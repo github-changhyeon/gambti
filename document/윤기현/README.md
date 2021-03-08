@@ -3,16 +3,18 @@
    | 번호 | 할 일                   | 이슈 번호                                                  | 진행 상황 | 문서 링크                                     |
    | :--: | ----------------------- | ---------------------------------------------------------- | --------- | --------------------------------------------- |
    |  1   | 프로젝트 주제 구체화    | [S04P21B206-2](https://jira.ssafy.com/browse/S04P21B206-2) | `완료`    | [프로젝트 주제 구체화](#프로젝트-주제-구체화) |
-   |  2   | 필수 기능 설계          | [S04P21B206-3](https://jira.ssafy.com/browse/S04P21B206-3) | `진행중`  | [필수 기능](#필수-기능)                       |
-   |  3   | 와이어프레임 설계       | [S04P21B206-4](https://jira.ssafy.com/browse/S04P21B206-4) | `진행중`  | [와이어 프레임](#와이어-프레임)               |
+   |  2   | 필수 기능 설계          | [S04P21B206-3](https://jira.ssafy.com/browse/S04P21B206-3) | `완료`    | [필수 기능](#필수-기능)                       |
+   |  3   | 와이어프레임 설계       | [S04P21B206-4](https://jira.ssafy.com/browse/S04P21B206-4) | `완료`    | [와이어 프레임](#와이어-프레임)               |
    |  4   | 사이트명 정하기(Domain) | [S04P21B206-5](https://jira.ssafy.com/browse/S04P21B206-5) | `완료`    | [도메인 지정](#도메인-지정)                   |
    |  5   | Coming soon page 구현   | [S04P21B206-7](https://jira.ssafy.com/browse/S04P21B206-7) | `완료`    | [Server](#server)                             |
    |  6   | docker-compose 구성     | [S04P21B206-8](https://jira.ssafy.com/browse/S04P21B206-8) | `완료`    | [Server](#server)                             |
    |  7   | nginx proxy config      | [S04P21B206-9](https://jira.ssafy.com/browse/S04P21B206-9) | `완료`    | [Server](#server)                             |
    |  8   | HTTPS 적용              | [S04P21B206-10](https://jira.ssafy.com/browse/S04P21B206-10) | `완료`   | [Server](#server)                            |
    |  9   | main layout 설계        | [S04P21B206-11](https://jira.ssafy.com/browse/S04P21B206-11) | `완료`   | [와이어 프레임](#와이어-프레임)              |
-   | 10   | main page 설게          | [S04P21B206-12](https://jira.ssafy.com/browse/S04P21B206-12) | `완료`   | [와이어 프레임](#와이어-프레임)              |
-  
+   | 10   | main page 설계          | [S04P21B206-12](https://jira.ssafy.com/browse/S04P21B206-12) | `완료`   | [와이어 프레임](#와이어-프레임)              |
+   | 11   | log in page 설계        | [S04P21B206-13](https://jira.ssafy.com/browse/S04P21B206-13) | `완료`   | [와이어 프레임](#와이어-프레임)              |
+   | 12   | sign up page 설계       | [S04P21B206-14](https://jira.ssafy.com/browse/S04P21B206-14) | `완료`   | [와이어 프레임](#와이어-프레임)              |
+   
    <br/><br/><br/>
 
 
@@ -33,10 +35,11 @@
    2. 회원 가입(스팀 아이디로 가입 가능하면 넣을 것!), 탈퇴, 정보 수정
    3. Game MBTI 검사
    4. MBTI에 따른 게임 추천
-      * `1~3` or `1~6`등까지는 고정으로 보여준다. 
-      * 만약 `1~6`등까지 동일한 점수를 가지는 등수가 있으면 우선 `random`으로 추천(매번 동일한 추천 방지)
-      * 게임 장르를 선택한다면 해당 장르의 `1~3` or `1~6`등까지 보여준다. 그 아래는 `random`으로 섞는다.
-      * 점수대(5~4점, 4~3점, 3~2점, 2~1점, 1~0점)별로 확인도 가능
+      * 로그인 후, 메인 페이지에서 추천 순으로 게임을 보여준다.
+      * JOIN한 게임은 추천하지 않는다.
+      * 동일한 점수를 가지는 등수가 있으면 우선 `random`으로 추천(매번 동일한 추천 방지)
+      * 게임 장르 페이지는 상단에 해당 게임의 추천 게임을 넣는다.
+      * 추천 게임 아래에는 필터를 구성해 해당 장르의 게임을 보여준다.
       * `추가적인 필터`는 차후 논의 예정
 
    5. 마음에 드는 게임에 join(커뮤니티에 합류) 기능
@@ -44,8 +47,10 @@
    7. 해당 게임이 `팀 구성` 가능 게임이라면 `MBTI 조합`을 통한 팀 구성 (팀원들의 `MBTI 조합 점수`가 가장 높게)
    8. 각 게임의 메인(커뮤니티 메인)에는 `워드 클라우드` 넣기(스팀 + post 리뷰 데이터 분석)
    9. 각 게임의 메인에 어떤 `MBTI`를 가진 사람들이 많이 하는지 `지표(그래프)`로 보여주기
-   10. 실시간 알림(`FCM + RealTimeDataBase`)
-   11. 추가적인 기능은 업데이트 예정
+   10. 회원가입 후, MBTI 설문 및 회원의 추가 정보 받기
+     * 성별, 나이 등등
+     * MBTI 설문은 약 20질문(금요일 회의로 결정 예정)
+   11. 실시간 알림(`FCM + RealTimeDataBase`)
 
 
    <br/><br/><br/>
@@ -66,6 +71,7 @@
 <br/><br/><br/>
 
 # Server
+* server url : www.gambti.com
+* [서버 설정 문서](GAMBTI/server)
+* 현 서버 index 페이지
 ![comingsoon](imgs/comingsoon.png)
-
- * [서버 설정 문서](GAMBTI/server)
