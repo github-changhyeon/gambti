@@ -1,0 +1,650 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>DB 스키마 설계</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="e7f4f1c5-b21c-42d3-93d9-f9559784364b" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="data:image/png;base64,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"/></div><h1 class="page-title">DB 스키마 설계</h1></header><div class="page-body"><h3 id="1b7d5da8-1787-4965-b419-76a6e0214e46" class="block-color-gray_background"> Firebase</h3><div id="541c6294-91ea-4ac1-8c1c-5c657e10325d" class="collection-content"><h4 class="collection-title">RealTime DB (user)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>키</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>값 예시</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>비고</th></tr></thead><tbody><tr id="99a13ade-4fbd-404e-afe0-4100e820de34"><td class="cell-title"><a href="https://www.notion.so/uid-99a13ade4fbd404eafe04100e820de34">uid</a></td><td class="cell-KL&gt;X">&quot;mT2bSkeigaDsjei&quot;</td><td class="cell-~:MP">사용자 UID(공개 가능)</td></tr><tr id="d6f28054-686e-4546-8d9c-e6e3e89973ea"><td class="cell-title"><a href="https://www.notion.so/status-d6f28054686e45468d9ce6e3e89973ea">status</a></td><td class="cell-KL&gt;X">0 or 1</td><td class="cell-~:MP">로그인(1) or 로그아웃(0) 상태</td></tr><tr id="7764ba62-dcb5-4f3f-ae05-bab5f1bb0df3"><td class="cell-title"><a href="https://www.notion.so/DB-7764ba62dcb54f3fae05bab5f1bb0df3">DB 테이블 템플릿</a></td><td class="cell-KL&gt;X"></td><td class="cell-~:MP"></td></tr></tbody></table></div><ul id="7516c26b-e9c0-47e0-b732-1ad19b728e7a" class="bulleted-list"><li>RealTime DB에 올라갈 User 정보</li></ul><ul id="151e2b6e-6e76-4917-a701-606de6f24384" class="bulleted-list"><li>채팅은 추후 추가</li></ul><p id="bf39ed1f-4a0d-4fc2-ae39-da3e10308303" class="">
+</p><p id="e37bc9ac-e369-41cd-9a60-72da72bdcab4" class="">
+</p><h3 id="22f89728-e6bc-4594-bf88-5e4e261d5f60" class="block-color-gray_background"> MariaDB</h3><div id="3649cdeb-025d-457a-9cae-7f5081d0460c" class="collection-content"><h4 class="collection-title">user(회원)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="475bdd67-5597-45a3-a4a1-588de23054b0"><td class="cell-title"><a href="https://www.notion.so/uid-475bdd67559745a3a4a1588de23054b0">uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-gray">pk</span></td><td class="cell-KL&gt;X">회원번호 (파이어베이스에서 uid로 받기)</td></tr><tr id="703e61f8-76eb-4018-84d7-ce9865379e96"><td class="cell-title"><a href="https://www.notion.so/mbti-703e61f876eb401884d7ce9865379e96">mbti</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">varchar(50)</span></td><td class="cell-KL&gt;X">회원의 mbti 정보</td></tr><tr id="dad1bc3e-d12f-4e8d-88fa-686b597422b4"><td class="cell-title"><a href="https://www.notion.so/age-dad1bc3ed12f4e8d88fa686b597422b4">age</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">int</span></td><td class="cell-KL&gt;X">나이</td></tr><tr id="d88e0409-6b85-4cf4-83cc-28f646b7b7bc"><td class="cell-title"><a href="https://www.notion.so/gender-d88e04096b854cf483cc28f646b7b7bc">gender</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">int</span></td><td class="cell-KL&gt;X">성별</td></tr><tr id="97412604-ad00-4aeb-92b6-2656e639713e"><td class="cell-title"><a href="https://www.notion.so/max_price-97412604ad004aeb92b62656e639713e">max_price</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">int</span></td><td class="cell-KL&gt;X">게임에 쓸 수 있는 최대 금액</td></tr><tr id="420aa48d-04dd-4b63-a970-ff243d46dcc2"><td class="cell-title"><a href="https://www.notion.so/updated_date-420aa48d04dd4b63a970ff243d46dcc2">updated_date</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">timestamp</span></td><td class="cell-KL&gt;X">유저 수정 일자</td></tr><tr id="4326c069-1476-46c9-92dd-142a6174e60f"><td class="cell-title"><a href="https://www.notion.so/steam_id-4326c069147646c992dd142a6174e60f">steam_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">varchar(50)</span></td><td class="cell-KL&gt;X">스팀 아이디 (연동 시)</td></tr><tr id="3b439686-c08a-475e-acf9-3b80f8c5a602"><td class="cell-title"><a href="https://www.notion.so/image_id-3b439686c08a475eacf93b80f8c5a602">image_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">int</span></td><td class="cell-KL&gt;X">유저 프로필 이미지 아이디</td></tr><tr id="72c7f99f-e4af-4e14-9db9-a484f8912738"><td class="cell-title"><a href="https://www.notion.so/DB-72c7f99fe4af4e149db9a484f8912738">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><div id="b6984677-22f6-4ed4-b1cd-840a74adad89" class="collection-content"><h4 class="collection-title">genre(장르)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="62d92a34-74b1-4f9a-aaf8-c27c97d916e3"><td class="cell-title"><a href="https://www.notion.so/genre_id-62d92a3474b14f9aaaf8c27c97d916e3">genre_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-pink">int</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">게임 장르 아이디</td></tr><tr id="6a7e552a-c811-4a28-bd13-2dff31e9aa64"><td class="cell-title"><a href="https://www.notion.so/genre_name-6a7e552ac8114a28bd132dff31e9aa64">genre_name</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 장르 이름</td></tr><tr id="2dbb2fe4-919a-49b0-9357-4efba289e387"><td class="cell-title"><a href="https://www.notion.so/DB-2dbb2fe4919a49b093574efba289e387">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><div id="97f89afa-c910-4ee8-ac2f-b4b4c4775e94" class="collection-content"><h4 class="collection-title">game(게임)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="26ff3165-b49c-4450-aaa8-66039d8a7681"><td class="cell-title"><a href="https://www.notion.so/id-26ff3165b49c4450aaa866039d8a7681">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-green">pk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 아이디</td></tr><tr id="b0f8a849-090a-46a2-b750-727e6966e5ca"><td class="cell-title"><a href="https://www.notion.so/app_name-b0f8a849090a46a2b750727e6966e5ca">app_name</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 이름</td></tr><tr id="5a93f922-bce6-40df-9813-71cf54dc8bfd"><td class="cell-title"><a href="https://www.notion.so/developer-5a93f922bce640df981371cf54dc8bfd">developer</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">개발 회사</td></tr><tr id="e18ff8d2-073b-4eeb-89a7-160823b28f13"><td class="cell-title"><a href="https://www.notion.so/publisher-e18ff8d2073b4eeb89a7160823b28f13">publisher</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">배포 회사</td></tr><tr id="e809def2-db1c-47a3-8f41-c2c6c0bfd132"><td class="cell-title"><a href="https://www.notion.so/release_date-e809def2db1c47a38f41c2c6c0bfd132">release_date</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">출시일</td></tr><tr id="76be05ac-5fd3-45d5-8a60-a49d02862571"><td class="cell-title"><a href="https://www.notion.so/metascore-76be05ac5fd345d58a60a49d02862571">metascore</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">메타 스코어</td></tr><tr id="6428220f-7732-4519-895e-2c3a219e5dcd"><td class="cell-title"><a href="https://www.notion.so/n_reviews-6428220f77324519895e2c3a219e5dcd">n_reviews</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">게임 리뷰 수</td></tr><tr id="c20ec185-7f01-4999-ba57-4539bab6777d"><td class="cell-title"><a href="https://www.notion.so/price-c20ec1857f014999ba574539bab6777d">price</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">게임 가격</td></tr><tr id="80a86b30-c981-432b-9170-8796e73ab5a5"><td class="cell-title"><a href="https://www.notion.so/sentiment-80a86b30c981432b91708796e73ab5a5">sentiment</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X"></td></tr><tr id="9418c429-6ea9-4794-aec2-77e393b2b362"><td class="cell-title"><a href="https://www.notion.so/url-9418c4296ea94794aec277e393b2b362">url</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">vachar(255)</span></td><td class="cell-KL&gt;X">스팀 게임 링크</td></tr><tr id="39668ad8-27be-4920-9821-43a2f4797b6f"><td class="cell-title"><a href="https://www.notion.so/video_url-39668ad827be4920982143a2f4797b6f">video_url</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">vachar(255)</span></td><td class="cell-KL&gt;X">게임 비디오 링크</td></tr><tr id="ad0a8834-5f8e-4222-b94a-0702d660cbc2"><td class="cell-title"><a href="https://www.notion.so/logo_image_id-ad0a88345f8e4222b94a0702d660cbc2">logo_image_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">게임 로고 이미지 아이디</td></tr><tr id="ab5c386a-0a31-4fbd-b2b6-d9a7fa0240c7"><td class="cell-title"><a href="https://www.notion.so/background_image_id-ab5c386a0a314fbdb2b6d9a7fa0240c7">background_image_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">게임 배경 이미지 아이디</td></tr><tr id="e505d41d-b4c5-4bb1-a56a-29e139dcdbb7"><td class="cell-title"><a href="https://www.notion.so/DB-e505d41db4c54bb1a56a29e139dcdbb7">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="ea212984-da90-40ae-8ef1-972273c7eb3a" class="bulleted-list"><li>게임 정보 관련 데이터 테이블</li></ul><p id="effe66fb-5adb-4e55-b040-068cad14efad" class="">
+</p><div id="3af679ac-6c11-4770-9ce2-5233db5b9533" class="collection-content"><h4 class="collection-title">tag(태그)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="c0d6005b-392c-45a8-bd81-c87d87a5139b"><td class="cell-title"><a href="https://www.notion.so/id-c0d6005b392c45a8bd81c87d87a5139b">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="bc820eb8-50d8-4eb8-9ff7-81da86dd8d49"><td class="cell-title"><a href="https://www.notion.so/tag_name-bc820eb850d84eb89ff781da86dd8d49">tag_name</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">태그 이름</td></tr><tr id="1befc8db-d6e0-4bc8-a860-1eb78434da99"><td class="cell-title"><a href="https://www.notion.so/DB-1befc8dbd6e04bc8a8601eb78434da99">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><div id="8c922d84-6268-4d7d-9e6e-5d2a9a2810f2" class="collection-content"><h4 class="collection-title">game_genre(게임_장르 매핑)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="0466f217-1f48-41de-9e36-33d28ea44354"><td class="cell-title"><a href="https://www.notion.so/id-0466f2171f4841de9e3633d28ea44354">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="e6bfca79-c6af-4561-8956-abb5f161ccec"><td class="cell-title"><a href="https://www.notion.so/game_id-e6bfca79c6af45618956abb5f161ccec">game_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 아이디</td></tr><tr id="6b7757c5-33d7-43df-8c76-9ba7b453a513"><td class="cell-title"><a href="https://www.notion.so/genre_id-6b7757c533d743df8c769ba7b453a513">genre_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">장르 아이디</td></tr><tr id="bdf088e3-c7d0-47c0-87cc-fbffb248d1ca"><td class="cell-title"><a href="https://www.notion.so/DB-bdf088e3c7d047c087ccfbffb248d1ca">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="f431a740-e33a-490f-9637-4efcd4ecb8a0" class="bulleted-list"><li>ManyToMany 관계인 게임과 장르 테이블을 매핑한다.</li></ul><p id="b284cffb-81ed-4e84-b83d-e59b181ca612" class="">
+</p><div id="b789a967-258b-47cd-b283-4e3ac9d16b8e" class="collection-content"><h4 class="collection-title">user_game_infomation(유저_게임_정보 매핑)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="3d7efe68-cac5-4870-95ac-56c977627e2d"><td class="cell-title"><a href="https://www.notion.so/id-3d7efe68cac5487095ac56c977627e2d">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="71a69fc9-3bb7-4223-b6a4-c74d82777ec6"><td class="cell-title"><a href="https://www.notion.so/game_id-71a69fc93bb74223b6a4c74d82777ec6">game_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 아이디</td></tr><tr id="2a5d0ad7-b13c-487b-a9bc-a2f18754636a"><td class="cell-title"><a href="https://www.notion.so/uid-2a5d0ad7b13c487ba9bca2f18754636a">uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">유저 아이디</td></tr><tr id="1cd5b6d4-34c5-421b-8390-8411c0db8e86"><td class="cell-title"><a href="https://www.notion.so/is_joined-1cd5b6d434c5421b83908411c0db8e86">is_joined</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">관심게임 조인하기</td></tr><tr id="51f62abd-3538-4fdc-ac0c-20a8cc6e6101"><td class="cell-title"><a href="https://www.notion.so/is_owned-51f62abd35384fdcac0c20a8cc6e6101">is_owned</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">사용자가 가진 게임</td></tr><tr id="72490e96-06a5-46e4-b1aa-df025b9657bb"><td class="cell-title"><a href="https://www.notion.so/DB-72490e9606a546e4b1aadf025b9657bb">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="a3a5aed2-62a2-4339-ac1a-9ae52dbd3563" class="bulleted-list"><li>ManyToMany 관계인 유저와 게임 테이블을 매핑한다.<ul id="973bc71d-9178-4dfd-b0c1-9c0a8cd7e4dd" class="bulleted-list"><li>한 유저는 여러 게임에 조인 할 수 있다.(is_joined)</li></ul><ul id="3cd10812-de7d-4973-beaf-6babbf60c9f6" class="bulleted-list"><li>한 유저는 여러 게임을 구매했을 수 있다.(is_owned)</li></ul><ul id="f3167147-17d0-431a-855c-ea0e2007f2a8" class="bulleted-list"><li>한 게임에 관심을 가지는 여러 사람이 있다.</li></ul><ul id="cae38de4-d506-4e78-bc5b-36dd147c6091" class="bulleted-list"><li>한 게임을 구매한 여러 사람이 있다.</li></ul></li></ul><ul id="149e4012-283a-4388-871b-a9a6001abe94" class="bulleted-list"><li>유저가 joined 누른 게임과 steam_id를 등록한 사람에 한해서 가지고 있는 게임</li></ul><p id="ff117ddd-e52f-4ba8-95a7-b81d24580a50" class="">
+</p><div id="3595ed10-2177-444e-8184-b8370834d25b" class="collection-content"><h4 class="collection-title">game_tag(게임_태그 매핑)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="436d9b17-791b-472a-8c0e-44eab7dd9544"><td class="cell-title"><a href="https://www.notion.so/id-436d9b17791b472a8c0e44eab7dd9544">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="bcda7738-7723-40be-9ba3-6be50c732707"><td class="cell-title"><a href="https://www.notion.so/game_id-bcda7738772340be9ba36be50c732707">game_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 아이디</td></tr><tr id="eec88bb9-a4d1-47ba-b0be-ed3b30501357"><td class="cell-title"><a href="https://www.notion.so/tag_id-eec88bb9a4d147bab0beed3b30501357">tag_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">태그 아이디</td></tr><tr id="ff0964ca-4f98-4771-bca8-8669d2ed9e77"><td class="cell-title"><a href="https://www.notion.so/DB-ff0964ca4f984771bca88669d2ed9e77">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="d61c44d4-8a5e-4721-8b1e-9fdf95f6628a" class="bulleted-list"><li>ManyToMany 관계인 게임과 태그 테이블을 매핑한다.<ul id="29ef2239-8195-4c88-a5ae-04d1d695a911" class="bulleted-list"><li>한 게임은 여러 태그를 가질 수 있다.</li></ul><ul id="cfcd5b27-462d-401f-8d52-9c7f318779eb" class="bulleted-list"><li>한 태그에 여러 게임이 속할 수 있다.</li></ul></li></ul><p id="ddb54564-a140-4f40-b530-acf50f4a731b" class="">
+</p><div id="fbd1ed49-d816-4c89-89f5-062f8921f40d" class="collection-content"><h4 class="collection-title">user_game_recommend(유저_게임_추천 매핑)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="93f4bb55-9fdb-48a3-b5c1-bc44b413512f"><td class="cell-title"><a href="https://www.notion.so/id-93f4bb559fdb48a3b5c1bc44b413512f">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="46466ff2-55fe-4ad5-8e21-b306ce1a3a16"><td class="cell-title"><a href="https://www.notion.so/game_id-46466ff255fe4ad58e21b306ce1a3a16">game_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">게임 아이디</td></tr><tr id="3bcb9a86-efa6-426d-b43a-0d7d0b37b628"><td class="cell-title"><a href="https://www.notion.so/uid-3bcb9a86efa6426db43a0d7d0b37b628">uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">유저 아이디</td></tr><tr id="2324f9e9-68be-4482-90a6-60abb6b0010e"><td class="cell-title"><a href="https://www.notion.so/genre_id-2324f9e968be448290a660abb6b0010e">genre_id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-default">fk</span><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">장르별 추천을 위해서</td></tr><tr id="37586645-05a5-4ad6-82a7-ff530fd1a25a"><td class="cell-title"><a href="https://www.notion.so/score-3758664505a54ad682a7ff530fd1a25a">score</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-yellow">float</span></td><td class="cell-KL&gt;X">추천 스코어 (0~1 사이의 값)</td></tr><tr id="e4998678-56ee-41e1-aa26-89f28ef07d64"><td class="cell-title"><a href="https://www.notion.so/DB-e499867856ee41e1aa2689f28ef07d64">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="a12fd196-b4ca-44f1-be37-4c687677c1fd" class="bulleted-list"><li>추천에서 삭제한 유저는 로그데이터에 쌓여 이후 추천에 뜨지 않게한다.</li></ul><ul id="384e7630-f028-4c17-99e4-dcf70e17ec46" class="bulleted-list"><li>genre_id가 null인 경우 전체 게임데이터에서 Top-K개의 추천을, 장르 id가 있는 경우 해당 장르에서 Top-K개의 추천을 한다</li></ul><ul id="a3043602-61ab-4fe4-a3ae-e77ce2fdaf1d" class="bulleted-list"><li>예를들어 <code>장르에 구분없는 추천게임</code>을 30개 <code>장르별 추천게임</code>을 10개, <code>장르의 수</code>가 8개라고 가정하고 <code>우리 서비스를 이용하는 유저의 수</code>가 1000명일 경우 (30 + (10 * 8)) * 1000 = 110,000 개의 데이터가 이 테이블에 쌓여있고 스케쥴링 된 시간마다 이 데이터들이 갱신된다.</li></ul><p id="e2409e9e-3106-4256-8abe-258d76e33af0" class="">
+</p><div id="e3d65179-30f6-45a9-a2f3-6608c60a65e6" class="collection-content"><h4 class="collection-title">image(이미지) </h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="e716dc42-4cde-4e2c-b7d3-6293f25c368f"><td class="cell-title"><a href="https://www.notion.so/id-e716dc424cde4e2cb7d36293f25c368f">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="79dac055-eb2a-4bcb-bf75-34cd5576fca9"><td class="cell-title"><a href="https://www.notion.so/path-79dac055eb2a4bcbbf7534cd5576fca9">path</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-yellow">varchar(255)</span></td><td class="cell-KL&gt;X">이미지 경로
+user/:uid (유저 프로필 이미지)
+game/:game_id_logo (게임 로고 이미지)
+game/:game_id_backgound(게임 배경 이미지)</td></tr><tr id="713d1a5d-ced8-4ecd-b180-011a724fff8d"><td class="cell-title"><a href="https://www.notion.so/DB-713d1a5dced84ecdb180011a724fff8d">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="b0fda33e-6522-4001-9619-82ba792b9c12" class="bulleted-list"><li>게임 스틸 컷 처럼 N개의 파일이 존재할 경우 각 파일마다 필드를 만들 수 없어 이미지 테이블이 필요함</li></ul><p id="c0b5dd9c-7711-4c40-a90c-19f95eee38e7" class="">
+</p><div id="8e64a110-3ac6-4d26-9b9d-4d13a437f541" class="collection-content"><h4 class="collection-title">friend(친구 매핑 테이블)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="fa156ca7-20ca-43ef-a08d-d0ef7d03194f"><td class="cell-title"><a href="https://www.notion.so/id-fa156ca720ca43efa08dd0ef7d03194f">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="4d994bef-d8a7-4e62-afaf-0f4193c59c12"><td class="cell-title"><a href="https://www.notion.so/from_uid-4d994befd8a74e62afaf0f4193c59c12">from_uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">is_approved가 0인 경우 친구요청을 보낸 유저 </td></tr><tr id="b7d45c34-99ae-4b32-a5ab-c53f1cc01a5b"><td class="cell-title"><a href="https://www.notion.so/to_uid-b7d45c3499ae4b32a5abc53f1cc01a5b">to_uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">is_approved가 0인 경우 친구요청을 받는 유저 </td></tr><tr id="77cc869b-c96b-4bbd-905a-4430a517856a"><td class="cell-title"><a href="https://www.notion.so/is_approved-77cc869bc96b4bbd905a4430a517856a">is_approved</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-pink">int</span></td><td class="cell-KL&gt;X">0 (승인대기), 1 (수락)</td></tr><tr id="1e3c9eb6-fd7c-4e27-a7d1-139a87ab2fc5"><td class="cell-title"><a href="https://www.notion.so/DB-1e3c9eb6fd7c4e27a7d1139a87ab2fc5">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="a8a71e4f-c56a-4f64-b2df-528616c3d1eb" class="bulleted-list"><li>ManyToMany 관계인 친구(유저와 유저) 관계를 매핑한다.</li></ul><ul id="7d72e06f-9e46-47c3-a496-905d9da7150d" class="bulleted-list"><li>친구 요청 기능 - 수락을 해야만 서로 친구관계가 형성됨</li></ul><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="b96836d9-61ab-4e50-adc8-9ba6c562bce0" class="code"><code><span class="token comment"># flow</span>
+A가 B에게 친구 신청을 하면 --<span class="token operator">></span> A<span class="token punctuation">(</span>from_uid<span class="token punctuation">)</span>, B<span class="token punctuation">(</span>to_uid<span class="token punctuation">)</span>, is_approved<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+B가 수락을 하면 
+				is_approved 변경 --<span class="token operator">></span> A<span class="token punctuation">(</span>from_uid<span class="token punctuation">)</span>, B<span class="token punctuation">(</span>to_uid<span class="token punctuation">)</span>, is_approved<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+			  B와 A 친구 관계설정 --<span class="token operator">></span> B<span class="token punctuation">(</span>from_uid<span class="token punctuation">)</span>, A<span class="token punctuation">(</span>to_uid<span class="token punctuation">)</span>, is_approved<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre><p id="cf9bec36-a6b0-4181-b7df-3e4a8692521d" class="">
+</p><div id="a00227b9-f9d1-4b3c-8f84-6b5efbd7802a" class="collection-content"><h4 class="collection-title">friend_recommend(친구 추천 매핑)</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>필드명</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>설정</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>설명</th></tr></thead><tbody><tr id="8fb6d8fb-15d9-4948-8756-828bba79e354"><td class="cell-title"><a href="https://www.notion.so/id-8fb6d8fb15d949488756828bba79e354">id</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-brown">auto_increment</span><span class="selected-value select-value-color-green">pk</span></td><td class="cell-KL&gt;X">테이블 pk</td></tr><tr id="4cd6259a-03b7-4e71-8488-b1c8c25b6fcd"><td class="cell-title"><a href="https://www.notion.so/uid-4cd6259a03b74e718488b1c8c25b6fcd">uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">추천 받을 유저</td></tr><tr id="f7e9da2f-c835-45a3-95e5-0048d77df6d1"><td class="cell-title"><a href="https://www.notion.so/recommend_uid-f7e9da2fc83545a395e50048d77df6d1">recommend_uid</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-orange">varchar(50)</span></td><td class="cell-KL&gt;X">추천 받을 유저에게 추천되는 유저</td></tr><tr id="93cfa932-db56-4b59-913a-59bd24727fc6"><td class="cell-title"><a href="https://www.notion.so/score-93cfa932db564b59913a59bd24727fc6">score</a></td><td class="cell-cnWk"><span class="selected-value select-value-color-yellow">float</span></td><td class="cell-KL&gt;X">추천 스코어 (0~1 사이의 값)</td></tr><tr id="66784b09-b99b-4198-8caa-ab24fc7b4379"><td class="cell-title"><a href="https://www.notion.so/DB-66784b09b99b41988caaab24fc7b4379">DB 테이블 템플릿</a></td><td class="cell-cnWk"></td><td class="cell-KL&gt;X"></td></tr></tbody></table></div><ul id="5d0c5657-2198-4d87-98fb-be4074b7560e" class="bulleted-list"><li>마이페이지에서 친구 추천은 20명까지 (X 버튼 허용) </li></ul><ul id="3b19d639-3014-4152-8999-b6876f2515c3" class="bulleted-list"><li>추천에서 삭제한 유저는 로그데이터에 쌓여 이후 추천에 뜨지 않게한다.</li></ul><p id="a7c625f9-b678-4e7c-b545-a67ca06b5cc4" class="">
+</p><p id="4b9b9b0f-3198-4d71-9642-888a235d1d21" class="">
+</p><p id="0434e29d-550a-4c25-af90-51c4185196d8" class="">
+</p><p id="ea6ac5b6-0434-42f6-8549-15b053e51685" class="">
+</p><p id="6be9f64b-d22e-4165-abec-c20bf1fbc1e2" class="">
+</p><p id="085de6bd-8de6-4076-a3ec-728544572c42" class="">
+</p></div></article></body></html>
