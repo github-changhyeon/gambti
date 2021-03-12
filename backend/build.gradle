@@ -4,11 +4,7 @@ plugins {
     id 'java'
     id "base"
 }
-bootJar {
-    archiveBaseName = 'GAMBTI-'
-    archiveFileName = '-.jar'
-    archiveVersion = '1.0.0'
-}
+bootJar {}
 group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
