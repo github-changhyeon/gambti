@@ -9,14 +9,14 @@ export default function ForgotSent() {
   const [asize, setAsize] = React.useState('small')
   const [atextvalue, setAtextvalue] = React.useState('Hi')
   // ButtonComp 사이즈, textvalue
-  const [bsize, setBsize] = React.useState('sm')
+  const [bsize, setBsize] = React.useState('md')
   const [btextvalue, setBtextvalue] = React.useState('Hi')
 
   return (
     <div>
       <h1>Hello ForgotSent</h1>
       {/* AvatarComp 사용할때 size랑 textvalue를 줘야해 */}
-      {/* <AvatarComp size={asize} textvalue={atextvalue}></AvatarComp> */}
+      <AvatarComp size={asize} textvalue={atextvalue}></AvatarComp>
       <ButtonComp size={bsize} textvalue={btextvalue}></ButtonComp>
     </div >
   );
