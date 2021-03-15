@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StylesProvider } from "@material-ui/core/styles";
-import { fire } from 'src/firebaseConfig';
+import 'src/firebaseConfig';
 
 import {
   Home,
