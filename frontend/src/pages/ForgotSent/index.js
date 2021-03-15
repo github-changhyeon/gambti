@@ -5,19 +5,17 @@ import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 
 
 export default function ForgotSent() {
-  // AvatarComp 사이즈, textvalue
-  const [asize, setAsize] = React.useState('small')
-  const [atextvalue, setAtextvalue] = React.useState('Hi')
-  // ButtonComp 사이즈, textvalue
-  const [bsize, setBsize] = React.useState('md')
-  const [btextvalue, setBtextvalue] = React.useState('Hi')
+  // AvatarComp textvalue
+  const [avatarTextvalue, setAvatarTextvalue] = React.useState('Hi')
+  // ButtonComp textvalue
+  const [buttonTextvalue, setButtonTextvalue] = React.useState('Hi')
 
   return (
     <div>
       <h1>Hello ForgotSent</h1>
       {/* AvatarComp 사용할때 size랑 textvalue를 줘야해 */}
-      <AvatarComp size={asize} textvalue={atextvalue}></AvatarComp>
-      <ButtonComp size={bsize} textvalue={btextvalue}></ButtonComp>
+      <AvatarComp size='small' textvalue={avatarTextvalue}></AvatarComp>
+      <ButtonComp size='small' textvalue={buttonTextvalue}></ButtonComp>
     </div >
   );
 }
