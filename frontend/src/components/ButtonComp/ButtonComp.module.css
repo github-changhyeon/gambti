@@ -12,4 +12,7 @@
 /* login, signup, Forgot, ForgotSent */
 .large {
   width: 300px;
+  color: #000000;
+  font-weight: bold;
+  background-color: #CCFF00;
 }
