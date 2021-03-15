@@ -5,26 +5,26 @@ import Button from '@material-ui/core/Button';
 export default function ButtonComp({ size, textvalue }) {
 
   // logout, editProfile(save, connect), 친구 추가 
-  if (size === 'sm') {
+  if (size === 'small') {
     return (
       <div>
-        <Button className={styles.sm} variant="contained">{textvalue}</Button>
+        <Button className={styles.small} variant="contained">{textvalue}</Button>
       </div>
     );
   }
   // GameCard, UserCard, MainButton
-  else if (size === 'md') {
+  else if (size === 'medium') {
     return (
       <div>
-        <Button className={styles.md} variant="contained" >{textvalue}</Button>
+        <Button className={styles.medium} variant="contained" >{textvalue}</Button>
       </div>
     );
   }
   // login, signup, Forgot, ForgotSent
-  else if (size === 'lg') {
+  else if (size === 'large') {
     return (
       <div>
-        <Button className={styles.lg} variant="contained" color="primary">{textvalue}</Button>
+        <Button className={styles.large} variant="contained" color="primary">{textvalue}</Button>
       </div>
     );
   }

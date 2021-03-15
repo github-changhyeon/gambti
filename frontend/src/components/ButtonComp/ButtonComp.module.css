@@ -1,15 +1,15 @@
 /* logout, editProfile(save, connect), 친구 추가 */
-.sm {
+.small {
   width: 80px;
   
 }
 /* GameCard, UserCard, MainButton */
-.md {
+.medium {
   width: 200px;
   color: #000000;
   background-color: #CCFF00;
 }
 /* login, signup, Forgot, ForgotSent */
-.lg {
+.large {
   width: 300px;
 }
