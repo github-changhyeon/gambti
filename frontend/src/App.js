@@ -13,6 +13,7 @@ import {
   Detail,
   Profile,
   EditProfile,
+  Test,
 } from './pages';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/detail/:gameName" component={Detail} />
             <Route exact path="/profiles/:id" component={Profile} />
             <Route path="/profiles/:id/edit" component={EditProfile} />
+            <Route path="/test" component={Test} />
           </Switch>
         </Router>
       </div>

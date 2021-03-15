@@ -10,3 +10,5 @@ export { default as Detail } from './Detail';
 
 export { default as Profile } from './Profile';
 export { default as EditProfile } from './EditProfile';
+
+export { default as Test } from './test';
