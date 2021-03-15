@@ -13,16 +13,19 @@ export default function Test() {
   return (
     <div>
       <h1>Hello Test</h1>
-      <AvatarComp size='small' textvalue='hi'></AvatarComp>
-      <ButtonComp size='small' textvalue='hi'></ButtonComp>
+      <AvatarComp size="small" textvalue="hi"></AvatarComp>
+      <ButtonComp size="small" textvalue="hi"></ButtonComp>
       <CloseButton />
       <GameCard />
-      <GenreCard />
+      <GenreCard
+        imagePath="https://s.gjcdn.net/assets/action.7447804b.png"
+        genreName="name"
+        isClicked={true}
+      />
       <Hashtag />
       <MediumProfile />
       <SmallProfile />
       <UserCard />
-
     </div>
   );
 }

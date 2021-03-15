@@ -1,0 +1,11 @@
+.genre {
+  background-color: #111111;
+  width: 120px;
+  text-align: center;
+}
+
+.genre_img {
+  width: 55px;
+  height: 55px;
+  margin-left: 16px;
+}
