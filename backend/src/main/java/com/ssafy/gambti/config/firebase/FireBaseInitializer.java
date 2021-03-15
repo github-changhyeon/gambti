@@ -1,4 +1,4 @@
-package com.ssafy.gambti.config;
+package com.ssafy.gambti.config.firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

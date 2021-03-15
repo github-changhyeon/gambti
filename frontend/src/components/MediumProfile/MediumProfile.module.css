@@ -1,0 +1,17 @@
+.root {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem;
+}
+.nick {
+  font-weight: bold;
+  font-size: 20px;
+  color: #CCFF00;
+}
+.text_margin {
+  margin: 1rem;
+}
+.email {
+  color: #CFCFCF;
+}
