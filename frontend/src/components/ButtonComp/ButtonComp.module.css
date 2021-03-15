@@ -1,0 +1,15 @@
+/* logout, editProfile(save, connect), 친구 추가 */
+.sm {
+  width: 80px;
+  
+}
+/* GameCard, UserCard, MainButton */
+.md {
+  width: 200px;
+  color: '#CCFF00';
+  background-color: '#CCFF00';
+}
+/* login, signup, Forgot, ForgotSent */
+.lg {
+  width: 300px;
+}
