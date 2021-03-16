@@ -1,6 +1,6 @@
 package com.ssafy.gambti.utils;
 
-import com.ssafy.gambti.models.auth.SecurityProperties;
+import com.ssafy.gambti.domain.auth.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
