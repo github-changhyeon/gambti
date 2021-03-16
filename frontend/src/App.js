@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { StylesProvider } from "@material-ui/core/styles";
+import { StylesProvider } from '@material-ui/core/styles';
+import Header from 'src/components/Header/Header';
+import Footer from 'src/components/Footer/Footer';
 import 'src/firebaseConfig';
 
 import {
@@ -21,6 +23,7 @@ function App() {
   return (
     <StylesProvider injectFirst>
       <div className="App">
+        <Header />
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -35,6 +38,7 @@ function App() {
             <Route path="/test" component={Test} />
           </Switch>
         </Router>
+        <Footer />
       </div>
     </StylesProvider>
   );
