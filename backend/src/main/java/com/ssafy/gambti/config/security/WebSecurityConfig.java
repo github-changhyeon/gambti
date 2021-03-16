@@ -1,7 +1,7 @@
 package com.ssafy.gambti.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.gambti.models.auth.SecurityProperties;
+import com.ssafy.gambti.domain.auth.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
