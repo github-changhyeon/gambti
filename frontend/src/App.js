@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StylesProvider } from '@material-ui/core/styles';
 import Header from 'src/components/Header/Header';
 import Footer from 'src/components/Footer/Footer';
+import 'src/firebaseConfig';
 
 import {
   Home,
@@ -16,6 +17,7 @@ import {
   EditProfile,
   Test,
 } from './pages';
+
 
 function App() {
   return (

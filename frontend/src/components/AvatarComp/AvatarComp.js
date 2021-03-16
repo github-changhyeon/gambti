@@ -7,7 +7,7 @@ import Badge from '@material-ui/core/Badge';
 
 
 
-export default function AvatarComp({ size, textvalue }) {
+export default function AvatarComp({ size, textvalue, imgPath }) {
   const classes = useStyles();
   const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
   // smallProfile
@@ -20,7 +20,7 @@ export default function AvatarComp({ size, textvalue }) {
     return (
       // TODO: 뱃지 위치, 색깔 맞추기
       <Badge color="primary" badgeContent=" " overlap="circle" variant="dot">
-        <Avatar className={styles.small} > {textvalue}</Avatar >
+        <Avatar className={styles.small} src={imgPath} > {textvalue}</Avatar >
       </Badge >
     );
   }

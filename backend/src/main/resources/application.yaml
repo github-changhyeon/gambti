@@ -1,6 +1,11 @@
 spring:
   profiles:
     active: local
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 100MB
 
   datasource: #DB 접속정보
     driverClassName: org.mariadb.jdbc.Driver
@@ -19,14 +24,83 @@ spring:
   jpa: #JPA 설정
     properties:
       hibernate:
-      #https://dololak.tistory.com/465, https://gigas-blog.tistory.com/119
-      dialect: org.hibernate.dialect.MariaDBDialect
-      #하이버네이트가 실행하는 모든 SQL문을 콘솔로 출력해 준다.
-      show_sql: true #콘솔에 출력되는 JPA 실행 쿼리를 가독성있게 표현한다.
-      format_sql: true
-      #디버깅이 용이하도록 SQL문 이외에 추가적인 정보를 출력해 준다.
-      use_sql_comments: true
+        #https://dololak.tistory.com/465, https://gigas-blog.tistory.com/119
+        dialect: org.hibernate.dialect.MariaDBDialect
+        #하이버네이트가 실행하는 모든 SQL문을 콘솔로 출력해 준다.
+        show_sql: true #콘솔에 출력되는 JPA 실행 쿼리를 가독성있게 표현한다.
+        format_sql: true
+        #디버깅이 용이하도록 SQL문 이외에 추가적인 정보를 출력해 준다.
+        use_sql_comments: true
 
+security:
+  firebase-props:
+    database-url: ${FIREBASE_DATABASE}
+    enable-strict-server-session: false
+    enable-check-session-revoked: false
+    enable-logout-everywhere: false
+    session-expiry-in-days: 5
+
+  cookie-props:
+    max-age-in-minutes: 7200
+    http-only: true
+    secure: true
+    domain: ${DOMAIN}
+    path: /
+
+  allow-credentials: true
+
+  allowed-origins:
+    - https://${DOMAIN}
+    - http://localhost:3000
+
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - OPTIONS
+
+  allowed-headers:
+    - Authorization
+    - Origin
+    - Content-Type
+    - Accept
+    - Accept-Encoding
+    - Accept-Language
+    - Access-Control-Allow-Origin
+    - Access-Control-Allow-Headers
+    - Access-Control-Request-Method
+    - X-Requested-With
+    - X-Auth-Token
+    - X-Xsrf-Token
+    - Cache-Control
+    - Id-Token
+
+  allowed-public-apis:
+    - /favicon.ico
+    - /session/login
+    - /**
+
+  exposed-headers:
+    - X-Xsrf-Token
+
+
+
+springdoc:
+  version: 1.0.0
+#    api-docs:
+#      path: /api-docs
+#    default-consumes-media-type: application/json
+#    default-produces-media-type: application/json
+#    swagger-ui:
+#      operations-sorter: alpha
+#      tags-sorter: alpha
+#      path: /swagger-ui.html
+#      disable-swagger-default-url: true
+#      display-query-params-without-oauth2: true
+#    paths-to-match:
+#      - /**
 ---
 #로컬용
 spring:
@@ -34,14 +108,14 @@ spring:
     activate:
       on-profile: local
 
-#devtool - restart 사용 false는 너무 잦은 restart를 막음
-  restart:
-    enabled: true
+  jpa: #JPA 설정
+    hibernate:
+      ddl-auto: update
 
 #로컬용 redis 만들어지면 넣기
-#  redis:
-#    host:
-#    port: 6380
+  redis:
+    host: ec2-54-180-105-93.ap-northeast-2.compute.amazonaws.com
+    port: 6380
 
 server:
   port: 8081
@@ -54,6 +128,10 @@ spring:
   config:
     activate:
       on-profile: dev
+
+  jpa: #JPA 설정
+    hibernate:
+      ddl-auto: none
 
 #redis서버 만들어지면 넣기
   redis:
@@ -73,9 +151,15 @@ spring:
     activate:
       on-profile: prod
 
+  jpa: #JPA 설정
+    hibernate:
+      ddl-auto: none
+
   redis:
     host: redis
     port: 6379
 
 server:
   port: 8081
+  servlet:
+    context-path: /v1
