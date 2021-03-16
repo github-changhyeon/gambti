@@ -25,7 +25,40 @@ export default function GameCard({ isLogin, gameInfo }) {
     buttonText = 'Joined';
   }
 
-  return (
+  const neonCard = (
+    <div className={styles['neon-block']}>
+      <div className={styles.block}>
+        <span className={styles.rainbow}></span>
+
+        <Card className={styles.game_card}>
+          <CardMedia
+            className={styles.game_card_background_img}
+            image="https://m.gjcdn.net/community-header/950/18067-crop0_296_1920_776-npqpqk9f-v4.webp"
+            title="Contemplative Reptile"
+          />
+          <CardContent className={styles.card_logo_img}>
+            <AvatarComp size="xlarge" textvalue="temp" />
+          </CardContent>
+          <CardContent>
+            <Typography className={styles.game_card_title} gutterBottom variant="h5" component="h2">
+              {gameInfo.appName}
+            </Typography>
+            <Typography variant="body1" color="textSecondary" component="span" style={cardColor}>
+              {descriptionNum}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="span" style={cardColor}>
+              {descriptionText}
+            </Typography>
+          </CardContent>
+          <CardActions className={styles.game_card_button}>
+            <ButtonComp size="medium" textvalue={buttonText}></ButtonComp>
+          </CardActions>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const normalCard = (
     <Card className={styles.game_card}>
       <CardMedia
         className={styles.game_card_background_img}
@@ -36,28 +69,13 @@ export default function GameCard({ isLogin, gameInfo }) {
         <AvatarComp size="xlarge" textvalue="temp" />
       </CardContent>
       <CardContent>
-        <Typography
-          className={styles.game_card_title}
-          gutterBottom
-          variant="h5"
-          component="h2"
-        >
+        <Typography className={styles.game_card_title} gutterBottom variant="h5" component="h2">
           {gameInfo.appName}
         </Typography>
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          component="span"
-          style={cardColor}
-        >
+        <Typography variant="body1" color="textSecondary" component="span" style={cardColor}>
           {descriptionNum}
         </Typography>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          component="span"
-          style={cardColor}
-        >
+        <Typography variant="body2" color="textSecondary" component="span" style={cardColor}>
           {descriptionText}
         </Typography>
       </CardContent>
@@ -66,4 +84,9 @@ export default function GameCard({ isLogin, gameInfo }) {
       </CardActions>
     </Card>
   );
+
+  let ret = normalCard;
+  if (gameInfo.suitedRate > 70) ret = neonCard;
+
+  return ret;
 }
