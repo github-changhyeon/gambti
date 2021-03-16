@@ -1,0 +1,27 @@
+.game_card {
+  width: 238px;
+  height: 283px;
+  border-radius: 15px;
+  background-color: #2a2c2d;
+  text-align: center;
+}
+.game_card_background_img {
+  height: 100px;
+}
+
+.card_logo_img {
+  position: relative;
+  padding: 0px;
+  margin-top: -52px;
+  margin-left: 67px;
+}
+
+.game_card_title {
+  color: white;
+  margin: 0px;
+}
+
+.game_card_button {
+  padding: 0;
+  justify-content: center;
+}

@@ -4,8 +4,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import CardActions from '@material-ui/core/CardActions';
 
-export default function MediaCard({ imagePath, genreName, isClicked }) {
+export default function GenreCard({ imagePath, genreName, isClicked }) {
   const colorStyle = { color: '#ffffff' };
   if (isClicked) {
     colorStyle.color = '#ccff00';
@@ -13,9 +14,11 @@ export default function MediaCard({ imagePath, genreName, isClicked }) {
 
   return (
     <Card className={styles.genre}>
-      <CardContent>
+      <CardContent style={{ paddingTop: '12px', paddingBottom: '8px' }}>
         <CardMedia className={styles.genre_img} image={imagePath} />
-        <Typography gutterBottom variant="body" style={colorStyle}>
+      </CardContent>
+      <CardContent style={{ paddingTop: '8px', paddingBottom: '12px' }}>
+        <Typography gutterBottom variant="body2" style={colorStyle}>
           #{genreName}
         </Typography>
       </CardContent>
