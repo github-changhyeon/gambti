@@ -1,11 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { StylesProvider } from "@material-ui/core/styles";
+import { StylesProvider } from '@material-ui/core/styles';
+import Header from 'src/components/Header/Header';
+import Footer from 'src/components/Footer/Footer';
 import 'src/firebaseConfig';
 
 import {
   Home,
-  Account,
+  Login,
+  Signup,
   Forgot,
   ForgotSent,
   GenreGames,
@@ -21,10 +24,12 @@ function App() {
   return (
     <StylesProvider injectFirst>
       <div className="App">
+        <Header />
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/account" component={Account} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
             <Route exact path="/forgot" component={Forgot} />
             <Route path="/forgot/sent" component={ForgotSent} />
             <Route path="/games/:genre" component={GenreGames} />
@@ -35,6 +40,7 @@ function App() {
             <Route path="/test" component={Test} />
           </Switch>
         </Router>
+        <Footer />
       </div>
     </StylesProvider>
   );

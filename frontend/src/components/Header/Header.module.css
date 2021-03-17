@@ -1,0 +1,68 @@
+.header {
+  background-color: black;
+  color: white;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1000;
+  width: 100%;
+  height: 48px;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  display: flex;
+  align-items: center; /* 세로에서 가운데에 요소를 배치 */
+}
+
+.header_left {
+  flex: 1;
+  text-align: left;
+  padding-left: 20px;
+  display: inline-block;
+}
+
+.header_center {
+  flex: 1;
+  position: relative;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-left: 0;
+  width: 400px;
+}
+
+.search:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.input_root {
+  color: white;
+  padding-left: 50px;
+}
+
+.search_icon {
+  padding-left: 10px;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.header_right {
+  flex: 1;
+  padding-right: 20px;
+  text-align: right;
+}
+
+.header_icon {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  display: inline-block;
+  /* text-align: center;
+  flex-direction: row; */
+}
+
+.header_avatar {
+  padding-bottom: 10px;
+  display: inline-block;
+}

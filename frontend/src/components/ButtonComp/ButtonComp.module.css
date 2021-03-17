@@ -11,8 +11,9 @@
 }
 /* login, signup, Forgot, ForgotSent */
 .large {
-  width: 300px;
+  width: 330px;
   color: #000000;
   font-weight: bold;
-  background-color: #CCFF00;
+  margin-top: 10px;
+  /* background-color: #CCFF00; */
 }

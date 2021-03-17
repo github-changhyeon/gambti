@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './ButtonComp.module.css';
 import Button from '@material-ui/core/Button';
 
-export default function ButtonComp({ size, textvalue, onClick }) {
+export default function ButtonComp({ size, textvalue, color, onClick }) {
+
 
   // logout, editProfile(save, connect), 친구 추가 
   if (size === 'small') {
@@ -24,7 +25,7 @@ export default function ButtonComp({ size, textvalue, onClick }) {
   else if (size === 'large') {
     return (
       <div>
-        <Button className={styles.large} variant="contained" onClick={onClick}>{textvalue}</Button>
+        <Button className={styles.large} style={{ backgroundColor: `${color}` }} variant="contained" onClick={onClick}>{textvalue}</Button>
       </div>
     );
   }
