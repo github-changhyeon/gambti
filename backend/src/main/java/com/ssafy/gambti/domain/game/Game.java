@@ -1,15 +1,15 @@
 package com.ssafy.gambti.domain.game;
 
-import com.ssafy.gambti.domain.image.Image;
-
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "game")
+@RequiredArgsConstructor
 @Getter
-@Setter
 public class Game {
 
     @Id
@@ -25,7 +25,7 @@ public class Game {
 
     private String releaseDate;
 
-    private Long metaScore;
+    private Long metascore;
 
     private Long price;
 
@@ -35,12 +35,8 @@ public class Game {
 
     private String videoUrl;
 
-    @OneToOne
-    @JoinColumn(name="IMAGE_ID", insertable=false, updatable=false)
-    private Image logoImage;
+    private String logoImagePath;
 
-    @OneToOne
-    @JoinColumn(name="IMAGE_ID", insertable=false, updatable=false)
-    private Image backgroundImage;
+    private String backgoundImagePath;
 
 }
