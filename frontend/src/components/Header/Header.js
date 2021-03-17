@@ -10,7 +10,9 @@ export default function Header() {
 
   return (
     <div className={styles.header}>
-      <div className={styles.header_left}>GAMBTI</div>
+      <div className={styles.header_left}>
+        <img src="/images/gambti_logo.png" alt="logo" style={{ height: '28px' }} />
+      </div>
       <div className={styles.header_center}>
         <div className={styles.search_icon}>
           <SearchIcon />
@@ -23,14 +25,8 @@ export default function Header() {
       </div>
 
       <div className={styles.header_right}>
-        <div style={{ display: 'inline-block' }}>
-          <NotificationsIcon className={styles.header_icon} />
-          <AvatarComp
-            className={styles.header_avatar}
-            size="small"
-            textvalue={atextvalue}
-          ></AvatarComp>
-        </div>
+        <NotificationsIcon className={styles.header_icon} />
+        <AvatarComp size="small" textvalue={atextvalue}></AvatarComp>
       </div>
     </div>
   );
