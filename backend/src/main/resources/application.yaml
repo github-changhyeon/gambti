@@ -9,7 +9,7 @@ spring:
 
   datasource: #DB 접속정보
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com:3306/gambti/serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mariadb://gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com/gambti?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: ssafy
     password: gambti123!
 
