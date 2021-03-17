@@ -4,6 +4,8 @@ import os
 import shutil
 import numpy as np
 import pickle
+import pymysql          #mariaDB 사용
+import sqlalchemy      #DB 접속 엔진
 
 DATA_FILE = os.path.join("products_all.jl")
 DUMP_FILE = os.path.join("game_data.pkl")
@@ -49,7 +51,7 @@ def import_data(data_path=DATA_FILE):
     #  metascore nan인 것은 0점으로 처리, price 없는 것 0으로 처리
     data = data.fillna({"metascore" : 0, "price" : 0})
 
-    games = data[[*game_columns, "tags", "specs"]]  #게임관련 데이터 테이블 + tag, specs
+    games = data[[*game_columns, "tags", "specs", "genres"]]  #게임관련 데이터 테이블 + tag, specs
 
     return {"games": games}
 
@@ -61,6 +63,13 @@ def dump_dataframes(dataframes):
 def load_dataframes():
     return pd.read_pickle(DUMP_FILE)
 
+def save_mariadb():
+    HOST = 'gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com'
+    USER = 'ssafy'
+    PW = 'gambti123!'
+
+    DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti'
+    engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
 def main():
 
@@ -82,6 +91,7 @@ def main():
     print(data["games"].head())
     print(f"\n{separater}\n\n")
 
+    save_mariadb()
 
 if __name__ == "__main__":
     main()
