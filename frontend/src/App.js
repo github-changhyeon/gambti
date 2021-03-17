@@ -7,7 +7,8 @@ import 'src/firebaseConfig';
 
 import {
   Home,
-  Account,
+  Login,
+  Signup,
   Forgot,
   ForgotSent,
   GenreGames,
@@ -27,7 +28,8 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/account" component={Account} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
             <Route exact path="/forgot" component={Forgot} />
             <Route path="/forgot/sent" component={ForgotSent} />
             <Route path="/games/:genre" component={GenreGames} />
