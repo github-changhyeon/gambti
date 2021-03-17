@@ -1,0 +1,12 @@
+.hashtag {
+  color: black;
+  padding: 3px 7px;
+  margin: 5px 7px 5px 0px;
+  font-size: 0.8rem;
+  border-radius: 0.3rem;
+  box-shadow: none;
+}
+
+.hashtag:hover {
+  box-shadow: none;
+}

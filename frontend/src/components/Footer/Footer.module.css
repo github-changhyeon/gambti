@@ -12,6 +12,9 @@
   font-weight: bold;
   padding-bottom: 15px;
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer_detail {
