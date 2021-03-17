@@ -62,7 +62,10 @@ export default function Test() {
         genreName="name"
         isClicked={true}
       />
-      <Hashtag />
+
+      <Hashtag value="게임태그" color="#4ae0e0" />
+      <Hashtag value="멀티미디어" color="#4ae0e0" />
+
       <MediumProfile />
       <SmallProfile />
       <UserCard />
