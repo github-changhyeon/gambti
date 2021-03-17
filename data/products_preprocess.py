@@ -63,13 +63,23 @@ def dump_dataframes(dataframes):
 def load_dataframes():
     return pd.read_pickle(DUMP_FILE)
 
-def save_mariadb():
+def save_mariadb(data):
     HOST = 'gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com'
     USER = 'ssafy'
     PW = 'gambti123!'
 
-    DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti'
+    DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti?charset=utf8mb4'
     engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
+
+    game_df = data["games"]
+    game_df = game_df[['id', 'app_name', 'developer', 'metascore', 'price', 'publisher', 'release_date', 'sentiment']]
+    game_df.rename({'id':'game_id'}, inplace=True)
+    table_name = 'game'
+    
+    print(game_df.head())
+#    game_df.to_sql(name=table_name, con=engine_mariadb, index=False, if_exists='append') --> append로 테스트 안해봄
+    game_df.to_sql(name=table_name, con=engine_mariadb, index=False, if_exists='replace')
+
 
 def main():
 
@@ -91,7 +101,7 @@ def main():
     print(data["games"].head())
     print(f"\n{separater}\n\n")
 
-    save_mariadb()
+    save_mariadb(data)
 
 if __name__ == "__main__":
     main()
