@@ -26,6 +26,7 @@
 }
 /* UserCard,GameCard, editProfile */
 .xlarge {
-  width: 6.5rem;
-  height: 6.5rem;
+  width: 5.7rem;
+  height: 5.7rem;
+  border: 5px solid #2a2c2d;
 }
