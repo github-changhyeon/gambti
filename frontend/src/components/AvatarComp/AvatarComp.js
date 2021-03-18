@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AvatarComp.module.css';
 import Avatar from '@material-ui/core/Avatar';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Badge from '@material-ui/core/Badge';
-
 
 
 export default function AvatarComp({ size, textvalue, imgPath }) {
@@ -34,7 +34,11 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
   }
   // UserCard,GameCard, editProfile
   else if (size = 'xlarge') {
-    return <Avatar className={styles.xlarge}>{textvalue}</Avatar>
+    return (
+      <AvatarGroup max={1}>
+        <Avatar src={imgPath} className={styles.xlarge}>{textvalue}</Avatar>
+      </AvatarGroup>
+    );
   }
 
 }
