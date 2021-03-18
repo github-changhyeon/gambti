@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp.js';
 import Avatar from '@material-ui/core/Avatar';
+import { Container } from '@material-ui/core';
 
 export default function GameCard({ isLogin, gameInfo }) {
   let descriptionNum, descriptionText, buttonText;
@@ -37,7 +38,9 @@ export default function GameCard({ isLogin, gameInfo }) {
             title="Contemplative Reptile"
           />
           <CardContent className={styles.card_logo_img}>
-            <AvatarComp size="xlarge" textvalue="temp" />
+            <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              <AvatarComp size="xlarge" textvalue="temp" />
+            </Container>
           </CardContent>
           <CardContent>
             <Typography className={styles.game_card_title} gutterBottom variant="h5" component="h2">
@@ -66,7 +69,9 @@ export default function GameCard({ isLogin, gameInfo }) {
         title="Contemplative Reptile"
       />
       <CardContent className={styles.card_logo_img}>
-        <AvatarComp size="xlarge" textvalue="temp" />
+        <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <AvatarComp size="xlarge" textvalue="temp" />
+        </Container>
       </CardContent>
       <CardContent>
         <Typography className={styles.game_card_title} gutterBottom variant="h5" component="h2">
