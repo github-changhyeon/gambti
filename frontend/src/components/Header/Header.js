@@ -6,7 +6,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 
 export default function Header() {
-  const [atextvalue, setAtextvalue] = React.useState('Hi');
+  const [atextvalue, setAtextvalue] = React.useState('김');
 
   return (
     <div className={styles.header}>
