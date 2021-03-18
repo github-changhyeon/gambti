@@ -53,9 +53,13 @@ export default function Test() {
       <AvatarComp size="small" textvalue="hi"></AvatarComp>
       <ButtonComp size="small" textvalue="hi"></ButtonComp>
       <CloseButton />
-      <GameCard isLogin={true} gameInfo={gameInfo1} />
+      <div style={{ height: 283, width: 238 }}>
+        <GameCard isLogin={true} gameInfo={gameInfo1} />
+      </div>
       <br />
-      <GameCard isLogin={true} gameInfo={gameInfo2} />
+      <div style={{ height: 283, width: 238 }}>
+        <GameCard isLogin={true} gameInfo={gameInfo2} />
+      </div>
       <br />
       <GenreCard
         imagePath="https://s.gjcdn.net/assets/action.7447804b.png"
