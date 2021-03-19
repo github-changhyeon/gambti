@@ -1,36 +1,39 @@
 ![main](README.assets/main.png)
 
-## GAMBTI란?
+## 🌈GAMBTI란?
 - `GAME + MBTI : 사용자 MBTI 및 성향을 고려한 Steam 기반 게임 추천 서비스입니다.`
 <br/><br/><br/>
 
-## 팀 소개
+## 👨팀 소개
+
 |   Name   | 이동규                                     | 윤기현                                     | 박수빈                                     | 김창현                                     | 김예슬                                     | 백민주                                     |
 | :------: | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
 | Profile  | ![p1](README.assets/p1.jpg) | ![p2](README.assets/p2.jpg) | ![p3](README.assets/p3.jpg) | ![p4](README.assets/p4.jpg) | ![p5](README.assets/p5.jpg) | ![p6](README.assets/p6.jpg) |
 | Position | 팀장<br />백엔드                           | 인프라<br />백엔드                         | 백엔드<br />데이터 분석                    | 프론트엔드<br />데이터 분석                | 프론트엔드<br />MBTI 설문                  | 프론트엔드<br />디자인                     |
-| Nickname | 특공머 머장                                | 특공 개구리                                | 특공 막내                                  | 특공 공주님                                | 특공 방구머장                              | 특공 예쁜이                                |
+
 
 <br/><br/><br/>
-## **Index**
+## **📖Index**
 
 - [Architecture](#archiecture)
 - [Tech Stack](#tech-stack)
 - [Feature](#feature)
+- [Wireframe](#wireframe)
 
 <br/><br/><br/>
 
 
-## **Architecture**
+## **🏰Architecture**
 
 ![flow1](README.assets/flow.png)
 ![flow2](README.assets/flow2.png)
 
 <br/><br/><br/>
 
-## **Tech Stack**
+## **⚙️Tech Stack**
 
 ### 💻Back-End
+
 <hr/>
 
 #### 기술스택
@@ -54,6 +57,7 @@
 
 
 ### ✨Front-End
+
 <hr/>
 
 #### 기술스택
@@ -75,6 +79,7 @@
 ![React-scripts](https://img.shields.io/badge/ReactScripts-4.0.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
 
 ### 인프라
+
 <hr/>
 
 #### ⚙️기술스택
@@ -87,7 +92,7 @@
 
 <br/><br/><br/>
 
-## **Feature**
+## **🌌Feature**
 
 ### **주요 기능**
 
@@ -118,9 +123,9 @@
 
 <br/><br/><br/>
 
-## 와이어 프레임
+## **🧙Wireframe**
 
-  * [Figma proto](https://www.figma.com/proto/n7biHPfvyDgPvwODgEO5ko/gambti?node-id=14%3A0&scaling=scale-down-width)
+  * 📌[Figma proto](https://www.figma.com/proto/n7biHPfvyDgPvwODgEO5ko/gambti?node-id=14%3A0&scaling=scale-down-width)
   * ![main page](README.assets/mainpage.png)
 
   
