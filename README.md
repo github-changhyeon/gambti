@@ -8,10 +8,10 @@
 
 ## **Index**
 
-- [Intro](notion://www.notion.so/README-md-bd5f3dc422bc468c81fe320e49fee5f0#intro)
-- [Architecture](notion://www.notion.so/README-md-bd5f3dc422bc468c81fe320e49fee5f0#architecture)
-- [Tech Stack](notion://www.notion.so/README-md-bd5f3dc422bc468c81fe320e49fee5f0#tech-stack)
-- [Feature](notion://www.notion.so/README-md-bd5f3dc422bc468c81fe320e49fee5f0#feature)
+- [Intro](#intro)
+- [Architecture](#archiecture)
+- [Tech Stack](#tech-stack)
+- [Feature](#feature)
 
 ## **Intro**
 
