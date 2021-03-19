@@ -1,4 +1,4 @@
-package com.ssafy.gambti.controller.wordcloud;
+package com.ssafy.gambti.controller.admin;
 
 import com.ssafy.gambti.controller.game.GameController;
 import com.ssafy.gambti.dto.basicResponse.Response;
@@ -12,20 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name="WordCloud", description = "워드 클라우드 REST API")
+@Tag(name="Admin", description = "관리자 REST API")
 @RestController
-@RequestMapping(value = "wordCloud")
-public class WordCloudController {
+@RequestMapping(value = "admin")
+public class AdminController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
-    //TODO: 이걸 따로 컨트롤러로 빼야하는가? 게임 detail에서 추가적으로 데이터를 보내주면 안되나?
     @GetMapping
-    @Operation(summary = "워드 클라우드", description = "")
-    public ResponseEntity<? extends Response> findWordCloud(){
-
-
+    @Operation(summary = "", description = "")
+    public ResponseEntity<? extends Response> temp(){
         return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
     }
 }
