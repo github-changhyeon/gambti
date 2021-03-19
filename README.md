@@ -2,9 +2,18 @@
 
 ---
 
-![README%20md%209c21056679184083ba48a7d13a489282/3.png](README.assets/3-1616123750721.png)
+![main](README.assets/main.png)
 
 `GAME + MBTI : 사용자 MBTI 및 성향을 고려한 Steam 기반 게임 추천 서비스`
+
+
+## 팀 소개
+|   Name   | 임동규                                     | 윤기현                                     | 박수빈                                     | 김창현                                     | 김예슬                                     | 백민주                                     |
+| :------: | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
+| Profile  | ![p1](README.assets/p1.jpg) | ![p2](README.assets/p2.jpg) | ![p3](README.assets/p3.jpg) | ![p4](README.assets/p4.jpg) | ![p5](README.assets/p5.jpg) | ![p6](README.assets/p6.jpg) |
+| Position | 팀장<br />백엔드                           | 인프라<br />백엔드                         | 백엔드<br />데이터 분석                    | 프론트엔드<br />데이터 분석                | 프론트엔드<br />MBTI 설문                  | 프론트엔드<br />디자인                     |
+| Nickname | 특공머 머장                                | 특공 개구리                                | 특공 막내                                  | 특공 공주님                                | 특공 방구머장                              | 특공 예쁜이                                |
+
 
 ## **Index**
 
@@ -16,7 +25,8 @@
 
 ## **Architecture**
 
-![README%20md%209c21056679184083ba48a7d13a489282/Untitled.png](README.assets/Untitled-1616123750722.png)
+![flow1](README.assets/flow.png)
+![flow2](README.assets/flow2.png)
 
 ## **Tech Stack**
 
@@ -67,4 +77,10 @@
 
 - MBTI 별 궁합에 따른 팀원 자동 매칭
 
-## 팀 소개
+### 와이어 프레임
+# 와이어 프레임
+
+  * [Figma proto](https://www.figma.com/proto/n7biHPfvyDgPvwODgEO5ko/gambti?node-id=14%3A0&scaling=scale-down-width)
+  * ![main page](README.assets/mainpage.png)
+
+  
