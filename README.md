@@ -8,12 +8,11 @@
 
 ## **Index**
 
-- [Intro](#intro)
 - [Architecture](#archiecture)
 - [Tech Stack](#tech-stack)
 - [Feature](#feature)
 
-## **Intro**
+
 
 ## **Architecture**
 
