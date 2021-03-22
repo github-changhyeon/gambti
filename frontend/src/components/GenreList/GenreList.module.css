@@ -1,0 +1,11 @@
+.genre_list {
+  white-space: nowrap;
+  overflow-x: scroll;
+  background-color: #2a2b2c;
+  padding: 20px;
+}
+
+.genre_item {
+  margin: 20px;
+  display: inline-block;
+}
