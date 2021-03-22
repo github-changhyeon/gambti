@@ -68,9 +68,12 @@ def load_dataframes():
     return pd.read_pickle(DUMP_FILE)
 
 def save_mariadb(data, table_name):
-    HOST = 'gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com'
-    USER = 'ssafy'
-    PW = 'gambti123!'
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+
+    HOST = config['DATABASE']['HOST']
+    USER = config['DATABASE']['USER']
+    PW = config['DATABASE']['PW']
 
     DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti?charset=utf8mb4'
     engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
