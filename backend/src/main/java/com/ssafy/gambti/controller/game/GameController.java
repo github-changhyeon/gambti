@@ -71,31 +71,18 @@ public class GameController {
         return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/genres/games/{genreId}")
+    @GetMapping(value = "/genres/{genreId}/games")
     @Operation(summary = "해당 장르 리스트 받기", description = "선택한 장르 리스트를 페이징하여 받는다.")
     public ResponseEntity<? extends Response> findAllGamesInGenre(){
 
         return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/genres/recommends/{genreId}")
+    @GetMapping(value = "/genres/{genreId}/recommends")
     @Operation(summary = "장르별 추천 게임 조회", description = "사용자가 선택한 장르에 대해 추천 게임을 조회한다.")
     public ResponseEntity<? extends Response> gameRecommendationsByGenre(){
 
         return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
     }
-
-    @GetMapping(value = "/genres/search-results")
-    @Operation(summary = "장르별 게임 검색", description = "사용자가 선택한 장르에 대해 게임을 검색한다.")
-    public ResponseEntity<? extends Response> searchForGamesByGenre(){
-
-        return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/genres/search/{word}")
-    @Operation(summary = "검색어를 포함하는 게임 리스트 검색", description = "검색어를 통해 선택한 장르에서 게임을 검색한다.")
-    public ResponseEntity<? extends Response> searchToWord(){
-
-        return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
-    }
 }
+
