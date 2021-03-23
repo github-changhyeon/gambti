@@ -20,13 +20,18 @@ export default function GenreList() {
   }, []);
 
   return (
-    <Container maxWidth="lg" className={styles.genre_list}>
-      <h2 style={{ color: 'white', margin: '0px' }}>Type of Games</h2>
-      {genres.map((genre, i) => (
-        <div key={i} className={styles.genre_item}>
-          <GenreCard imagePath={genre.path} genreName={genre.name} isClicked={false}></GenreCard>
-        </div>
-      ))}
-    </Container>
+    <div>
+      <Container maxWidth="lg" style={{ backgroundColor: '#2a2b2c', paddingTop: '10px' }}>
+        <h2 style={{ color: 'white', margin: '0px' }}>Type of Games</h2>
+      </Container>
+
+      <Container maxWidth="lg" className={styles.genre_list}>
+        {genres.map((genre, i) => (
+          <div key={i} className={styles.genre_item}>
+            <GenreCard imagePath={genre.path} genreName={genre.name}></GenreCard>
+          </div>
+        ))}
+      </Container>
+    </div>
   );
 }
