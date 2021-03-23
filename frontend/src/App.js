@@ -10,6 +10,8 @@ import {
   Home,
   Login,
   Signup,
+  CheckGambti,
+  CheckInfo,
   Forgot,
   ForgotSent,
   GenreGames,
@@ -37,6 +39,9 @@ function App() {
             <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
             <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
             <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
+            {/* TODO: 수정 */}
+            <Route path="/checkinfo" component={CheckInfo} />
+            <Route path="/checkgambti" component={CheckGambti} />
             <Route path="/test" component={Test} />
           </Switch>
         </Router>
