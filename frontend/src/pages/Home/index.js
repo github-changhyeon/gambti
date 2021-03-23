@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { generatePath } from 'react-router-dom';
+import routerInfo from 'src/constants/routerInfo';
 import styles from './index.module.css';
 import GameCard from 'src/components/GameCard/GameCard';
 import fire from 'src/firebaseConfig';
@@ -61,6 +63,18 @@ export default function Home() {
           <button onClick={login}>로그인</button>
         </div>
       }
+      <button
+        onClick={() => {
+          history.push(
+            generatePath(routerInfo.PAGE_URLS.GAMES, {
+              order: 'a',
+              genre: 'b',
+            })
+          );
+        }}
+      >
+        버튼
+      </button>
     </div>
   );
 }

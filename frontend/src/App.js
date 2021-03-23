@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StylesProvider } from '@material-ui/core/styles';
 import Header from 'src/components/Header/Header';
 import Footer from 'src/components/Footer/Footer';
+import routerInfo from 'src/constants/routerInfo';
 import 'src/firebaseConfig';
 
 import {
@@ -21,7 +22,6 @@ import {
   Test,
 } from './pages';
 
-
 function App() {
   return (
     <StylesProvider injectFirst>
@@ -29,18 +29,19 @@ function App() {
         <Header />
         <Router>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
+            <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
+            <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
+            <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
+            <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
+            <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
+            <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
+            <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
+            <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
+            <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
+            {/* TODO: 수정 */}
             <Route path="/checkinfo" component={CheckInfo} />
             <Route path="/checkgambti" component={CheckGambti} />
-            <Route exact path="/forgot" component={Forgot} />
-            <Route path="/forgot/sent" component={ForgotSent} />
-            <Route path="/games/:genre" component={GenreGames} />
-            <Route path="/search" component={Search} />
-            <Route path="/detail/:gameName" component={Detail} />
-            <Route exact path="/profiles/:id" component={Profile} />
-            <Route path="/profiles/:id/edit" component={EditProfile} />
             <Route path="/test" component={Test} />
           </Switch>
         </Router>
