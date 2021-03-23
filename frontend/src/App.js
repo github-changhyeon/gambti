@@ -9,6 +9,8 @@ import {
   Home,
   Login,
   Signup,
+  CheckGambti,
+  CheckInfo,
   Forgot,
   ForgotSent,
   GenreGames,
@@ -30,6 +32,8 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/checkinfo" component={CheckInfo} />
+            <Route path="/checkgambti" component={CheckGambti} />
             <Route exact path="/forgot" component={Forgot} />
             <Route path="/forgot/sent" component={ForgotSent} />
             <Route path="/games/:genre" component={GenreGames} />
