@@ -53,7 +53,7 @@ export default function Test() {
       <h1>Hello Test</h1>
       <AvatarComp size="small" textvalue="hi"></AvatarComp>
       <ButtonComp size="small" textvalue="hi"></ButtonComp>
-      <CloseButton />
+      <CloseButton color="white" />
       <div style={{ height: 283, width: 238 }}>
         <GameCard isLogin={true} gameInfo={gameInfo1} />
       </div>
