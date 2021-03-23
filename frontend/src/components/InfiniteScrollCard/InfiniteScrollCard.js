@@ -5,6 +5,7 @@ import styles from './InfiniteScrollCard.module.css';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { Button, Card } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 export default function InfiniteScrollCard() {
   // 새로운 state 변수를 선언하고, count라 부르겠습니다.
@@ -80,7 +81,15 @@ export default function InfiniteScrollCard() {
           </Grid>
         ))}
       </Grid>
-      {isFetching ? <h3>데이터를 가져오는 중입니다.</h3> : null}
+      {isFetching ? (
+        <Typography
+          variant="h5"
+          style={{ color: 'white', margin: '10px 0px 0px 0px' }}
+          gutterBottom
+        >
+          데이터를 받아오는 중입니다.
+        </Typography>
+      ) : null}
     </Container>
   );
 }

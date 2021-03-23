@@ -24,11 +24,7 @@ export default function GenreList({ propsOrder }) {
 
   return (
     <div>
-      <Container maxWidth="lg" style={{ backgroundColor: '#2a2b2c', paddingTop: '10px' }}>
-        <h2 style={{ color: 'white', margin: '0px' }}>Type of Games</h2>
-      </Container>
-
-      <Container maxWidth="lg" className={styles.genre_list}>
+      <div maxWidth="lg" className={styles.genre_list}>
         {genres.map((genre, i) => (
           <div key={i} className={styles.genre_item}>
             <GenreCard
@@ -45,7 +41,7 @@ export default function GenreList({ propsOrder }) {
             ></GenreCard>
           </div>
         ))}
-      </Container>
+      </div>
     </div>
   );
 }
