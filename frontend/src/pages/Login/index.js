@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import fire from 'src/firebaseConfig';
 import { useHistory } from 'react-router';
+import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
 
 
 export default function Login() {
@@ -39,12 +40,14 @@ export default function Login() {
         //   username: 'ddddd',
         //   email: user.user.email,
         // })
-        history.push('/')
+        console.log(user);
+        history.push('/');
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(error)
+        alert(errorMessage)
       });
   }
 
@@ -78,12 +81,13 @@ export default function Login() {
             <div className={styles.buttons}>
               <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin}></ButtonComp>
               <hr />
-              <ButtonComp size='large' textvalue='Sign in with Google' color='#2196F3'></ButtonComp>
-              <ButtonComp size='large' textvalue='Sign in with Steam' color='#0288D1'></ButtonComp>
+              {/* 소셜 로그인 */}
+              <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
+              <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
             </div>
           </form>
           <div className={styles.move_page}>
-            <a href="/signup" className={styles.link}>or Sign Up</a>
+            <a href="/checkgambti" className={styles.link}>or Sign Up</a>
             <a href="/forgot" className={styles.link}>Forgot Username or Password</a>
           </div>
         </div>

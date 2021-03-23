@@ -8,6 +8,7 @@ import Hashtag from 'src/components/Hashtag/Hashtag';
 import MediumProfile from 'src/components/MediumProfile/MediumProfile';
 import SmallProfile from 'src/components/SmallProfile/SmallProfile';
 import UserCard from 'src/components/UserCard/UserCard';
+import GenreList from 'src/components/GenreList/GenreList';
 import InfiniteScrollCard from 'src/components/InfiniteScrollCard/InfiniteScrollCard';
 
 export default function Test() {
@@ -52,7 +53,7 @@ export default function Test() {
       <h1>Hello Test</h1>
       <AvatarComp size="small" textvalue="hi"></AvatarComp>
       <ButtonComp size="small" textvalue="hi"></ButtonComp>
-      <CloseButton />
+      <CloseButton color="white" />
       <div style={{ height: 283, width: 238 }}>
         <GameCard isLogin={true} gameInfo={gameInfo1} />
       </div>
@@ -61,11 +62,7 @@ export default function Test() {
         <GameCard isLogin={true} gameInfo={gameInfo2} />
       </div>
       <br />
-      <GenreCard
-        imagePath="https://s.gjcdn.net/assets/action.7447804b.png"
-        genreName="name"
-        isClicked={true}
-      />
+      <GenreCard imagePath="https://s.gjcdn.net/assets/action.7447804b.png" genreName="name" />
 
       <Hashtag value="게임태그" color="#4ae0e0" />
       <Hashtag value="멀티미디어" color="#4ae0e0" />
@@ -73,7 +70,7 @@ export default function Test() {
       <MediumProfile />
       <SmallProfile />
       <UserCard />
-
+      <GenreList propsOrder="all"></GenreList>
       <InfiniteScrollCard />
     </div>
   );
