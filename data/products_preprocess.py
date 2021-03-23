@@ -79,20 +79,25 @@ def save_mariadb(data, table_name):
     engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
     #duplicate 문제를 해결하기 위해 data 저장 전에 truncate table을 먼저 수행
-    engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
+    if table_name == "game":
+        engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
+
     data.to_sql(name=table_name, con=engine_mariadb, index=False, if_exists='append') 
 
-def genre_dataframe(data):
-    genre_data = data["genres"].dropna() 
-    genres = []
+def extract_dataframe(data, column_name):
+    target_data = data[column_name].dropna() 
+    lists = []
     
-    for index, game_genre in genre_data.items():
-        for genre in game_genre:
-            genres.append(genre)
+    for index, row in target_data.items():
+        for item in row:
+            lists.append(item)
 
     #리스트를 dataframe으로 만들기
-    genre_df = pd.DataFrame(genres, columns=['genre_name']).drop_duplicates()
-    return genre_df
+    extract_df = pd.DataFrame(lists, columns=[column_name[0:-1]+"_name"]).drop_duplicates()
+    return extract_df
+
+def make_mapping_table(games, category):
+    print(games.head())
 
 def main():
     print("[*] Parsing data...")
@@ -110,12 +115,19 @@ def main():
     game_df = game_df[[*game_columns]]
     game_df.rename(columns={'id':'game_id'}, inplace=True) #id를 DB의 컬럼명(game_id)과 맞춰주기
 
-    #장르 dataframe 추출
-    genre_df = genre_dataframe(data["games"])
+    #장르, 태그 dataframe 추출
+    genre_df = extract_dataframe(data["games"], "genres")
+    tag_df = extract_dataframe(data["games"], "tags")
 
+    #game-genre 맵핑 테이블
+    game_genre_df = make_mapping_table(data["games"], genre_df)
+
+    '''
     #maria DB에 저장
     save_mariadb(game_df, 'game')
     save_mariadb(genre_df, 'genre')
+    save_mariadb(tag_df, 'tag')
+    '''
 
 if __name__ == "__main__":
     main()
