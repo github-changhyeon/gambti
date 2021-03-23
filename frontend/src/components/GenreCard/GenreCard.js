@@ -6,11 +6,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
-export default function GenreCard({ imagePath, genreName }) {
+export default function GenreCard({ imagePath, genreName, onClickFunc }) {
   const [color, setColor] = useState('#ffffff');
 
   return (
-    <Card className={styles.genre}>
+    <Card className={styles.genre} onClick={onClickFunc}>
       <CardActionArea
         onMouseOver={() => {
           setColor('#ccff00');
