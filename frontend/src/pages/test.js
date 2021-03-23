@@ -62,11 +62,7 @@ export default function Test() {
         <GameCard isLogin={true} gameInfo={gameInfo2} />
       </div>
       <br />
-      <GenreCard
-        imagePath="https://s.gjcdn.net/assets/action.7447804b.png"
-        genreName="name"
-        isClicked={true}
-      />
+      <GenreCard imagePath="https://s.gjcdn.net/assets/action.7447804b.png" genreName="name" />
 
       <Hashtag value="게임태그" color="#4ae0e0" />
       <Hashtag value="멀티미디어" color="#4ae0e0" />
