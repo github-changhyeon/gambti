@@ -8,6 +8,7 @@ import Hashtag from 'src/components/Hashtag/Hashtag';
 import MediumProfile from 'src/components/MediumProfile/MediumProfile';
 import SmallProfile from 'src/components/SmallProfile/SmallProfile';
 import UserCard from 'src/components/UserCard/UserCard';
+import GenreList from 'src/components/GenreList/GenreList';
 import InfiniteScrollCard from 'src/components/InfiniteScrollCard/InfiniteScrollCard';
 
 export default function Test() {
@@ -73,7 +74,7 @@ export default function Test() {
       <MediumProfile />
       <SmallProfile />
       <UserCard />
-
+      <GenreList></GenreList>
       <InfiniteScrollCard />
     </div>
   );
