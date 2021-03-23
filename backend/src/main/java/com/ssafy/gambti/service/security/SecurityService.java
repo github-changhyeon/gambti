@@ -4,7 +4,7 @@ import com.ssafy.gambti.domain.auth.Credentials;
 import com.ssafy.gambti.domain.auth.SecurityProperties;
 import com.ssafy.gambti.domain.auth.User;
 import com.ssafy.gambti.utils.CookieUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Service
+@RequiredArgsConstructor
 public class SecurityService {
 
-    @Autowired
-    HttpServletRequest httpServletRequest;
-
-    @Autowired
-    CookieUtils cookieUtils;
-
-    @Autowired
-    SecurityProperties securityProps;
+    private final HttpServletRequest httpServletRequest;
+    private final CookieUtils cookieUtils;
+    private final SecurityProperties securityProps;
 
     public User getUser() {
         User userPrincipal = null;

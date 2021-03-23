@@ -80,7 +80,12 @@ security:
   allowed-public-apis:
     - /favicon.ico
     - /session/login
-    - /**
+    - /swagger-ui.html
+    - /swagger-ui/**
+    - /swagger/**
+    - /swagger-resources/**
+    - /v3/api-docs/**
+    - /webjars/**
 
   exposed-headers:
     - X-Xsrf-Token

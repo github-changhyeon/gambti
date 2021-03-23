@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "friend")
 public class FriendController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FriendController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 

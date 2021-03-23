@@ -1,8 +1,10 @@
 package com.ssafy.gambti.domain.user;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -10,8 +12,9 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "user")
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
+@ToString
 public class User {
 
     @Id
@@ -32,14 +35,28 @@ public class User {
     @Column(nullable = false)
     private long maxPrice;
 
+    @CreationTimestamp
+    private Timestamp createdDate;
+
     @UpdateTimestamp
     private Timestamp updatedDate;
 
     private String steamId;
 
-    private String profileImagePath;
-
+    //유저 권한
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Builder
+    public User(String id, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+        this.id = id;
+        this.mbti = mbti;
+        this.age = age;
+        this.gender = gender;
+        this.maxPrice = maxPrice;
+        this.steamId = steamId;
+        this.role = role;
+    }
+
 
 }

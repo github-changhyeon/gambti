@@ -1,7 +1,7 @@
 package com.ssafy.gambti.utils;
 
 import com.ssafy.gambti.domain.auth.SecurityProperties;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
@@ -11,15 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @Service
+@RequiredArgsConstructor
 public class CookieUtils {
 
-	@Autowired
-    HttpServletRequest httpServletRequest;
-
-	HttpServletResponse httpServletResponse;
-
-	@Autowired
-	SecurityProperties restSecProps;
+	private final HttpServletRequest httpServletRequest;
+	private final HttpServletResponse httpServletResponse;
+	private final SecurityProperties restSecProps;
 
 	public Cookie getCookie(String name) {
 		return WebUtils.getCookie(httpServletRequest, name);
