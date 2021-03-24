@@ -82,7 +82,7 @@ export default function Login() {
               <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin}></ButtonComp>
               <hr />
               {/* 소셜 로그인 */}
-              <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
+              <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
             </div>
           </form>
