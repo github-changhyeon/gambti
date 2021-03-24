@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
-import fire from 'src/firebaseConfig';
+import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
 
@@ -33,14 +33,14 @@ export default function Login() {
 
   const onLogin = (event) => {
     // firebase Login
-    fire.auth().signInWithEmailAndPassword(email, password)
+    fire.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
         // realtime Database 사용법
         // fire.database().ref('users/' + user.user.uid).set({
         //   username: 'ddddd',
         //   email: user.user.email,
         // })
-        console.log(user);
+        // console.log(user);
         history.push('/');
       })
       .catch((error) => {

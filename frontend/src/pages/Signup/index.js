@@ -5,11 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
-import fire from 'src/firebaseConfig';
+import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
-
-
 
 export default function Signup() {
   const history = useHistory();
@@ -31,7 +29,7 @@ export default function Signup() {
 
   // firebase signup
   const onSignup = (event) => {
-    fire.auth().createUserWithEmailAndPassword(email, password)
+    fire.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
         // Signed in
         // ...
@@ -42,8 +40,12 @@ export default function Signup() {
           email: createdUser.email,
           nickName: nickName,
         }
-        alert('이메일 인증해주세요')
-        history.push('/')
+        createdUser.sendEmailVerification().then(function () {
+          alert('인증메일 발송 이메일을 확인해주세요');
+          history.push('/emailconfirm')
+        }).catch(function (error) {
+          alert('인증메일 발송에 실패하였습니다.');
+        });
       })
       .catch((error) => {
         var errorCode = error.code;
