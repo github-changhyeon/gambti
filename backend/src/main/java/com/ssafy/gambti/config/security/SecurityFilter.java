@@ -8,8 +8,8 @@ import com.ssafy.gambti.domain.auth.SecurityProperties;
 import com.ssafy.gambti.domain.auth.User;
 import com.ssafy.gambti.service.security.SecurityService;
 import com.ssafy.gambti.utils.CookieUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -24,20 +24,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    SecurityService securityService;
-
-    @Autowired
-    SecurityProperties restSecProps;
-
-    @Autowired
-    CookieUtils cookieUtils;
-
-    @Autowired
-    SecurityProperties securityProps;
+    private final SecurityService securityService;
+    private final SecurityProperties restSecProps;
+    private final CookieUtils cookieUtils;
+    private final SecurityProperties securityProps;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -53,6 +47,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         boolean strictServerSessionEnabled = securityProps.getFirebaseProps().isEnableStrictServerSession();
         Cookie sessionCookie = cookieUtils.getCookie("session");
         String token = securityService.getBearerToken(request);
+
         try {
             if (sessionCookie != null) {
                 session = sessionCookie.getValue();
