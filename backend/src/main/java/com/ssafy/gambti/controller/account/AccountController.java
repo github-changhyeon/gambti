@@ -55,7 +55,7 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.PATCH)
     @Operation(summary = "회원 정보 수정", description = "회원이 본인의 정보 수정을 요청한다.")
     public ResponseEntity<? extends Response> ModifyUserInfo(@RequestBody ModifyUserInfoRequest modifyUserInfoRequest, HttpServletRequest httpServletRequest){
-        accountService.ModifyUserInfo(modifyUserInfoRequest, httpServletRequest);
+        accountService.modifyUserInfo(modifyUserInfoRequest, httpServletRequest);
         return new ResponseEntity<>(new Response(SUCCESS, "수정 성공", null), HttpStatus.OK);
     }
 
