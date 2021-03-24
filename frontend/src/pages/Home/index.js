@@ -31,25 +31,9 @@ export default function Home() {
     });
   }
 
-  // 그냥 test 버튼
-  const login = () => {
-    history.push('/login')
-  }
-
-  const updateTest = () => {
-    user.updateProfile({
-      displayName: "ming",
-    }).then(function () {
-      // Update successful.
-    }).catch(function (error) {
-      // An error happened.
-    });
-  }
-
-
   return (
     <div style={{ backgroundColor: "#222222" }}>
-      <button onClick={logout}>logout</button>
+      {/* <button onClick={logout}>logout</button> */}
       <RepresentImage />
       <Typography
         variant="h5"
