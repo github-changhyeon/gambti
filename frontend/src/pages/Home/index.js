@@ -6,6 +6,7 @@ import GameCard from 'src/components/GameCard/GameCard';
 import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { UserContext } from 'src/Context/UserContext';
+import userEvent from '@testing-library/user-event';
 
 
 
@@ -29,6 +30,16 @@ export default function Home() {
     history.push('/login')
   }
 
+  const updateTest = () => {
+    user.updateProfile({
+      displayName: "ming",
+    }).then(function () {
+      // Update successful.
+    }).catch(function (error) {
+      // An error happened.
+    });
+  }
+
 
   return (
     <div>
@@ -40,11 +51,13 @@ export default function Home() {
         user.emailVerified ?
           // 인증 되었을때 상황 
           <div>
-            <p>{user.email}</p>
+            <p>{user.displayName}</p>
             <button onClick={logout}>로그아웃</button>
+            <button onClick={updateTest}>update</button>
           </div> :
           // 인증이 안되었을 경우
           <p>
+            {user.displayName}
             이메일 인증하세요.
           </p>
         :
