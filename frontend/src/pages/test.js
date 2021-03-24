@@ -70,7 +70,7 @@ export default function Test() {
       <MediumProfile />
       <SmallProfile />
       <UserCard />
-      <GenreList></GenreList>
+      <GenreList propsOrder="all"></GenreList>
       <InfiniteScrollCard />
     </div>
   );

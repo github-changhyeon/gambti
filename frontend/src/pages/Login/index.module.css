@@ -31,6 +31,7 @@
 .buttons {
   margin-bottom: 1rem;
 }
+
 .move_page {
   display: flex;
   flex-direction: column;
@@ -42,4 +43,5 @@
 .link {
   text-decoration: none;
   color: #cecece;
+  z-index: 1000;
 }

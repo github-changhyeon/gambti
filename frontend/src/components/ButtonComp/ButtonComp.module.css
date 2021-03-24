@@ -12,8 +12,15 @@
 /* login, signup, Forgot, ForgotSent */
 .large {
   width: 330px;
+  margin: 5px;
   color: #000000;
   font-weight: bold;
-  margin-top: 10px;
   /* background-color: #CCFF00; */
+}
+.xlarge {
+  width: 200px;
+  height: 70px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 35px;
 }

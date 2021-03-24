@@ -29,5 +29,12 @@ export default function ButtonComp({ size, textvalue, color, onClick }) {
       </div>
     );
   }
+  else if (size === 'xlarge') {
+    return (
+      <div>
+        <Button className={styles.xlarge} style={{ backgroundColor: `${color}` }} variant="contained" onClick={onClick}>{textvalue}</Button>
+      </div>
+    )
+  }
 }
 

@@ -1,6 +1,11 @@
 export { default as Home } from './Home';
 export { default as Login } from './Login';
+
 export { default as Signup } from './Signup';
+export { default as CheckGambti } from './CheckGambti';
+export { default as CheckInfo } from './CheckInfo';
+export { default as EmailConfirm } from './EmailConfirm';
+
 
 export { default as Forgot } from './Forgot';
 export { default as ForgotSent } from './ForgotSent';

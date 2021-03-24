@@ -3,6 +3,7 @@ package com.ssafy.gambti.domain.tag;
 import com.ssafy.gambti.domain.game.Game;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "tag")
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class Tag {
 
