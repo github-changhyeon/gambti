@@ -10,16 +10,17 @@ export default function EmailConfirm() {
   const user = useContext(UserContext);
 
   const reSend = (event) => {
-    const credential = fire.auth.EmailAuthProvider.credential(
-      user.email,
-    )
+    // TODO: 재인증 실패 다시
+    // const credential = fire.auth.EmailAuthProvider.credential(
+    //   user.email,
+    // )
 
-    user.reauthenticateWithCredential(credential).then(function () {
-      // User re-authenticated.
-      alert('인증 메일이 재전송 되었습니다.')
-    }).catch(function (error) {
-      // An error happened.
-    });
+    // user.reauthenticateWithCredential(credential).then(function () {
+    //   // User re-authenticated.
+    //   alert('인증 메일이 재전송 되었습니다.')
+    // }).catch(function (error) {
+    //   // An error happened.
+    // });
   };
 
   // 로그아웃

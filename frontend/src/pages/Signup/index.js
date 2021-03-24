@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './index.module.css';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp'
 import TextField from '@material-ui/core/TextField';
@@ -8,9 +8,12 @@ import Divider from '@material-ui/core/Divider';
 import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
+import { UserContext } from 'src/Context/UserContext';
+import axios from "axios";
 
 export default function Signup() {
   const history = useHistory();
+  const user = useContext(UserContext)
 
   const [email, setEmail] = React.useState('');
   const [nickName, setNickName] = React.useState('');
@@ -31,6 +34,11 @@ export default function Signup() {
   const onSignup = (event) => {
     fire.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
+        // add user to db
+        fire.db.collection("users").doc(user.user.uid).set({
+          name: "hi",
+          email
+        })
         // Signed in
         // ...
         const createdUser = user.user;
@@ -40,11 +48,27 @@ export default function Signup() {
           email: createdUser.email,
           nickName: nickName,
         }
+
+        axios.post('https://dev.gambti.com/v1/account/signup', {
+          //...data
+        }, {
+          headers: {
+            'Authorization': `Baerer ${user}`
+          }
+        })
+
         createdUser.sendEmailVerification().then(function () {
           alert('인증메일 발송 이메일을 확인해주세요');
           history.push('/emailconfirm')
         }).catch(function (error) {
           alert('인증메일 발송에 실패하였습니다.');
+        });
+        createdUser.updateProfile({
+          displayName: nickName,
+        }).then(function () {
+          // Update successful.
+        }).catch(function (error) {
+          // An error happened.
         });
       })
       .catch((error) => {

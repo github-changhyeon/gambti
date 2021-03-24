@@ -23,15 +23,28 @@ export default function Home() {
 
   // 로그아웃
   const logout = (event) => {
-    fire.auth
-      .signOut()
-      .then(() => {
-        history.push("/");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
+    fire.auth.signOut().then(() => {
+      history.push('/')
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
+
+  // 그냥 test 버튼
+  const login = () => {
+    history.push('/login')
+  }
+
+  const updateTest = () => {
+    user.updateProfile({
+      displayName: "ming",
+    }).then(function () {
+      // Update successful.
+    }).catch(function (error) {
+      // An error happened.
+    });
+  }
+
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
@@ -69,11 +82,13 @@ export default function Home() {
         user.emailVerified ?
           // 인증 되었을때 상황 
           <div>
-            <p>{user.email}</p>
+            <p>{user.displayName}</p>
             <button onClick={logout}>로그아웃</button>
+            <button onClick={updateTest}>update</button>
           </div> :
           // 인증이 안되었을 경우
           <p>
+            {user.displayName}
             이메일 인증하세요.
           </p>
         :
