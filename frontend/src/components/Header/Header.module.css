@@ -21,6 +21,11 @@
   align-items: center; /* 세로에서 가운데에 요소를 배치 */
 }
 
+.header_logo {
+  height: 28px;
+  cursor: pointer;
+}
+
 .header_center {
   flex: 1;
   position: relative;
