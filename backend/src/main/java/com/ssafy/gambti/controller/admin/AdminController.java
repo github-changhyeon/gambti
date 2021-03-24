@@ -1,6 +1,5 @@
 package com.ssafy.gambti.controller.admin;
 
-import com.ssafy.gambti.controller.game.GameController;
 import com.ssafy.gambti.dto.basicResponse.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "admin")
 public class AdminController {
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
