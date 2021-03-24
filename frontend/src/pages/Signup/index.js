@@ -9,11 +9,11 @@ import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
 import { UserContext } from 'src/Context/UserContext';
-import axios from "axios";
+import { signup } from 'src/common/axios/Account';
 
 export default function Signup() {
   const history = useHistory();
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
 
   const [email, setEmail] = React.useState('');
   const [nickName, setNickName] = React.useState('');
@@ -30,46 +30,73 @@ export default function Signup() {
     setPassword(event.target.value);
   };
 
+
+
   // firebase signup
   const onSignup = (event) => {
     fire.auth.createUserWithEmailAndPassword(email, password)
-      .then((user) => {
+      .then((currentUser) => {
+        // token 받아오기
+        fire.auth.currentUser.getIdToken().then(function (idToken) {
+          // Send token to your backend via HTTPS
+          // ...
+          const param = {
+            // userId: createdUser.uid,
+            // password: createdUser.password,
+            // email: createdUser.email,
+            // nickName: nickName,
+
+            mbti: 'INFP',
+            gender: 'FEMALE',
+            steamId: '',
+            maxPrice: 0,
+            age: 0
+          }
+          alert('signup!')
+          signup(idToken, param, (response) => {
+            // response.data.status: 상태
+            // response.data.message: 메세지
+            // response.data.data: get할 경우 객체 받는거 
+            alert('response')
+            console.log(response, 'response');
+            if (!response.data.status) {
+              alert('땡!!!')
+            } else {
+              alert('성공이다ㅏㅏ')
+              console.log(response.data.message)
+            }
+          }, (error) => {
+            alert(error);
+            console.log(error);
+          })
+
+        }).catch(function (error) {
+          // Handle error
+        });
         // add user to db
-        fire.db.collection("users").doc(user.user.uid).set({
-          name: "hi",
-          email
+        fire.db.collection("users").doc(currentUser.user.uid).set({
+          nickName: nickName,
+          email: currentUser.user.email,
         })
         // Signed in
         // ...
-        const createdUser = user.user;
-        const params = {
-          userId: createdUser.uid,
-          password: createdUser.password,
-          email: createdUser.email,
-          nickName: nickName,
-        }
+        const createdUser = currentUser.user;
 
-        axios.post('https://dev.gambti.com/v1/account/signup', {
-          //...data
-        }, {
-          headers: {
-            'Authorization': `Baerer ${user}`
-          }
-        })
 
-        createdUser.sendEmailVerification().then(function () {
-          alert('인증메일 발송 이메일을 확인해주세요');
-          history.push('/emailconfirm')
-        }).catch(function (error) {
-          alert('인증메일 발송에 실패하였습니다.');
-        });
-        createdUser.updateProfile({
-          displayName: nickName,
-        }).then(function () {
-          // Update successful.
-        }).catch(function (error) {
-          // An error happened.
-        });
+        // 이메일 인증 
+        // createdUser.sendEmailVerification().then(function () {
+        //   alert('인증메일 발송 이메일을 확인해주세요');
+        //   // history.push('/emailconfirm')
+        // }).catch(function (error) {
+        //   alert('인증메일 발송에 실패하였습니다.');
+        // });
+        // createdUser.updateProfile({
+        //   displayName: nickName,
+        // }).then(function () {
+        //   // Update successful.
+        // }).catch(function (error) {
+        //   // An error happened.
+        // });
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -77,6 +104,7 @@ export default function Signup() {
         if (error.code === 'auth/email-already-in-use') {
           alert('해당 이메일은 이미 존재합니다.')
         }
+        console.log(errorMessage);
         // ..
       });
   }
