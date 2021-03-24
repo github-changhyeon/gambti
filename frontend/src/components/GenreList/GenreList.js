@@ -10,7 +10,11 @@ export default function GenreList({ propsOrder }) {
   const history = useHistory();
 
   useEffect(() => {
-    fetch('jsonFiles/genres.json')
+    fetch('/jsonFiles/genres.json', {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
       .then((res) => {
         return res.json();
       })

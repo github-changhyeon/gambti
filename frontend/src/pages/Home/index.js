@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <div style={{ backgroundColor: '#222222' }}>
       <RepresentImage />
-      <Typography variant="h5" style={{ color: 'white', margin: '20px 0px 0px 0px' }} gutterBottom>
+      <Typography variant="h5" style={{ color: 'white', margin: '20px 0px 0px 20px' }} gutterBottom>
         Type of Games
       </Typography>
       <GenreList propsOrder="all"></GenreList>
