@@ -25,6 +25,7 @@ export default function Home() {
   const logout = (event) => {
     fire.auth.signOut().then(() => {
       history.push('/')
+      window.localStorage.clear();
     }).catch((error) => {
       // An error happened.
     });
@@ -48,6 +49,7 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
+      <button onClick={logout}>logout</button>
       <RepresentImage />
       <Typography
         variant="h5"
