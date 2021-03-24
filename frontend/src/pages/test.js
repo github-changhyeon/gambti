@@ -49,7 +49,7 @@ export default function Test() {
   };
 
   return (
-    <div style={{ margin: '30px' }}>
+    <div>
       <h1>Hello Test</h1>
       <AvatarComp size="small" textvalue="hi"></AvatarComp>
       <ButtonComp size="small" textvalue="hi"></ButtonComp>

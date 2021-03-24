@@ -6,7 +6,6 @@ import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Badge from '@material-ui/core/Badge';
 
-
 export default function AvatarComp({ size, textvalue, imgPath }) {
   const classes = useStyles();
   const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
@@ -16,34 +15,39 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
   }
   // header, chat(groupProfile, chattingProfile)
   else if (size === 'small') {
-
     return (
       // TODO: 뱃지 위치, 색깔 맞추기
       <Badge color="primary" badgeContent=" " overlap="circle" variant="dot">
-        <Avatar className={styles.small} src={imgPath} > {textvalue}</Avatar >
-      </Badge >
+        <Avatar className={styles.small} src={imgPath}>
+          {' '}
+          {textvalue}
+        </Avatar>
+      </Badge>
     );
   }
   // chatHeader, nav
   else if (size === 'medium') {
-    return <Avatar className={styles.medium}>{textvalue}</Avatar>;
+    return (
+      <Avatar className={styles.medium} src={imgPath}>
+        {textvalue}
+      </Avatar>
+    );
   }
   // mediumProfile
   else if (size === 'large') {
     return <Avatar className={styles.large}>{textvalue}</Avatar>;
   }
   // UserCard,GameCard, editProfile
-  else if (size = 'xlarge') {
+  else if ((size = 'xlarge')) {
     return (
       <AvatarGroup max={1}>
-        <Avatar src={imgPath} className={styles.xlarge}>{textvalue}</Avatar>
+        <Avatar src={imgPath} className={styles.xlarge}>
+          {textvalue}
+        </Avatar>
       </AvatarGroup>
     );
   }
-
 }
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
