@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "genre")
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class Genre {
 
