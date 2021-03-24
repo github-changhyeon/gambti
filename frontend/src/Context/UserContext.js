@@ -4,7 +4,7 @@ import fire from 'src/fire';
 const UserContext = createContext();
 
 const UserProvider = (props) => {
-  const [user, setUser] = useState({ isLoggedIn: null });
+  const [user, setUser] = useState(null);
   const unsubscribe = useRef();
 
 
@@ -40,7 +40,8 @@ const UserProvider = (props) => {
 
   const updateUser = async (user) => {
     if (!user.uid) return;
-    setUser({ isLoggedIn: true, ...user });
+    setUser(user);
+    console.log(user)
     console.log("updated user");
   };
 
@@ -53,7 +54,7 @@ const UserProvider = (props) => {
         // console.log(currentUser);
       }
       else {
-        setUser({ isLoggedIn: false });
+        setUser(null);
       };
     });
 

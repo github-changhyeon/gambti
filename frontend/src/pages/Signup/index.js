@@ -38,65 +38,64 @@ export default function Signup() {
       .then((currentUser) => {
         // token 받아오기
         fire.auth.currentUser.getIdToken().then(function (idToken) {
-          // Send token to your backend via HTTPS
-          // ...
+          // firebase.store에서 정보 가져와서 넣어줌
           const param = {
-            // userId: createdUser.uid,
-            // password: createdUser.password,
-            // email: createdUser.email,
-            // nickName: nickName,
-
             mbti: 'INFP',
             gender: 'FEMALE',
             steamId: '',
             maxPrice: 0,
             age: 0
           }
-          alert('signup!')
+
+          // axios
+          // response.data.status: 상태
+          // response.data.message: 메세지
+          // response.data.data: get할 경우 객체 받는거 
           signup(idToken, param, (response) => {
-            // response.data.status: 상태
-            // response.data.message: 메세지
-            // response.data.data: get할 경우 객체 받는거 
-            alert('response')
-            console.log(response, 'response');
+
+            // console.log(response, 'response');
             if (!response.data.status) {
-              alert('땡!!!')
-            } else {
-              alert('성공이다ㅏㅏ')
-              console.log(response.data.message)
+            }
+            else {
+              // console.log(response.data.message)
             }
           }, (error) => {
-            alert(error);
-            console.log(error);
+            // console.log(error);
           })
 
         }).catch(function (error) {
           // Handle error
         });
+
         // add user to db
         fire.db.collection("users").doc(currentUser.user.uid).set({
           nickName: nickName,
           email: currentUser.user.email,
+          emailVerified: currentUser.user.emailVerified,
+          mbti: 'INFP',
+          gender: 'FEMALE',
+          steamId: '',
+          maxPrice: 0,
+          age: 0
         })
-        // Signed in
-        // ...
+
         const createdUser = currentUser.user;
 
-
         // 이메일 인증 
-        // createdUser.sendEmailVerification().then(function () {
-        //   alert('인증메일 발송 이메일을 확인해주세요');
-        //   // history.push('/emailconfirm')
-        // }).catch(function (error) {
-        //   alert('인증메일 발송에 실패하였습니다.');
-        // });
-        // createdUser.updateProfile({
-        //   displayName: nickName,
-        // }).then(function () {
-        //   // Update successful.
-        // }).catch(function (error) {
-        //   // An error happened.
-        // });
+        createdUser.sendEmailVerification().then(function () {
+          alert('인증메일 발송 이메일을 확인해주세요');
+          history.push('/emailconfirm')
+        }).catch(function (error) {
+          alert('인증메일 발송에 실패하였습니다.');
+        });
+        // 정보 수정
+        createdUser.updateProfile({
+          displayName: nickName,
+        }).then(function () {
+          // Update successful.
+        }).catch(function (error) {
+          // An error happened.
+        });
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -104,9 +103,15 @@ export default function Signup() {
         if (error.code === 'auth/email-already-in-use') {
           alert('해당 이메일은 이미 존재합니다.')
         }
-        console.log(errorMessage);
+        // console.log(errorMessage);
         // ..
       });
+  }
+  // TODOS: enter가 안됨
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      onSignup();
+    }
   }
 
   return (
@@ -119,7 +124,7 @@ export default function Signup() {
           </Typography>
             {/* 소셜 로그인 */}
             {/* <div className={styles.buttons}> */}
-            <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")}>
+            <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
               <span>
                 Sign up with Google
               </span>
@@ -157,9 +162,10 @@ export default function Signup() {
               size="small"
               required
               onChange={handlePasswordChange}
+              onKeyPress={handleKeyPress}
             />
             <div className={styles.buttons}>
-              <ButtonComp size='large' textvalue='SIGN UP' color='#CCFF00' onClick={onSignup}></ButtonComp>
+              <ButtonComp size='large' textvalue='SIGN UP' color='#CCFF00' onClick={onSignup} onKeyPress={onSignup}></ButtonComp>
             </div>
           </form>
           <div className={styles.move_page}>
