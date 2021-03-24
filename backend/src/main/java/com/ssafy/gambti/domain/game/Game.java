@@ -2,9 +2,7 @@ package com.ssafy.gambti.domain.game;
 
 import com.ssafy.gambti.domain.genre.Genre;
 import com.ssafy.gambti.domain.tag.Tag;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,8 +10,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "game")
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@ToString
 public class Game {
 
     @Id
@@ -56,5 +56,4 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags = new ArrayList<>();
-
 }
