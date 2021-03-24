@@ -54,11 +54,13 @@
   border: 2px dashed #d1d1d1;
   border-radius: 50%;
   color: #d1d1d1;
+  cursor: pointer;
 }
 
 .search:hover {
   color: #ccff00;
   border: 2.1px dashed #ccff00;
+  transition: 200ms;
 }
 
 .searchIcon {

@@ -35,8 +35,12 @@ export default function Header() {
       </div>
 
       <div className={styles.header_right}>
-        <NotificationsIcon className={styles.header_icon} />
-        <AvatarComp size="small" textvalue={atextvalue}></AvatarComp>
+        <div className={styles.header_right_item}>
+          <NotificationsIcon className={styles.header_icon} />
+        </div>
+        <div className={styles.header_right_item}>
+          <AvatarComp size="small" textvalue={atextvalue}></AvatarComp>
+        </div>
       </div>
     </div>
   );
