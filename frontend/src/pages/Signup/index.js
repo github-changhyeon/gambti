@@ -34,10 +34,11 @@ export default function Signup() {
 
   // firebase signup
   const onSignup = (event) => {
-    alert('onSignup')
     fire.auth.createUserWithEmailAndPassword(email, password)
       .then((currentUser) => {
         // token 받아오기
+        console.log(currentUser)
+
         fire.auth.currentUser.getIdToken().then(function (idToken) {
           // firebase.store에서 정보 가져와서 넣어줌
           const param = {
