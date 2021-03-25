@@ -13,20 +13,19 @@ public class GameSimpleRes {
     private Long price;
     private String sentiment;
     private String logoImagePath;
-    private String backgoundImagePath;
+    private String backgroundImagePath;
+    private String videoUrl;
     private boolean isJoined;
     private boolean isOwned;
     private int joinUserCount;
 
     @Builder
-    public GameSimpleRes(Long gameId, String appName, Long metascore, Long price, String sentiment, String logoImagePath, String backgoundImagePath) {
+    public GameSimpleRes(Long gameId, String appName, String logoImagePath, String backgroundImagePath, String videoUrl) {
         this.gameId = gameId;
         this.appName = appName;
-        this.metascore = metascore;
-        this.price = price;
-        this.sentiment = sentiment;
         this.logoImagePath = logoImagePath;
-        this.backgoundImagePath = backgoundImagePath;
+        this.backgroundImagePath = backgroundImagePath;
+        this.videoUrl = videoUrl;
     }
 
     public GameSimpleRes(Game game){
@@ -36,7 +35,7 @@ public class GameSimpleRes {
         this.price = game.getPrice();
         this.sentiment = game.getSentiment();
         this.logoImagePath = game.getLogoImagePath();
-        this.backgoundImagePath = game.getBackgroundImagePath();
+        this.backgroundImagePath = game.getBackgroundImagePath();
     }
 
     public void setJoinUserCount(int joinUserCount) {

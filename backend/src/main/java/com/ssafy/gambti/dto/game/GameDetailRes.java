@@ -23,7 +23,7 @@ public class GameDetailRes {
     private String url;
     private String videoUrl;
     private String logoImagePath;
-    private String backgoundImagePath;
+    private String backgroundImagePath;
     private List<String> tags;
     private List<String> genres;
 
@@ -40,7 +40,7 @@ public class GameDetailRes {
                 .url(game.getUrl())
                 .videoUrl(game.getVideoUrl())
                 .logoImagePath(game.getLogoImagePath())
-                .backgoundImagePath(game.getBackgroundImagePath())
+                .backgroundImagePath(game.getBackgroundImagePath())
                 .tags(Tag.listOf(game.getGameTags()))
                 .genres(Genre.listOf(game.getGameGenres()))
                 .build();
