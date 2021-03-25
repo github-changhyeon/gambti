@@ -18,7 +18,8 @@ PW = config['DATABASE']['PW']
 DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti?charset=utf8mb4'
 engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
-DUMP_FILE = os.path.join("image_data.pkl")
+IMAGE_FILE = os.path.join("image_data.pkl")
+BG_IMAGE_FILE = os.path.join("background_image_data.pkl")
 
 def get_data():
     # mariadb의 table 값을 읽어서 DataFrame으로 반환
@@ -26,25 +27,26 @@ def get_data():
 
     return game_data
 
-def save_mariadb(data):
-    table_name = 'game'
+def save_mariadb(data, table_name, column_name):
+    data = data.dropna(subset=[column_name])
+
     for i in range(len(data)):
         row = data.iloc[i, :]
         game_id = row['game_id']
-        path = row['logo_image_path']
+        path = row[column_name]
         #UPDATE game SET logo_image_path = 'image_path' WHERE game_id = 1;
-        sql = 'UPDATE {} SET {} = {} WHERE {} = {}'.format(table_name, 'logo_image_path', "'"+path+"'", 'game_id', game_id)
+        sql = 'UPDATE {} SET {} = {} WHERE {} = {}'.format(table_name, column_name, "'"+path+"'", 'game_id', game_id)
 
         with engine_mariadb.begin() as conn:
             conn.execute(sql)
     
     print("[*] 데이터 저장 완료")
 
-def dump_dataframes(data):
-    pd.to_pickle(data, DUMP_FILE)
+def dump_dataframes(data, file_name):
+    pd.to_pickle(data, file_name)
 
-def load_dataframes():
-    return pd.read_pickle(DUMP_FILE)
+def load_dataframes(file_name):
+    return pd.read_pickle(file_name)
 
 def image_scrapy(data):
     #url, game_id DataFrame을 순회
@@ -65,10 +67,34 @@ def image_scrapy(data):
     df = pd.DataFrame(rows_list)
     
     #pkl 파일로 생성
-    dump_dataframes(df)
-    
+    dump_dataframes(df, IMAGE_FILE)
     print("스크래핑 끝!")
-    save_mariadb(df)
+    save_mariadb(df, "game", "logo_image_path")
+
+def background_image_scrapy(data):
+    rows_list = []
+    
+    for i in range(len(data)):
+        row = data.iloc[i, :]
+        url = row['url']
+        game_id = row['game_id']
+        
+        with urlopen(url) as response:
+            soup = bs(response, 'html.parser')
+            background_url = soup.find("a", attrs={"class" : "highlight_screenshot_link"})
+            if(background_url is not None):
+                background_url = background_url.get('href')
+    
+        print(i)
+        rows_list.append({"game_id":game_id, "background_image_path":background_url})
+
+    df = pd.DataFrame(rows_list)
+    
+    #pkl 파일로 생성
+    dump_dataframes(df, BG_IMAGE_FILE)
+    print("스크래핑 끝!")
+    # save_mariadb(df, "game", "background_image_path")
+
 
 def main():
     print("[+] 게임 데이터 가져오기")
@@ -76,9 +102,12 @@ def main():
     print("[*] done..")
     print("[+] url 크롤링")
     # image_scrapy(game_data)
+    # image_data = load_dataframes(IMAGE_FILE)
 
-    data = load_dataframes()
-    # save_mariadb(data)
+    # background_image_scrapy(game_data)
+    background_image_data = load_dataframes(BG_IMAGE_FILE)
+    save_mariadb(background_image_data, "game", "background_image_path")
+
     print("[*] success")
 
 if __name__ == "__main__":
