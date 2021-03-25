@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './index.module.css';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp'
 import TextField from '@material-ui/core/TextField';
@@ -7,11 +7,12 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import fire from 'src/fire';
 import { useHistory } from 'react-router';
-import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
-
+import { UserContext } from 'src/Context/UserContext';
 
 export default function Login() {
   const history = useHistory();
+
+  const user = useContext(UserContext);
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -62,14 +63,14 @@ export default function Login() {
 
       // firebase Login
       fire.auth.signInWithEmailAndPassword(email, password)
-        .then((user) => {
+        .then((currentUser) => {
           // realtime Database 사용법
           // fire.database().ref('users/' + user.user.uid).set({
           //   username: 'ddddd',
           //   email: user.user.email,
           // })
           // console.log(user);
-          if (user.user.emailVerified) {
+          if (user.emailVerified) {
             history.push('/');
           } else {
             history.push('/email-confirm')
