@@ -18,6 +18,9 @@ export { default as Profile } from './Profile';
 export { default as EditProfile } from './EditProfile';
 
 export { default as NoAccess } from './NoAccess';
+export { default as NotFound } from './NotFound';
+
 export { default as Loading } from './Loading';
 
 export { default as Test } from './test';
+export { default as ActionUrlHandler } from './ActionUrlHandler';
