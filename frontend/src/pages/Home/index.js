@@ -46,6 +46,7 @@ export default function Home() {
   // // 로그아웃
   // const logout = (event) => {
   //   fire.auth().signOut().then(() => {
+  // window.localStorage.clear();
   //     history.push('/')
   //   }).catch((error) => {
   //     // An error happened.
