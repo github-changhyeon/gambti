@@ -1,0 +1,47 @@
+.background {
+  background-color: gray;
+  z-index: -100;
+}
+.root {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  color: #cecece;
+}
+.form {
+  margin-top: 6rem;
+  background-color: #000000;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.8rem;
+  border-radius: 12px;
+}
+.policy {
+  font-size: 15px;
+  margin: 1rem;
+}
+.input {
+  width: 330px;
+  background-color: #cecece;
+  border-radius: 5px;
+  margin-top: 0.2rem;
+}
+.buttons {
+  margin-bottom: 1rem;
+}
+
+.move_page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 10rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
+.link {
+  text-decoration: none;
+  color: #cecece;
+  z-index: 1000;
+}

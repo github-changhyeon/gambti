@@ -1,0 +1,26 @@
+/* logout, editProfile(save, connect), 친구 추가 */
+.small {
+  width: 80px;
+  
+}
+/* GameCard, UserCard, MainButton */
+.medium {
+  width: 200px;
+  color: #000000;
+  background-color: #CCFF00;
+}
+/* login, signup, Forgot, ForgotSent */
+.large {
+  width: 300px;
+  margin: 7px;
+  color: #000000;
+  font-weight: bold;
+  /* background-color: #CCFF00; */
+}
+.xlarge {
+  width: 200px;
+  height: 70px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 35px;
+}

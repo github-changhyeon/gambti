@@ -1,0 +1,55 @@
+.background {
+  height: calc(100vh - 54px);
+  text-align: center;
+  /* background: url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Moraine_Lake_17092005.jpg')
+    no-repeat center; */
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.9);
+  background-blend-mode: multiply;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.inner_text {
+  color: white;
+  font-size: 50px;
+}
+
+.gambti_logo {
+  width: 50%;
+  height: auto;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+}
+
+.question {
+  display: none;
+}
+
+.questionBtn {
+  background-color: aqua;
+}
+
+.result {
+  display: none;
+}
+
+.img {
+  width: 150px;
+  height: auto;
+  margin: 0 auto; /* 가운데 배치 */
+}
+
+.share {
+  margin: 0 auto;
+}
+
+.progress-line__outer {
+  display: flex;
+  margin: 15px auto;
+}
