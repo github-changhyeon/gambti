@@ -20,6 +20,7 @@ export default function Home() {
 
   // 전역변수 usertoken 가져오기
   const user = useContext(UserContext);
+  const currentUser = fire.auth.currentUser;
 
   // 로그아웃
   const logout = (event) => {
@@ -30,10 +31,14 @@ export default function Home() {
       // An error happened.
     });
   }
+  if (currentUser) {
+    console.log('인증후', currentUser.emailVerified);
+  }
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
-      {/* <button onClick={logout}>logout</button> */}
+      <button onClick={logout}>logout</button>
+
       <RepresentImage />
       <Typography
         variant="h5"

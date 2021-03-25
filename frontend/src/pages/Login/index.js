@@ -41,7 +41,11 @@ export default function Login() {
         //   email: user.user.email,
         // })
         // console.log(user);
-        history.push('/');
+        if (user.user.emailVerified) {
+          history.push('/');
+        } else {
+          history.push('/email-confirm')
+        }
       })
       .catch((error) => {
         var errorCode = error.code;

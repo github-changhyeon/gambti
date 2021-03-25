@@ -5,7 +5,7 @@ import Header from 'src/components/Header/Header';
 import Nav from 'src/components/Nav/Nav';
 import Footer from 'src/components/Footer/Footer';
 import routerInfo from 'src/constants/routerInfo';
-import 'src/fire';
+import fire from 'src/fire';
 import { UserContext, UserProvider } from 'src/Context/UserContext';
 import { FirebaseProvider } from 'src/Context/FirebaseContext';
 
@@ -25,25 +25,43 @@ import {
   EditProfile,
   Test,
   NoAccess,
-  Loading
+  Loading,
+  NotFound,
+  ActionUrlHandler
 } from './pages';
 
 
 const AppRouter = () => {
   const user = useContext(UserContext);
-  return user.isLoggedIn === null ? (
-    <Loading />
-  ) : user.isLoggedIn ? (
-    user.emailVerified ? (<MainRouter />) : (<EmailConfirm />)) : (< NotLogin />);
-};
+  const currentUser = fire.auth.currentUser;
+
+  if (user.isLoggedIn === null) {
+    return <Loading />
+  } else {
+    // 로그인이 되어 있을 경우
+    if (user.isLoggedIn) {
+      // 이메일 인증이 되어 있을 경우
+      if (user.emailVerified) {
+        return <MainRouter />
+      }
+      // 이메일 인증이 안되어 있을 경우
+      else {
+        return <EmailConfirmRouter />
+      }
+    }
+    // 로그인이 안되어 있을 경우
+    else {
+      return <NotLoginRouter />
+    }
+  }
+}
 
 
-const NotLogin = () => {
 
+const NotLoginRouter = () => {
   return (
     <Router>
       <Header />
-      <Nav />
       <div style={{ paddingLeft: '64px' }}>
         <Switch>
           <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
@@ -57,7 +75,10 @@ const NotLogin = () => {
           <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
           <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
           <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
+          <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
+          <Route path="*" component={NoAccess} />
+
         </Switch>
         <Footer />
       </div>
@@ -67,7 +88,6 @@ const NotLogin = () => {
 
 const MainRouter = () => {
   const user = useContext(UserContext);
-
   return (
     <Router>
       <Header />
@@ -80,14 +100,33 @@ const MainRouter = () => {
           <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
           <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
           <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
+          <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
+          <Route path="*" component={NoAccess} />
+
         </Switch>
         <Footer />
       </div>
     </Router >
   )
 }
+const EmailConfirmRouter = () => {
+  return (
+    <Router>
+      <Header />
 
+      <div style={{ paddingLeft: '64px' }}>
+        <Switch>
+          <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+          <Route path="/action-url-handler" component={ActionUrlHandler} />
+          <Route path="/test" component={Test} />
+          <Route path="*" component={NoAccess} />
+        </Switch>
+        <Footer />
+      </div>
+    </Router >
+  )
+}
 
 
 

@@ -1,0 +1,12 @@
+.root {
+  background-color: black;
+  height: 100vh;
+}
+.form {
+  font-size: 100px;
+  display: flex;
+  padding-top: 15rem;
+  flex-direction: column;
+  align-items: center;
+  color: #cecece;
+}

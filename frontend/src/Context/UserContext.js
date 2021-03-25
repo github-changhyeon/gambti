@@ -13,7 +13,7 @@ const UserProvider = (props) => {
   const subscribeUser = (uid) => {
     if (!uid) return;
     // console.log("subscribing user:", uid);
-    // console.log(CurrentUser);
+
 
     // unsub는 함수 (doc(uid) 리스너를 구독해제하는 역할)
     const unsub = fire.db
@@ -24,6 +24,8 @@ const UserProvider = (props) => {
         next: (user) => {
           // ...의미: use.id는 uid로 쓰고 나머지는 user.data에 있는거 뿌셔서 doc에 넣어줌
           updateUser({ uid: user.id, ...user.data() });
+          console.log(CurrentUser)
+          console.log(user);
         },
         error: (error) => {
           console.log(`[User Listener Error] ${error.message}`);
@@ -53,6 +55,7 @@ const UserProvider = (props) => {
   const updateUser = async (user) => {
     if (!user.uid) return;
     setUser({ isLoggedIn: true, ...user });
+
     fire.auth.currentUser.getIdToken().then(function (idToken) {
       window.localStorage.setItem('idToken', idToken);
     }).catch(function (error) {
