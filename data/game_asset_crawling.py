@@ -6,9 +6,6 @@ import json
 import pandas as pd
 import os
 
-# 일단 game의 id와 url을 가져온다
-# url을 하나씩 순회하면서 bs4를 이용하여 대표 이미지 주소 가져오기
-# <img class = "game_header_image_full" />
 with open('config.json', 'r') as f:
     config = json.load(f)
 HOST = config['DATABASE']['HOST']
@@ -20,6 +17,7 @@ engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
 IMAGE_FILE = os.path.join("image_data.pkl")
 BG_IMAGE_FILE = os.path.join("background_image_data.pkl")
+VIDEO_FILE = os.path.join("video_data.pkl")
 
 def get_data():
     # mariadb의 table 값을 읽어서 DataFrame으로 반환
@@ -28,6 +26,7 @@ def get_data():
     return game_data
 
 def save_mariadb(data, table_name, column_name):
+    # background_image, video가 없는 데이터에 대해서 drop 시켜야 sql 에러발생하지 않음
     data = data.dropna(subset=[column_name])
 
     for i in range(len(data)):
@@ -50,7 +49,10 @@ def load_dataframes(file_name):
 
 def image_scrapy(data):
     #url, game_id DataFrame을 순회
-    rows_list = []
+    logo_list = []
+    background_list = []
+    video_list = []
+
     for i in range(len(data)):
         row = data.iloc[i, :]
         url = row['url']
@@ -58,42 +60,37 @@ def image_scrapy(data):
         
         with urlopen(url) as response:
             soup = bs(response, 'html.parser')
+            
+            #logo_image
             for anchor in soup.select("img.game_header_image_full"):
                 image_url = anchor.get('src')
-                print(i)
-
-        rows_list.append({"game_id":game_id, "logo_image_path":image_url})
-
-    df = pd.DataFrame(rows_list)
-    
-    #pkl 파일로 생성
-    dump_dataframes(df, IMAGE_FILE)
-    print("스크래핑 끝!")
-    save_mariadb(df, "game", "logo_image_path")
-
-def background_image_scrapy(data):
-    rows_list = []
-    
-    for i in range(len(data)):
-        row = data.iloc[i, :]
-        url = row['url']
-        game_id = row['game_id']
-        
-        with urlopen(url) as response:
-            soup = bs(response, 'html.parser')
+            
+            #background_image
             background_url = soup.find("a", attrs={"class" : "highlight_screenshot_link"})
             if(background_url is not None):
                 background_url = background_url.get('href')
-    
-        print(i)
-        rows_list.append({"game_id":game_id, "background_image_path":background_url})
+            
+            #video
+            video_url = soup.find("div", attrs={"class" : "highlight_movie"})
+            if(video_url is not None):
+                video_url = video_url.get('data-webm-source')
+            print(i)
 
-    df = pd.DataFrame(rows_list)
+        logo_list.append({"game_id":game_id, "logo_image_path":image_url})
+        background_list.append({"game_id":game_id, "background_image_path":background_url})
+        video_list.append({"game_id":game_id, "video_url":video_url})
+
+
+    logo_df = pd.DataFrame(logo_list)
+    background_df = pd.DataFrame(background_list)
+    video_df = pd.DataFrame(video_list)
+
     
     #pkl 파일로 생성
-    dump_dataframes(df, BG_IMAGE_FILE)
+    dump_dataframes(logo_df, IMAGE_FILE)
+    dump_dataframes(background_df, BG_IMAGE_FILE)
+    dump_dataframes(video_df, VIDEO_FILE)
     print("스크래핑 끝!")
-    # save_mariadb(df, "game", "background_image_path")
 
 
 def main():
@@ -101,13 +98,15 @@ def main():
     game_data = get_data()
     print("[*] done..")
     print("[+] url 크롤링")
-    # image_scrapy(game_data)
-    # image_data = load_dataframes(IMAGE_FILE)
+    image_scrapy(game_data)
 
-    # background_image_scrapy(game_data)
+    logo_image_data = load_dataframes(IMAGE_FILE)
     background_image_data = load_dataframes(BG_IMAGE_FILE)
+    video_data = load_dataframes(VIDEO_FILE)
+    
+    save_mariadb(logo_image_data, "game", "logo_image_path")
     save_mariadb(background_image_data, "game", "background_image_path")
-
+    save_mariadb(video_data, "game", "video_url")
     print("[*] success")
 
 if __name__ == "__main__":
