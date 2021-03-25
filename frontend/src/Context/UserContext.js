@@ -12,8 +12,8 @@ const UserProvider = (props) => {
 
   const subscribeUser = (uid) => {
     if (!uid) return;
-    console.log("subscribing user:", uid);
-    console.log(CurrentUser);
+    // console.log("subscribing user:", uid);
+    // console.log(CurrentUser);
 
     // unsub는 함수 (doc(uid) 리스너를 구독해제하는 역할)
     const unsub = fire.db
@@ -35,17 +35,17 @@ const UserProvider = (props) => {
   // 현재 user를 구독 취소해라.
   const unsubscribeCurrentUser = () => {
     if (!unsubscribe.current) return;
-    console.log("unsubscribing current user...");
+    // console.log("unsubscribing current user...");
     // 리스너 구독해제하는 함수
     unsubscribe.current();
     // 리스너 구독 해제 했으니까 undefined한거
     unsubscribe.current = undefined;
-    console.log("unsubscribed.");
+    // console.log("unsubscribed.");
   };
 
   // 리스너 구독
   const initUser = async (currentUser) => {
-    console.log("initializing user:", currentUser.uid);
+    // console.log("initializing user:", currentUser.uid);
     subscribeUser(currentUser.uid);
   };
 
@@ -58,8 +58,8 @@ const UserProvider = (props) => {
     }).catch(function (error) {
       // Handle error
     });
-    console.log(user);
-    console.log("updated user");
+    // console.log(user);
+    // console.log("updated user");
   };
 
 
