@@ -1,15 +1,19 @@
 package com.ssafy.gambti.domain.mapping;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.gambti.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "friend")
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class Friend {
 
     @Id
@@ -33,6 +37,9 @@ public class Friend {
 	    B와 A 친구 관계설정 --> B(from_uid), A(to_uid), is_approved(true)
      */
     @Column(columnDefinition = "boolean default false")
-    private boolean isApproved = false;
+    private boolean isApproved;
 
+    public void changeApproved() {
+        this.isApproved = true;
+    }
 }
