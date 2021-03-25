@@ -52,6 +52,8 @@ security:
   allowed-origins:
     - https://${DOMAIN}
     - http://localhost:3000
+    - https://dev.gambti.com
+    - https://gambti.com
 
   allowed-methods:
     - GET
