@@ -37,7 +37,6 @@ export default function Signup() {
     fire.auth.createUserWithEmailAndPassword(email, password)
       .then((currentUser) => {
         history.push('/email-confirm');
-        console.log(currentUser.user.emailVerified)
 
         // token 받아오기
         fire.auth.currentUser.getIdToken().then(function (idToken) {
@@ -106,7 +105,7 @@ export default function Signup() {
         if (error.code === 'auth/email-already-in-use') {
           alert('해당 이메일은 이미 존재합니다.')
         }
-        console.log(errorMessage);
+        // console.log(errorMessage);
         // ..
       });
   }
