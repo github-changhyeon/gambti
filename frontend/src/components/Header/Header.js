@@ -8,7 +8,7 @@ import { useHistory } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
 
 export default function Header() {
-  let history = useHistory();
+  const history = useHistory();
   const [atextvalue, setAtextvalue] = React.useState('김');
 
   return (

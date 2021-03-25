@@ -6,7 +6,6 @@ export { default as CheckGambti } from './CheckGambti';
 export { default as CheckInfo } from './CheckInfo';
 export { default as EmailConfirm } from './EmailConfirm';
 
-
 export { default as Forgot } from './Forgot';
 export { default as ForgotSent } from './ForgotSent';
 
