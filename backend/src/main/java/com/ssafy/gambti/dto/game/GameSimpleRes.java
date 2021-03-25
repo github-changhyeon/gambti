@@ -14,7 +14,6 @@ public class GameSimpleRes {
     private String sentiment;
     private String logoImagePath;
     private String backgoundImagePath;
-    //TODO : 3개는 더 넣어줘야함
     private boolean isJoined;
     private boolean isOwned;
     private int joinUserCount;

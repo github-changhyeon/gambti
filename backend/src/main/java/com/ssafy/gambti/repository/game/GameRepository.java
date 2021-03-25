@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
     Page<Game> findAll(Pageable pageable);
+    Page<Game>  findByGameGenres_genreId(Long genreId, Pageable pageable);
 }
