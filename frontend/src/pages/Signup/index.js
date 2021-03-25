@@ -36,9 +36,9 @@ export default function Signup() {
   const onSignup = (event) => {
     fire.auth.createUserWithEmailAndPassword(email, password)
       .then((currentUser) => {
-        // token 받아오기
-        console.log(currentUser)
+        history.push('/email-confirm');
 
+        // token 받아오기
         fire.auth.currentUser.getIdToken().then(function (idToken) {
           // firebase.store에서 정보 가져와서 넣어줌
           const param = {
@@ -83,13 +83,7 @@ export default function Signup() {
 
         const createdUser = currentUser.user;
 
-        // 이메일 인증 
-        createdUser.sendEmailVerification().then(function () {
-          alert('인증메일 발송 이메일을 확인해주세요');
-          history.push('/email-confirm')
-        }).catch(function (error) {
-          alert('인증메일 발송에 실패하였습니다.');
-        });
+
         // 정보 수정
         createdUser.updateProfile({
           displayName: nickName,
@@ -98,6 +92,12 @@ export default function Signup() {
         }).catch(function (error) {
           // An error happened.
         });
+        // 이메일 인증 
+        createdUser.sendEmailVerification().then(function () {
+          alert('인증메일 발송 이메일을 확인해주세요');
+        }).catch(function (error) {
+          alert('인증메일 발송에 실패하였습니다.');
+        });
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -105,7 +105,7 @@ export default function Signup() {
         if (error.code === 'auth/email-already-in-use') {
           alert('해당 이메일은 이미 존재합니다.')
         }
-        console.log(errorMessage);
+        // console.log(errorMessage);
         // ..
       });
   }

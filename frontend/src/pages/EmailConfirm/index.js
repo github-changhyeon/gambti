@@ -3,7 +3,6 @@ import styles from './index.module.css';
 import { useHistory } from 'react-router-dom';
 import fire from 'src/fire';
 import { UserContext } from 'src/Context/UserContext';
-import firebase from 'firebase';
 
 export default function EmailConfirm() {
   const history = useHistory();
@@ -22,7 +21,6 @@ export default function EmailConfirm() {
       .catch((err) => {
         alert('인증메일이 발송된지 얼마지나지 않았습니다.이메일에서 인증메일을 확인해주세요.');
       })
-
   };
 
   // 로그아웃
@@ -33,6 +31,8 @@ export default function EmailConfirm() {
       // An error happened.
     });
   }
+
+
 
   return (
     <div>
