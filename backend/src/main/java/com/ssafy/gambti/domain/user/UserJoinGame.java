@@ -22,4 +22,9 @@ public class UserJoinGame {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
+    public UserJoinGame(User user, Game game) {
+        this.user = user;
+        this.game = game;
+    }
 }
