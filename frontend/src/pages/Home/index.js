@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
-      {/* <button onClick={logout}>logout</button> */}
+      <button onClick={logout}>logout</button>
 
       <RepresentImage />
       <Typography
