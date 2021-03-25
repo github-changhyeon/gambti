@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseToken;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
+import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.genre.GenreRepository;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -117,6 +120,55 @@ public class GameService {
         }
         return true;
     }
+
+    @Transactional(readOnly = true)
+    public List<GameRecommendDto> gameRecommends(Long genreId, HttpServletRequest httpServletRequest) {
+        //일딴 random으로 받아서 주자
+        //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
+        String token = securityService.getBearerToken(httpServletRequest);
+        FirebaseToken decodedToken = null;
+        List<GameRecommendDto> gameRecommendResList = new ArrayList<>();
+        List<Object[]> result;
+        //2. 장르 아이디로 장르까지 판단한다.
+        if(genreId==0) {
+            result = gameRepository.findAllRecommendGamesOrderByRandom();
+            for (int i = 0; i<20; i++){
+                gameRecommendResList.add(new GameRecommendDto(result.get(i)));
+            }
+        }
+        else{
+            result = gameRepository.findRecommendGamesOrderByRandom(genreId);
+            for (int i = 0; i<20; i++){
+                gameRecommendResList.add(new GameRecommendDto(result.get(i)));
+            }
+        }
+        //3. 유저 카운트를 가지고 온다.
+        for (GameRecommendDto grr : gameRecommendResList) {
+            //4. 게임 커뮤니티에 참여하고 있는 사람 수 받아와서 set시켜준다.
+            grr.setJoinUserCount(userJoinGameRepository.countByGameId(grr.getGameId()));
+            if(token!=null){
+                try {
+                    //5. 토큰을 디코딩한다.
+                    decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+                    //6. uid를 가지고온다.
+                    String uid = decodedToken.getUid();
+                    //7. 해당 유저가 가지고 있는 게임인지 확인한다.
+                    grr.setOwned(userOwnGameRepository.existsByUserId(uid));
+                    //8. 유저가 이미 조인하고 있는 게임인지 확인한다.
+                    grr.setJoined(userJoinGameRepository.existsByUserId(uid));
+                }
+                catch (FirebaseAuthException e){
+                    logger.error("Firebase Exception : ", e.getLocalizedMessage());
+                    return null;
+                }
+            }
+        }
+        return gameRecommendResList;
+    }
+    // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 
+//    public GameSimpleRes banFromGameRecommend(Long gameId, HttpServletRequest httpServletRequest) {
+//
+//    }
 //    public Page<Game> findGamesInGenre(Long genreId, Pageable pageable, HttpServletRequest httpServletRequest) {
 //        //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
 //        String token = securityService.getBearerToken(httpServletRequest);

@@ -16,10 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource()).and()
 
                 //rest API 서버이므로 csrf disable이므로 formLogin도 disable 시킴
-                .csrf().disable().formLogin().disable().httpBasic().disable()
+                .csrf().requireCsrfProtectionMatcher(new CsrfRequireMatcher())
+                .disable().formLogin().disable().httpBasic().disable()
 
                 //인증 헤더가 오지 않았다면 401(UnAuthorized)을 보내주기 위한 설정
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint()).and()
@@ -98,5 +101,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    static class CsrfRequireMatcher implements RequestMatcher {
+        @Override
+        public boolean matches(HttpServletRequest request) {
+
+            final String referer = request.getHeader("Referer");
+            if (referer != null && referer.contains("/swagger-ui")) {
+                return false;
+            }
+            return true;
+        }
     }
 }
