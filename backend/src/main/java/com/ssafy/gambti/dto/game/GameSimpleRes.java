@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class GameSimpleDto {
+public class GameSimpleRes {
 
     private Long gameId;
     private String appName;
@@ -20,7 +20,7 @@ public class GameSimpleDto {
     private int joinUserCount;
 
     @Builder
-    public GameSimpleDto(Long gameId, String appName, Long metascore, Long price, String sentiment, String logoImagePath, String backgoundImagePath) {
+    public GameSimpleRes(Long gameId, String appName, Long metascore, Long price, String sentiment, String logoImagePath, String backgoundImagePath) {
         this.gameId = gameId;
         this.appName = appName;
         this.metascore = metascore;
@@ -30,13 +30,25 @@ public class GameSimpleDto {
         this.backgoundImagePath = backgoundImagePath;
     }
 
-    public GameSimpleDto(Game game){
+    public GameSimpleRes(Game game){
         this.gameId = game.getId();
         this.appName = game.getAppName();
         this.metascore = game.getMetascore();
         this.price = game.getPrice();
         this.sentiment = game.getSentiment();
         this.logoImagePath = game.getLogoImagePath();
-        this.backgoundImagePath = game.getBackgoundImagePath();
+        this.backgoundImagePath = game.getBackgroundImagePath();
+    }
+
+    public void setJoinUserCount(int joinUserCount) {
+        this.joinUserCount = joinUserCount;
+    }
+
+    public void setOwned(boolean owned) {
+        isOwned = owned;
+    }
+
+    public void setJoined(boolean joined) {
+        isJoined = joined;
     }
 }

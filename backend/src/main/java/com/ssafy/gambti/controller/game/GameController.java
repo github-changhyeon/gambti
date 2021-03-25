@@ -2,8 +2,8 @@ package com.ssafy.gambti.controller.game;
 
 import com.ssafy.gambti.commons.PageRequest;
 import com.ssafy.gambti.dto.basicResponse.Response;
-import com.ssafy.gambti.dto.game.GameDto;
-import com.ssafy.gambti.dto.game.GameSimpleDto;
+import com.ssafy.gambti.dto.game.GameDetailRes;
+import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.service.game.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,7 @@ public class GameController {
     @GetMapping
     @Operation(summary = "모든 게임 조회", description = "게임 list를 조회한다. page, size, sort를 이용해 정렬한다.")
     public ResponseEntity<? extends Response> findAllGames(final PageRequest pageable){
-        Page<GameSimpleDto> pagingGames = gameService.findAllGames(pageable.of());
+        Page<GameSimpleRes> pagingGames = gameService.findAllGames(pageable.of());
         return new ResponseEntity<>(new Response(SUCCESS, "게임 조회 성공", pagingGames), HttpStatus.OK);
     }
 
@@ -57,7 +57,7 @@ public class GameController {
     @GetMapping(value="/{gameId}")
     @Operation(summary = "선택된 게임의 detail 정보를 조회", description = "gameId를 통해 하나의 게임의 detail을 조회한다.")
     public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId){
-        GameDto gameDetail = gameService.gameDetail(gameId);
+        GameDetailRes gameDetail = gameService.gameDetail(gameId);
         if (gameDetail != null) {
             return new ResponseEntity<>(new Response(SUCCESS, "게임 디테일 조회 성공", gameDetail), HttpStatus.OK);
         } else {

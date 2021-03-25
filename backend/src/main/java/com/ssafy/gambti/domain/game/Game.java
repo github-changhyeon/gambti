@@ -1,5 +1,8 @@
 package com.ssafy.gambti.domain.game;
 
+import com.ssafy.gambti.domain.user.UserBanGame;
+import com.ssafy.gambti.domain.user.UserJoinGame;
+import com.ssafy.gambti.domain.user.UserOwnGame;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,11 +41,20 @@ public class Game {
 
     private String logoImagePath;
 
-    private String backgoundImagePath;
+    private String backgroundImagePath;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<GameGenre> gameGenres = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<GameTag> gameTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserJoinGame> userJoinGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserOwnGame> userOwnGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserBanGame> userBanGames = new ArrayList<>();
 }
