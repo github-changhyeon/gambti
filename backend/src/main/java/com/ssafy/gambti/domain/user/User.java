@@ -1,9 +1,11 @@
 package com.ssafy.gambti.domain.user;
 
-import com.ssafy.gambti.domain.game.Game;
+
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -13,8 +15,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
+@ToString
 public class User {
 
     @Id
@@ -35,47 +38,37 @@ public class User {
     @Column(nullable = false)
     private long maxPrice;
 
+    @CreationTimestamp
+    private Timestamp createdDate;
+
     @UpdateTimestamp
     private Timestamp updatedDate;
 
     private String steamId;
 
-    private String profileImagePath;
-
+    //유저 권한
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    // user banned friend
-    @ManyToMany
-    @JoinTable(name="ban_friend",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="ban_user_id")
-    )
-    private List<User> banFriends = new ArrayList<>();
-
     // user joined game
-    @ManyToMany
-    @JoinTable(name="user_join_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> joinGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserJoinGame> userJoinGames = new ArrayList<>();
 
-    // user owned game
-    @ManyToMany
-    @JoinTable(name="user_own_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> ownGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserOwnGame> userOwnGames = new ArrayList<>();
 
-    // user baned game
-    @ManyToMany
-    @JoinTable(name="user_ban_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> banGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserBanGame> userBanGames = new ArrayList<>();
 
+    @Builder
+    public User(String id, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+        this.id = id;
+        this.mbti = mbti;
+        this.age = age;
+        this.gender = gender;
+        this.maxPrice = maxPrice;
+        this.steamId = steamId;
+        this.role = role;
+    }
 }
 

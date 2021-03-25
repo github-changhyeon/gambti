@@ -9,14 +9,14 @@ function restApi() {
   });
 }
 
-function getConfig() {
-  const token = localStorage.getItem("token");
+function GetConfig(token) {
   const config = {
     headers: {
-      "X-Authorization-Firebase": token,
+      Authorization: `Bearer ${token}`,
+      // 'Authorization': 'Bearer ' + accessToken
     },
   };
   return config;
 }
 
-export { restApi, getConfig };
+export { restApi, GetConfig };

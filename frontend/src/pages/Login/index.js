@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
-import fire from 'src/firebaseConfig';
+import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-buttons";
 
@@ -33,20 +33,24 @@ export default function Login() {
 
   const onLogin = (event) => {
     // firebase Login
-    fire.auth().signInWithEmailAndPassword(email, password)
+    fire.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
         // realtime Database 사용법
         // fire.database().ref('users/' + user.user.uid).set({
         //   username: 'ddddd',
         //   email: user.user.email,
         // })
-        console.log(user);
-        history.push('/');
+        // console.log(user);
+        if (user.user.emailVerified) {
+          history.push('/');
+        } else {
+          history.push('/email-confirm')
+        }
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(error)
+        // console.log(error)
         alert(errorMessage)
       });
   }
@@ -82,7 +86,7 @@ export default function Login() {
               <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin}></ButtonComp>
               <hr />
               {/* 소셜 로그인 */}
-              <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
+              <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} />
             </div>
           </form>

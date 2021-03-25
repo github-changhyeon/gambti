@@ -1,7 +1,6 @@
 package com.ssafy.gambti.controller.Search;
 
 
-import com.ssafy.gambti.controller.game.GameController;
 import com.ssafy.gambti.dto.basicResponse.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "search")
 public class SearchController {
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 

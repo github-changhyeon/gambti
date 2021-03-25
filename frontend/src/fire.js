@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 
-var firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCNng46CAdkVhYoTqtm4Dexb2AlTVCAIUA",
   authDomain: "gambti-9002f.firebaseapp.com",
   databaseURL: "https://gambti-9002f-default-rtdb.firebaseio.com",
@@ -10,10 +10,14 @@ var firebaseConfig = {
   appId: "1:1002867083304:web:ece770caa3777db8100d1d",
   measurementId: "G-NDB0JQ2WVF"
 };
+
+
 // Initialize Firebase
 if (!firebase.apps.length) {
-  var fire = firebase.initializeApp(firebaseConfig);
-  // firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
+  firebase.initializeApp(firebaseConfig);
 }
-export default fire;
+const analytics = firebase.analytics();
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+export default { analytics, db, auth };

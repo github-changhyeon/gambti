@@ -68,28 +68,58 @@ def load_dataframes():
     return pd.read_pickle(DUMP_FILE)
 
 def save_mariadb(data, table_name):
-    HOST = 'gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com'
-    USER = 'ssafy'
-    PW = 'gambti123!'
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+
+    HOST = config['DATABASE']['HOST']
+    USER = config['DATABASE']['USER']
+    PW = config['DATABASE']['PW']
 
     DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti?charset=utf8mb4'
     engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
     #duplicate 문제를 해결하기 위해 data 저장 전에 truncate table을 먼저 수행
-    engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
+    # if table_name == "game":
+    #     engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
+
     data.to_sql(name=table_name, con=engine_mariadb, index=False, if_exists='append') 
 
-def genre_dataframe(data):
-    genre_data = data["genres"].dropna() 
-    genres = []
+def extract_dataframe(data, column_name):
+    target_data = data[column_name].dropna() 
+    lists = []
     
-    for index, game_genre in genre_data.items():
-        for genre in game_genre:
-            genres.append(genre)
+    for index, row in target_data.items():
+        for item in row:
+            lists.append(item)
 
     #리스트를 dataframe으로 만들기
-    genre_df = pd.DataFrame(genres, columns=['genre_name']).drop_duplicates()
-    return genre_df
+    extract_df = pd.DataFrame(lists, columns=[column_name[0:-1]+"_name"]).drop_duplicates()
+    return extract_df
+
+def make_mapping_table(games, category, map_names):
+    #nan값을 drop 시켜야 for문에서 float it not iterable 오류가 발생하지 않음
+    map_df = games[["id", map_names]].dropna(subset=[map_names])
+
+    #genres->genre / tags->tag
+    name = map_names[0:-1]
+
+    rows_list = []
+    for idx, row in map_df.iterrows():
+        for item in row[map_names]:
+            #dict 형태로 만들어서 list에 append 한 다음
+            rows_list.append({"game_id":row["id"], name+"_name":item})
+    
+    #list를 DataFrame 형태로 만들기
+    df = pd.DataFrame(rows_list)
+
+    #category의 id를 가져오기 위해서 index reset + 1 (index는 0번부터 시작이므로)
+    category[name+"_id"] = category.reset_index(drop=True).index+1
+
+    #inner join
+    df_result = pd.merge(df, category, on=name+"_name", how="inner")
+    df_result = df_result[["game_id", name+"_id"]]
+    
+    return df_result
 
 def main():
     print("[*] Parsing data...")
@@ -107,12 +137,22 @@ def main():
     game_df = game_df[[*game_columns]]
     game_df.rename(columns={'id':'game_id'}, inplace=True) #id를 DB의 컬럼명(game_id)과 맞춰주기
 
-    #장르 dataframe 추출
-    genre_df = genre_dataframe(data["games"])
+    #장르, 태그 dataframe 추출
+    genre_df = extract_dataframe(data["games"], "genres")
+    tag_df = extract_dataframe(data["games"], "tags")
 
+    #game-genre 맵핑 테이블
+    game_genre_df = make_mapping_table(data["games"], genre_df, "genres")
+    game_tag_df = make_mapping_table(data["games"], tag_df, "tags")
+
+    '''
     #maria DB에 저장
     save_mariadb(game_df, 'game')
     save_mariadb(genre_df, 'genre')
+    save_mariadb(tag_df, 'tag')
+    save_mariadb(game_genre_df, 'game_genre')
+    '''
+    save_mariadb(game_tag_df, 'game_tag')
 
 if __name__ == "__main__":
     main()

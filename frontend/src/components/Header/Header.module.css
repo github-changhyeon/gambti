@@ -5,7 +5,7 @@
   position: sticky;
   z-index: 1000;
   width: 100%;
-  height: 48px;
+  height: 54px;
   top: 0;
   left: 0;
   font-weight: bold;
@@ -19,6 +19,11 @@
   padding-left: 20px;
   display: flex;
   align-items: center; /* 세로에서 가운데에 요소를 배치 */
+}
+
+.header_logo {
+  height: 28px;
+  cursor: pointer;
 }
 
 .header_center {
@@ -50,14 +55,28 @@
 
 .header_right {
   flex: 1;
-  padding-right: 20px;
+  padding-right: 10px;
   display: flex;
   justify-content: flex-end;
+}
+
+.header_right_item {
+  height: 54px;
+  width: 54px;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
 .header_icon {
   width: 28px;
   height: 28px;
-  margin-right: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.header_icon:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: 200ms;
+  padding: 5px;
 }
