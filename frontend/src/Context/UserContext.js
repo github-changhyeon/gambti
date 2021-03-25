@@ -24,8 +24,8 @@ const UserProvider = (props) => {
         next: (user) => {
           // ...의미: use.id는 uid로 쓰고 나머지는 user.data에 있는거 뿌셔서 doc에 넣어줌
           updateUser({ uid: user.id, ...user.data() });
-          console.log(CurrentUser)
-          console.log(user);
+          // console.log(CurrentUser)
+          // console.log(user);
         },
         error: (error) => {
           console.log(`[User Listener Error] ${error.message}`);

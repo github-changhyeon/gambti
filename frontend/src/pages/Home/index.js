@@ -31,13 +31,11 @@ export default function Home() {
       // An error happened.
     });
   }
-  if (currentUser) {
-    console.log('인증후', currentUser.emailVerified);
-  }
+
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
-      <button onClick={logout}>logout</button>
+      {/* <button onClick={logout}>logout</button> */}
 
       <RepresentImage />
       <Typography
