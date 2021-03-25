@@ -1,19 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
 function restApi() {
-  axios.create({
-    baseURL: process.env.BASE_URL,
+  return axios.create({
+    baseURL: "https://dev.gambti.com/v1",
     headers: {
-      'Content-type': 'application/json',
+      "Content-type": "application/json",
     },
   });
 }
 
 function getConfig() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const config = {
     headers: {
-      'X-Authorization-Firebase': token,
+      "X-Authorization-Firebase": token,
     },
   };
   return config;
