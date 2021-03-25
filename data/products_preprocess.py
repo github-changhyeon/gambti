@@ -64,8 +64,8 @@ def dump_dataframes(dataframes):
     pd.to_pickle(dataframes, DUMP_FILE)
 
 
-def load_dataframes():
-    return pd.read_pickle(DUMP_FILE)
+def load_dataframes(filename):
+    return pd.read_pickle(filename)
 
 def save_mariadb(data, table_name):
     with open('config.json', 'r') as f:
@@ -121,6 +121,14 @@ def make_mapping_table(games, category, map_names):
     
     return df_result
 
+def add_image_path(data):
+    IMAGE_FILE = os.path.join("image_data.pkl")
+    image_data = load_dataframes(IMAGE_FILE)
+
+    df_result = pd.merge(data, image_data, on='game_id', how="inner")
+    
+    return df_result
+
 def main():
     print("[*] Parsing data...")
     data = import_data()
@@ -130,7 +138,7 @@ def main():
     dump_dataframes(data)
     print("[+] Done\n")
 
-    data = load_dataframes()
+    data = load_dataframes(DUMP_FILE)
 
     #DB에 저장하기 위한 정제(game 테이블)
     game_df = data["games"]
@@ -145,14 +153,17 @@ def main():
     game_genre_df = make_mapping_table(data["games"], genre_df, "genres")
     game_tag_df = make_mapping_table(data["games"], tag_df, "tags")
 
+    #image주소가 포함된 df
+    game_df = add_image_path(game_df)
+
     '''
     #maria DB에 저장
-    save_mariadb(game_df, 'game')
     save_mariadb(genre_df, 'genre')
     save_mariadb(tag_df, 'tag')
     save_mariadb(game_genre_df, 'game_genre')
-    '''
     save_mariadb(game_tag_df, 'game_tag')
+    save_mariadb(game_df, 'game')
+    '''
 
 if __name__ == "__main__":
     main()

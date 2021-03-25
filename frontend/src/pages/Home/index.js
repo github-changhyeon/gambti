@@ -13,34 +13,69 @@ import Link from "@material-ui/core/Link";
 import GenreList from "src/components/GenreList/GenreList";
 import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
 import RepresentImage from "src/pages/Home/home-components/RepresentImage";
+import { restApi } from "src/common/axios/index";
 import { UserContext } from "src/Context/UserContext";
 
 export default function Home() {
   const history = useHistory();
 
+  // var user = fire.auth().currentUser;
+  // const [nickName, setNickName] = useState('')
+  // const [email, setEmail] = useState('')
+  // const [photoUrl, setPhotoUrl] = useState('')
+  // const [uid, setUid] = useState('')
+  // const [emailVerified, setEmailVerified] = useState('')
+  const [mainGameDatas, setMainGameDatas] = useState(new Array());
   // 전역변수 usertoken 가져오기
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
   // 로그아웃
   const logout = (event) => {
-    fire.auth.signOut().then(() => {
-      history.push('/')
-      window.localStorage.clear();
-    }).catch((error) => {
-      // An error happened.
-    });
-  }
+    fire.auth
+      .signOut()
+      .then(() => {
+        history.push("/");
+        window.localStorage.clear();
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
+  // // 로그아웃
+  // const logout = (event) => {
+  //   fire.auth().signOut().then(() => {
+  //     history.push('/')
+  //   }).catch((error) => {
+  //     // An error happened.
+  //   });
+  // }
+
+  // // 그냥 test 버튼
+  // const login = () => {
+  //   history.push('/login')
+  // }
+  // const classes = useStyles();
+  useEffect(() => {
+    restApi()
+      .get(
+        `games/find?genreId=1&page=1&size=10&direction=DESC&colName=metascore`
+      )
+      .then((res) => {
+        console.log(res.data.data.content);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
-      <button onClick={logout}>logout</button>
-
       <RepresentImage />
       <Typography
         variant="h5"
-        style={{ color: "white", margin: "20px 0px 0px 0px" }}
+        style={{ color: "white", margin: "20px 0px 0px 20px" }}
         gutterBottom
       >
         Type of Games
