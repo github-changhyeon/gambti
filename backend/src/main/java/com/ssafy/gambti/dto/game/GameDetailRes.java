@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class GameDto {
+public class GameDetailRes {
 
     private Long gameId;
     private String appName;
@@ -27,8 +27,8 @@ public class GameDto {
     private List<String> tags;
     private List<String> genres;
 
-    public static GameDto of(Game game){
-        GameDto gameDto = GameDto.builder()
+    public static GameDetailRes of(Game game){
+        GameDetailRes gameDetailRes = GameDetailRes.builder()
                 .gameId(game.getId())
                 .appName(game.getAppName())
                 .developer(game.getDeveloper())
@@ -40,10 +40,10 @@ public class GameDto {
                 .url(game.getUrl())
                 .videoUrl(game.getVideoUrl())
                 .logoImagePath(game.getLogoImagePath())
-                .backgoundImagePath(game.getBackgoundImagePath())
+                .backgoundImagePath(game.getBackgroundImagePath())
                 .tags(Tag.listOf(game.getGameTags()))
                 .genres(Genre.listOf(game.getGameGenres()))
                 .build();
-        return gameDto;
+        return gameDetailRes;
     }
 }

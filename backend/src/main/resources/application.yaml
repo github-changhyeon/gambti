@@ -86,6 +86,7 @@ security:
     - /swagger-resources/**
     - /v3/api-docs/**
     - /webjars/**
+    - /**
 
   exposed-headers:
     - X-Xsrf-Token
