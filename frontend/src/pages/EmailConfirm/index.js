@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import styles from './index.module.css';
 import { useHistory } from 'react-router-dom';
 import fire from 'src/fire';
@@ -11,30 +11,30 @@ export default function EmailConfirm() {
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
+
   const reSend = (event) => {
     // TODO: 재인증 실패 다시
     console.log(user)
     console.log(currentUser)
-    if (!currentUser.emailVerified) {
-      const credential = firebase.auth.EmailAuthProvider.credentialWithLink(
-        user.email, window.location.href);
 
-      // Re-authenticate the user with this credential.
-      fire.auth.user.reauthenticateWithCredential(credential)
-        .then((usercred) => {
-          // The user is now successfully re-authenticated and can execute sensitive
-          // operations.
-          alert('인증 메일이 재전송 되었습니다.')
 
-        })
-        .catch((error) => {
-          // Some error occurred.
-          alert(error)
-          console.log(error)
-        });
-    } else {
-      history.push('/');
-    }
+    const credential = firebase.auth.EmailAuthProvider.credentialWithLink(
+      user.email, window.location.href);
+
+    // Re-authenticate the user with this credential.
+    fire.auth.user.reauthenticateWithCredential(credential)
+      .then((usercred) => {
+        // The user is now successfully re-authenticated and can execute sensitive
+        // operations.
+        alert('인증 메일이 재전송 되었습니다.')
+
+      })
+      .catch((error) => {
+        // Some error occurred.
+        alert(error)
+        console.log(error)
+      });
+
   };
 
   // 로그아웃

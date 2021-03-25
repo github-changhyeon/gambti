@@ -25,29 +25,15 @@ export default function Home() {
   const logout = (event) => {
     fire.auth.signOut().then(() => {
       history.push('/')
+      window.localStorage.clear();
     }).catch((error) => {
       // An error happened.
     });
   }
 
-  // 그냥 test 버튼
-  const login = () => {
-    history.push('/login')
-  }
-
-  const updateTest = () => {
-    user.updateProfile({
-      displayName: "ming",
-    }).then(function () {
-      // Update successful.
-    }).catch(function (error) {
-      // An error happened.
-    });
-  }
-
-
   return (
     <div style={{ backgroundColor: "#222222" }}>
+      {/* <button onClick={logout}>logout</button> */}
       <RepresentImage />
       <Typography
         variant="h5"

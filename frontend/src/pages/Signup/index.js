@@ -34,6 +34,7 @@ export default function Signup() {
 
   // firebase signup
   const onSignup = (event) => {
+    alert('onSignup')
     fire.auth.createUserWithEmailAndPassword(email, password)
       .then((currentUser) => {
         // token 받아오기
@@ -84,7 +85,7 @@ export default function Signup() {
         // 이메일 인증 
         createdUser.sendEmailVerification().then(function () {
           alert('인증메일 발송 이메일을 확인해주세요');
-          history.push('/emailconfirm')
+          history.push('/email-confirm')
         }).catch(function (error) {
           alert('인증메일 발송에 실패하였습니다.');
         });
@@ -103,13 +104,14 @@ export default function Signup() {
         if (error.code === 'auth/email-already-in-use') {
           alert('해당 이메일은 이미 존재합니다.')
         }
-        // console.log(errorMessage);
+        console.log(errorMessage);
         // ..
       });
   }
-  // TODOS: enter가 안됨
+  // TODO: preventDefault 알아보기
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
+      event.preventDefault();
       onSignup();
     }
   }
