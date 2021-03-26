@@ -44,7 +44,7 @@ export default function InfiniteScrollCard() {
 
     restApi()
       .get(
-        `/games/find?genreId=16&page=${pageNum}&size=${size}&direction=DESC&colName=metascore`
+        `/games/find?genreId=0&page=${pageNum}&size=${size}&direction=DESC&colName=metascore`
       )
       .then((res) => {
         console.log(res.data.data.content);

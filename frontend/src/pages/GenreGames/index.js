@@ -1,4 +1,5 @@
-import { React, useState, useEffect, useLayoutEffect } from "react";
+import { React, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./index.module.css";
 import GenreList from "src/components/GenreList/GenreList";
 import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
@@ -7,11 +8,12 @@ import { Carousel } from "3d-react-carousal";
 import GameCard from "src/components/GameCard/GameCard";
 import VideoAndCard from "src/pages/GenreGames/genreGame-components/VideoAndCard";
 import MediaQuery from "react-responsive";
+import { restApi } from "src/common/axios/index";
 
-export default function GenreGames({ match }) {
+export default function GenreGames({ match, genreId }) {
   const [recommendGames, setRecommendGames] = useState(new Array());
-
   const [videoAndCards, setVideoAndCards] = useState(new Array());
+  const location = useLocation();
 
   const gameInfo = {
     appName: "title",
@@ -80,6 +82,17 @@ export default function GenreGames({ match }) {
 
   useEffect(() => {
     // TODO: AXIOS
+
+    console.log(location.state.genreId);
+
+    restApi()
+      .get(`games/recommends/${location.state.genreId}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setVideoAndCards(new Array());
 
