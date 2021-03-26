@@ -99,7 +99,10 @@ export default function GenreGames({ match, genreId }) {
       ></Typography>
       <br />
       <br />
-      <InfiniteScrollCard></InfiniteScrollCard>
+      <InfiniteScrollCard
+        genreId={location.state.genreId}
+        routerMatch={match}
+      ></InfiniteScrollCard>
     </div>
   );
 }

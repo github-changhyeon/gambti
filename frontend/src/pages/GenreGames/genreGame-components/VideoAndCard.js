@@ -31,7 +31,28 @@ export default function VideoAndCard({ gameInfo }) {
             styles.btm_left_in
           }
         >
-          <video
+          {" "}
+          {gameInfo.videoUrl === null ? (
+            <img
+              className={styles.round}
+              width="100%"
+              src={gameInfo.backgroundImagePath}
+            ></img>
+          ) : (
+            <video
+              playsinline
+              autoPlay={true}
+              muted={true}
+              loop={true}
+              width="100%"
+              height="auto"
+              controls={false}
+              className={styles.round}
+            >
+              <source src={gameInfo.videoUrl} type="video/mp4" />
+            </video>
+          )}
+          {/* <video
             playsinline
             autoPlay={true}
             muted={true}
@@ -47,7 +68,12 @@ export default function VideoAndCard({ gameInfo }) {
               }
               type="video/mp4"
             />
-          </video>
+          </video> */}
+          {/* <img
+            className={styles.round}
+            width="100%"
+            src={gameInfo.backgroundImagePath}
+          ></img> */}
         </div>
       </div>
     </div>

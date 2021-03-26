@@ -16,7 +16,7 @@ import RepresentImage from "src/pages/Home/home-components/RepresentImage";
 import { restApi } from "src/common/axios/index";
 import { UserContext } from "src/Context/UserContext";
 
-export default function Home() {
+export default function Home({ match }) {
   const history = useHistory();
 
   // var user = fire.auth().currentUser;
@@ -84,7 +84,7 @@ export default function Home() {
       <GenreList propsOrder="all"></GenreList>
       <Typography
         variant="h5"
-        style={{ color: 'white', margin: '20px 0px' }}
+        style={{ color: "white", margin: "20px 0px" }}
         gutterBottom
         align="center"
       >
@@ -92,13 +92,14 @@ export default function Home() {
       </Typography>
       <Typography
         variant="body1"
-        style={{ color: 'white', margin: '20px 0px 40px 0px' }}
+        style={{ color: "white", margin: "20px 0px 40px 0px" }}
         paragraph
         align="center"
       >
         Discover, follow, and play games!
       </Typography>
-      <InfiniteScrollCard />
+      {/* TODO: 인피니티 스크롤 router 이동에 따라서 랜더링 다시 안되는 부분 수정 */}
+      <InfiniteScrollCard genreId={0} routerMatch={match} />
       {/* <h1>Hello Home</h1>
       <a href="/test">Test Page</a>
       { user != null ?
