@@ -16,7 +16,7 @@ import RepresentImage from "src/pages/Home/home-components/RepresentImage";
 import { restApi } from "src/common/axios/index";
 import { UserContext } from "src/Context/UserContext";
 
-export default function Home() {
+export default function Home({ match }) {
   const history = useHistory();
 
   // var user = fire.auth().currentUser;
@@ -46,6 +46,7 @@ export default function Home() {
   // // 로그아웃
   // const logout = (event) => {
   //   fire.auth().signOut().then(() => {
+  // window.localStorage.clear();
   //     history.push('/')
   //   }).catch((error) => {
   //     // An error happened.
@@ -97,7 +98,8 @@ export default function Home() {
       >
         Discover, follow, and play games!
       </Typography>
-      <InfiniteScrollCard />
+      {/* TODO: 인피니티 스크롤 router 이동에 따라서 랜더링 다시 안되는 부분 수정 */}
+      <InfiniteScrollCard genreId={0} routerMatch={match} />
       {/* <h1>Hello Home</h1>
       <a href="/test">Test Page</a>
       { user != null ?

@@ -35,12 +35,13 @@ export default function GenreList({ propsOrder }) {
               imagePath={genre.path}
               genreName={genre.name}
               onClickFunc={() => {
-                history.push(
-                  generatePath(routerInfo.PAGE_URLS.GAMES, {
+                history.push({
+                  pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
                     order: propsOrder,
                     genre: genre.name,
-                  })
-                );
+                  }),
+                  state: { genreId: genre.id },
+                });
               }}
             ></GenreCard>
           </div>

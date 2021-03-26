@@ -21,6 +21,13 @@ export default function Signup() {
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
+  const [nullError, setNullError] = React.useState(false);
+  const [passwordMatchError, setPasswordMatchError] = React.useState(false);
+  const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
+  const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
+  const [nickNameError, setNickNameError] = React.useState(false);
+  const [emailLengthError, setEmailLengthError] = React.useState(false);
+
 
 
   const handleEmailChange = (event) => {
@@ -28,6 +35,7 @@ export default function Signup() {
   };
   const handleUserChange = (event) => {
     setNickName(event.currentTarget.value);
+    console.log(nickName.length)
   };
   const handlePasswordChange = (event) => {
     setPassword(event.currentTarget.value);
@@ -69,98 +77,119 @@ export default function Signup() {
   // firebase signup
   const onSignup = (event) => {
     if (!email || !password || !passwordConfirm || !nickName) {
-      alert('모든 입력값을 채워주세요.')
+      setNullError(true)
+      alert('모든 입력값을 채워주세요.');
       return
     }
-    if (password != passwordConfirm) {
-      alert('비밀번호 확인이 일치하지 않습니다.')
+    if (1 > nickName.length || nickName.length > 10) {
+      setNickNameError(true);
+      alert('닉네임을 10자 이하 입니다.');
       return
     }
     let valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!valid.test(email)) {
-      alert('이메일 형식이 아닙니다.')
+      setEmailVarifiedError(true);
+      alert('이메일 형식이 아닙니다.');
+      return
     }
-    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+    if (email.length > 30) {
+      setEmailLengthError(true);
+      alert('이메일은 30자 이하 입니다.');
+      return
+    }
+    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
     if (!reg.test(password)) {
-      alert('비밀번호는 소문자/숫자 포함 8글자 이상입니다.')
+      setNullPasswordLengthError(true);
+      alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하 입니다.');
+      return
+    }
+    if (password != passwordConfirm) {
+      setPasswordMatchError(true);
+      alert('비밀번호 확인이 일치하지 않습니다.');
+      return
     }
 
 
-    fire.auth.createUserWithEmailAndPassword(email, password)
-      .then((currentUser) => {
-        history.push('/email-confirm');
+    if (!nullError && !passwordMatchError && !emailVarifiedError && !passwordLengthError && !nickNameError && !emailLengthError) {
+      fire.auth.createUserWithEmailAndPassword(email, password)
+        .then((currentUser) => {
+          history.push('/email-confirm');
 
-        // token 받아오기
-        fire.auth.currentUser.getIdToken().then(function (idToken) {
-          // firebase.store에서 정보 가져와서 넣어줌
-          const param = {
-            mbti: 'INFP',
-            gender: 'FEMALE',
+          // token 받아오기
+          fire.auth.currentUser.getIdToken().then(function (idToken) {
+            // firebase.store에서 정보 가져와서 넣어줌
+            // mbti, gender는 대문자
+            const param = {
+              mbti: '',
+              gender: '',
+              steamId: '',
+              maxPrice: 0,
+              age: 0
+            }
+
+            // axios
+            // response.data.status: 상태
+            // response.data.message: 메세지
+            // response.data.data: get할 경우 객체 받는거 
+            signup(idToken, param, (response) => {
+
+              // console.log(response, 'response');
+              if (!response.data.status) {
+              }
+              else {
+                // console.log(response.data.message)
+              }
+            }, (error) => {
+              // console.log(error);
+            })
+
+          }).catch(function (error) {
+            // Handle error
+          });
+
+          // add user to db
+          fire.db.collection("users").doc(currentUser.user.uid).set({
+            nickName: nickName,
+            email: currentUser.user.email,
+            emailVerified: currentUser.user.emailVerified,
+            mbti: '',
+            gender: '',
             steamId: '',
             maxPrice: 0,
             age: 0
-          }
-
-          // axios
-          // response.data.status: 상태
-          // response.data.message: 메세지
-          // response.data.data: get할 경우 객체 받는거 
-          signup(idToken, param, (response) => {
-
-            // console.log(response, 'response');
-            if (!response.data.status) {
-            }
-            else {
-              // console.log(response.data.message)
-            }
-          }, (error) => {
-            // console.log(error);
           })
 
-        }).catch(function (error) {
-          // Handle error
-        });
+          const createdUser = currentUser.user;
 
-        // add user to db
-        fire.db.collection("users").doc(currentUser.user.uid).set({
-          nickName: nickName,
-          email: currentUser.user.email,
-          emailVerified: currentUser.user.emailVerified,
-          mbti: 'INFP',
-          gender: 'FEMALE',
-          steamId: '',
-          maxPrice: 0,
-          age: 0
+
+          // 정보 수정
+          createdUser.updateProfile({
+            displayName: nickName,
+          }).then(function () {
+            // Update successful.
+          }).catch(function (error) {
+            // An error happened.
+          });
+          // 이메일 인증 
+          createdUser.sendEmailVerification().then(function () {
+            alert('인증메일 발송 이메일을 확인해주세요');
+          }).catch(function (error) {
+            alert('인증메일 발송에 실패하였습니다.');
+          });
         })
-
-        const createdUser = currentUser.user;
-
-
-        // 정보 수정
-        createdUser.updateProfile({
-          displayName: nickName,
-        }).then(function () {
-          // Update successful.
-        }).catch(function (error) {
-          // An error happened.
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (error.code === 'auth/email-already-in-use') {
+            alert('해당 이메일은 이미 존재합니다.')
+          }
+          // console.log(errorMessage);
+          // ..
         });
-        // 이메일 인증 
-        createdUser.sendEmailVerification().then(function () {
-          alert('인증메일 발송 이메일을 확인해주세요');
-        }).catch(function (error) {
-          alert('인증메일 발송에 실패하였습니다.');
-        });
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (error.code === 'auth/email-already-in-use') {
-          alert('해당 이메일은 이미 존재합니다.')
-        }
-        // console.log(errorMessage);
-        // ..
-      });
+    }
   }
+
+
   // TODO: preventDefault 알아보기
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -203,7 +232,7 @@ export default function Signup() {
                   type="text"
                   className={styles.newinput}
                   autofocus
-                  placeholder="Name"
+                  placeholder="Nickname"
                   required
                   onChange={handleUserChange}
                 />

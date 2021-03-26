@@ -169,6 +169,15 @@ export default function CheckGambti() {
               history.push(routerInfo.PAGE_URLS.HOME);
             }}
           ></ButtonComp>
+          <br />
+          <ButtonComp
+            size="xlarge"
+            textvalue="Sign up"
+            color="#CCFF00"
+            onClick={() => {
+              history.push(routerInfo.PAGE_URLS.SIGNUP);
+            }}
+          ></ButtonComp>
         </article>
         {/* mbti 타입별 점수를 내부적으로 저장 */}
         {/* <p>{valueEI}</p>
