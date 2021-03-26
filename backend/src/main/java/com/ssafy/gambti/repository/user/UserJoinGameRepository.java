@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface UserJoinGameRepository extends JpaRepository<UserJoinGame, Long> {
     int countByGameId(Long gameId);
     boolean existsByUserId(String uid);
-    int deleteByUserId(String uid);
+    boolean existsByUserIdAndGameId(String uid, Long gameId);
+    int deleteByUserIdAndGameId(String uid, long gameId);
 }
