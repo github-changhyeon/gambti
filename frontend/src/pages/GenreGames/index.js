@@ -19,7 +19,7 @@ export default function GenreGames({ match, genreId }) {
   useEffect(() => {
     // TODO: AXIOS
 
-    console.log(location.state.genreId);
+    // console.log(location.state.genreId);
     setVideoAndCards(new Array());
     setRecommendGames(new Array());
     setIsFetchEnd(false);
@@ -27,7 +27,7 @@ export default function GenreGames({ match, genreId }) {
     restApi()
       .get(`games/recommends/${location.state.genreId}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         let gameInfos = res.data.data;
         for (let i = 0; i < gameInfos.length; ++i) {
           setVideoAndCards((videoAndCards) => [

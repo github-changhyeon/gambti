@@ -59,16 +59,16 @@ export default function Home({ match }) {
   // }
   // const classes = useStyles();
   useEffect(() => {
-    restApi()
-      .get(
-        `games/find?genreId=1&page=1&size=10&direction=DESC&colName=metascore`
-      )
-      .then((res) => {
-        console.log(res.data.data.content);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // restApi()
+    //   .get(
+    //     `games/find?genreId=1&page=1&size=10&direction=DESC&colName=metascore`
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.content);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, []);
 
   return (
