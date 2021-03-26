@@ -6,10 +6,28 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 import { useHistory } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
+import Button from '@material-ui/core/Button';
+import fire from 'src/fire';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FaceIcon from '@material-ui/icons/Face';
 
-export default function Header() {
+export default function Header({ isLogin }) {
   const history = useHistory();
   const [atextvalue, setAtextvalue] = React.useState('김');
+
+  // 로그아웃
+  const logout = (event) => {
+    fire.auth
+      .signOut()
+      .then(() => {
+        history.push('/');
+        window.localStorage.clear();
+        alert('로그아웃 되었습니다 !!');
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   return (
     <div className={styles.header}>
@@ -36,10 +54,56 @@ export default function Header() {
 
       <div className={styles.header_right}>
         <div className={styles.header_right_item}>
-          <NotificationsIcon className={styles.header_icon} />
+          {/* 알림 */}
+          {isLogin && <NotificationsIcon className={styles.header_icon} />}
+          {/* 로그인 */}
+          {!isLogin && (
+            <Button
+              onClick={() => {
+                history.push(routerInfo.PAGE_URLS.LOGIN);
+              }}
+              className={styles.header_accountBtn}
+            >
+              Login
+            </Button>
+          )}
         </div>
         <div className={styles.header_right_item}>
-          <AvatarComp size="small" textvalue={atextvalue}></AvatarComp>
+          {/* 프로필 */}
+          {isLogin && (
+            <div className={styles.dropdown}>
+              <AvatarComp
+                className={styles.dropbtn}
+                size="small"
+                textvalue={atextvalue}
+              ></AvatarComp>
+              <div className={styles.dropdown_content}>
+                <div className={styles.dropdown_menu}>
+                  <p>
+                    <FaceIcon />
+                  </p>
+                  <p>Profile</p>
+                </div>
+                <div onClick={logout} className={styles.dropdown_menu}>
+                  <p>
+                    <ExitToAppIcon />
+                  </p>
+                  <p>Logout</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* 회원가입 */}
+          {!isLogin && (
+            <Button
+              onClick={() => {
+                history.push(routerInfo.PAGE_URLS.CHECK_GAMBTI);
+              }}
+              style={{ color: 'white', fontSize: '0.65rem' }}
+            >
+              Sign Up
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -84,7 +84,7 @@ export default function Home() {
       <GenreList propsOrder="all"></GenreList>
       <Typography
         variant="h5"
-        style={{ color: "white", margin: "20px 0px" }}
+        style={{ color: 'white', margin: '20px 0px' }}
         gutterBottom
         align="center"
       >
@@ -92,7 +92,7 @@ export default function Home() {
       </Typography>
       <Typography
         variant="body1"
-        style={{ color: "white", margin: "20px 0px 40px 0px" }}
+        style={{ color: 'white', margin: '20px 0px 40px 0px' }}
         paragraph
         align="center"
       >
