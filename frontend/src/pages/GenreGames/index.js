@@ -1,4 +1,5 @@
-import { React, useState, useEffect, useLayoutEffect } from "react";
+import { React, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./index.module.css";
 import GenreList from "src/components/GenreList/GenreList";
 import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
@@ -7,107 +8,61 @@ import { Carousel } from "3d-react-carousal";
 import GameCard from "src/components/GameCard/GameCard";
 import VideoAndCard from "src/pages/GenreGames/genreGame-components/VideoAndCard";
 import MediaQuery from "react-responsive";
+import { restApi } from "src/common/axios/index";
 
-export default function GenreGames({ match }) {
+export default function GenreGames({ match, genreId }) {
   const [recommendGames, setRecommendGames] = useState(new Array());
-
   const [videoAndCards, setVideoAndCards] = useState(new Array());
-
-  const gameInfo = {
-    appName: "title",
-    isJoined: false,
-    isOwned: true,
-    image: {
-      logoImage: {
-        id: 1,
-        path:
-          "https://m.gjcdn.net/community-header/950/18067-crop0_296_1920_776-npqpqk9f-v4.webp",
-      },
-      backgroundImage: {
-        id: 1,
-        path:
-          "https://m.gjcdn.net/community-header/950/18067-crop0_296_1920_776-npqpqk9f-v4.webp",
-      },
-    },
-    videoPath:
-      "https://cdn.akamai.steamstatic.com/steam/apps/256733242/movie_max.webm?t=1540671394",
-    suitedRate: 67.7,
-    totalJoin: 123456,
-  };
-
-  // let slides = [
-  //   <div
-  //     style={{
-  //       display: "flex",
-  //       alignItems: "center",
-  //       justifyContent: "center",
-  //       width: "250px",
-  //     }}
-  //   >
-  //     <GameCard gameInfo={gameInfo1}></GameCard>
-  //   </div>,
-  //   <div
-  //     style={{
-  //       display: "flex",
-  //       alignItems: "center",
-  //       justifyContent: "center",
-  //       width: "250px",
-  //     }}
-  //   >
-  //     <GameCard gameInfo={gameInfo1}></GameCard>
-  //   </div>,
-  //   <div
-  //     style={{
-  //       display: "flex",
-  //       alignItems: "center",
-  //       justifyContent: "center",
-  //       width: "250px",
-  //     }}
-  //   >
-  //     <GameCard gameInfo={gameInfo1}></GameCard>
-  //   </div>,
-  //   <div
-  //     style={{
-  //       display: "flex",
-  //       alignItems: "center",
-  //       justifyContent: "center",
-  //       width: "250px",
-  //     }}
-  //   >
-  //     <GameCard gameInfo={gameInfo1}></GameCard>
-  //   </div>,
-  // ];
+  const [isFetchEnd, setIsFetchEnd] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // TODO: AXIOS
 
+    console.log(location.state.genreId);
     setVideoAndCards(new Array());
+    setRecommendGames(new Array());
+    setIsFetchEnd(false);
+
+    restApi()
+      .get(`games/recommends/${location.state.genreId}`)
+      .then((res) => {
+        console.log(res);
+        let gameInfos = res.data.data;
+        for (let i = 0; i < gameInfos.length; ++i) {
+          setVideoAndCards((videoAndCards) => [
+            ...videoAndCards,
+
+            <VideoAndCard gameInfo={gameInfos[i]}></VideoAndCard>,
+          ]);
+          setRecommendGames((recommendGames) => [
+            ...recommendGames,
+
+            <div style={{ width: "238px" }}>
+              <GameCard gameInfo={gameInfos[i]}></GameCard>
+            </div>,
+          ]);
+        }
+        setIsFetchEnd(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     // console.log(tempArr);
     // setRecommendGames(new Array());
-    for (let i = 0; i < 10; ++i) {
-      setVideoAndCards((videoAndCards) => [
-        ...videoAndCards,
-
-        <VideoAndCard gameInfo={gameInfo}></VideoAndCard>,
-      ]);
-    }
-    for (let i = 0; i < 10; ++i) {
-      setRecommendGames((recommendGames) => [
-        ...recommendGames,
-
-        <div style={{ width: "238px" }}>
-          <GameCard gameInfo={gameInfo}></GameCard>
-        </div>,
-      ]);
-    }
   }, [match]);
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
       <GenreList propsOrder="all"></GenreList>
+      <Typography
+        variant="h5"
+        style={{ color: "white", margin: "20px 0px 0px 20px" }}
+        gutterBottom
+      ></Typography>
       <MediaQuery minWidth="1024px">
-        {videoAndCards.length === 0 ? null : (
+        {!isFetchEnd ? null : (
           <div
             style={{
               display: "flex",
@@ -122,7 +77,7 @@ export default function GenreGames({ match }) {
         )}
       </MediaQuery>
       <MediaQuery maxWidth="1024px">
-        {recommendGames.length === 0 ? null : (
+        {!isFetchEnd ? null : (
           <div
             style={{
               display: "flex",
@@ -136,58 +91,15 @@ export default function GenreGames({ match }) {
           </div>
         )}
       </MediaQuery>
-      {/* //["talk-bubble tri-right border round btm-left-in"] */}
-      {/* <div
-        className={
-          styles.talk_bubble +
-          " " +
-          styles.tri_right +
-          " " +
-          styles.border +
-          " " +
-          styles.round +
-          " " +
-          styles.btm_left_in
-        }
-      >
-        <video
-          playsinline
-          autoPlay={true}
-          muted={true}
-          loop={true}
-          width="100%"
-          height="100%"
-          controls={false}
-          className={styles.round}
-        >
-          <source
-            src="https://cdn.akamai.steamstatic.com/steam/apps/256733242/movie_max.webm?t=1540671394"
-            type="video/mp4"
-          />
-        </video>
-      </div> */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <video
-          autoPlay={true}
-          muted={true}
-          loop={true}
-          width="40%"
-          height="150px"
-          controls={false}
-        >
-          <source
-            src="https://cdn.akamai.steamstatic.com/steam/apps/256733242/movie_max.webm?t=1540671394"
-            type="video/mp4"
-          />
-        </video>
-      </div>
-      ,{/* <InfiniteScrollCard></InfiniteScrollCard> */}
+
+      <Typography
+        variant="h5"
+        style={{ color: "white", margin: "20px 0px 0px 20px" }}
+        gutterBottom
+      ></Typography>
+      <br />
+      <br />
+      <InfiniteScrollCard></InfiniteScrollCard>
     </div>
   );
 }

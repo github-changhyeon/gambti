@@ -41,7 +41,12 @@ export default function VideoAndCard({ gameInfo }) {
             controls={false}
             className={styles.round}
           >
-            <source src={gameInfo.videoPath} type="video/mp4" />
+            <source
+              src={
+                "https://cdn.akamai.steamstatic.com/steam/apps/256733242/movie_max.webm?t=1540671394"
+              }
+              type="video/mp4"
+            />
           </video>
         </div>
       </div>
