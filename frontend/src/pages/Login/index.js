@@ -51,10 +51,10 @@ export default function Login() {
       alert('이메일 형식이 아닙니다.');
       return
     }
-    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
     if (!reg.test(password)) {
       setNullPasswordLengthError(true);
-      alert('비밀번호는 소문자/숫자 포함 8글자 이상입니다.');
+      alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하입니다.');
       return
     }
     if (!nullError && !emailVarifiedError && !passwordLengthError) {
@@ -70,7 +70,7 @@ export default function Login() {
           //   email: user.user.email,
           // })
           // console.log(user);
-          if (user.emailVerified) {
+          if (currentUser.user.emailVerified) {
             history.push('/');
           } else {
             history.push('/email-confirm')
