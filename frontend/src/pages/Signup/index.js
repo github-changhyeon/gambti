@@ -25,6 +25,8 @@ export default function Signup() {
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
+  const [nickNameError, setNickNameError] = React.useState(false);
+  const [emailLengthError, setEmailLengthError] = React.useState(false);
 
 
 
@@ -33,6 +35,7 @@ export default function Signup() {
   };
   const handleUserChange = (event) => {
     setNickName(event.currentTarget.value);
+    console.log(nickName.length)
   };
   const handlePasswordChange = (event) => {
     setPassword(event.currentTarget.value);
@@ -78,9 +81,9 @@ export default function Signup() {
       alert('모든 입력값을 채워주세요.');
       return
     }
-    if (password != passwordConfirm) {
-      setPasswordMatchError(true);
-      alert('비밀번호 확인이 일치하지 않습니다.');
+    if (1 > nickName.length || nickName.length > 10) {
+      setNickNameError(true);
+      alert('닉네임을 10자 이하 입니다.');
       return
     }
     let valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
@@ -89,13 +92,25 @@ export default function Signup() {
       alert('이메일 형식이 아닙니다.');
       return
     }
-    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
-    if (!reg.test(password)) {
-      setNullPasswordLengthError(true);
-      alert('비밀번호는 소문자/숫자 포함 8글자 이상입니다.');
+    if (email.length > 30) {
+      setEmailLengthError(true);
+      alert('이메일은 30자 이하 입니다.');
       return
     }
-    if (!nullError && !passwordMatchError && !emailVarifiedError && !passwordLengthError) {
+    const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
+    if (!reg.test(password)) {
+      setNullPasswordLengthError(true);
+      alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하 입니다.');
+      return
+    }
+    if (password != passwordConfirm) {
+      setPasswordMatchError(true);
+      alert('비밀번호 확인이 일치하지 않습니다.');
+      return
+    }
+
+
+    if (!nullError && !passwordMatchError && !emailVarifiedError && !passwordLengthError && !nickNameError && !emailLengthError) {
       fire.auth.createUserWithEmailAndPassword(email, password)
         .then((currentUser) => {
           history.push('/email-confirm');
