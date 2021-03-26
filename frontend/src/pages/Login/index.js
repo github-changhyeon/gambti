@@ -70,7 +70,7 @@ export default function Login() {
           //   email: user.user.email,
           // })
           // console.log(user);
-          if (user.emailVerified) {
+          if (currentUser.user.emailVerified) {
             history.push('/');
           } else {
             history.push('/email-confirm')
