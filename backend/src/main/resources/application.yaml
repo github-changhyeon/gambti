@@ -92,6 +92,7 @@ security:
     - /webjars/**
     - /admin/**
     - /games/find/**
+    - /games/recommends/**
 
   exposed-headers:
     - X-Xsrf-Token
