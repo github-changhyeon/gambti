@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './Header.module.css';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
@@ -10,10 +10,11 @@ import Button from '@material-ui/core/Button';
 import fire from 'src/fire';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FaceIcon from '@material-ui/icons/Face';
+import { UserContext } from 'src/Context/UserContext';
 
 export default function Header({ isLogin }) {
   const history = useHistory();
-  const [atextvalue, setAtextvalue] = React.useState('김');
+  const user = useContext(UserContext);
 
   // 로그아웃
   const logout = (event) => {
@@ -75,7 +76,7 @@ export default function Header({ isLogin }) {
               <AvatarComp
                 className={styles.dropbtn}
                 size="small"
-                textvalue={atextvalue}
+                textvalue={user.nickName.substring(0, 1)}
               ></AvatarComp>
               <div className={styles.dropdown_content}>
                 <div className={styles.dropdown_menu}>

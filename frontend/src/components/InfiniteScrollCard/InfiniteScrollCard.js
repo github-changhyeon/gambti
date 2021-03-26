@@ -89,9 +89,9 @@ export default function InfiniteScrollCard({ genreId, routerMatch }) {
 
   useEffect(() => {
     // scroll event listener 등록
-    console.log("매치매치", routerMatch);
+    // console.log("매치매치", routerMatch);
     setItems(new Array());
-    console.log("매치 리스트", items);
+    // console.log("매치 리스트", items);
     fetchData();
     window.addEventListener("scroll", handleScroll);
     return () => {
