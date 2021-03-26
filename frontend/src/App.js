@@ -107,16 +107,13 @@ const EmailConfirmRouter = () => {
   return (
     <Router>
       <Header isLogin={true} />
-
-      <div style={{ paddingLeft: '64px' }}>
-        <Switch>
-          <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
-          <Route path="/action-url-handler" component={ActionUrlHandler} />
-          <Route path="/test" component={Test} />
-          <Route path="*" component={NoAccess} />
-        </Switch>
-        <Footer />
-      </div>
+      <Switch>
+        <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+        <Route path="/action-url-handler" component={ActionUrlHandler} />
+        <Route path="/test" component={Test} />
+        <Route path="*" component={NoAccess} />
+      </Switch>
+      <Footer />
     </Router>
   );
 };
