@@ -17,12 +17,11 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
   else if (size === 'small') {
     return (
       // TODO: 뱃지 위치, 색깔 맞추기
-      <Badge color="primary" badgeContent=" " overlap="circle" variant="dot">
-        <Avatar className={styles.small} src={imgPath}>
-          {' '}
-          {textvalue}
-        </Avatar>
-      </Badge>
+      // <Badge color="primary" badgeContent=" " overlap="circle" variant="dot">
+      <Avatar className={styles.small} src={imgPath}>
+        {textvalue}
+      </Avatar>
+      // </Badge>
     );
   }
   // chatHeader, nav
