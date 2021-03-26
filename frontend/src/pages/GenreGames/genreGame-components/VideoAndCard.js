@@ -36,6 +36,7 @@ export default function VideoAndCard({ gameInfo }) {
             <img
               className={styles.round}
               width="100%"
+              style={{ maxHeight: "283px" }}
               src={gameInfo.backgroundImagePath}
             ></img>
           ) : (

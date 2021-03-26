@@ -10,136 +10,54 @@ import ButtonComp from "src/components/ButtonComp/ButtonComp.js";
 import Avatar from "@material-ui/core/Avatar";
 import { Container } from "@material-ui/core";
 import ColorThief from "colorthief";
+import { restApi } from "src/common/axios/index";
 
 export default function GameCard({ isLogin, gameInfo }) {
-  let descriptionNum, descriptionText, buttonText;
+  let descriptionText, buttonText;
   const [cardColor, setCardColor] = useState("#ffffff");
+  const [descriptionNum, setDescriptionNum] = useState(
+    gameInfo.joinUserCount
+    // Number(gameInfo.joinUserCount).toLocaleString()
+  );
+  const [joined, setJoined] = useState(gameInfo.joined);
   if (isLogin) {
-    descriptionNum = Number(gameInfo.joinUserCount).toLocaleString();
     descriptionText = " joined";
   } else {
-    descriptionNum = Number(gameInfo.joinUserCount).toLocaleString();
     descriptionText = " joined";
     // descriptionNum = gameInfo.metascore + "%";
     // descriptionText = " suited";
   }
-  if (gameInfo.joined) {
-    buttonText = "Joined";
-  } else {
-    buttonText = "Join Game";
-  }
 
-  const neonCard = (
-    <div className={styles["neon-block"]}>
-      <div className={styles.block}>
-        <span className={styles.rainbow}></span>
+  const clickJoinBtn = () => {
+    const token = localStorage.getItem("idToken");
+    // console.log(token);
+    if (token === null || token === undefined) {
+      alert("로그인 해주세요");
+    } else {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // 'Authorization': 'Bearer ' + accessToken
+        },
+      };
+      restApi()
+        .post(`games/joinLeave/${gameInfo.gameId}`, {}, config)
+        .then((res) => {
+          if (res.data.status === "success") {
+            // setDescriptionNum(res.data.data);
 
-        <Card className={styles.game_card}>
-          <CardMedia
-            className={styles.game_card_background_img}
-            image={gameInfo.backgroundImagePath}
-            title="Contemplative Reptile"
-          />
-          <CardContent className={styles.card_logo_img}>
-            <Container
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <AvatarComp size="xlarge" imgPath={gameInfo.logoImagePath} />
-            </Container>
-          </CardContent>
-          <CardContent>
-            <Typography
-              className={styles.game_card_title}
-              gutterBottom
-              variant="h5"
-              component="h2"
-              noWrap={true}
-            >
-              {gameInfo.appName}
-            </Typography>
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              component="span"
-              style={{ color: cardColor }}
-            >
-              {descriptionNum}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="span"
-              style={{ color: cardColor }}
-            >
-              {descriptionText}
-            </Typography>
-          </CardContent>
-          <CardActions className={styles.game_card_button}>
-            <ButtonComp size="medium" textvalue={buttonText}></ButtonComp>
-          </CardActions>
-        </Card>
-      </div>
-    </div>
-  );
+            if (joined) {
+              setDescriptionNum(descriptionNum - 1);
+            } else {
+              setDescriptionNum(descriptionNum + 1);
+            }
 
-  const normalCard = (
-    <Card className={styles.game_card}>
-      <CardMedia
-        className={styles.game_card_background_img}
-        image={gameInfo.backgroundImagePath}
-        title="Contemplative Reptile"
-      />
-      <CardContent className={styles.card_logo_img}>
-        <Container
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <AvatarComp
-            size="xlarge"
-            textvalue="temp"
-            imgPath={gameInfo.logoImagePath}
-          />
-        </Container>
-      </CardContent>
-      <CardContent>
-        <Typography
-          className={styles.game_card_title}
-          gutterBottom
-          variant="h5"
-          component="h2"
-          noWrap={true}
-        >
-          {gameInfo.appName}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          component="span"
-          style={{ color: cardColor }}
-        >
-          {descriptionNum}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          component="span"
-          style={{ color: cardColor }}
-        >
-          {descriptionText}
-        </Typography>
-      </CardContent>
-      <CardActions className={styles.game_card_button}>
-        <ButtonComp size="medium" textvalue={buttonText}></ButtonComp>
-      </CardActions>
-    </Card>
-  );
+            setJoined(!joined);
+          }
+        })
+        .catch((err) => {});
+    }
+  };
 
   useEffect(() => {
     const colorThief = new ColorThief();
@@ -206,7 +124,12 @@ export default function GameCard({ isLogin, gameInfo }) {
             </Typography>
           </CardContent>
           <CardActions className={styles.game_card_button}>
-            <ButtonComp size="medium" textvalue={buttonText}></ButtonComp>
+            <ButtonComp
+              size="medium"
+              joined={joined}
+              textvalue={joined ? "JOINED" : "JOIN GAME"}
+              onClick={clickJoinBtn}
+            ></ButtonComp>
           </CardActions>
         </Card>
       </div>
@@ -261,7 +184,12 @@ export default function GameCard({ isLogin, gameInfo }) {
         </Typography>
       </CardContent>
       <CardActions className={styles.game_card_button}>
-        <ButtonComp size="medium" textvalue={buttonText}></ButtonComp>
+        <ButtonComp
+          size="medium"
+          joined={joined}
+          textvalue={joined ? "JOINED" : "JOIN GAME"}
+          onClick={clickJoinBtn}
+        ></ButtonComp>
       </CardActions>
     </Card>
   );
