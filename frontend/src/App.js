@@ -27,70 +27,64 @@ import {
   NoAccess,
   Loading,
   NotFound,
-  ActionUrlHandler
+  ActionUrlHandler,
 } from './pages';
-
 
 const AppRouter = () => {
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
   if (user.isLoggedIn === null) {
-    return <Loading />
+    return <Loading />;
   } else {
     // 로그인이 되어 있을 경우
     if (user.isLoggedIn) {
       // 이메일 인증이 되어 있을 경우
       if (user.emailVerified) {
-        return <MainRouter />
+        return <MainRouter />;
       }
       // 이메일 인증이 안되어 있을 경우
       else {
-        return <EmailConfirmRouter />
+        return <EmailConfirmRouter />;
       }
     }
     // 로그인이 안되어 있을 경우
     else {
-      return <NotLoginRouter />
+      return <NotLoginRouter />;
     }
   }
-}
-
-
+};
 
 const NotLoginRouter = () => {
   return (
     <Router>
-      <Header />
-      <div style={{ paddingLeft: '64px' }}>
-        <Switch>
-          <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
-          <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
-          <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
-          <Route path={routerInfo.PAGE_URLS.CHECK_INFO} component={CheckInfo} />
-          <Route path={routerInfo.PAGE_URLS.CHECK_GAMBTI} component={CheckGambti} />
-          <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
-          <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
-          <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
-          <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
-          <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
-          <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
-          <Route path="/action-url-handler" component={ActionUrlHandler} />
-          <Route path="/test" component={Test} />
-          <Route path="*" component={NoAccess} />
-
-        </Switch>
-        <Footer />
-      </div>
+      <Header isLogin={false} />
+      <Switch>
+        <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
+        <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
+        <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
+        <Route path={routerInfo.PAGE_URLS.CHECK_INFO} component={CheckInfo} />
+        <Route path={routerInfo.PAGE_URLS.CHECK_GAMBTI} component={CheckGambti} />
+        <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
+        <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
+        <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
+        <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
+        <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
+        <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
+        <Route path="/action-url-handler" component={ActionUrlHandler} />
+        <Route path="/test" component={Test} />
+        <Route path="*" component={NoAccess} />
+      </Switch>
+      <Footer />
     </Router>
   );
-}
+};
 
 const MainRouter = () => {
   const user = useContext(UserContext);
   return (
     <Router>
-      <Header />
+      <Header isLogin={true} />
       <Nav />
       <div style={{ paddingLeft: '64px' }}>
         <Switch>
@@ -103,17 +97,16 @@ const MainRouter = () => {
           <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
-
         </Switch>
         <Footer />
       </div>
-    </Router >
-  )
-}
+    </Router>
+  );
+};
 const EmailConfirmRouter = () => {
   return (
     <Router>
-      <Header />
+      <Header isLogin={true} />
 
       <div style={{ paddingLeft: '64px' }}>
         <Switch>
@@ -124,11 +117,9 @@ const EmailConfirmRouter = () => {
         </Switch>
         <Footer />
       </div>
-    </Router >
-  )
-}
-
-
+    </Router>
+  );
+};
 
 function App() {
   return (

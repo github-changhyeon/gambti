@@ -3,7 +3,6 @@ import styles from './Nav.module.css';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 import SearchIcon from '@material-ui/icons/Search';
 import { useHistory } from 'react-router';
-import routerInfo from 'src/constants/routerInfo';
 
 export default function Nav() {
   const history = useHistory();
@@ -54,12 +53,7 @@ export default function Nav() {
           onMouseLeave={() => setIsShownSearch(false)}
         >
           <div className={styles.search}>
-            <SearchIcon
-              className={styles.searchIcon}
-              onClick={() => {
-                history.push(routerInfo.PAGE_URLS.CHECK_GAMBTI);
-              }}
-            />
+            <SearchIcon className={styles.searchIcon} />
             {isShownSearch && <div className={styles.textarea}>Search Game or User</div>}
           </div>
         </div>

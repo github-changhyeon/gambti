@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styles from './index.module.css';
-import ButtonComp from 'src/components/ButtonComp/ButtonComp'
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -125,8 +125,12 @@ export default function Login() {
             </div>
           </form>
           <div className={styles.move_page}>
-            <a href="/checkgambti" className={styles.link}>or Sign Up</a>
-            <a href="/forgot" className={styles.link}>Forgot Username or Password</a>
+            <a href="/checkgambti" className={styles.link}>
+              or Sign Up
+            </a>
+            <a href="/forgot" className={styles.link}>
+              Forgot Username or Password
+            </a>
           </div>
         </div>
       </Container>
