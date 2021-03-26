@@ -8,7 +8,7 @@ import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { restApi } from "src/common/axios/index";
 
-export default function InfiniteScrollCard() {
+export default function InfiniteScrollCard({ genreId, routerMatch }) {
   // 새로운 state 변수를 선언하고, count라 부르겠습니다.
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
@@ -44,11 +44,12 @@ export default function InfiniteScrollCard() {
 
     restApi()
       .get(
-        `/games/find?genreId=0&page=${pageNum}&size=${size}&direction=DESC&colName=metascore`
+        `/games/find?genreId=${genreId}&page=${pageNum}&size=${size}&direction=DESC&colName=metascore`
       )
       .then((res) => {
-        console.log(res.data.data.content);
-        setItems([...items, ...res.data.data.content]);
+        console.log("무한스크롤", res.data.data.content);
+        setItems((items) => [...items, ...res.data.data.content]);
+        // setItems([...items, ...res.data.data.content]);
         setPageNum(pageNum + 1);
         if (res.data.data.last) {
           setIsEnd(true);
@@ -88,6 +89,9 @@ export default function InfiniteScrollCard() {
 
   useEffect(() => {
     // scroll event listener 등록
+    console.log("매치매치", routerMatch);
+    setItems(new Array());
+    console.log("매치 리스트", items);
     fetchData();
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -95,7 +99,7 @@ export default function InfiniteScrollCard() {
 
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [routerMatch]);
 
   useEffect(() => {
     // scroll event listener 등록
