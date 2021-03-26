@@ -18,8 +18,10 @@ export default function GameCard({ isLogin, gameInfo }) {
     descriptionNum = Number(gameInfo.joinUserCount).toLocaleString();
     descriptionText = " joined";
   } else {
-    descriptionNum = gameInfo.metascore + "%";
-    descriptionText = " suited";
+    descriptionNum = Number(gameInfo.joinUserCount).toLocaleString();
+    descriptionText = " joined";
+    // descriptionNum = gameInfo.metascore + "%";
+    // descriptionText = " suited";
   }
   if (gameInfo.joined) {
     buttonText = "Joined";
