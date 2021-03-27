@@ -10,6 +10,7 @@ import { GoogleLoginButton, TwitterLoginButton } from "react-social-login-button
 import { UserContext } from 'src/Context/UserContext';
 import { signup } from 'src/common/axios/Account';
 import background from 'src/Images/background.jpg';
+import firebase from 'firebase';
 
 
 export default function Signup() {
@@ -35,7 +36,6 @@ export default function Signup() {
   };
   const handleUserChange = (event) => {
     setNickName(event.currentTarget.value);
-    console.log(nickName.length)
   };
   const handlePasswordChange = (event) => {
     setPassword(event.currentTarget.value);
@@ -114,7 +114,17 @@ export default function Signup() {
       fire.auth.createUserWithEmailAndPassword(email, password)
         .then((currentUser) => {
           history.push('/email-confirm');
-
+          // token 지속성
+          fire.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+            .then(() => {
+              // console.log('성공');
+            })
+            .catch((error) => {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // alert('session', errorMessage);
+            });
           // token 받아오기
           fire.auth.currentUser.getIdToken().then(function (idToken) {
             // firebase.store에서 정보 가져와서 넣어줌
@@ -160,7 +170,6 @@ export default function Signup() {
           })
 
           const createdUser = currentUser.user;
-
 
           // 정보 수정
           createdUser.updateProfile({
