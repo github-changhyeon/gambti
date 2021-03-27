@@ -4,13 +4,14 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
-import { useHistory } from 'react-router';
+import { useHistory, generatePath } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
 import Button from '@material-ui/core/Button';
 import fire from 'src/fire';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FaceIcon from '@material-ui/icons/Face';
 import { UserContext } from 'src/Context/UserContext';
+import { event } from 'jquery';
 
 export default function Header({ isLogin }) {
   const history = useHistory();
@@ -28,6 +29,14 @@ export default function Header({ isLogin }) {
       .catch((error) => {
         // An error happened.
       });
+  };
+
+  const goMypage = (event) => {
+    history.push({
+      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+        uid: user.uid,
+      })
+    })
   };
 
   return (
@@ -79,7 +88,7 @@ export default function Header({ isLogin }) {
                 textvalue={user.nickName.substring(0, 1)}
               ></AvatarComp>
               <div className={styles.dropdown_content}>
-                <div className={styles.dropdown_menu}>
+                <div className={styles.dropdown_menu} onClick={goMypage}>
                   <p>
                     <FaceIcon />
                   </p>
