@@ -1,0 +1,86 @@
+.root {
+  height: 100vh;
+  background-color: #222222;
+}
+.upper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.section {
+  width: 70%;
+}
+.section2{
+  width: 30%;
+}
+.box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #2a2c2d;
+  height: 207px;
+  margin: 2rem 0rem 2rem 2rem;
+  border-radius: 15px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 3rem;
+}
+.main_nick {
+  font-weight: bold;
+  font-size: 2rem;
+  margin-left: 2rem;
+  color: white;
+}
+.info{
+  margin: 4rem;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+.info_group{
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.info_title{
+  /* color: white; */
+  font-size: 0.7rem;
+}
+.info_number{
+  font-weight: bold;
+  font-size: 2.7rem;
+}
+.divider {
+  position: relative;
+  border-top: 14px solid #2a2c2d;
+  border-bottom: 14px solid #2a2c2d;
+  border-left: none;
+  border-right: none;
+  background-color: #cecece;  
+}
+.friend_box{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #2a2c2d;
+  height: 300px;
+  margin: 2rem 2rem;
+  border-radius: 15px;
+}
+.rec_title{
+  margin: 1rem 0rem 0.5rem 1rem;
+  color: #cecece;
+}
+.friend_list{
+  overflow: auto;
+}
+/* TODO: 스크롤 보이는지 확인 */
+.box::-webkit-scrollbar {
+  display: none;
+}

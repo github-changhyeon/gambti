@@ -46,3 +46,12 @@
   border: 5px solid #2a2c2d;
   cursor: pointer;
 }
+.super_large{
+  width: 8rem;
+  height: 8rem;
+  font-size: 6rem;
+  cursor: pointer;
+  background-color: #ccff00;
+  color: black;
+
+}

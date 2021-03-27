@@ -78,7 +78,14 @@ export default function Login() {
           alert(errorMessage);
         });
     }
-  };
+  }
+  // TODO: preventDefault 알아보기
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onLogin();
+    }
+  }
 
   return (
     <div
@@ -95,37 +102,34 @@ export default function Login() {
               Policy.
             </Typography>
 
-            <div className={styles.form_holder}>
-              {/* Email */}
-              <input
-                id="email"
-                type="email"
-                className={styles.newinput}
-                placeholder="Email"
-                required
-                onChange={handleEmailChange}
-              />
-              {/* password */}
-              <input
-                id="password"
-                type="password"
-                className={styles.newinput}
-                placeholder="Password"
-                required
-                onChange={handlePasswordChange}
-              />
-            </div>
+              <div className={styles.form_holder} >
+                {/* Email */}
+                <input
+                  id="email"
+                  type="email"
+                  className={styles.newinput}
+                  placeholder="Email"
+                  required
+                  onChange={handleEmailChange}
+                />
+                {/* password */}
+                <input
+                  id="password"
+                  type="password"
+                  className={styles.newinput}
+                  placeholder="Password"
+                  required
+                  onChange={handlePasswordChange}
+                  onKeyPress={handleKeyPress}
+                />
 
-            <div className={styles.buttons}>
-              <ButtonComp
-                size="large"
-                textvalue="LOGIN"
-                color="#CCFF00"
-                onClick={onLogin}
-              ></ButtonComp>
-              {/* <hr /> */}
-              {/* 소셜 로그인 */}
-              {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
+              </div>
+
+              <div className={styles.buttons}>
+                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin} onKeyPress={onLogin}></ButtonComp>
+                {/* <hr /> */}
+                {/* 소셜 로그인 */}
+                {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} /> */}
             </div>
           </form>
