@@ -23,7 +23,6 @@ export default function Login() {
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
 
-
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
   };
@@ -32,31 +31,31 @@ export default function Login() {
   };
 
   const onLogin = (event) => {
-
     if (!email || !password) {
-      setNullError(true)
-      alert('모든 입력값을 채워주세요.')
-      return
+      setNullError(true);
+      alert('모든 입력값을 채워주세요.');
+      return;
     }
     let valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!valid.test(email)) {
       setEmailVarifiedError(true);
       alert('이메일 형식이 아닙니다.');
-      return
+      return;
     }
     const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
     if (!reg.test(password)) {
       setNullPasswordLengthError(true);
       alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하입니다.');
-      return
+      return;
     }
     if (!nullError && !emailVarifiedError && !passwordLengthError) {
-
       // firebase Login
-      fire.auth.signInWithEmailAndPassword(email, password)
+      fire.auth
+        .signInWithEmailAndPassword(email, password)
         .then((currentUser) => {
           // token 지속성
-          fire.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+          fire.auth
+            .setPersistence(firebase.auth.Auth.Persistence.SESSION)
             .then(() => {
               // console.log('성공');
             })
@@ -70,7 +69,7 @@ export default function Login() {
           if (currentUser.user.emailVerified) {
             history.push('/');
           } else {
-            history.push('/email-confirm')
+            history.push('/email-confirm');
           }
         })
         .catch((error) => {
@@ -89,16 +88,19 @@ export default function Login() {
   }
 
   return (
-    <div style={{
-      backgroundImage: `url(${background})`,
-    }}>
-      <div className={styles.background}>
-        <Container component="main" maxWidth="xs">
-          <div className={styles.root}>
-            <form noValidate className={styles.form}>
-              <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy Policy, including the Cookie Policy.
-          </Typography>
+    <div
+      className={styles.background}
+      style={{
+        backgroundImage: `url(${background})`,
+      }}
+    >
+      <Container component="main" maxWidth="xs">
+        <div className={styles.root}>
+          <form noValidate className={styles.form}>
+            <Typography className={styles.policy}>
+              By signing up, you agree to the Terms of User and Privacy Policy, including the Cookie
+              Policy.
+            </Typography>
 
               <div className={styles.form_holder} >
                 {/* Email */}
@@ -129,19 +131,18 @@ export default function Login() {
                 {/* 소셜 로그인 */}
                 {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} /> */}
-              </div>
-            </form>
-            <div className={styles.move_page}>
-              <a href="/check-gambti" className={styles.link}>
-                or Sign Up
-            </a>
-              <a href="/forgot" className={styles.link}>
-                Forgot Username or Password
-            </a>
             </div>
+          </form>
+          <div className={styles.move_page}>
+            <a href="/check-gambti" className={styles.link}>
+              or Sign Up
+            </a>
+            <a href="/forgot" className={styles.link}>
+              Forgot Username or Password
+            </a>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </div>
   );
 }

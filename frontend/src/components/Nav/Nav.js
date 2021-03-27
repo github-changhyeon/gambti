@@ -46,6 +46,87 @@ export default function Nav() {
           </AvatarComp>
           {isShownName && <div className={styles.textarea}>Game Name</div>}
         </div>
+        {/* test */}
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
+        <div
+          className={styles.item}
+          onMouseEnter={() => setIsShownName(true)}
+          onMouseLeave={() => setIsShownName(false)}
+        >
+          <AvatarComp size="medium" imgPath="/images/nav/chat.png">
+            {atextvalue}
+          </AvatarComp>
+          {isShownName && <div className={styles.textarea}>Game Name</div>}
+        </div>
         {/* 검색 아이콘 */}
         <div
           className={styles.item}

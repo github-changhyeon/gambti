@@ -1,5 +1,9 @@
 .background {
   background-color: rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 54px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .root {
   display: flex;
@@ -31,7 +35,6 @@
   margin-top: 1.8rem;
   margin-bottom: 1rem;
   cursor: pointer;
-
 }
 
 .move_page {
@@ -56,18 +59,18 @@
   width: 300px;
   /* -webkit-transition: all .3s ease; */
 }
-  .newinput {
-    border: 0;
-    outline: none;
-    box-shadow: none;
-    display: block;
-    height: 30px;
-    line-height: 30px;
-    padding: 8px 15px;
-    border-bottom: 1px solid #ccff00;
-    width: 100%;
-    font-size: 12px;
-    background-color: black;
-    color: #cecece;
-    margin-top: 0.3rem;
-  }
+.newinput {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  padding: 8px 15px;
+  border-bottom: 1px solid #ccff00;
+  width: 100%;
+  font-size: 12px;
+  background-color: black;
+  color: #cecece;
+  margin-top: 0.3rem;
+}

@@ -1,17 +1,15 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import styles from './AvatarComp.module.css';
 import Avatar from '@material-ui/core/Avatar';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
-import Badge from '@material-ui/core/Badge';
 
 export default function AvatarComp({ size, textvalue, imgPath }) {
-  const classes = useStyles();
-  const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
   // smallProfile
   if (size === 'xsmall') {
-    return <Avatar className={styles.xsmall}>{textvalue}</Avatar>;
+    return (
+      <Avatar className={styles.xsmall} src={imgPath}>
+        {textvalue}
+      </Avatar>
+    );
   }
   // header, chat(groupProfile, chattingProfile)
   else if (size === 'small') {
@@ -39,11 +37,9 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
   // UserCard,GameCard, 
   else if ((size === 'xlarge')) {
     return (
-      <AvatarGroup max={1}>
-        <Avatar src={imgPath} className={styles.xlarge}>
-          {textvalue}
-        </Avatar>
-      </AvatarGroup>
+      <Avatar src={imgPath} className={styles.xlarge}>
+        {textvalue}
+      </Avatar>
     );
   }
 
@@ -59,19 +55,3 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
 
 
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-  shape: {
-    backgroundColor: theme.palette.primary.main,
-    width: 40,
-    height: 40,
-  },
-  shapeCircle: {
-    borderRadius: '50%',
-  },
-}));

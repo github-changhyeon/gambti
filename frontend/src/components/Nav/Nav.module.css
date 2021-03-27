@@ -6,7 +6,11 @@
   position: fixed;
   top: 54px;
   left: 0;
-  z-index: 100;
+  overflow: auto;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .section {
