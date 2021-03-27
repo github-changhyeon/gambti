@@ -36,8 +36,8 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
   else if (size === 'large') {
     return <Avatar className={styles.large}>{textvalue}</Avatar>;
   }
-  // UserCard,GameCard, editProfile
-  else if ((size = 'xlarge')) {
+  // UserCard,GameCard, 
+  else if ((size === 'xlarge')) {
     return (
       <AvatarGroup max={1}>
         <Avatar src={imgPath} className={styles.xlarge}>
@@ -46,6 +46,18 @@ export default function AvatarComp({ size, textvalue, imgPath }) {
       </AvatarGroup>
     );
   }
+
+  // editProfile
+  else if ((size === 'superlarge')) {
+    return (
+      <Avatar className={styles.super_large} src={imgPath} >
+        {textvalue}
+      </Avatar>
+    );
+  }
+
+
+
 }
 
 const useStyles = makeStyles((theme) => ({

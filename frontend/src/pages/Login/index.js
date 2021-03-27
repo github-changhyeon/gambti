@@ -80,6 +80,13 @@ export default function Login() {
         });
     }
   }
+  // TODO: preventDefault 알아보기
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onLogin();
+    }
+  }
 
   return (
     <div style={{
@@ -111,12 +118,13 @@ export default function Login() {
                   placeholder="Password"
                   required
                   onChange={handlePasswordChange}
+                  onKeyPress={handleKeyPress}
                 />
 
               </div>
 
               <div className={styles.buttons}>
-                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin}></ButtonComp>
+                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin} onKeyPress={onLogin}></ButtonComp>
                 {/* <hr /> */}
                 {/* 소셜 로그인 */}
                 {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
