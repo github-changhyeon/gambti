@@ -8,7 +8,6 @@
   height: 54px;
   top: 0;
   left: 0;
-  font-weight: bold;
   display: flex;
   align-items: center; /* 세로에서 가운데에 요소를 배치 */
 }
@@ -16,14 +15,25 @@
 .header_left {
   flex: 1;
   text-align: left;
-  padding-left: 20px;
+  padding-left: 10px;
+}
+
+.header_logo {
+  height: 54px;
+  width: fit-content;
+  cursor: pointer;
   display: flex;
   align-items: center; /* 세로에서 가운데에 요소를 배치 */
 }
 
-.header_logo {
+.header_logo_icon {
+  height: 22px;
+  width: auto;
+  padding-right: 2px;
+}
+.header_logo_text {
   height: 28px;
-  cursor: pointer;
+  width: auto;
 }
 
 .header_center {
@@ -35,13 +45,13 @@
   width: 400px;
 }
 
-.search:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
 .input_root {
   color: white;
+  width: 400px;
   padding-left: 50px;
+}
+.header_center:hover {
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .search_icon {
@@ -55,7 +65,7 @@
 
 .header_right {
   flex: 1;
-  padding-right: 10px;
+  padding-right: 20px;
   display: flex;
   justify-content: flex-end;
 }
@@ -63,35 +73,35 @@
 .header_right_item {
   height: 54px;
   width: 54px;
+  margin: 0 1px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.header_icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  border-bottom: 4px solid black;
+  transform: translateY(-1.5px);
   cursor: pointer;
-  color: white;
-  font-size: 0.65rem;
 }
 
-.header_icon:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.header_right_item:hover {
+  border-bottom: 4px solid #d1d1d1;
   transition: 200ms;
-  padding: 5px;
 }
 
-.header_accountBtn {
+.header_right_account_button {
   color: white;
-  font-size: 0.65rem;
-  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.header_right_icon {
+  width: 25px;
+  height: 25px;
+  color: white;
 }
 
 .dropdown {
   position: relative;
   display: inline-block;
+  padding-top: 3px;
 }
 
 .dropdown_content {
@@ -125,7 +135,7 @@
   cursor: pointer;
 }
 
-.dropdown:hover .dropdown_content {
+.header_right_item:hover .dropdown_content {
   display: block;
   animation: fade-in 300ms;
 }
@@ -141,4 +151,15 @@
 
 .dropdown_menu {
   display: flex;
+}
+
+.textarea {
+  position: absolute;
+  top: 62px;
+  background-color: black;
+  width: max-content;
+  padding: 3px 10px;
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 5px;
 }
