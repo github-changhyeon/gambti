@@ -9,7 +9,7 @@ import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { UserContext } from 'src/Context/UserContext';
 import background from 'src/Images/background.jpg';
-
+import firebase from 'firebase';
 
 export default function Login() {
   const history = useHistory();
@@ -23,15 +23,6 @@ export default function Login() {
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
 
-
-
-
-  // 채팅 or 실시간으로 변경될때 편하게 사용 가능 
-  // var starCountRef = fire.database().ref('users/5qKHUGsoLCRuNGKEyZz7SY74g2Q2/' + 'username');
-  // starCountRef.on('value', (snapshot) => {
-  //   const data = snapshot.val();
-  //   console.log(data)
-  // });
 
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
@@ -61,17 +52,21 @@ export default function Login() {
     }
     if (!nullError && !emailVarifiedError && !passwordLengthError) {
 
-
-
       // firebase Login
       fire.auth.signInWithEmailAndPassword(email, password)
         .then((currentUser) => {
-          // realtime Database 사용법
-          // fire.database().ref('users/' + user.user.uid).set({
-          //   username: 'ddddd',
-          //   email: user.user.email,
-          // })
-          // console.log(user);
+          // token 지속성
+          fire.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+            .then(() => {
+              // console.log('성공');
+            })
+            .catch((error) => {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // alert('session', errorMessage);
+            });
+
           if (currentUser.user.emailVerified) {
             history.push('/');
           } else {
@@ -81,8 +76,7 @@ export default function Login() {
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          // console.log(error)
-          alert(errorMessage)
+          alert(errorMessage);
         });
     }
   }
