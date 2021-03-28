@@ -9,7 +9,7 @@ import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { UserContext } from 'src/Context/UserContext';
 import background from 'src/Images/background.jpg';
-
+import firebase from 'firebase';
 
 export default function Login() {
   const history = useHistory();
@@ -23,16 +23,6 @@ export default function Login() {
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
 
-
-
-
-  // 채팅 or 실시간으로 변경될때 편하게 사용 가능 
-  // var starCountRef = fire.database().ref('users/5qKHUGsoLCRuNGKEyZz7SY74g2Q2/' + 'username');
-  // starCountRef.on('value', (snapshot) => {
-  //   const data = snapshot.val();
-  //   console.log(data)
-  // });
-
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
   };
@@ -41,63 +31,76 @@ export default function Login() {
   };
 
   const onLogin = (event) => {
-
     if (!email || !password) {
-      setNullError(true)
-      alert('모든 입력값을 채워주세요.')
-      return
+      setNullError(true);
+      alert('모든 입력값을 채워주세요.');
+      return;
     }
     let valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!valid.test(email)) {
       setEmailVarifiedError(true);
       alert('이메일 형식이 아닙니다.');
-      return
+      return;
     }
     const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
     if (!reg.test(password)) {
       setNullPasswordLengthError(true);
       alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하입니다.');
-      return
+      return;
     }
     if (!nullError && !emailVarifiedError && !passwordLengthError) {
-
-
-
       // firebase Login
-      fire.auth.signInWithEmailAndPassword(email, password)
+      fire.auth
+        .signInWithEmailAndPassword(email, password)
         .then((currentUser) => {
-          // realtime Database 사용법
-          // fire.database().ref('users/' + user.user.uid).set({
-          //   username: 'ddddd',
-          //   email: user.user.email,
-          // })
-          // console.log(user);
+          // token 지속성
+          fire.auth
+            .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+            .then(() => {
+              // console.log('성공');
+            })
+            .catch((error) => {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // alert('session', errorMessage);
+            });
+
           if (currentUser.user.emailVerified) {
             history.push('/');
           } else {
-            history.push('/email-confirm')
+            history.push('/email-confirm');
           }
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          // console.log(error)
-          alert(errorMessage)
+          alert(errorMessage);
         });
+    }
+  }
+  // TODO: preventDefault 알아보기
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onLogin();
     }
   }
 
   return (
-    <div style={{
-      backgroundImage: `url(${background})`,
-    }}>
-      <div className={styles.background}>
-        <Container component="main" maxWidth="xs">
-          <div className={styles.root}>
-            <form noValidate className={styles.form}>
-              <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy Policy, including the Cookie Policy.
-          </Typography>
+    <div
+      className={styles.background}
+      style={{
+        backgroundImage: `url(${background})`,
+      }}
+    >
+      <Container component="main" maxWidth="xs">
+        <div className={styles.root}>
+          <form noValidate className={styles.form}>
+            <Typography className={styles.policy}>
+              By signing up, you agree to the Terms of User and Privacy Policy, including the Cookie
+              Policy.
+            </Typography>
 
               <div className={styles.form_holder} >
                 {/* Email */}
@@ -117,29 +120,29 @@ export default function Login() {
                   placeholder="Password"
                   required
                   onChange={handlePasswordChange}
+                  onKeyPress={handleKeyPress}
                 />
 
               </div>
 
               <div className={styles.buttons}>
-                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin}></ButtonComp>
+                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin} onKeyPress={onLogin}></ButtonComp>
                 {/* <hr /> */}
                 {/* 소셜 로그인 */}
                 {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} /> */}
-              </div>
-            </form>
-            <div className={styles.move_page}>
-              <a href="/check-gambti" className={styles.link}>
-                or Sign Up
-            </a>
-              <a href="/forgot" className={styles.link}>
-                Forgot Username or Password
-            </a>
             </div>
+          </form>
+          <div className={styles.move_page}>
+            <a href="/check-gambti" className={styles.link}>
+              or Sign Up
+            </a>
+            <a href="/forgot" className={styles.link}>
+              Forgot Username or Password
+            </a>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </div>
   );
 }

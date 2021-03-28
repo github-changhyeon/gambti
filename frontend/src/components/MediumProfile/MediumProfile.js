@@ -9,7 +9,7 @@ export default function MediumProfile() {
 
   return (
     <div className={styles.root}>
-      <AvatarComp size='large'></AvatarComp>
+      <AvatarComp size='medium'></AvatarComp>
       <div className={styles.text_margin}>
         <Typography className={styles.nick}>{nickName}</Typography>
         <Typography className={styles.email}>{email}</Typography>
