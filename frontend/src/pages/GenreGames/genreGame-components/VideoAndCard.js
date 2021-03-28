@@ -41,7 +41,6 @@ export default function VideoAndCard({ gameInfo }) {
             ></img>
           ) : (
             <video
-              playsinline
               autoPlay={true}
               muted={true}
               loop={true}
