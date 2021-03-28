@@ -6,9 +6,9 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { restApi } from "src/common/axios/index";
+import { getGamesOrderBy } from "src/common/axios/Game";
 
-export default function InfiniteScrollCard({ genreId, routerMatch }) {
+export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
   // 새로운 state 변수를 선언하고, count라 부르겠습니다.
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
@@ -18,59 +18,30 @@ export default function InfiniteScrollCard({ genreId, routerMatch }) {
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const gameInfo = {
-    appName: "title",
-    isJoined: false,
-    isOwned: true,
-    image: {
-      logoImage: {
-        id: 1,
-        path:
-          "https://m.gjcdn.net/community-header/950/18067-crop0_296_1920_776-npqpqk9f-v4.webp",
-      },
-      backgroundImage: {
-        id: 1,
-        path:
-          "https://m.gjcdn.net/community-header/950/18067-crop0_296_1920_776-npqpqk9f-v4.webp",
-      },
-    },
-    suitedRate: 77.7,
-    totalJoin: 123456,
-  };
-
   const fetchData = () => {
     //TODO: change
     setIsFetching(true);
 
-    restApi()
-      .get(
-        `/games/find?genreId=${genreId}&page=${pageNum}&size=${size}&direction=DESC&colName=metascore`
-      )
-      .then((res) => {
-        console.log("무한스크롤", res.data.data.content);
-        setItems((items) => [...items, ...res.data.data.content]);
+    getGamesOrderBy(
+      {
+        genreId: genreId,
+        pageNum: pageNum,
+        size: size,
+      },
+      (response) => {
+        console.log("무한스크롤", response.data.data.content);
+        setItems((items) => [...items, ...response.data.data.content]);
         // setItems([...items, ...res.data.data.content]);
         setPageNum(pageNum + 1);
-        if (res.data.data.last) {
+        if (response.data.data.last) {
           setIsEnd(true);
         }
         setIsFetching(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // axios
-    //   .get(`https://api.openbrewerydb.org/breweries?page=${pageNum}&per_page=${size}`)
-    //   .then((res) => {
-    //     //updating data
-    //     let gameInfos = new Array();
-    //     for (let i = 0; i < 20; ++i) gameInfos.push(gameInfo);
-    //     setItems([...items, ...gameInfos]);
-    //     //updating page numbers
-    //     setPageNum(pageNum + 1);
-    //     setIsFetching(false);
-    //   });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   const handleScroll = () => {
