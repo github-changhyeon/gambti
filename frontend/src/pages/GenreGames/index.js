@@ -8,9 +8,11 @@ import { Carousel } from "3d-react-carousal";
 import GameCard from "src/components/GameCard/GameCard";
 import VideoAndCard from "src/pages/GenreGames/genreGame-components/VideoAndCard";
 import MediaQuery from "react-responsive";
-import { restApi } from "src/common/axios/index";
+import { getRecommendedGames } from "src/common/axios/Game";
+import DescriptionPage from "src/pages/GenreGames/genreGame-components/DescriptionPage";
+import FilterOrder from "src/pages/GenreGames/genreGame-components/FilterOrder";
 
-export default function GenreGames({ match, genreId }) {
+export default function GenreGames({ match }) {
   const [recommendGames, setRecommendGames] = useState(new Array());
   const [videoAndCards, setVideoAndCards] = useState(new Array());
   const [isFetchEnd, setIsFetchEnd] = useState(false);
@@ -24,11 +26,10 @@ export default function GenreGames({ match, genreId }) {
     setRecommendGames(new Array());
     setIsFetchEnd(false);
 
-    restApi()
-      .get(`games/recommends/${location.state.genreId}`)
-      .then((res) => {
-        // console.log(res);
-        let gameInfos = res.data.data;
+    getRecommendedGames(
+      location.state.genre.id,
+      (response) => {
+        let gameInfos = response.data.data;
         for (let i = 0; i < gameInfos.length; ++i) {
           setVideoAndCards((videoAndCards) => [
             ...videoAndCards,
@@ -44,10 +45,11 @@ export default function GenreGames({ match, genreId }) {
           ]);
         }
         setIsFetchEnd(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 
     // console.log(tempArr);
     // setRecommendGames(new Array());
@@ -55,12 +57,10 @@ export default function GenreGames({ match, genreId }) {
 
   return (
     <div style={{ backgroundColor: "#222222" }}>
+      <DescriptionPage></DescriptionPage>
       <GenreList propsOrder="all"></GenreList>
-      <Typography
-        variant="h5"
-        style={{ color: "white", margin: "20px 0px 0px 20px" }}
-        gutterBottom
-      ></Typography>
+      <FilterOrder></FilterOrder>
+
       <MediaQuery minWidth="1024px">
         {!isFetchEnd ? null : (
           <div
@@ -100,7 +100,7 @@ export default function GenreGames({ match, genreId }) {
       <br />
       <br />
       <InfiniteScrollCard
-        genreId={location.state.genreId}
+        genreId={location.state.genre.id}
         routerMatch={match}
       ></InfiniteScrollCard>
     </div>

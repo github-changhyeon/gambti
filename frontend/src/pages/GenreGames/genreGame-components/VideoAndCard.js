@@ -53,28 +53,6 @@ export default function VideoAndCard({ gameInfo }) {
               <source src={gameInfo.videoUrl} type="video/mp4" />
             </video>
           )}
-          {/* <video
-            playsinline
-            autoPlay={true}
-            muted={true}
-            loop={true}
-            width="100%"
-            height="auto"
-            controls={false}
-            className={styles.round}
-          >
-            <source
-              src={
-                "https://cdn.akamai.steamstatic.com/steam/apps/256733242/movie_max.webm?t=1540671394"
-              }
-              type="video/mp4"
-            />
-          </video> */}
-          {/* <img
-            className={styles.round}
-            width="100%"
-            src={gameInfo.backgroundImagePath}
-          ></img> */}
         </div>
       </div>
     </div>
