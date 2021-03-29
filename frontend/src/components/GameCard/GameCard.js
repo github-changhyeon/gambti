@@ -34,6 +34,7 @@ export default function GameCard({ isLogin, gameInfo }) {
     // console.log(token);
     if (token === null || token === undefined) {
       alert("로그인 해주세요");
+      return;
     }
 
     joinAndLeave(
