@@ -63,7 +63,7 @@ export default function GameCard({ isLogin, gameInfo }) {
     img.src = gameInfo.backgroundImagePath;
     img.addEventListener("load", function () {
       let arr = colorThief.getColor(img);
-      // setCardColor(`rgb(${arr[0]}, ${arr[1]}, ${arr[2]})`);
+      setCardColor(`rgb(${arr[0]}, ${arr[1]}, ${arr[2]})`);
     });
   }, []);
 
@@ -126,6 +126,7 @@ export default function GameCard({ isLogin, gameInfo }) {
               joined={joined}
               textvalue={joined ? "JOINED" : "JOIN GAME"}
               onClick={clickJoinBtn}
+              color={cardColor}
             ></ButtonComp>
           </CardActions>
         </Card>
@@ -186,6 +187,7 @@ export default function GameCard({ isLogin, gameInfo }) {
           joined={joined}
           textvalue={joined ? "JOINED" : "JOIN GAME"}
           onClick={clickJoinBtn}
+          color={cardColor}
         ></ButtonComp>
       </CardActions>
     </Card>
