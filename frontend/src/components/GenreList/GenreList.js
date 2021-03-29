@@ -40,7 +40,7 @@ export default function GenreList({ propsOrder }) {
                     order: propsOrder,
                     genre: genre.name,
                   }),
-                  state: { genreId: genre.id },
+                  state: { genre: genre },
                 });
               }}
             ></GenreCard>

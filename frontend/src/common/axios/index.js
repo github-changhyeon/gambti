@@ -9,7 +9,9 @@ function restApi() {
   });
 }
 
-function GetConfig(token) {
+function getConfig(token) {
+  // const token = localStorage.getItem("idToken");
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -19,4 +21,4 @@ function GetConfig(token) {
   return config;
 }
 
-export { restApi, GetConfig };
+export { restApi, getConfig };
