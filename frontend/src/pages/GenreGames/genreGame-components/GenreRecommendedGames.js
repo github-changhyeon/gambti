@@ -30,6 +30,9 @@ export default function GenreRecommendedGames({ propsMatch }) {
       (response) => {
         let gameInfos = response.data.data;
         for (let i = 0; i < gameInfos.length; ++i) {
+          //TODO: METASCORE 임의로 넣어줌 -> 제거
+          gameInfos[i].metascore = 1000;
+
           setVideoAndCards((videoAndCards) => [
             ...videoAndCards,
 
@@ -38,6 +41,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
           setRecommendGames((recommendGames) => [
             ...recommendGames,
 
+            //TODO: VALUE
             <div style={{ width: "238px" }}>
               <GameCard gameInfo={gameInfos[i]}></GameCard>
             </div>,
@@ -85,6 +89,8 @@ export default function GenreRecommendedGames({ propsMatch }) {
       </Container>
       <MediaQuery minWidth="1024px">
         {!isFetchEnd ? null : (
+          // <Carousel slides={videoAndCards} />
+
           <div
             style={{
               display: "flex",
@@ -92,7 +98,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
               alignItems: "center",
             }}
           >
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "85%" }}>
               <Carousel slides={videoAndCards} />
             </div>
           </div>

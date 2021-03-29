@@ -2,9 +2,10 @@
 .talk_bubble {
   display: inline-block;
   position: relative;
-  width: 100%;
-  height: auto;
+  width: 450px;
+  height: 250px;
   background-color: #222222;
+  overflow: hidden;
 }
 .border {
   border: 8px solid #666;

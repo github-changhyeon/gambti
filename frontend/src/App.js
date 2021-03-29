@@ -29,7 +29,7 @@ import {
   Loading,
   NotFound,
   ActionUrlHandler,
-} from './pages';
+} from "./pages";
 
 const AppRouter = () => {
   const user = useContext(UserContext);
@@ -78,7 +78,10 @@ const NotLoginRouter = () => {
         <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
         <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
         <Route path={routerInfo.PAGE_URLS.CHECK_INFO} component={CheckInfo} />
-        <Route path={routerInfo.PAGE_URLS.CHECK_GAMBTI} component={CheckGambti} />
+        <Route
+          path={routerInfo.PAGE_URLS.CHECK_GAMBTI}
+          component={CheckGambti}
+        />
         <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
         <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
         <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
@@ -100,7 +103,7 @@ const MainRouter = () => {
     <Router>
       <Header isLogin={true} />
       <Nav />
-      <div style={{ paddingLeft: '64px' }}>
+      <div style={{ paddingLeft: "64px" }}>
         <Switch>
           <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
           <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
@@ -123,7 +126,11 @@ const EmailConfirmRouter = () => {
     <Router>
       <Header isLogin={true} />
       <Switch>
-        <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+        <Route
+          exact
+          path={routerInfo.PAGE_URLS.EMAIL_CONFIRM}
+          component={EmailConfirm}
+        />
         <Route path="/action-url-handler" component={ActionUrlHandler} />
         <Route path="/test" component={Test} />
         <Route path="*" component={NoAccess} />
