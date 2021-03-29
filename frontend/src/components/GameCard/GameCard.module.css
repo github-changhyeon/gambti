@@ -1,7 +1,5 @@
 .game_card {
-  max-width: 283px;
-  min-width: 283px;
-  width: 99%;
+  width: 283px;
   height: 283px;
   border-radius: 15px;
   background-color: #2a2c2d;
@@ -56,7 +54,7 @@
 }
 .neon-block .block:after {
   border-radius: 15px;
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   right: -2px;
@@ -76,7 +74,7 @@
   /* z-index: -2; */
 }
 .neon-block .block .rainbow:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;

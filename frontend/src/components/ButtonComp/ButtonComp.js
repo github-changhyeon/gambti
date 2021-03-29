@@ -44,16 +44,23 @@ export default function ButtonComp({
         {joined ? (
           <Button
             className={styles.medium}
-            style={{ backgroundColor: `${color}` }}
+            style={{
+              border: "2px solid " + color,
+              backgroundColor: "transparent",
+              color: "white",
+            }}
             variant="contained"
             onClick={onClick}
+            bold
           >
             {textvalue}
           </Button>
         ) : (
           <Button
             className={styles.medium}
-            style={{ backgroundColor: `${color}` }}
+            style={{
+              backgroundColor: `${color}`,
+            }}
             variant="contained"
             onClick={onClick}
           >
