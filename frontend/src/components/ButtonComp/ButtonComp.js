@@ -1,53 +1,51 @@
-import React from "react";
-import styles from "./ButtonComp.module.css";
-import Button from "@material-ui/core/Button";
+import React from 'react';
+import styles from './ButtonComp.module.css';
+import Button from '@material-ui/core/Button';
 
-export default function ButtonComp({
-  size,
-  textvalue,
-  color,
-  onClick,
-  joined,
-}) {
+export default function ButtonComp({ size, textvalue, color, onClick, joined }) {
   // 친구 추가
-  if (size === "xsmall") {
+  if (size === 'xsmall') {
     return (
       <div>
-        <Button className={styles.xsmall} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.xsmall}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
     );
   }
   // logout, editProfile(save, connect)
-  else if (size === "small") {
+  else if (size === 'small') {
     return (
       <div>
-        <Button className={styles.small} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.small}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
     );
   }
   // GameCard, UserCard, MainButton
-  else if (size === "medium") {
+  else if (size === 'medium') {
     return (
       <div>
         {joined ? (
           <Button
             className={styles.medium}
-            style={{ backgroundColor: "#00ffcc" }}
+            style={{ backgroundColor: '#00ffcc' }}
             variant="contained"
             onClick={onClick}
           >
             {textvalue}
           </Button>
         ) : (
-          <Button
-            className={styles.medium}
-            variant="contained"
-            onClick={onClick}
-          >
+          <Button className={styles.medium} variant="contained" onClick={onClick}>
             {textvalue}
           </Button>
         )}
@@ -55,7 +53,7 @@ export default function ButtonComp({
     );
   }
   // login, signup, Forgot, ForgotSent
-  else if (size === "large") {
+  else if (size === 'large') {
     return (
       <div>
         <Button
@@ -68,11 +66,24 @@ export default function ButtonComp({
         </Button>
       </div>
     );
-  } else if (size === "xlarge") {
+  } else if (size === 'xlarge') {
     return (
       <div>
         <Button
           className={styles.xlarge}
+          style={{ backgroundColor: `${color}` }}
+          variant="contained"
+          onClick={onClick}
+        >
+          {textvalue}
+        </Button>
+      </div>
+    );
+  } else if (size === 'bold') {
+    return (
+      <div>
+        <Button
+          className={styles.bold}
           style={{ backgroundColor: `${color}` }}
           variant="contained"
           onClick={onClick}

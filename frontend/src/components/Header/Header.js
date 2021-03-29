@@ -36,8 +36,8 @@ export default function Header({ isLogin }) {
     history.push({
       pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
         uid: user.uid,
-      })
-    })
+      }),
+    });
   };
 
   return (
@@ -49,8 +49,16 @@ export default function Header({ isLogin }) {
             history.push(routerInfo.PAGE_URLS.HOME);
           }}
         >
-          <img className={styles.header_logo_icon} src="/images/gambti_icon.png" alt="icon" />
-          <img className={styles.header_logo_text} src="/images/gambti_logo.png" alt="logo" />
+          <img
+            className={styles.header_logo_icon}
+            src="/images/gambti/gambti_icon.png"
+            alt="icon"
+          />
+          <img
+            className={styles.header_logo_text}
+            src="/images/gambti/gambti_logo.png"
+            alt="logo"
+          />
         </div>
       </div>
       <div className={styles.header_center}>
