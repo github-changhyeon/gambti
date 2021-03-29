@@ -8,6 +8,7 @@ import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
+import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.genre.GenreRepository;
 import com.ssafy.gambti.repository.user.UserBanGameRepository;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -104,8 +104,8 @@ public class GameService {
                 //5. 만약에 존재하지 않는다면
                 if(!userJoinGameRepository.existsByUserIdAndGameId(uid, gameId)){
                     userJoinGameRepository.save(new UserJoinGame(
-                            userRepository.findById(uid).orElseThrow(NoSuchElementException::new),
-                            gameRepository.findById(gameId).orElseThrow(NoSuchElementException::new)));
+                            userRepository.findById(uid).orElseThrow(GameListException::new),
+                            gameRepository.findById(gameId).orElseThrow(GameListException::new)));
                 }
                 else{
                     //6. 존재하고 있다면 탈퇴 시킴
