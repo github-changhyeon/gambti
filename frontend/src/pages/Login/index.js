@@ -58,6 +58,11 @@ export default function Login() {
             .setPersistence(firebase.auth.Auth.Persistence.SESSION)
             .then(() => {
               // console.log('성공');
+              fire.auth.currentUser.getIdToken().then(function (idToken) {
+                window.localStorage.setItem('idToken', idToken);
+              }).catch(function (error) {
+                // Handle error
+              });
             })
             .catch((error) => {
               // Handle Errors here.
@@ -67,6 +72,7 @@ export default function Login() {
             });
 
           if (currentUser.user.emailVerified) {
+            console.log(currentUser.user);
             history.push('/');
           } else {
             history.push('/email-confirm');
@@ -102,34 +108,34 @@ export default function Login() {
               Policy.
             </Typography>
 
-              <div className={styles.form_holder} >
-                {/* Email */}
-                <input
-                  id="email"
-                  type="email"
-                  className={styles.newinput}
-                  placeholder="Email"
-                  required
-                  onChange={handleEmailChange}
-                />
-                {/* password */}
-                <input
-                  id="password"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="Password"
-                  required
-                  onChange={handlePasswordChange}
-                  onKeyPress={handleKeyPress}
-                />
+            <div className={styles.form_holder} >
+              {/* Email */}
+              <input
+                id="email"
+                type="email"
+                className={styles.newinput}
+                placeholder="Email"
+                required
+                onChange={handleEmailChange}
+              />
+              {/* password */}
+              <input
+                id="password"
+                type="password"
+                className={styles.newinput}
+                placeholder="Password"
+                required
+                onChange={handlePasswordChange}
+                onKeyPress={handleKeyPress}
+              />
 
-              </div>
+            </div>
 
-              <div className={styles.buttons}>
-                <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin} onKeyPress={onLogin}></ButtonComp>
-                {/* <hr /> */}
-                {/* 소셜 로그인 */}
-                {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
+            <div className={styles.buttons}>
+              <ButtonComp size='large' textvalue='LOGIN' color='#CCFF00' onClick={onLogin} onKeyPress={onLogin}></ButtonComp>
+              {/* <hr /> */}
+              {/* 소셜 로그인 */}
+              {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohi")} />
               <TwitterLoginButton style={{ width: '330px' }} onClick={() => alert("Hello")} /> */}
             </div>
           </form>
