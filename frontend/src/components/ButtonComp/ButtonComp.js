@@ -13,7 +13,11 @@ export default function ButtonComp({
   if (size === "xsmall") {
     return (
       <div>
-        <Button className={styles.xsmall} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.xsmall}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
@@ -23,7 +27,11 @@ export default function ButtonComp({
   else if (size === "small") {
     return (
       <div>
-        <Button className={styles.small} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.small}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
@@ -36,7 +44,7 @@ export default function ButtonComp({
         {joined ? (
           <Button
             className={styles.medium}
-            style={{ backgroundColor: "#00ffcc" }}
+            style={{ backgroundColor: `${color}` }}
             variant="contained"
             onClick={onClick}
           >
@@ -45,6 +53,7 @@ export default function ButtonComp({
         ) : (
           <Button
             className={styles.medium}
+            style={{ backgroundColor: `${color}` }}
             variant="contained"
             onClick={onClick}
           >

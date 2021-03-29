@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
-import styles from './Header.module.css';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import AvatarComp from 'src/components/AvatarComp/AvatarComp';
-import { useHistory, generatePath } from 'react-router';
-import routerInfo from 'src/constants/routerInfo';
-import Button from '@material-ui/core/Button';
-import fire from 'src/fire';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import FaceIcon from '@material-ui/icons/Face';
-import { UserContext } from 'src/Context/UserContext';
-import { event } from 'jquery';
+import React, { useContext } from "react";
+import styles from "./Header.module.css";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AvatarComp from "src/components/AvatarComp/AvatarComp";
+import { useHistory, generatePath } from "react-router";
+import routerInfo from "src/constants/routerInfo";
+import Button from "@material-ui/core/Button";
+import fire from "src/fire";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import FaceIcon from "@material-ui/icons/Face";
+import { UserContext } from "src/Context/UserContext";
+import { event } from "jquery";
 
 export default function Header({ isLogin }) {
   const history = useHistory();
@@ -23,9 +23,9 @@ export default function Header({ isLogin }) {
     fire.auth
       .signOut()
       .then(() => {
-        history.push('/');
+        history.push("/");
         window.localStorage.clear();
-        alert('로그아웃 되었습니다 !!');
+        alert("로그아웃 되었습니다 !!");
       })
       .catch((error) => {
         // An error happened.
@@ -36,8 +36,8 @@ export default function Header({ isLogin }) {
     history.push({
       pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
         uid: user.uid,
-      })
-    })
+      }),
+    });
   };
 
   return (
@@ -49,8 +49,16 @@ export default function Header({ isLogin }) {
             history.push(routerInfo.PAGE_URLS.HOME);
           }}
         >
-          <img className={styles.header_logo_icon} src="/images/gambti_icon.png" alt="icon" />
-          <img className={styles.header_logo_text} src="/images/gambti_logo.png" alt="logo" />
+          <img
+            className={styles.header_logo_icon}
+            src="/images/gambti_icon.png"
+            alt="icon"
+          />
+          <img
+            className={styles.header_logo_text}
+            src="/images/gambti_logo.png"
+            alt="logo"
+          />
         </div>
       </div>
       <div className={styles.header_center}>
@@ -60,7 +68,14 @@ export default function Header({ isLogin }) {
         <InputBase
           className={styles.input_root}
           placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
+          inputProps={{ "aria-label": "search" }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              history.push({
+                pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
+              });
+            }
+          }}
         />
       </div>
 
@@ -71,7 +86,7 @@ export default function Header({ isLogin }) {
             {/* 로그인 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: '54px', width: '65px' }}
+              style={{ height: "54px", width: "65px" }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.LOGIN);
               }}
@@ -81,7 +96,7 @@ export default function Header({ isLogin }) {
             {/* 회원가입 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: '54px', width: '65px' }}
+              style={{ height: "54px", width: "65px" }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.CHECK_GAMBTI);
               }}
@@ -101,9 +116,11 @@ export default function Header({ isLogin }) {
             >
               <NotificationsIcon
                 className={styles.header_right_icon}
-                style={{ color: '#d1d1d1' }}
+                style={{ color: "#d1d1d1" }}
               />
-              {isShownNoti && <div className={styles.textarea}>Notifications</div>}
+              {isShownNoti && (
+                <div className={styles.textarea}>Notifications</div>
+              )}
             </div>
             {/* 프로필 버튼 */}
             <div className={styles.header_right_item}>
@@ -114,7 +131,7 @@ export default function Header({ isLogin }) {
                   textvalue={user.nickName.substring(0, 1)}
                 ></AvatarComp>
                 <div className={styles.dropdown_content}>
-                  <div className={styles.dropdown_menu}>
+                  <div className={styles.dropdown_menu} onClick={goMypage}>
                     <p>
                       <FaceIcon />
                     </p>
