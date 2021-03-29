@@ -28,6 +28,7 @@ import {
   Loading,
   NotFound,
   ActionUrlHandler,
+  KiHyeonTest
 } from "./pages";
 
 const AppRouter = () => {
@@ -76,6 +77,7 @@ const NotLoginRouter = () => {
         <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
         <Route path="/action-url-handler" component={ActionUrlHandler} />
         <Route path="/test" component={Test} />
+        <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
         <Route path="*" component={NoAccess} />
       </Switch>
       <Footer />

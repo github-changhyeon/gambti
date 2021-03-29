@@ -23,3 +23,4 @@ export { default as Loading } from './Loading';
 
 export { default as Test } from './test';
 export { default as ActionUrlHandler } from './ActionUrlHandler';
+export { default as KiHyeonTest } from './KiHyeonTest';
