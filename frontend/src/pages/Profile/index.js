@@ -59,7 +59,12 @@ export default function Profile() {
 
       <br />
       <Box>
-        <h1>dkkd</h1>
+        <div>
+          <ul className={styles.nav_pills} >
+            <li>My Games</li>
+            <li>My Profile</li>
+          </ul>
+        </div>
       </Box>
 
     </div>

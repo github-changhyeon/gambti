@@ -20,7 +20,7 @@
   justify-content: center;
   background-color: #2a2c2d;
   height: 207px;
-  margin: 4rem 0rem 4rem 4rem;
+  margin: 2rem 0rem 4rem 4rem;
   border-radius: 15px;
 }
 
@@ -71,7 +71,7 @@
   align-items: flex-start;
   background-color: #2a2c2d;
   height: 300px;
-  margin: 4rem 4rem;
+  margin: 2rem 4rem;
   border-radius: 15px;
 }
 .rec_title{
@@ -86,4 +86,12 @@
 /* TODO: 스크롤 보이는지 확인 */
 .box::-webkit-scrollbar {
   display: none;
+}
+.nav_pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+.tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
 }

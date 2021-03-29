@@ -129,18 +129,17 @@ export default function Signup() {
               // alert('session', errorMessage);
             });
           // token 받아오기
-          fire.auth.currentUser
-            .getIdToken()
-            .then(function (idToken) {
-              // firebase.store에서 정보 가져와서 넣어줌
-              // mbti, gender는 대문자
-              const param = {
-                mbti: "",
-                gender: "",
-                steamId: "",
-                maxPrice: 0,
-                age: 0,
-              };
+          fire.auth.currentUser.getIdToken().then(function (idToken) {
+            window.localStorage.setItem('idToken', idToken);
+            // firebase.store에서 정보 가져와서 넣어줌
+            // mbti, gender는 대문자
+            const param = {
+              mbti: 'INFP',
+              gender: 'FEMALE',
+              steamId: '',
+              maxPrice: 0,
+              age: 0
+            }
 
               // add user to db
               fire.db.collection("users").doc(currentUser.user.uid).set({

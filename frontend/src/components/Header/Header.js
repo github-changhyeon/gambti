@@ -32,7 +32,7 @@ export default function Header({ isLogin }) {
       });
   };
 
-  const goMypage = (event) => {
+  const goProfile = (event) => {
     history.push({
       pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
         uid: user.uid,
@@ -51,12 +51,12 @@ export default function Header({ isLogin }) {
         >
           <img
             className={styles.header_logo_icon}
-            src="/images/gambti_icon.png"
+            src="/images/gambti/gambti_icon.png"
             alt="icon"
           />
           <img
             className={styles.header_logo_text}
-            src="/images/gambti_logo.png"
+            src="/images/gambti/gambti_logo.png"
             alt="logo"
           />
         </div>
@@ -130,8 +130,8 @@ export default function Header({ isLogin }) {
                   size="xsmall"
                   textvalue={user.nickName.substring(0, 1)}
                 ></AvatarComp>
-                <div className={styles.dropdown_content}>
-                  <div className={styles.dropdown_menu} onClick={goMypage}>
+                <div className={styles.dropdown_content} onClick={goProfile}>
+                  <div className={styles.dropdown_menu}>
                     <p>
                       <FaceIcon />
                     </p>

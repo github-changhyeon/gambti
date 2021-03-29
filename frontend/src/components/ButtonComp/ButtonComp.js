@@ -90,5 +90,18 @@ export default function ButtonComp({
         </Button>
       </div>
     );
+  } else if (size === "bold") {
+    return (
+      <div>
+        <Button
+          className={styles.bold}
+          style={{ backgroundColor: `${color}` }}
+          variant="contained"
+          onClick={onClick}
+        >
+          {textvalue}
+        </Button>
+      </div>
+    );
   }
 }
