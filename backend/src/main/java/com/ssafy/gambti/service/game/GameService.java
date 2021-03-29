@@ -129,6 +129,7 @@ public class GameService {
         List<GameRecommendDto> gameRecommendResList = new ArrayList<>();
         List<Object[]> result;
         //2. 장르 아이디로 장르까지 판단한다.
+        //TODO: size 데이터 받아서 설정하도록 해줘야 함
         if(genreId==0) {
             result = gameRepository.findAllRecommendGamesOrderByRandom();
             for (int i = 0; i<20; i++){
@@ -154,7 +155,7 @@ public class GameService {
                     //7. 해당 유저가 가지고 있는 게임인지 확인한다.
                     grr.setOwned(userOwnGameRepository.existsByUserId(uid));
                     //8. 유저가 이미 조인하고 있는 게임인지 확인한다.
-                    grr.setJoined(userJoinGameRepository.existsByUserId(uid));
+                    grr.setJoined(userJoinGameRepository.existsByUserIdAndGameId(uid, grr.getGameId()));
                 }
                 catch (FirebaseAuthException e){
                     logger.error("Firebase Exception : ", e.getLocalizedMessage());
@@ -172,8 +173,5 @@ public class GameService {
 //        //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
 //        String token = securityService.getBearerToken(httpServletRequest);
 //        FirebaseToken decodedToken = null;
-//
-//
-//
 //    }
 }
