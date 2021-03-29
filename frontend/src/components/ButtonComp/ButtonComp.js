@@ -9,11 +9,21 @@ export default function ButtonComp({
   onClick,
   joined,
 }) {
-  // logout, editProfile(save, connect), 친구 추가
-  if (size === "small") {
+  // 친구 추가
+  if (size === "xsmall") {
     return (
       <div>
-        <Button className={styles.small} variant="contained">
+        <Button className={styles.xsmall} variant="contained" style={{ backgroundColor: `${color}` }}>
+          {textvalue}
+        </Button>
+      </div>
+    );
+  }
+  // logout, editProfile(save, connect)
+  else if (size === "small") {
+    return (
+      <div>
+        <Button className={styles.small} variant="contained" style={{ backgroundColor: `${color}` }}>
           {textvalue}
         </Button>
       </div>

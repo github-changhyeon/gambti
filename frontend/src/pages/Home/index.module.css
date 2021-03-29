@@ -1,3 +1,7 @@
+.background {
+  background-color: #222222;
+}
+
 .main_post {
   height: 400px;
   position: relative;

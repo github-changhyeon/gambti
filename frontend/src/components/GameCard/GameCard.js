@@ -10,7 +10,7 @@ import ButtonComp from "src/components/ButtonComp/ButtonComp.js";
 import Avatar from "@material-ui/core/Avatar";
 import { Container } from "@material-ui/core";
 import ColorThief from "colorthief";
-import { restApi } from "src/common/axios/index";
+import { joinAndLeave } from "src/common/axios/Game";
 
 export default function GameCard({ isLogin, gameInfo }) {
   let descriptionText, buttonText;
@@ -33,30 +33,27 @@ export default function GameCard({ isLogin, gameInfo }) {
     // console.log(token);
     if (token === null || token === undefined) {
       alert("로그인 해주세요");
-    } else {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // 'Authorization': 'Bearer ' + accessToken
-        },
-      };
-      restApi()
-        .post(`games/joinLeave/${gameInfo.gameId}`, {}, config)
-        .then((res) => {
-          if (res.data.status === "success") {
-            // setDescriptionNum(res.data.data);
-
-            if (joined) {
-              setDescriptionNum(descriptionNum - 1);
-            } else {
-              setDescriptionNum(descriptionNum + 1);
-            }
-
-            setJoined(!joined);
-          }
-        })
-        .catch((err) => {});
     }
+
+    joinAndLeave(
+      gameInfo.gameId,
+      (response) => {
+        if (response.data.status === "success") {
+          // setDescriptionNum(res.data.data);
+
+          if (joined) {
+            setDescriptionNum(descriptionNum - 1);
+          } else {
+            setDescriptionNum(descriptionNum + 1);
+          }
+
+          setJoined(!joined);
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   useEffect(() => {
