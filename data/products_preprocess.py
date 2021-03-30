@@ -144,7 +144,6 @@ def main():
     game_df = data["games"]
     game_df = game_df[[*game_columns]]
     game_df.rename(columns={'id':'game_id'}, inplace=True) #id를 DB의 컬럼명(game_id)과 맞춰주기
-    print(game_df.head())
 
     #장르, 태그 dataframe 추출
     genre_df = extract_dataframe(data["games"], "genres")
