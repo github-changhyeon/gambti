@@ -12,6 +12,6 @@ import javax.transaction.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-    public Page<User> findByNicknameContaining(String nickname, Pageable pageable);
+    Page<User> findByNicknameContaining(String nickname, Pageable pageable);
 
 }

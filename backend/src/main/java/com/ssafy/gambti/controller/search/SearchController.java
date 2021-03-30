@@ -3,6 +3,7 @@ package com.ssafy.gambti.controller.search;
 import com.ssafy.gambti.commons.PageRequest;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.dto.basicResponse.Response;
+import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.dto.user.UserSimpleRes;
 import com.ssafy.gambti.service.game.GameService;
 import com.ssafy.gambti.service.user.UserService;
@@ -31,6 +32,7 @@ public class SearchController {
     private static final String FAIL = "fail";
 
     private final UserService userService;
+    private final GameService gameService;
 
     @GetMapping(value = "/{word}")
     @Operation(summary = "검색", description = "입력된 word에 대한 user, game에 대한 검색 리스트")
@@ -41,18 +43,21 @@ public class SearchController {
     }
 
     @GetMapping(value = "/users/{word}")
-    @Operation(summary = "유저 검색", description = "유저 닉네임으로 유저를 검색한다.")
+    @Operation(summary = "유저 검색", description = "유저 닉네임으로 유저를 검색한다. friendStatus 0: 요청을 보낸 적이 없는 관계 1: 친구관계 " +
+            "2: 내가 친구 요청을 보낸 유저 3: 내가 친구 요청을 받은 유저 4: 자기 자신")
     public ResponseEntity<? extends Response> searchUserByNickname(@PathVariable String word, final PageRequest pageable, HttpServletRequest httpServletRequest){
 
         Page<UserSimpleRes> data = userService.searchUserByNickname(word, pageable.of(), httpServletRequest);
 
-        return new ResponseEntity<>(new Response(SUCCESS, "test", data), HttpStatus.OK);
+        return new ResponseEntity<>(new Response(SUCCESS, "유저 검색 성공", data), HttpStatus.OK);
     }
 
     @GetMapping(value = "/games/{word}")
-    @Operation(summary = "검색어를 포함하는 게임 리스트 검색", description = "검색어를 통해 선택한 장르에서 게임을 검색한다.")
-    public ResponseEntity<? extends Response> searchFromGames(){
+    @Operation(summary = "게임 검색", description = "게임 이름으로 게임을 검색한다.")
+    public ResponseEntity<? extends Response> searchGameByAppName(@PathVariable String word, final PageRequest pageable, HttpServletRequest httpServletRequest){
 
-        return new ResponseEntity<>(new Response(SUCCESS, "test", "test"), HttpStatus.OK);
+        Page<GameSimpleRes> data = gameService.searchGameByAppName(word, pageable.of(), httpServletRequest);
+
+        return new ResponseEntity<>(new Response(SUCCESS, "게임 검색 성공", data), HttpStatus.OK);
     }
 }

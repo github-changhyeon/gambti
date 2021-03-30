@@ -63,9 +63,10 @@ public class UserService {
         Page<User> searchUsers = userRepository.findByNicknameContaining(word, pageable);
 
         // 3. 2.에서 처리한 모든 유저들과 나와의 현재 관계가 어떤 관계인지 파악하기 위해 각 관계 별로 유저를 리스트로 묶는다.
-        // 다음 네 가지의 경우가 있을 수 있음.
+        // 다음 다섯 가지의 코드를 가질 수 있음.
         // 서로간 어떤 요청도 없던 경우(0), 친구관계인 경우(1)
         // 내가 친구 요청을 보낸 경우(2), 내가 친구 요청을 받은 경우(3)
+        // 본인인 경우(4)
 
         // 3.1 친구 관계인 경우
         List<User> typeOneList = friendRepository.findByFromAndIsApproved(loginUser, true).stream()
@@ -82,7 +83,6 @@ public class UserService {
                 .map( friend ->{return friend.getFrom();}
                 ).collect(Collectors.toList());
 
-        //
         Page<UserSimpleRes> result = searchUsers.map(
                 user -> {
                     if (typeOneList.contains(user)) {
@@ -91,6 +91,8 @@ public class UserService {
                         return new UserSimpleRes(user, 2);
                     } else if (typeThreeList.contains(user)) {
                         return new UserSimpleRes(user, 3);
+                    } else if (user.equals(loginUser)) {
+                        return new UserSimpleRes(user, 4);
                     }
                     return new UserSimpleRes(user, 0);
                 }
