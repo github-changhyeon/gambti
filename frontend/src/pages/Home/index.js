@@ -19,7 +19,7 @@ export default function Home({ match }) {
   const history = useHistory();
 
   // var user = fire.auth().currentUser;
-  // const [nickName, setNickName] = useState('')
+  // const [nickname, setNickname] = useState('')
   // const [email, setEmail] = useState('')
   // const [photoUrl, setPhotoUrl] = useState('')
   // const [uid, setUid] = useState('')

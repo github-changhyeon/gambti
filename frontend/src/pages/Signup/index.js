@@ -19,7 +19,7 @@ export default function Signup() {
   const history = useHistory();
   const user = useContext(UserContext);
 
-  const [nickName, setNickName] = React.useState("");
+  const [nickname, setNickname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
@@ -28,14 +28,14 @@ export default function Signup() {
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
-  const [nickNameError, setNickNameError] = React.useState(false);
+  const [nicknameError, setNicknameError] = React.useState(false);
   const [emailLengthError, setEmailLengthError] = React.useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
   };
   const handleUserChange = (event) => {
-    setNickName(event.currentTarget.value);
+    setNickname(event.currentTarget.value);
   };
   const handlePasswordChange = (event) => {
     setPassword(event.currentTarget.value);
@@ -72,7 +72,7 @@ export default function Signup() {
   const onSignup = (event) => {
 
     setNullError(false);
-    setNickNameError(false);
+    setNicknameError(false);
     setEmailVarifiedError(false);
     setEmailLengthError(false);
     setNullPasswordLengthError(false);
@@ -80,17 +80,17 @@ export default function Signup() {
 
 
     console.log(nullError)
-    console.log(Boolean(email), Boolean(password), Boolean(passwordConfirm), Boolean(nickName));
+    console.log(Boolean(email), Boolean(password), Boolean(passwordConfirm), Boolean(nickname));
 
-    if (!email || !password || !passwordConfirm || !nickName) {
+    if (!email || !password || !passwordConfirm || !nickname) {
       setNullError(true);
       console.log(nullError);
       console.log('모든 입력값');
       alert("모든 입력값을 채워주세요.");
       return;
     }
-    if (1 > nickName.length || nickName.length > 10) {
-      setNickNameError(true);
+    if (1 > nickname.length || nickname.length > 10) {
+      setNicknameError(true);
       console.log('닉네임을 10자 이하 입니다.');
       alert("닉네임을 10자 이하 입니다.");
       return;
@@ -125,7 +125,7 @@ export default function Signup() {
     console.log(passwordMatchError);
     console.log(emailVarifiedError);
     console.log(passwordLengthError);
-    console.log(nickNameError);
+    console.log(nicknameError);
     console.log(emailLengthError);
 
     if (
@@ -133,7 +133,7 @@ export default function Signup() {
       !passwordMatchError &&
       !emailVarifiedError &&
       !passwordLengthError &&
-      !nickNameError &&
+      !nicknameError &&
       !emailLengthError
     ) {
       console.log('정상작동');
@@ -157,7 +157,7 @@ export default function Signup() {
 
             // add user to db
             fire.db.collection("users").doc(currentUser.user.uid).set({
-              nickName: nickName,
+              nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
               mbti: "INFP",
@@ -195,7 +195,7 @@ export default function Signup() {
           // 정보 수정
           createdUser
             .updateProfile({
-              displayName: nickName,
+              displayName: nickname,
             })
             .then(function () {
               // Update successful.
@@ -263,13 +263,13 @@ export default function Signup() {
               {/* <hr /> */}
 
               <div className={styles.form_holder}>
-                {/* NickName */}
+                {/* nickname */}
                 <input
-                  id="nickName"
+                  id="nickname"
                   type="text"
                   className={styles.newinput}
                   autofocus
-                  placeholder="Nickname"
+                  placeholder="nickname"
                   required
                   onChange={handleUserChange}
                 />
