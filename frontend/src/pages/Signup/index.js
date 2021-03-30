@@ -163,7 +163,7 @@ export default function Signup() {
               mbti: "INFP",
               gender: "FEMALE",
               steamId: "",
-              maxPrice: 0,
+              maxPrice: 1,
               age: 0,
             });
 
