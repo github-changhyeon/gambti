@@ -95,7 +95,7 @@ public class AccountService {
         return result;
     }
 
-    public boolean ModifyUserInfo(ModifyUserInfoRequest modifyUserInfoRequest, HttpServletRequest httpServletRequest) {
+    public boolean modifyUserInfo(ModifyUserInfoRequest modifyUserInfoRequest, HttpServletRequest httpServletRequest) {
         //1. 토큰을 가지고온다.
         String token = securityService.getBearerToken(httpServletRequest);
         FirebaseToken decodedToken = null;

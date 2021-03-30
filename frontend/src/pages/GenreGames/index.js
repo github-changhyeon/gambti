@@ -1,6 +1,16 @@
-import React from 'react';
-import styles from './index.module.css';
+import { React } from "react";
+import GenreList from "src/components/GenreList/GenreList";
+import DescriptionPage from "src/pages/GenreGames/genreGame-components/DescriptionPage";
+import GenreRecommendedGames from "src/pages/GenreGames/genreGame-components/GenreRecommendedGames";
+import GamesOrderBy from "src/pages/GenreGames/genreGame-components/GamesOrderBy";
 
-export default function GenreGames() {
-  return <h1>Hello GenreGames</h1>;
+export default function GenreGames({ match }) {
+  return (
+    <div style={{ backgroundColor: "#222222" }}>
+      <DescriptionPage propsMatch={match}></DescriptionPage>
+      <GenreList propsOrder="Random"></GenreList>
+      <GenreRecommendedGames propsMatch={match}></GenreRecommendedGames>
+      <GamesOrderBy propsMatch={match}></GamesOrderBy>
+    </div>
+  );
 }

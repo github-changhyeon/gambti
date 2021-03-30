@@ -1,18 +1,20 @@
 /* logout, editProfile(save, connect), 친구 추가 */
+.xsmall {
+  font-size: 10px;
+}
 .small {
   width: 80px;
-  
 }
 /* GameCard, UserCard, MainButton */
 .medium {
-  width: 200px;
+  width: 250px;
   color: #000000;
-  background-color: #CCFF00;
+  background-color: #ccff00;
 }
 /* login, signup, Forgot, ForgotSent */
 .large {
-  width: 330px;
-  margin: 5px;
+  width: 300px;
+  margin: 7px;
   color: #000000;
   font-weight: bold;
   /* background-color: #CCFF00; */
@@ -23,4 +25,11 @@
   font-weight: bold;
   border-radius: 15px;
   font-size: 35px;
+}
+.bold {
+  width: 150px;
+  height: 45px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 20px;
 }

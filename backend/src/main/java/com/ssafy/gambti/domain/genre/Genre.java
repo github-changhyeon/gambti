@@ -1,9 +1,8 @@
 package com.ssafy.gambti.domain.genre;
 
-import com.ssafy.gambti.domain.game.Game;
-import lombok.AllArgsConstructor;
+import com.ssafy.gambti.domain.game.GameGenre;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "genre")
-@AllArgsConstructor
 @Getter
+@Setter
 public class Genre {
 
     @Id
@@ -22,7 +21,14 @@ public class Genre {
 
     private String genreName;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
-    private List<Game> games = new ArrayList<>();
+    @OneToMany(mappedBy = "genre",  cascade = CascadeType.ALL)
+    private List<GameGenre> gameGenres = new ArrayList<>();
 
+    public static List<String> listOf(List<GameGenre> gameGenres){
+        List<String> genreList = new ArrayList<>();
+        for (GameGenre gg : gameGenres) {
+            genreList.add(gg.getGenre().getGenreName());
+        }
+        return genreList;
+    }
 }
