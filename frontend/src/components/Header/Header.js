@@ -17,6 +17,7 @@ export default function Header({ isLogin }) {
   const history = useHistory();
   const user = useContext(UserContext);
   const [isShownNoti, setIsShownNoti] = React.useState(false);
+  console.log(user)
 
   // 로그아웃
   const logout = (event) => {
