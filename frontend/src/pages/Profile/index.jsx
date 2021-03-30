@@ -56,7 +56,7 @@ export default function Profile() {
     );
   }
 
-  const [nickName, setNickName] = React.useState(user.nickName);
+  const [nickname, setNickname] = React.useState(user.nickname);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -66,18 +66,18 @@ export default function Profile() {
 
 
   const handleChangeNick = (event) => {
-    setNickName(event.target.value);
+    setNickname(event.target.value);
   }
   const updateNick = (event) => {
-    if (1 > nickName.length || 10 < nickName.length) {
+    if (1 > nickname.length || 10 < nickname.length) {
       setNickError(true);
     } else {
       setNickError(false);
       currentUser.updateProfile({
-        displayName: nickName,
+        displayName: nickname,
       });
       fire.db.collection("users").doc(currentUser.uid).update({
-        nickName: nickName
+        nickname: nickname
       });
     }
     // TODO: back에도 정보수정 
@@ -112,8 +112,8 @@ export default function Profile() {
         <div className={styles.section}>
           <Box className={styles.box}>
             <div className={styles.profile}>
-              <AvatarComp size="superlarge" textvalue={user.nickName.substring(0, 1)} ></AvatarComp>
-              <Typography className={styles.main_nick}>{user.nickName}</Typography>
+              <AvatarComp size="superlarge" textvalue={user.nickname.substring(0, 1)} ></AvatarComp>
+              <Typography className={styles.main_nick}>{user.nickname}</Typography>
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
             <div className={styles.info}>
@@ -177,9 +177,9 @@ export default function Profile() {
               <div className={styles.edit_content} >
                 <Typography className={styles.edit_title}>닉네임 변경</Typography>
                 <input
-                  id="nickName"
+                  id="nickname"
                   type="text"
-                  value={nickName}
+                  value={nickname}
                   className={styles.edit_sub}
                   autoFocus
                   onKeyPress={handleNickKeyPress}
