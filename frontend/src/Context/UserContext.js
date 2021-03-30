@@ -15,7 +15,7 @@ const UserProvider = (props) => {
     // console.log("subscribing user:", uid);
 
 
-    // unsub는 함수 (doc(uid) 리스너를 구독해제하는 역할)
+    // unsub는 함수 
     const unsub = fire.db
       .collection("users")
       .doc(uid)
@@ -56,11 +56,6 @@ const UserProvider = (props) => {
     if (!user.uid) return;
     setUser({ isLoggedIn: true, ...user });
 
-    fire.auth.currentUser.getIdToken().then(function (idToken) {
-      window.localStorage.setItem('idToken', idToken);
-    }).catch(function (error) {
-      // Handle error
-    });
     // console.log(user);
     // console.log("updated user");
   };

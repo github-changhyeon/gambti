@@ -7,17 +7,15 @@ export default function VideoAndCard({ gameInfo }) {
     <div
       style={{
         height: "300px",
-        width: "100%",
         display: "flex",
+        // width: "100%",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#202020",
       }}
     >
-      <div style={{ width: "35%", display: "inline-block" }}>
-        <GameCard gameInfo={gameInfo}></GameCard>
-      </div>
-      <div style={{ width: "55%", padding: "0px 0px 0px 40px" }}>
+      <GameCard gameInfo={gameInfo}></GameCard>
+      <div style={{ padding: "0px 0px 0px 40px" }}>
         <div
           className={
             styles.talk_bubble +
@@ -31,11 +29,11 @@ export default function VideoAndCard({ gameInfo }) {
             styles.btm_left_in
           }
         >
-          {" "}
           {gameInfo.videoUrl === null ? (
             <img
               className={styles.round}
               width="100%"
+              height="auto"
               style={{ maxHeight: "283px" }}
               src={gameInfo.backgroundImagePath}
             ></img>

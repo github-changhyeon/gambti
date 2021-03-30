@@ -5,8 +5,13 @@ import { useHistory } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
 import $ from 'jquery';
 import Button from '@material-ui/core/Button';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 export default function CheckGambti() {
+  const classes = useStyles();
+
   const history = useHistory();
 
   // const goLink = (event) => {
@@ -24,6 +29,7 @@ export default function CheckGambti() {
   const [valueTF, setValueTF] = useState(0);
   const [valueJP, setValueJP] = useState(0);
 
+  const [percent, setPercent] = useState(1);
   var q = {
     1: { title: '문제 1번', type: 'EI', A: '질문A', B: '질문B' },
     2: { title: '문제 2번', type: 'EI', A: '질문A', B: '질문B' },
@@ -104,6 +110,8 @@ export default function CheckGambti() {
       setType(q[num]['type']);
       setButtonA(q[num]['A']);
       setButtonB(q[num]['B']);
+      setPercent((100 / 12) * num);
+      console.log(percent);
     }
     setNum(num + 1);
     // }
@@ -120,7 +128,7 @@ export default function CheckGambti() {
       valueTF < 2 ? (mbti += 'F') : (mbti += 'T');
       valueJP < 2 ? (mbti += 'P') : (mbti += 'J');
       alert(mbti);
-      $('.img').attr('src', result[mbti]['img']);
+      $('.result_img').attr('src', result[mbti]['img']);
       $('.gambti').html(result[mbti]['gambti']);
       $('.explain').html(result[mbti]['explain']);
     }
@@ -131,53 +139,117 @@ export default function CheckGambti() {
       <div>
         {/* 시작 화면 */}
         <article className="start">
-          <div className={styles.inner_text}>
+          <div className={styles.start_title}>
             <div>Let's find your</div>
-            <img className={styles.gambti_logo} src="/images/gambti_logo.png" alt="logo" />
+            <img className={styles.start_logo} src="/images/gambti/gambti_logo.png" alt="logo" />
           </div>
           <ButtonComp size="xlarge" textvalue="START" color="#CCFF00" onClick={start}></ButtonComp>
         </article>
         {/* 문제 화면 */}
         <article className="question" style={{ display: 'none' }}>
-            {/* <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: 'calc(100 / 12 * 1%)' }}
-            /> */}
-          <h2>{questionTitle}</h2>
+          <div className={styles.question_top_text}>
+            What is your
+            <img
+              className={styles.question_top_icon}
+              src="/images/gambti/gambti_logo.png"
+              alt="logo"
+            />
+            ?
+          </div>
+          {/* Progress Bar */}
+          <div className={classes.progress}>
+            <BorderLinearProgress variant="determinate" value={percent} />
+          </div>
+          <div className={styles.question_title}>
+            <div className={styles.question_title_deco} />
+            <div className={styles.question_title_text}>{questionTitle}</div>
+            <div className={styles.question_title_deco} />
+          </div>
           <p style={{ display: 'none' }}>{type}</p>
 
-          <Button onClick={clickButtonA} variant="outlined" color="secondary">{buttonA}</Button>
-          <Button onClick={clickButtonB} variant="outlined" color="secondary">{buttonB}</Button>
-          {/* <button onClick={clickButtonA} type="button" className={styles.questionBtn}>
-            {buttonA}
-          </button> */}
-          {/* <button onClick={clickButtonB} type="button" className={styles.questionBtn}>
-            {buttonB}
-          </button> */}
+          <div className={styles.buttons}>
+            <div className={styles.button} onClick={clickButtonA}>
+              {buttonA}
+            </div>
+            <div className={styles.button} onClick={clickButtonB}>
+              {buttonB}
+            </div>
+          </div>
         </article>
         {/* 결과 화면 */}
         <article className="result" style={{ display: 'none' }}>
-          <img className={styles.img} src="/images/joystick.png" alt="gambti" />
-          <h2 className="gambti">유형 이름</h2>
-          <h3 className="explain">설명</h3>
-          <ButtonComp
-            size="xlarge"
-            textvalue="Home"
-            color="#CCFF00"
-            onClick={() => {
-              history.push(routerInfo.PAGE_URLS.HOME);
-            }}
-          ></ButtonComp>
-          <br />
-          <ButtonComp
-            size="xlarge"
-            textvalue="Sign up"
-            color="#CCFF00"
-            onClick={() => {
-              history.push(routerInfo.PAGE_URLS.SIGNUP);
-            }}
-          ></ButtonComp>
+          <div className={styles.result_title}>
+            This is your
+            <img
+              className={styles.question_top_icon}
+              src="/images/gambti/gambti_logo.png"
+              alt="logo"
+            />
+            !
+          </div>
+          {/* 결과 이미지 */}
+          {/* <img className={styles.result_img} src="/images/joystick.png" alt="gambti" /> */}
+          <div className={styles.result_concept_container}>
+            <div className={styles.result_concept_deco}>
+              <div
+                className={styles.result_concept_deco_bar}
+                style={{ transform: 'rotate(-30deg)' }}
+              />
+              <div
+                className={styles.result_concept_deco_bar}
+                style={{ transform: 'rotate(30deg)' }}
+              />
+            </div>
+            <div className={styles.result_concept}>
+              당신은
+              <div className="gambti" style={{ display: 'inline-block', paddingLeft: '10px' }}>
+                유형 이름
+              </div>
+              !!
+            </div>
+            <div className={styles.result_concept_deco}>
+              <div
+                className={styles.result_concept_deco_bar}
+                style={{ transform: 'rotate(210deg)' }}
+              />
+              <div
+                className={styles.result_concept_deco_bar}
+                style={{ transform: 'rotate(150deg)' }}
+              />
+            </div>
+          </div>
+          <div className={styles.result_detail}>
+            <div className={styles.result_recommend}>
+              <p className="explain">설명</p>
+            </div>
+            <div className={styles.result_genre}>
+              <p className="explain">설명</p>
+            </div>
+          </div>
+
+          <div className={styles.result_buttons}>
+            <div className={styles.result_button}>
+              <ButtonComp
+                size="bold"
+                textvalue="Home"
+                color="#CCFF00"
+                onClick={() => {
+                  history.push(routerInfo.PAGE_URLS.HOME);
+                }}
+              ></ButtonComp>
+            </div>
+            <div className={styles.result_button}>
+              <ButtonComp
+                className={styles.result_button}
+                size="bold"
+                textvalue="Sign up"
+                color="#CCFF00"
+                onClick={() => {
+                  history.push(routerInfo.PAGE_URLS.SIGNUP);
+                }}
+              ></ButtonComp>
+            </div>
+          </div>
         </article>
         {/* mbti 타입별 점수를 내부적으로 저장 */}
         {/* <p>{valueEI}</p>
@@ -188,3 +260,25 @@ export default function CheckGambti() {
     </div>
   );
 }
+
+const BorderLinearProgress = withStyles({
+  root: {
+    width: '70%',
+    height: 24,
+    borderRadius: 2,
+    margin: '0 auto',
+  },
+  colorPrimary: {
+    backgroundColor: '#ddd',
+  },
+  bar: {
+    borderRadius: 2,
+    backgroundColor: '#f80',
+  },
+})(LinearProgress);
+
+const useStyles = makeStyles({
+  progress: {
+    flexGrow: 1,
+  },
+});

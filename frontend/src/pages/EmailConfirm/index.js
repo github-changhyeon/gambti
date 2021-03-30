@@ -33,6 +33,15 @@ export default function EmailConfirm() {
     });
   }
 
+  useEffect(() => {
+    if (user.emailVerified) {
+      // console.log('go');
+      history.push('/');
+    }
+    console.log(currentUser);
+    console.log(user);
+  }, []);
+
 
 
   return (
