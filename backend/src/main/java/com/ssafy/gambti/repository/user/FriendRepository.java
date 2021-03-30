@@ -13,6 +13,10 @@ public interface FriendRepository extends CrudRepository<Friend, Long> {
 
     Optional<Friend> findByFromAndTo(User from, User to);
 
+    Optional<Friend> findByFromAndIsApproved(User from, boolean isApproved);
+
+    Optional<Friend> findByToAndIsApproved(User to, boolean isApproved);
+
     List<Friend> findByFrom(User from);
 
 }
