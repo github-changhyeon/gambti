@@ -69,10 +69,19 @@ export default function Profile() {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordMatchError, setPasswordMatchError] = useState('');
 
+
+  useEffect(() => {
+    setNickname(user.nickname);
+  }, [])
+
+
   // niciname 설정
   const handleChangeNick = (event) => {
     setNickname(event.target.value);
+    console.log(nickname);
+    // handleChangeNick.current.focus();
   }
+
   // nickname 수정, 수정 안될시 nickError
   const updateNick = (event) => {
     if (1 > nickname.length || 10 < nickname.length) {
@@ -214,6 +223,7 @@ export default function Profile() {
           <Tab label="MY DETAIL" {...a11yProps(1)} className={styles.tab}
           />
         </Tabs>
+
         {/* MY Profile edit */}
         <TabPanel value={value} index={0} className={styles.tab_panel}>
           <div style={{ margin: '1rem 5rem' }}>
@@ -233,23 +243,21 @@ export default function Profile() {
                 <label className={styles.edit_title}>닉네임 변경</label>
                 <input
                   className={styles.edit_sub}
-                  id="nickname"
                   type="text"
                   value={nickname}
-                  onKeyPress={handleNickKeyPress}
                   onChange={handleChangeNick}
+                  onKeyPress={handleNickKeyPress}
                   autoFocus
                 />
                 {nickError && (
                   <div className={styles.error}>
-                    10자 이내로 표현해주세요!
+                    10자 이내로 닉네임을 설정해 주세요!
                   </div>
                 )}
               </div>
               <div className={styles.edit_content} >
                 <label className={styles.edit_title}>비밀번호 변경</label>
                 <input
-                  id="password"
                   type="password"
                   className={styles.edit_sub}
                   placeholder="현재 비밀번호를 입력해 주세요."
@@ -266,13 +274,13 @@ export default function Profile() {
                 {pwcheck && (
                   <div className={styles.edit_pw}>
                     <input
-                      id="new_password"
                       type="password"
                       className={styles.edit_sub}
                       placeholder="새 비밀번호를 입력해주세요"
                       defaultValue={password}
                       onChange={handlePasswordChange}
                       autoFocus
+
                     />
                     {passwordError && (
                       <div className={styles.error}>
@@ -280,14 +288,13 @@ export default function Profile() {
                       </div>
                     )}
                     <input
-                      id="new_password"
                       type="password"
                       className={styles.edit_sub}
                       placeholder="새 비밀번호를 다시 한 번 입력해주세요"
                       defaultValue={passwordConfirm}
                       onChange={handlePasswordConfirmChange}
-                      autoFocus
                       onKeyPress={handleSubmitKeyPress}
+                      autoFocus
                     />
                     {passwordMatchError && (
                       <div className={styles.error}>
