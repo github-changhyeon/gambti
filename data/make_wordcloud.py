@@ -5,8 +5,9 @@ import pandas as pd
 import os
 import numpy as np
 
-DATA_FILE = os.path.join("reviews.jl")
-DUMP_FILE = os.path.join("review_data.pkl")
+BASE_URL = "./rawdata"
+DATA_FILE = os.path.join(BASE_URL, "reviews.jl")
+DUMP_FILE = os.path.join(BASE_URL, "review_data.pkl")
 
 #워드클라우드 함수
 def displayWordCloud(data = None, backgroundcolor = 'white', width=1600, height=800):
@@ -82,8 +83,6 @@ def main():
     game_df = data["games"]
     
     make_text_data(game_df, review_df)
-
-
 
 if __name__ == "__main__":
     main()
