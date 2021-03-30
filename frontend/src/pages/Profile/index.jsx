@@ -11,6 +11,9 @@ import RecFriend from './RecFriend';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
+import firebase from 'firebase';
+import $ from 'jquery';
+import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert';
 
 
 
@@ -25,7 +28,7 @@ export default function Profile() {
 
   const [value, setValue] = React.useState(0);
 
-
+  // tab 설정
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -57,17 +60,20 @@ export default function Profile() {
   }
 
   const [nickname, setNickname] = React.useState(user.nickname);
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
+  const [currentpw, setCurrentpw] = useState('');
   const [nickError, setNickError] = useState(false);
-  const [pw, setPw] = useState(false);
+  const [pwcheck, setPwcheck] = useState(false);
+  const [pwcheckError, setPwcheckError] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordMatchError, setPasswordMatchError] = useState('');
 
-
-
+  // niciname 설정
   const handleChangeNick = (event) => {
     setNickname(event.target.value);
   }
+  // nickname 수정, 수정 안될시 nickError
   const updateNick = (event) => {
     if (1 > nickname.length || 10 < nickname.length) {
       setNickError(true);
@@ -80,28 +86,77 @@ export default function Profile() {
         nickname: nickname
       });
     }
-    // TODO: back에도 정보수정 
-
   }
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-  const handlePasswordCheckChange = (event) => {
-    setPasswordError(event.target.value !== password);
-    setPasswordCheck(event.target.value);
-  };
+  // enter하면 updateNick 함수 호출(수정)
   const handleNickKeyPress = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       updateNick();
     }
   };
-  const handlePwKeyPress = (event) => {
+  // 현재 비밀번호 설정
+  const handleCurrentPasswordChange = (event) => {
+    setCurrentpw(event.target.value);
+  };
+  // 현재 비밀번호가 user의 비밀번호와 일치한지 확인
+  const handlePwKeyPress = async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      setPw(true)
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        currentUser.email,
+        event.target.value
+      )
+      await currentUser.reauthenticateWithCredential(credential)
+        .then(() => {
+          setPwcheck(true);
+          setPwcheckError(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setPwcheck(false);
+          setPwcheckError(true);
+        })
     }
   };
+  // 비밀번호 규칙 
+  const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
+
+  // 새 비밀번호 설정
+  const handlePasswordChange = (evnet) => {
+    setPassword(evnet.target.value);
+    if (!reg.test(password)) {
+      setPasswordError(true);
+    } else {
+      setPasswordError(false);
+    }
+  }
+  // 새 비밀번호 확인
+  const handlePasswordConfirmChange = (event) => {
+    setPasswordConfirm(event.target.value);
+    if (password !== passwordConfirm) {
+      setPasswordMatchError(true);
+    } else {
+      setPasswordMatchError(false);
+    }
+  }
+  // 비밀번호 수정
+  const handleSubmitKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (passwordError || passwordMatchError) {
+        alert('조건에 적합하지 않은 부분이 있습니다.');
+      } else {
+        // 비밀번호 수정
+        currentUser.updatePassword(password)
+          .then(() => {
+            alert('비밀번호 변경이 완료되었습니다.');
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+    }
+  }
 
 
   return (
@@ -156,7 +211,7 @@ export default function Profile() {
         >
           <Tab label="MY PROFILE" {...a11yProps(0)} className={styles.tab}
           />
-          <Tab label="MY GAMES" {...a11yProps(1)} className={styles.tab}
+          <Tab label="MY DETAIL" {...a11yProps(1)} className={styles.tab}
           />
         </Tabs>
         {/* MY Profile edit */}
@@ -173,17 +228,17 @@ export default function Profile() {
                 <Typography className={styles.profile_sub}>용맹한 사자</Typography>
               </div>
             </Box>
-            <Box className={styles.edit}>
+            <form className={styles.edit}>
               <div className={styles.edit_content} >
-                <Typography className={styles.edit_title}>닉네임 변경</Typography>
+                <label className={styles.edit_title}>닉네임 변경</label>
                 <input
+                  className={styles.edit_sub}
                   id="nickname"
                   type="text"
                   value={nickname}
-                  className={styles.edit_sub}
-                  autoFocus
                   onKeyPress={handleNickKeyPress}
                   onChange={handleChangeNick}
+                  autoFocus
                 />
                 {nickError && (
                   <div className={styles.error}>
@@ -192,35 +247,57 @@ export default function Profile() {
                 )}
               </div>
               <div className={styles.edit_content} >
-                <Typography className={styles.edit_title}>비밀번호 변경</Typography>
+                <label className={styles.edit_title}>비밀번호 변경</label>
                 <input
                   id="password"
                   type="password"
                   className={styles.edit_sub}
                   placeholder="현재 비밀번호를 입력해 주세요."
-                  onChange={handlePasswordChange}
+                  onChange={handleCurrentPasswordChange}
                   onKeyPress={handlePwKeyPress}
+                  defaultValue={currentpw}
                   autoFocus
                 />
-                {pw && (
+                {pwcheckError && (
+                  <div className={styles.error}>
+                    비밀번호가 일치하지 않습니다.
+                  </div>
+                )}
+                {pwcheck && (
                   <div className={styles.edit_pw}>
                     <input
                       id="new_password"
                       type="password"
                       className={styles.edit_sub}
                       placeholder="새 비밀번호를 입력해주세요"
+                      defaultValue={password}
+                      onChange={handlePasswordChange}
+                      autoFocus
                     />
+                    {passwordError && (
+                      <div className={styles.error}>
+                        비밀번호는 소문자/ 숫자 포함 8자 이상, 20자 이하입니다.
+                      </div>
+                    )}
                     <input
                       id="new_password"
                       type="password"
                       className={styles.edit_sub}
                       placeholder="새 비밀번호를 다시 한 번 입력해주세요"
+                      defaultValue={passwordConfirm}
+                      onChange={handlePasswordConfirmChange}
+                      autoFocus
+                      onKeyPress={handleSubmitKeyPress}
                     />
+                    {passwordMatchError && (
+                      <div className={styles.error}>
+                        비밀번호가 일치하지 않습니다.
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            </Box>
-
+            </form>
           </div>
         </TabPanel>
         <TabPanel value={value} index={1} className={styles.tab_panel}>
