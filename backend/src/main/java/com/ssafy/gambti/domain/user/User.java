@@ -2,7 +2,6 @@ package com.ssafy.gambti.domain.user;
 
 
 import lombok.Builder;
-import com.ssafy.gambti.domain.game.Game;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -51,38 +50,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
-    // user banned friend
-    @ManyToMany
-    @JoinTable(name="ban_friend",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="ban_user_id")
-    )
-    private List<User> banFriends = new ArrayList<>();
-
     // user joined game
-    @ManyToMany
-    @JoinTable(name="user_join_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> joinGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserJoinGame> userJoinGames = new ArrayList<>();
 
-    // user owned game
-    @ManyToMany
-    @JoinTable(name="user_own_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> ownGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserOwnGame> userOwnGames = new ArrayList<>();
 
-    // user baned game
-    @ManyToMany
-    @JoinTable(name="user_ban_game",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="game_id")
-    )
-    private List<Game> banGames = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserBanGame> userBanGames = new ArrayList<>();
 
     @Builder
     public User(String id, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {

@@ -1,16 +1,18 @@
-import { restApi, getConfig } from './index';
+import { restApi, getConfig } from "./index";
 
 // 대략 이런식으로 -> 수정 필요하면 수정해서 사용
 
 // 회원가입
-function signup(param, success, fail) {
+function signup(user, param, success, fail) {
   // param : 계정 정보가 담긴 object
-  restApi.post(`/accounts`, param).then(success).catch(fail);
+  const config = getConfig(user);
+  const instance = restApi();
+  instance.post(`/account/signup`, param, config).then(success).catch(fail);
 }
 
 // 회원정보 수정
 function editProfile(param, success, fail) {
-  const config = getConfig;
+  const config = getConfig();
   restApi.patch(`/accounts`, param, config).then(success).catch(fail);
 }
 

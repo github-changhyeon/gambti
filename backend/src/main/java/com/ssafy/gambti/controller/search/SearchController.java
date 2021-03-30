@@ -1,5 +1,4 @@
-package com.ssafy.gambti.controller.Search;
-
+package com.ssafy.gambti.controller.search;
 
 import com.ssafy.gambti.dto.basicResponse.Response;
 import io.swagger.v3.oas.annotations.Operation;

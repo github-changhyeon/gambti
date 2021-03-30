@@ -1,8 +1,8 @@
 package com.ssafy.gambti.domain.tag;
 
-import com.ssafy.gambti.domain.game.Game;
-import lombok.AllArgsConstructor;
+import com.ssafy.gambti.domain.game.GameTag;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "tag")
-@AllArgsConstructor
 @Getter
+@Setter
 public class Tag {
 
     @Id
@@ -21,7 +21,15 @@ public class Tag {
 
     private String tagName;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
-    private List<Game> games = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tag",  cascade = CascadeType.ALL)
+    private List<GameTag> gameTags = new ArrayList<>();
+
+    public static List<String> listOf(List<GameTag> gameTag){
+        List<String> tagList = new ArrayList<>();
+        for (GameTag gt: gameTag) {
+            tagList.add(gt.getTag().getTagName());
+        }
+        return tagList;
+    }
 }

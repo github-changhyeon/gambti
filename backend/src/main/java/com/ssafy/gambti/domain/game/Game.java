@@ -1,10 +1,10 @@
 package com.ssafy.gambti.domain.game;
 
-import com.ssafy.gambti.domain.genre.Genre;
-import com.ssafy.gambti.domain.tag.Tag;
+import com.ssafy.gambti.domain.user.UserBanGame;
+import com.ssafy.gambti.domain.user.UserJoinGame;
+import com.ssafy.gambti.domain.user.UserOwnGame;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "game")
-@RequiredArgsConstructor
 @Getter
+@Setter
 public class Game {
 
     @Id
@@ -41,20 +41,20 @@ public class Game {
 
     private String logoImagePath;
 
-    private String backgoundImagePath;
+    private String backgroundImagePath;
 
-    @ManyToMany
-    @JoinTable(
-            name = "game_genre",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<Genre> genres = new ArrayList<>();
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<GameGenre> gameGenres = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "game_tag",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tag> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<GameTag> gameTags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserJoinGame> userJoinGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserOwnGame> userOwnGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserBanGame> userBanGames = new ArrayList<>();
 }

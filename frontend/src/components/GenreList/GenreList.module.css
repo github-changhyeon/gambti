@@ -1,8 +1,19 @@
 .genre_list {
   white-space: nowrap;
   overflow-x: scroll;
-  background-color: #2a2b2c;
-  padding: 0px 20px 20px 20px;
+  background-color: #222222;
+  /* background-color: #2a2b2c; */
+}
+
+.genre_list::-webkit-scrollbar {
+  background-color: #222222;
+}
+
+.genre_list::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 5px solid transparent;
 }
 
 .genre_item {
