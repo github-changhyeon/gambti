@@ -1,20 +1,22 @@
 .root {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0.1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #2a2c2d;
+  margin: 0.1rem;
 }
 .nick {
   font-weight: bold;
   font-size: 15px;
-  color: #CCFF00;
+  color: #ccff00;
 }
 .email {
   font-size: 12px;
 }
 .text_margin {
   margin: 0.6rem;
+  overflow: auto;
 }
 .email {
-  color: #CFCFCF;
+  color: #cfcfcf;
 }

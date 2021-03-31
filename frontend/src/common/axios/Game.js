@@ -1,14 +1,14 @@
 import { restApi, getConfig } from "./index";
 
 function getRecommendedGames(genreId, success, fail) {
-  restApi().get(`games/recommends/${genreId}`).then(success).catch(fail);
+  restApi().get(`/games/recommends/${genreId}`).then(success).catch(fail);
 }
 
 function joinAndLeave(gameId, success, fail) {
   const token = localStorage.getItem("idToken");
   const config = getConfig(token);
   restApi()
-    .post(`games/joinLeave/${gameId}`, {}, token ? config : null)
+    .post(`/games/joinLeave/${gameId}`, {}, token ? config : null)
     .then(success)
     .catch(fail);
 }

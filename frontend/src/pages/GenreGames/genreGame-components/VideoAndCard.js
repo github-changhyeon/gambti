@@ -14,7 +14,9 @@ export default function VideoAndCard({ gameInfo }) {
         backgroundColor: "#202020",
       }}
     >
-      <GameCard gameInfo={gameInfo}></GameCard>
+      <div style={{ width: "280px" }}>
+        <GameCard gameInfo={gameInfo}></GameCard>
+      </div>
       <div style={{ padding: "0px 0px 0px 40px" }}>
         <div
           className={

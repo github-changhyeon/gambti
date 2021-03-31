@@ -31,7 +31,7 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
       (response) => {
         console.log("무한스크롤", response.data.data.content);
         setItems((items) => [...items, ...response.data.data.content]);
-        // setItems([...items, ...res.data.data.content]);
+        // setItems([...items, ...response.data.data.content]);
         setPageNum(pageNum + 1);
         if (response.data.data.last) {
           setIsEnd(true);

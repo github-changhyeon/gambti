@@ -73,6 +73,7 @@ export default function Header({ isLogin }) {
             if (event.key === "Enter") {
               history.push({
                 pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
+                search: "?word=a",
               });
             }
           }}
