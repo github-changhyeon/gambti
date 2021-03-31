@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseToken;
 import com.ssafy.gambti.domain.mapping.Friend;
 import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserBanFriend;
+import com.ssafy.gambti.domain.user.UserMBTI;
 import com.ssafy.gambti.dto.user.UserIdListRes;
 import com.ssafy.gambti.repository.user.FriendRepository;
 import com.ssafy.gambti.repository.user.UserBanFriendRepository;
@@ -16,8 +17,6 @@ import com.ssafy.gambti.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -135,18 +134,25 @@ public class FriendService {
         // 1. 현재 로그인 유저 객체 생성
         User loginUser = getLoginUser(httpServletRequest);
 
-        // 2. 현재 유저와 현재 유저의 친구들, 현재 유저가 ban한 유저까지 추천 친구에서 제외하고 보여주기위한 리스트 exclusiveUsers
-        // 2.1 현재 유저의 친구 리스트 exclusiveUsers에 추가
-        List<User> exclusiveUsers = friendRepository.findByFrom(loginUser).stream()
+        // 2. 현재 유저와 현재 유저의 친구들, 현재 유저가 ban한 유저까지 추천 친구에서 제외하고 보여주기위한 리스트(exclusiveUsers) 생성
+        // 2.1 현재 유저가 친구 요청한 사람 또는 친구관계인 사람 exclusiveUsers에 추가
+        Set<User> exclusiveUsers = friendRepository.findByFrom(loginUser).stream()
                 .map(friend -> {
                     return friend.getTo();
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        // 2.2 현재 유저 exclusiveUsers에 추가
+        // 2.2 현재 유저에게 친구 요청을 보낸 사람 exclusiveUsers에 추가
+        exclusiveUsers.addAll(friendRepository.findByToAndIsApproved(loginUser, false).stream()
+                .map(friend -> {
+                    return friend.getTo();
+                })
+                .collect(Collectors.toSet()));
+
+        // 2.3 현재 유저 exclusiveUsers에 추가
         exclusiveUsers.add(loginUser);
 
-        // 2.3 현재 유저가 ban한 유저 exclusiveUsers에 추가
+        // 2.4 현재 유저가 ban한 유저 exclusiveUsers에 추가
         userBanFriendRepository.findByFrom(loginUser).stream()
                 .filter(userBanFriend -> userBanFriend.getFrom().equals(loginUser))
                 .forEach(userBanFriend -> {
@@ -155,28 +161,17 @@ public class FriendService {
                     }
                 });
 
-        // 3. 추천 친구를 저장할 recommendFriends
-        List<User> recommendUsers = userRepository.findAll().stream()
-                .filter(user->!exclusiveUsers.contains(user)).collect(Collectors.toList());
+        // 3. 친구 추천 알고리즘
+        // 3.1. cache에서 현재 사용자의 mbti와 궁합이 맞는 mbti 리스트를 가져온다.
+        List<UserMBTI> recommendMbtiList = cachingService.recommendMbtiList(loginUser.getMbti().getMbtiType()).stream()
+                .map(s -> UserMBTI.valueOf(s)).collect(Collectors.toList());
+
+        // 3.2. recommendUsers에 궁합이 맞는 mbti 유저를 랜덤하게 받아온후 exclusiveUsers에 있는 배제되어야 할 유저를 빼주고 그 크기를 10명으로 제한.
+        List<User> recommendUsers = userRepository.findByMbtiIn(recommendMbtiList).stream()
+                .filter(user->!exclusiveUsers.contains(user)).limit(10).collect(Collectors.toList());
+
+        // 4. 추천이 필요한 최종 유저리스트를 UserIdListRes 형태로 생성
         UserIdListRes recommendFriends = new UserIdListRes(recommendUsers);
-
-        // TODO: 추천 알고리즘 적용해야함 현재 랜덤으로 섞어서 추천유저 10명 반환 시작
-
-        cachingService.recommendMbtiList(loginUser.getMbti().getMbtiType()).toString();
-
-        // TODO: 추천 알고리즘 적용해야함 현재 랜덤으로 섞어서 추천유저 10명 반환 끝
-
-        List<String> recommendUserIds = recommendFriends.getUserIds();
-        Collections.shuffle(recommendUserIds);
-
-        int size = recommendUserIds.size();
-
-        if (size < 10) {
-            recommendFriends.changeUserIds(recommendUserIds.subList(0, size));
-        } else {
-            recommendFriends.changeUserIds(recommendUserIds.subList(0, 10));
-
-        }
 
         return recommendFriends;
     }
