@@ -78,7 +78,7 @@ export default function Profile() {
   // niciname 설정
   const handleChangeNick = (event) => {
     setNickname(event.target.value);
-    console.log(nickname);
+    // console.log(nickname);
     // handleChangeNick.current.focus();
   }
 
@@ -272,7 +272,8 @@ export default function Profile() {
                   </div>
                 )}
                 {pwcheck && (
-                  <div className={styles.edit_pw}>
+                  <div className={styles.edit_pw} onKeyPress={handleSubmitKeyPress}
+                  >
                     <input
                       type="password"
                       className={styles.edit_sub}
@@ -293,7 +294,6 @@ export default function Profile() {
                       placeholder="새 비밀번호를 다시 한 번 입력해주세요"
                       defaultValue={passwordConfirm}
                       onChange={handlePasswordConfirmChange}
-                      onKeyPress={handleSubmitKeyPress}
                       autoFocus
                     />
                     {passwordMatchError && (
