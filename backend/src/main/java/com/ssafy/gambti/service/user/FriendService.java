@@ -11,10 +11,12 @@ import com.ssafy.gambti.dto.user.UserIdListRes;
 import com.ssafy.gambti.repository.user.FriendRepository;
 import com.ssafy.gambti.repository.user.UserBanFriendRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
+import com.ssafy.gambti.service.caching.CachingService;
 import com.ssafy.gambti.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserBanFriendRepository userBanFriendRepository;
     private final SecurityService securityService;
+    private final CachingService cachingService;
 
     // 현재 로그인한 유저의 토큰을 디코딩하여 로그인 유저 객체를 가져오는 getter
     public User getLoginUser(HttpServletRequest httpServletRequest){
@@ -157,7 +160,11 @@ public class FriendService {
                 .filter(user->!exclusiveUsers.contains(user)).collect(Collectors.toList());
         UserIdListRes recommendFriends = new UserIdListRes(recommendUsers);
 
-        // TODO: 추천 알고리즘 적용해야함 현재 랜덤으로 섞어서 추천유저 10명 반환
+        // TODO: 추천 알고리즘 적용해야함 현재 랜덤으로 섞어서 추천유저 10명 반환 시작
+
+        cachingService.recommendMbtiList(loginUser.getMbti().getMbtiType()).toString();
+
+        // TODO: 추천 알고리즘 적용해야함 현재 랜덤으로 섞어서 추천유저 10명 반환 끝
 
         List<String> recommendUserIds = recommendFriends.getUserIds();
         Collections.shuffle(recommendUserIds);
