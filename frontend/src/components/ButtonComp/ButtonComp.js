@@ -40,7 +40,7 @@ export default function ButtonComp({
   // GameCard, UserCard, MainButton
   else if (size === "medium") {
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         {joined ? (
           <Button
             className={styles.medium}
@@ -51,7 +51,6 @@ export default function ButtonComp({
             }}
             variant="contained"
             onClick={onClick}
-            bold
           >
             {textvalue}
           </Button>
