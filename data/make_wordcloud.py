@@ -8,11 +8,13 @@ import numpy as np
 BASE_URL = "./rawdata"
 DATA_FILE = os.path.join(BASE_URL, "reviews.jl")
 DUMP_FILE = os.path.join(BASE_URL, "review_data.pkl")
-STOPWORDS = ["를", "접", "정말"]
+
+STOPWORDS = ["를", "접", "정말", "게임"]
+kkma = Okt()
 
 
 #워드클라우드 함수
-def displayWordCloud(data = None, backgroundcolor = 'black', width=1600, height=800):
+def displayWordCloud(data = None, game_id = None, backgroundcolor = 'black', width=1600, height=800):
     wordcloud = WordCloud(
                         font_path = './font/NanumSquareRoundB.ttf',
                         stopwords = STOPWORDS, 
@@ -21,16 +23,26 @@ def displayWordCloud(data = None, backgroundcolor = 'black', width=1600, height=
     plt.figure(figsize = (15 , 10))
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.show()
+    plt.tight_layout()
 
-kkma = Okt()
+    image_file = os.path.join('./wordcloud_image', 'wc_'+str(game_id))
+    
+    plt.savefig(fname=image_file, bbox_inches='tight', pad_inches=0)
+
 
 def nouns_wordcloud(content):
-    content = content.loc[0, 'text']
-    # Kkma 으로 명사만 추출합니다.
-    extract_nouns = kkma.nouns(''.join(str(content)))
-    print(extract_nouns)
-    displayWordCloud(' '.join(extract_nouns))
+    for i in range(len(content)):
+        game_id = content.iloc[i, 0]
+        game_id = game_id['product_id']
+        text = content.iloc[i, 1]
+
+        # Kkma 으로 명사만 추출합니다.
+        extract_nouns = kkma.nouns(''.join(str(text)))
+
+        # 너무 적은 단어를 가진 것은 제외
+        if(len(extract_nouns) >= 10):
+            displayWordCloud(' '.join(extract_nouns), game_id)
+    
 
 def import_data(data_path=DATA_FILE):
     """
