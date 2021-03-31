@@ -159,6 +159,7 @@ export default function Signup() {
               nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
+              uid: currentUser.user.uid,
               mbti: "INFP",
               gender: "FEMALE",
               steamId: "",
