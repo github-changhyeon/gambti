@@ -24,6 +24,9 @@ public class User {
     @Column(name="USER_ID", insertable = false, updatable = false)
     private String id;
 
+//    @Column(nullable = false)
+    private String nickname;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserMBTI mbti;

@@ -7,8 +7,9 @@ import pickle
 import pymysql          #mariaDB 사용
 import sqlalchemy      #DB 접속 엔진
 
-DATA_FILE = os.path.join("products_all.jl")
-DUMP_FILE = os.path.join("game_data.pkl")
+BASE_URL = "./rawdata"
+DATA_FILE = os.path.join(BASE_URL, "products_all.jl")
+DUMP_FILE = os.path.join(BASE_URL, "game_data.pkl")
 
 game_columns = (
     "id",  # 스팀 고유 게임 아이디
@@ -122,7 +123,7 @@ def make_mapping_table(games, category, map_names):
     return df_result
 
 def add_image_path(data):
-    IMAGE_FILE = os.path.join("image_data.pkl")
+    IMAGE_FILE = os.path.join(BASE_URL, "image_data.pkl")
     image_data = load_dataframes(IMAGE_FILE)
 
     df_result = pd.merge(data, image_data, on='game_id', how="inner")
@@ -139,11 +140,11 @@ def main():
     print("[+] Done\n")
 
     data = load_dataframes(DUMP_FILE)
-
     #DB에 저장하기 위한 정제(game 테이블)
     game_df = data["games"]
     game_df = game_df[[*game_columns]]
     game_df.rename(columns={'id':'game_id'}, inplace=True) #id를 DB의 컬럼명(game_id)과 맞춰주기
+    print(game_df.head())
 
     #장르, 태그 dataframe 추출
     genre_df = extract_dataframe(data["games"], "genres")
