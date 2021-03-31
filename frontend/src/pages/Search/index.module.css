@@ -28,13 +28,37 @@
   width: 67%;
   /* margin-top: 20px; */
   float: left;
-  background-color: chartreuse;
+  /* background-color: chartreuse; */
 }
 
 .search_right_container {
   width: 33%;
-  background-color: red;
+  /* background-color: red; */
   float: right;
   /* margin-left: 10px; */
   /* padding-left: 10px; */
+}
+
+.profile_divider {
+  border-top: 1px solid white;
+  margin: 5px 0px 5px 0px;
+}
+
+.search_all_container {
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+.search_content_title {
+  color: white;
+  margin: 20px 0px;
+  font-weight: bold;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 50%;
+}
+
+.view_all_btn {
+  color: white;
+  font-weight: bold;
 }

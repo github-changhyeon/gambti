@@ -56,6 +56,7 @@ export default function Search({ match }) {
 
     console.log(temp1);
     setSimpleUsers(temp1);
+    setUsers(temp1);
     setGames(temp2);
 
     // searchGames(
@@ -87,15 +88,7 @@ export default function Search({ match }) {
   return (
     <div style={{ backgroundColor: "#222222" }}>
       <SearchDescription></SearchDescription>
-      {/* <div style={{ width: "200px" }}>
-        <MediumProfile
-          propsUser={{
-            nickname: "aa",
-            email:
-              "bbdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-          }}
-        />
-      </div> */}
+
       <SearchNavigation
         propsMatch={match}
         gameCnt={games.length}
