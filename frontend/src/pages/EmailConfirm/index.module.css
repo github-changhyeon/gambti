@@ -1,0 +1,28 @@
+.background {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 54px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.root {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.logo {
+  width: 70%;
+  height: auto;
+  margin: 1rem;
+}
+.button_group{
+  display: flex;
+  flex-direction: row;
+}
+.button{
+  margin: 2rem;
+}
