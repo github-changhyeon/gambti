@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import styles from './ChangePassword.module.css';
 import fire from 'src/fire';
+import qs from 'query-string';
 import { useHistory } from 'react-router';
 import background from 'src/Images/background.jpg';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { LocalConvenienceStoreOutlined } from '@material-ui/icons';
 
 
 export default function ChangePassword({ query }) {
@@ -15,13 +15,14 @@ export default function ChangePassword({ query }) {
   const actionCode = query.oobCode;
   const currentUser = fire.auth.currentUser;
 
+
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
 
   // 계정을 찾는 사용자가 이메일 인증 후 유효한 비밀번호를 제출하면 firebase에 적용하는 함수
-  const handleResetPassword = (auth, actionCode) => {
+  const handleResetPassword = async (auth, actionCode) => {
     fire.auth.verifyPasswordResetCode(actionCode)
       .then((email) => {
         if (passwordError || passwordMatchError) {
@@ -33,7 +34,7 @@ export default function ChangePassword({ query }) {
               history.push('/');
             })
             .catch((err) => {
-              console.log('verify', err)
+              console.log('verify', err);
             })
 
         }
@@ -43,21 +44,18 @@ export default function ChangePassword({ query }) {
       })
   }
 
-  useEffect(() => {
-    handleResetPassword(auth, actionCode);
 
-  }, [])
 
   // 비밀번호 규칙
   const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
 
   // 비밀번호 설정
   const handlePasswordChange = (event) => {
-    setPassword(event.currentTarget.value);
+    setPassword(event.target.value);
   }
   // 비밀번호 확인
   const handlePasswordConfirmChange = (event) => {
-    setPasswordConfirm(event.currentTarget.value);
+    setPasswordConfirm(event.target.value);
   };
 
 
@@ -108,9 +106,9 @@ export default function ChangePassword({ query }) {
   }
 
   const handleKeyPress = (event) => {
+    event.preventDefault();
     if (event.key === "Enter") {
-      event.preventDefault();
-      handleResetPassword();
+      handleResetPassword(auth, actionCode);
     }
   };
 
@@ -146,7 +144,6 @@ export default function ChangePassword({ query }) {
                 placeholder="비밀번호를 확인해 주세요"
                 required
                 onChange={handlePasswordConfirmChange}
-                onKeyPress={handleKeyPress}
               />
               <PassConfirm className={styles.error}></PassConfirm>
             </div>
@@ -155,12 +152,13 @@ export default function ChangePassword({ query }) {
                 size='large'
                 textvalue='Reset Password'
                 color='#CCFF00'
-                onClick={handleResetPassword}
-              // onKeyPress={handleKeyPress}
+                onClick={() => {
+                  handleResetPassword(auth, actionCode);
+                }}
+                onKeyPress={handleKeyPress}
               />
             </div>
           </form>
-
         </div>
       </Container>
     </div>
