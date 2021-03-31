@@ -14,7 +14,7 @@ import fire from 'src/fire';
 import firebase from 'firebase';
 import $ from 'jquery';
 import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert';
-
+import EditProfile from 'src/components/EditProfile/EditProfile';
 
 
 export default function Profile() {
@@ -25,6 +25,18 @@ export default function Profile() {
   const currentUser = fire.auth.currentUser;
   const [joinedGame, setJoinedGame] = React.useState(8);
   const [friendNumber, setFriendNumber] = React.useState(1);
+
+  // const [nickname, setNickname] = useState(user.nickname);
+  // const [currentpw, setCurrentpw] = useState('');
+  // const [nickError, setNickError] = useState(false);
+  // const [pwcheck, setPwcheck] = useState(false);
+  // const [pwcheckError, setPwcheckError] = useState(false);
+  // const [password, setPassword] = useState('');
+  // const [passwordError, setPasswordError] = useState(false);
+  // const [passwordConfirm, setPasswordConfirm] = useState('');
+  // const [passwordMatchError, setPasswordMatchError] = useState('');
+  // const [test, setTest] = useState(user.nickname);
+
 
   const [value, setValue] = React.useState(0);
 
@@ -59,113 +71,106 @@ export default function Profile() {
     );
   }
 
-  const [nickname, setNickname] = React.useState(user.nickname);
-  const [currentpw, setCurrentpw] = useState('');
-  const [nickError, setNickError] = useState(false);
-  const [pwcheck, setPwcheck] = useState(false);
-  const [pwcheckError, setPwcheckError] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordMatchError, setPasswordMatchError] = useState('');
 
 
-  useEffect(() => {
-    setNickname(user.nickname);
-  }, [])
+  // useEffect(() => {
+  //   setNickname(user.nickname);
+  // }, [])
 
 
-  // niciname 설정
-  const handleChangeNick = (event) => {
-    setNickname(event.target.value);
-    // console.log(nickname);
-    // handleChangeNick.current.focus();
-  }
+  // // niciname 설정
+  // const handleChangeNick = (event) => {
+  //   setNickname(event.target.value);
+  //   console.log(nickname);
+  //   // handleChangeNick.current.focus();
+  // }
 
-  // nickname 수정, 수정 안될시 nickError
-  const updateNick = (event) => {
-    if (1 > nickname.length || 10 < nickname.length) {
-      setNickError(true);
-    } else {
-      setNickError(false);
-      currentUser.updateProfile({
-        displayName: nickname,
-      });
-      fire.db.collection("users").doc(currentUser.uid).update({
-        nickname: nickname
-      });
-    }
-  }
-  // enter하면 updateNick 함수 호출(수정)
-  const handleNickKeyPress = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      updateNick();
-    }
-  };
-  // 현재 비밀번호 설정
-  const handleCurrentPasswordChange = (event) => {
-    setCurrentpw(event.target.value);
-  };
-  // 현재 비밀번호가 user의 비밀번호와 일치한지 확인
-  const handlePwKeyPress = async (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      const credential = firebase.auth.EmailAuthProvider.credential(
-        currentUser.email,
-        event.target.value
-      )
-      await currentUser.reauthenticateWithCredential(credential)
-        .then(() => {
-          setPwcheck(true);
-          setPwcheckError(false);
-        })
-        .catch(err => {
-          console.log(err);
-          setPwcheck(false);
-          setPwcheckError(true);
-        })
-    }
-  };
-  // 비밀번호 규칙 
-  const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
+  // // nickname 수정, 수정 안될시 nickError
+  // const updateNick = (event) => {
+  //   if (1 > nickname.length || 10 < nickname.length) {
+  //     setNickError(true);
+  //   } else {
+  //     setNickError(false);
+  //     currentUser.updateProfile({
+  //       displayName: nickname,
+  //     });
+  //     fire.db.collection("users").doc(currentUser.uid).update({
+  //       nickname: nickname
+  //     });
+  //   }
+  // }
+  // // enter하면 updateNick 함수 호출(수정)
+  // const handleNickKeyPress = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     updateNick();
+  //   }
+  // };
+  // // 현재 비밀번호 설정
+  // const handleCurrentPasswordChange = (event) => {
+  //   setCurrentpw(event.target.value);
+  // };
+  // // 현재 비밀번호가 user의 비밀번호와 일치한지 확인
+  // const handlePwKeyPress = async (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     const credential = firebase.auth.EmailAuthProvider.credential(
+  //       currentUser.email,
+  //       event.target.value
+  //     )
+  //     await currentUser.reauthenticateWithCredential(credential)
+  //       .then(() => {
+  //         setPwcheck(true);
+  //         setPwcheckError(false);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //         setPwcheck(false);
+  //         setPwcheckError(true);
+  //       })
+  //   }
+  // };
+  // // 비밀번호 규칙 
+  // const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
 
-  // 새 비밀번호 설정
-  const handlePasswordChange = (evnet) => {
-    setPassword(evnet.target.value);
-    if (!reg.test(password)) {
-      setPasswordError(true);
-    } else {
-      setPasswordError(false);
-    }
-  }
-  // 새 비밀번호 확인
-  const handlePasswordConfirmChange = (event) => {
-    setPasswordConfirm(event.target.value);
-    if (password !== passwordConfirm) {
-      setPasswordMatchError(true);
-    } else {
-      setPasswordMatchError(false);
-    }
-  }
-  // 비밀번호 수정
-  const handleSubmitKeyPress = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (passwordError || passwordMatchError) {
-        alert('조건에 적합하지 않은 부분이 있습니다.');
-      } else {
-        // 비밀번호 수정
-        currentUser.updatePassword(password)
-          .then(() => {
-            alert('비밀번호 변경이 완료되었습니다.');
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      }
-    }
-  }
+  // // 새 비밀번호 설정
+  // const handlePasswordChange = (event) => {
+  //   setPassword(event.target.value);
+  //   if (!reg.test(password)) {
+  //     setPasswordError(true);
+  //   } else {
+  //     setPasswordError(false);
+  //   }
+  // }
+  // // 새 비밀번호 확인
+  // const handlePasswordConfirmChange = (event) => {
+  //   setPasswordConfirm(event.target.value);
+  //   if (password !== passwordConfirm) {
+  //     setPasswordMatchError(true);
+  //   } else {
+  //     setPasswordMatchError(false);
+  //   }
+  // }
+  // // 비밀번호 수정
+  // const handleSubmitKeyPress = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     if (passwordError || passwordMatchError) {
+  //       alert('조건에 적합하지 않은 부분이 있습니다.');
+  //     } else {
+  //       // 비밀번호 수정
+  //       currentUser.updatePassword(password)
+  //         .then(() => {
+  //           alert('비밀번호 변경이 완료되었습니다.');
+  //         })
+  //         .catch(err => {
+  //           console.log(err);
+  //         })
+  //     }
+  //   }
+  // }
+
+
 
 
   return (
@@ -238,16 +243,19 @@ export default function Profile() {
                 <Typography className={styles.profile_sub}>용맹한 사자</Typography>
               </div>
             </Box>
-            <form className={styles.edit}>
+            {/* <form className={styles.edit}>
               <div className={styles.edit_content} >
                 <label className={styles.edit_title}>닉네임 변경</label>
                 <input
                   className={styles.edit_sub}
                   type="text"
-                  value={nickname}
-                  onChange={handleChangeNick}
-                  onKeyPress={handleNickKeyPress}
-                  autoFocus
+                  // value={test}
+                  onChange={(event) => {
+                    setTest(event.target.value);
+                    console.log(event.target.value);
+                  }}
+                // onKeyPress={handleNickKeyPress}
+                // autoFocus
                 />
                 {nickError && (
                   <div className={styles.error}>
@@ -255,16 +263,16 @@ export default function Profile() {
                   </div>
                 )}
               </div>
-              <div className={styles.edit_content} >
+              {/* <div className={styles.edit_content} >
                 <label className={styles.edit_title}>비밀번호 변경</label>
                 <input
                   type="password"
                   className={styles.edit_sub}
                   placeholder="현재 비밀번호를 입력해 주세요."
                   onChange={handleCurrentPasswordChange}
-                  onKeyPress={handlePwKeyPress}
+                  // onKeyPress={handlePwKeyPress}
                   defaultValue={currentpw}
-                  autoFocus
+                // autoFocus
                 />
                 {pwcheckError && (
                   <div className={styles.error}>
@@ -280,8 +288,7 @@ export default function Profile() {
                       placeholder="새 비밀번호를 입력해주세요"
                       defaultValue={password}
                       onChange={handlePasswordChange}
-                      autoFocus
-
+                    // autoFocus
                     />
                     {passwordError && (
                       <div className={styles.error}>
@@ -294,7 +301,7 @@ export default function Profile() {
                       placeholder="새 비밀번호를 다시 한 번 입력해주세요"
                       defaultValue={passwordConfirm}
                       onChange={handlePasswordConfirmChange}
-                      autoFocus
+                    // autoFocus
                     />
                     {passwordMatchError && (
                       <div className={styles.error}>
@@ -303,8 +310,9 @@ export default function Profile() {
                     )}
                   </div>
                 )}
-              </div>
-            </form>
+              </div> 
+            </form> */}
+            <EditProfile />
           </div>
         </TabPanel>
         <TabPanel value={value} index={1} className={styles.tab_panel}>
