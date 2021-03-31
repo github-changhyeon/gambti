@@ -1,5 +1,6 @@
 package com.ssafy.gambti.domain.wordcloud;
 
+import com.ssafy.gambti.domain.game.Game;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,12 @@ public class WordCloud {
     @Column(name = "WORD_ID")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "GAME_ID")
+    private Game game;
+
     private String word;
+
+    private int weight;
 
 }
