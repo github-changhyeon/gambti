@@ -1,6 +1,9 @@
 .root{
   color: #cecece;
-  margin-left: 1rem;
+  margin-left: 0.7rem;
+}
+.title{
+  font-weight: bold;
 }
 .header_center {
   flex: 0.2;
@@ -8,12 +11,12 @@
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.3);
   margin-left: 0;
-  width: 185px;
+  width: 195px;
 }
 .input_root {
   color: white;
-  width: 185px;
-  padding-left: 25px;
+  width: 195px;
+  padding-left: 20px;
 }
 .item {
   display: flex;
@@ -23,3 +26,15 @@
   align-items: center;
   justify-content: center;
 } 
+.chat{
+  left: 350px;
+  top: 120px;
+  width: 700px;
+  height: 500px;
+  background-color: #222222;
+  transition: 300ms;
+  position: fixed;
+  z-index: 1000;
+  border-radius: 10px;
+
+}
