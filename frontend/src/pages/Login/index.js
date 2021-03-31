@@ -144,7 +144,7 @@ export default function Login() {
               or Sign Up
             </a>
             <a href="/forgot" className={styles.link}>
-              Forgot Username or Password
+              Forgot Password
             </a>
           </div>
         </div>

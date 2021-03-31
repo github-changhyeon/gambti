@@ -3,6 +3,9 @@ import styles from './index.module.css';
 import { useHistory } from 'react-router-dom';
 import fire from 'src/fire';
 import { UserContext } from 'src/Context/UserContext';
+import background from 'src/Images/background.jpg';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
+
 
 export default function EmailConfirm() {
   const history = useHistory();
@@ -45,10 +48,33 @@ export default function EmailConfirm() {
 
 
   return (
-    <div>
-      <h1>Hello EmailConfirm</h1>
-      <button onClick={reSend}>재전송</button>
-      <button onClick={logout}>로그아웃</button>
+    <div
+      className={styles.background}
+      style={{
+        backgroundImage: `url(${background})`,
+      }}
+    >
+      <form className={styles.root}>
+        <img className={styles.logo} src="/images/gambti/gambti_logo.png" alt="logo" />
+        <div className={styles.button_group}>
+          <div className={styles.button}>
+            <ButtonComp
+              size='xlarge'
+              textvalue='재전송'
+              color='#CCFF00'
+              onClick={reSend}
+            />
+          </div>
+          <div className={styles.button}>
+            <ButtonComp
+              size='xlarge'
+              textvalue='로그아웃'
+              color='#CCFF00'
+              onClick={logout}
+            />
+          </div>
+        </div>
+      </form>
     </div>
   );
 }

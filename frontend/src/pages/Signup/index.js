@@ -52,9 +52,8 @@ export default function Signup() {
         return <Typography>&nbsp;</Typography>;
       }
       if (pass.value === confirm.value) {
-        return (
-          <Typography className={styles.yes}>비밀번호가 일치합니다.</Typography>
-        );
+        return <Typography>&nbsp;</Typography>;
+
       }
       if (pass.value !== confirm.value) {
         return (
@@ -160,6 +159,7 @@ export default function Signup() {
               nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
+              uid: currentUser.user.uid,
               mbti: "INFP",
               gender: "FEMALE",
               steamId: "",
@@ -235,21 +235,21 @@ export default function Signup() {
 
   return (
     <div
+      className={styles.background}
       style={{
         backgroundImage: `url(${background})`,
       }}
     >
-      <div className={styles.background}>
-        <Container component="main" maxWidth="xs">
-          <div className={styles.root}>
-            <form noValidate className={styles.form}>
-              <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy
-                Policy, including the Cookie Policy.
+      <Container component="main" maxWidth="xs">
+        <div className={styles.root}>
+          <form noValidate className={styles.form}>
+            <Typography className={styles.policy}>
+              By signing up, you agree to the Terms of User and Privacy
+              Policy, including the Cookie Policy.
               </Typography>
-              {/* 소셜 로그인 */}
-              {/* <div className={styles.buttons}> */}
-              {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
+            {/* 소셜 로그인 */}
+            {/* <div className={styles.buttons}> */}
+            {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
               <span>
                 Sign up with Google
               </span>
@@ -259,68 +259,67 @@ export default function Signup() {
                 Sign up with Twitter
               </span>
             </TwitterLoginButton> */}
-              {/* </div> */}
-              {/* <hr /> */}
+            {/* </div> */}
+            {/* <hr /> */}
 
-              <div className={styles.form_holder}>
-                {/* nickname */}
-                <input
-                  id="nickname"
-                  type="text"
-                  className={styles.newinput}
-                  autofocus
-                  placeholder="nickname"
-                  required
-                  onChange={handleUserChange}
-                />
-                {/* Email */}
-                <input
-                  id="email"
-                  type="email"
-                  className={styles.newinput}
-                  placeholder="Email"
-                  required
-                  onChange={handleEmailChange}
-                />
-                {/* password */}
-                <input
-                  id="password"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="Password"
-                  required
-                  onChange={handlePasswordChange}
-                />
-                <input
-                  id="passwordConfirm"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="PasswordConfirm"
-                  required
-                  onChange={handlePasswordConfirmChange}
-                  onKeyPress={handleKeyPress}
-                />
-                <PassConfirm></PassConfirm>
-              </div>
-
-              <div className={styles.buttons}>
-                <ButtonComp
-                  size="large"
-                  textvalue="SIGN UP"
-                  color="#CCFF00"
-                  onClick={onSignup}
-                  onKeyPress={onSignup}
-                ></ButtonComp>
-              </div>
-            </form>
-            <div className={styles.move_page}>
-              <a href="/login" className={styles.link}>
-                or Log In
-              </a>
+            <div className={styles.form_holder}>
+              {/* nickname */}
+              <input
+                id="nickname"
+                type="text"
+                className={styles.newinput}
+                autofocus
+                placeholder="nickname"
+                required
+                onChange={handleUserChange}
+              />
+              {/* Email */}
+              <input
+                id="email"
+                type="email"
+                className={styles.newinput}
+                placeholder="Email"
+                required
+                onChange={handleEmailChange}
+              />
+              {/* password */}
+              <input
+                id="password"
+                type="password"
+                className={styles.newinput}
+                placeholder="Password"
+                required
+                onChange={handlePasswordChange}
+              />
+              <input
+                id="passwordConfirm"
+                type="password"
+                className={styles.newinput}
+                placeholder="PasswordConfirm"
+                required
+                onChange={handlePasswordConfirmChange}
+                onKeyPress={handleKeyPress}
+              />
+              <PassConfirm></PassConfirm>
             </div>
+
+            <div className={styles.buttons}>
+              <ButtonComp
+                size="large"
+                textvalue="SIGN UP"
+                color="#CCFF00"
+                onClick={onSignup}
+                onKeyPress={onSignup}
+              ></ButtonComp>
+            </div>
+          </form>
+          <div className={styles.move_page}>
+            <a href="/login" className={styles.link}>
+              or Log In
+              </a>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </div>
   );
 }
