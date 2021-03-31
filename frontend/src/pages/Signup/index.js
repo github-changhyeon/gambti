@@ -19,7 +19,7 @@ export default function Signup() {
   const history = useHistory();
   const user = useContext(UserContext);
 
-  const [nickName, setNickName] = React.useState("");
+  const [nickname, setNickname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
@@ -28,14 +28,14 @@ export default function Signup() {
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
-  const [nickNameError, setNickNameError] = React.useState(false);
+  const [nicknameError, setNicknameError] = React.useState(false);
   const [emailLengthError, setEmailLengthError] = React.useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
   };
   const handleUserChange = (event) => {
-    setNickName(event.currentTarget.value);
+    setNickname(event.currentTarget.value);
   };
   const handlePasswordChange = (event) => {
     setPassword(event.currentTarget.value);
@@ -52,9 +52,8 @@ export default function Signup() {
         return <Typography>&nbsp;</Typography>;
       }
       if (pass.value === confirm.value) {
-        return (
-          <Typography className={styles.yes}>비밀번호가 일치합니다.</Typography>
-        );
+        return <Typography>&nbsp;</Typography>;
+
       }
       if (pass.value !== confirm.value) {
         return (
@@ -72,7 +71,7 @@ export default function Signup() {
   const onSignup = (event) => {
 
     setNullError(false);
-    setNickNameError(false);
+    setNicknameError(false);
     setEmailVarifiedError(false);
     setEmailLengthError(false);
     setNullPasswordLengthError(false);
@@ -80,17 +79,17 @@ export default function Signup() {
 
 
     console.log(nullError)
-    console.log(Boolean(email), Boolean(password), Boolean(passwordConfirm), Boolean(nickName));
+    console.log(Boolean(email), Boolean(password), Boolean(passwordConfirm), Boolean(nickname));
 
-    if (!email || !password || !passwordConfirm || !nickName) {
+    if (!email || !password || !passwordConfirm || !nickname) {
       setNullError(true);
       console.log(nullError);
       console.log('모든 입력값');
       alert("모든 입력값을 채워주세요.");
       return;
     }
-    if (1 > nickName.length || nickName.length > 10) {
-      setNickNameError(true);
+    if (1 > nickname.length || nickname.length > 10) {
+      setNicknameError(true);
       console.log('닉네임을 10자 이하 입니다.');
       alert("닉네임을 10자 이하 입니다.");
       return;
@@ -125,7 +124,7 @@ export default function Signup() {
     console.log(passwordMatchError);
     console.log(emailVarifiedError);
     console.log(passwordLengthError);
-    console.log(nickNameError);
+    console.log(nicknameError);
     console.log(emailLengthError);
 
     if (
@@ -133,7 +132,7 @@ export default function Signup() {
       !passwordMatchError &&
       !emailVarifiedError &&
       !passwordLengthError &&
-      !nickNameError &&
+      !nicknameError &&
       !emailLengthError
     ) {
       console.log('정상작동');
@@ -157,13 +156,13 @@ export default function Signup() {
 
             // add user to db
             fire.db.collection("users").doc(currentUser.user.uid).set({
-              nickName: nickName,
+              nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
               mbti: "INFP",
               gender: "FEMALE",
               steamId: "",
-              maxPrice: 0,
+              maxPrice: 1,
               age: 0,
             });
 
@@ -195,7 +194,7 @@ export default function Signup() {
           // 정보 수정
           createdUser
             .updateProfile({
-              displayName: nickName,
+              displayName: nickname,
             })
             .then(function () {
               // Update successful.
@@ -235,21 +234,21 @@ export default function Signup() {
 
   return (
     <div
+      className={styles.background}
       style={{
         backgroundImage: `url(${background})`,
       }}
     >
-      <div className={styles.background}>
-        <Container component="main" maxWidth="xs">
-          <div className={styles.root}>
-            <form noValidate className={styles.form}>
-              <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy
-                Policy, including the Cookie Policy.
+      <Container component="main" maxWidth="xs">
+        <div className={styles.root}>
+          <form noValidate className={styles.form}>
+            <Typography className={styles.policy}>
+              By signing up, you agree to the Terms of User and Privacy
+              Policy, including the Cookie Policy.
               </Typography>
-              {/* 소셜 로그인 */}
-              {/* <div className={styles.buttons}> */}
-              {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
+            {/* 소셜 로그인 */}
+            {/* <div className={styles.buttons}> */}
+            {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
               <span>
                 Sign up with Google
               </span>
@@ -259,68 +258,67 @@ export default function Signup() {
                 Sign up with Twitter
               </span>
             </TwitterLoginButton> */}
-              {/* </div> */}
-              {/* <hr /> */}
+            {/* </div> */}
+            {/* <hr /> */}
 
-              <div className={styles.form_holder}>
-                {/* NickName */}
-                <input
-                  id="nickName"
-                  type="text"
-                  className={styles.newinput}
-                  autofocus
-                  placeholder="Nickname"
-                  required
-                  onChange={handleUserChange}
-                />
-                {/* Email */}
-                <input
-                  id="email"
-                  type="email"
-                  className={styles.newinput}
-                  placeholder="Email"
-                  required
-                  onChange={handleEmailChange}
-                />
-                {/* password */}
-                <input
-                  id="password"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="Password"
-                  required
-                  onChange={handlePasswordChange}
-                />
-                <input
-                  id="passwordConfirm"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="PasswordConfirm"
-                  required
-                  onChange={handlePasswordConfirmChange}
-                  onKeyPress={handleKeyPress}
-                />
-                <PassConfirm></PassConfirm>
-              </div>
-
-              <div className={styles.buttons}>
-                <ButtonComp
-                  size="large"
-                  textvalue="SIGN UP"
-                  color="#CCFF00"
-                  onClick={onSignup}
-                  onKeyPress={onSignup}
-                ></ButtonComp>
-              </div>
-            </form>
-            <div className={styles.move_page}>
-              <a href="/login" className={styles.link}>
-                or Log In
-              </a>
+            <div className={styles.form_holder}>
+              {/* nickname */}
+              <input
+                id="nickname"
+                type="text"
+                className={styles.newinput}
+                autofocus
+                placeholder="nickname"
+                required
+                onChange={handleUserChange}
+              />
+              {/* Email */}
+              <input
+                id="email"
+                type="email"
+                className={styles.newinput}
+                placeholder="Email"
+                required
+                onChange={handleEmailChange}
+              />
+              {/* password */}
+              <input
+                id="password"
+                type="password"
+                className={styles.newinput}
+                placeholder="Password"
+                required
+                onChange={handlePasswordChange}
+              />
+              <input
+                id="passwordConfirm"
+                type="password"
+                className={styles.newinput}
+                placeholder="PasswordConfirm"
+                required
+                onChange={handlePasswordConfirmChange}
+                onKeyPress={handleKeyPress}
+              />
+              <PassConfirm></PassConfirm>
             </div>
+
+            <div className={styles.buttons}>
+              <ButtonComp
+                size="large"
+                textvalue="SIGN UP"
+                color="#CCFF00"
+                onClick={onSignup}
+                onKeyPress={onSignup}
+              ></ButtonComp>
+            </div>
+          </form>
+          <div className={styles.move_page}>
+            <a href="/login" className={styles.link}>
+              or Log In
+              </a>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </div>
   );
 }

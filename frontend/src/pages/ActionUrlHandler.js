@@ -11,7 +11,7 @@ function ActionUrlHandler({ location }) {
 
 
   if (mode === 'resetPassword') {
-    return <ChangePassword />;
+    return <ChangePassword query={query} />;
   } else if (mode === 'verifyEmail') {
     return <JoinComplete query={query} />;
   }
