@@ -104,9 +104,8 @@ export default function SearchAll({ propsGames, propsUsers }) {
             <div key={i} style={{ marginBottom: "20px" }}>
               <MediumProfile
                 propsUser={{
-                  nickname: "aa",
-                  email:
-                    "bbdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddbbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                  nickname: user.nickname,
+                  email: user.email,
                 }}
               />
               {/* <Divider light={true} className={styles.profile_divider} /> */}

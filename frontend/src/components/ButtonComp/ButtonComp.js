@@ -51,7 +51,6 @@ export default function ButtonComp({
             }}
             variant="contained"
             onClick={onClick}
-            bold
           >
             {textvalue}
           </Button>

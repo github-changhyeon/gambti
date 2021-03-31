@@ -78,7 +78,7 @@ export default function Test() {
       <SmallProfile />
       <UserCard />
       <GenreList propsOrder="all"></GenreList>
-      <InfiniteScrollCard />
+      {/* <InfiniteScrollCard /> */}
     </div>
   );
 }

@@ -139,9 +139,14 @@ export default function GamesorderBy({ propsMatch }) {
         &nbsp;
       </Typography>
       <InfiniteScrollCard
+        params={{
+          type: 0,
+          genreId: location.state.genre.id,
+          order: "DESC",
+          word: "",
+        }}
         genreId={location.state.genre.id}
         routerMatch={propsMatch}
-        order={order}
       ></InfiniteScrollCard>
     </div>
   );

@@ -1,19 +1,25 @@
 import { restApi, getConfig } from "./index";
 
-function searchGames(word, success, fail) {
+function searchGames(params, success, fail) {
   const token = localStorage.getItem("idToken");
   const config = getConfig(token);
   restApi()
-    .get(`/search/games/${word}`, token ? config : null)
+    .get(
+      `/search/games/${params.word}?page=${params.pageNum}&size=${params.size}&direction=ASC&colName=${params.colName}`,
+      token ? config : null
+    )
     .then(success)
     .catch(fail);
 }
 
-function searchUsers(word, success, fail) {
+function searchUsers(params, success, fail) {
   const token = localStorage.getItem("idToken");
   const config = getConfig(token);
   restApi()
-    .get(`/search/users/${word}`, token ? config : null)
+    .get(
+      `/search/users/${params.word}?page=${params.pageNum}&size=${params.size}&direction=ASC&colName=${params.colName}`,
+      token ? config : null
+    )
     .then(success)
     .catch(fail);
 }

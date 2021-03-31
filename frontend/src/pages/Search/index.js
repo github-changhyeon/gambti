@@ -14,7 +14,7 @@ import fire from "src/fire";
 export default function Search({ match }) {
   const location = useLocation();
   const [games, setGames] = useState(new Array());
-  const [simpleUsers, setSimpleUsers] = useState(new Array());
+  // const [simpleUsers, setSimpleUsers] = useState(new Array());
   const [users, setUsers] = useState(new Array());
 
   const gameInfo = {
@@ -39,60 +39,87 @@ export default function Search({ match }) {
   };
 
   useEffect(() => {
-    let temp1 = new Array();
-    let temp2 = new Array();
+    // for (let i = 0; i < 11; ++i) {
+    //   temp1.push(userInfo);
+    //   fire.db
+    //     .collection("users")
+    //     .doc(userInfo.userId)
+    //     .get()
+    //     .then((user) => {
+    //       // console.log("유저", user.data());
+    //     });
+    //   temp2.push(gameInfo);
+    // }
 
-    for (let i = 0; i < 9; ++i) {
-      temp1.push(userInfo);
-      fire.db
-        .collection("users")
-        .doc(userInfo.userId)
-        .get()
-        .then((user) => {
-          console.log("유저", user.data());
-        });
-      temp2.push(gameInfo);
-    }
+    // console.log(temp1);
+    // setSimpleUsers(temp1);
+    // setUsers(temp1);
+    // setGames(temp2);
 
-    console.log(temp1);
-    setSimpleUsers(temp1);
-    setUsers(temp1);
-    setGames(temp2);
-
-    // searchGames(
-    //   queryString.parse(location.search).word,
-    //   (response) => {
-    //     if (response.data.status) {
-    //     } else {
-    //       console.log("search game 실패");
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
-    // searchUsers(
-    //   queryString.parse(location.search).word,
-    //   (response) => {
-    //     if (response.data.status) {
-    //     } else {
-    //       console.log("search User 실패");
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
+    searchGames(
+      {
+        word: queryString.parse(location.search).word,
+        pageNum: 0,
+        size: 9,
+        colName: "appName",
+      },
+      (response) => {
+        if (response.data.status) {
+          console.log("게임", response.data.data);
+          setGames(response.data.data.content);
+        } else {
+          console.log("search game 실패");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    searchUsers(
+      {
+        word: queryString.parse(location.search).word,
+        pageNum: 0,
+        size: 11,
+        colName: "nickname",
+      },
+      (response) => {
+        if (response.data.status) {
+          console.log(response.data.data);
+          let simpleUsers = response.data.data.content;
+          let tempUsers = new Array();
+          for (let i = 0; i < simpleUsers.length; ++i) {
+            fire.db
+              .collection("users")
+              .doc(simpleUsers[i].userId)
+              .get()
+              .then((user) => {
+                // console.log("유저", user.data());
+                tempUsers.push(user.data());
+                if (i === simpleUsers.length - 1) {
+                  setUsers(tempUsers);
+                }
+              });
+          }
+        } else {
+          console.log("search User 실패");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }, [match]);
 
   return (
-    <div style={{ backgroundColor: "#222222" }}>
+    <div style={{ backgroundColor: "#222222", minHeight: "900px" }}>
       <SearchDescription></SearchDescription>
 
       <SearchNavigation
         propsMatch={match}
         gameCnt={games.length}
         userCnt={users.length}
+        // gameCnt={3}
+        // userCnt={3}
       ></SearchNavigation>
 
       {match.params.all === null || match.params.all === undefined ? (

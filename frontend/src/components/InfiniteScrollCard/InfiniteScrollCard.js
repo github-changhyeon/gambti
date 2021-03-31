@@ -7,8 +7,10 @@ import Grid from "@material-ui/core/Grid";
 import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { getGamesOrderBy } from "src/common/axios/Game";
+import { searchGames, searchUsers } from "src/common/axios/Search";
+import UserCard from "src/components/UserCard/UserCard";
 
-export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
+export default function InfiniteScrollCard({ params, routerMatch }) {
   // 새로운 state 변수를 선언하고, count라 부르겠습니다.
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
@@ -22,26 +24,72 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
     //TODO: change
     setIsFetching(true);
 
-    getGamesOrderBy(
-      {
-        genreId: genreId,
-        pageNum: pageNum,
-        size: size,
-      },
-      (response) => {
-        console.log("무한스크롤", response.data.data.content);
-        setItems((items) => [...items, ...response.data.data.content]);
-        // setItems([...items, ...response.data.data.content]);
-        setPageNum(pageNum + 1);
-        if (response.data.data.last) {
-          setIsEnd(true);
+    if (params.type === 0) {
+      getGamesOrderBy(
+        {
+          genreId: params.genreId,
+          pageNum: pageNum,
+          size: size,
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum(pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
         }
-        setIsFetching(false);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
+    } else if (params.type === 1) {
+      searchGames(
+        {
+          word: params.word,
+          pageNum: pageNum,
+          size: size,
+          colName: "appName",
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum(pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 2) {
+      searchUsers(
+        {
+          word: params.word,
+          pageNum: pageNum,
+          size: size,
+          colName: "nickname",
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum(pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   };
 
   const handleScroll = () => {
@@ -96,7 +144,11 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
             lg={3}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            <GameCard isLogin={true} gameInfo={item}></GameCard>
+            {params.type === 2 ? (
+              <UserCard isLogin={true} simpleUserInfo={item}></UserCard>
+            ) : (
+              <GameCard isLogin={true} gameInfo={item}></GameCard>
+            )}
           </Grid>
         ))}
       </Grid>

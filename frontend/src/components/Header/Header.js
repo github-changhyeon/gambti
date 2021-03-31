@@ -18,7 +18,7 @@ export default function Header({ isLogin }) {
   const user = useContext(UserContext);
   const [isShownNoti, setIsShownNoti] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
-  console.log(user);
+  // console.log(user);
 
   // 로그아웃
   const logout = (event) => {
@@ -140,7 +140,7 @@ export default function Header({ isLogin }) {
                   className={styles.dropbtn}
                   size="xsmall"
                   textvalue={user.nickname}
-                // textvalue={user.nickname.substring(0, 1)}
+                  // textvalue={user.nickname.substring(0, 1)}
                 ></AvatarComp>
                 <div className={styles.dropdown_content} onClick={goProfile}>
                   <div className={styles.dropdown_menu}>
