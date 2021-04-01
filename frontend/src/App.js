@@ -107,6 +107,7 @@ const MainRouter = () => {
             component={EditProfile}
           />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
+          <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
         </Switch>

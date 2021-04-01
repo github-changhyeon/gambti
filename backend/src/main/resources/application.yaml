@@ -123,9 +123,9 @@ spring:
       ddl-auto: update
 
 #로컬용 redis 만들어지면 넣기
-  redis:
-    host: ec2-54-180-105-93.ap-northeast-2.compute.amazonaws.com
-    port: 6380
+#  redis:
+#    host: ec2-54-180-105-93.ap-northeast-2.compute.amazonaws.com
+#    port: 6380
 
 server:
   port: 8081
@@ -144,9 +144,9 @@ spring:
       ddl-auto: none
 
 #redis서버 만들어지면 넣기
-  redis:
-    host: redis
-    port: 6379
+#  redis:
+#    host: redis
+#    port: 6379
 
 server:
   port: 8081
@@ -165,9 +165,9 @@ spring:
     hibernate:
       ddl-auto: none
 
-  redis:
-    host: redis
-    port: 6379
+#  redis:
+#    host: redis
+#    port: 6379
 
 server:
   port: 8081
