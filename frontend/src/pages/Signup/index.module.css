@@ -7,6 +7,9 @@
 .background {
   background-color: rgba(0, 0, 0, 0.4);
   height: calc(100vh - 54px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .root {
   display: flex;
