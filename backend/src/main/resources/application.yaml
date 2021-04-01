@@ -93,6 +93,7 @@ security:
     - /admin/**
     - /games/find/**
     - /games/recommends/**
+    - /search/**
 
   exposed-headers:
     - X-Xsrf-Token
