@@ -11,6 +11,9 @@ import Avatar from "@material-ui/core/Avatar";
 import { Container } from "@material-ui/core";
 import { joinAndLeave } from "src/common/axios/Game";
 import { usePalette } from "react-palette";
+import IconButton from "@material-ui/core/IconButton";
+import { useHistory, generatePath } from "react-router-dom";
+import routerInfo from "src/constants/routerInfo";
 
 export default function GameCard({ isLogin, gameInfo }) {
   let descriptionText, buttonText;
@@ -20,6 +23,7 @@ export default function GameCard({ isLogin, gameInfo }) {
   );
   const [joined, setJoined] = useState(gameInfo.joined);
   const { data, loading, error } = usePalette(gameInfo.backgroundImagePath);
+  const history = useHistory();
 
   if (isLogin) {
     descriptionText = " joined";
@@ -82,6 +86,13 @@ export default function GameCard({ isLogin, gameInfo }) {
                   size="xlarge"
                   textvalue="temp"
                   imgPath={gameInfo.logoImagePath}
+                  onClick={() => {
+                    history.push({
+                      pathname: generatePath(routerInfo.PAGE_URLS.DETAIL, {
+                        gameId: gameInfo.gameId,
+                      }),
+                    });
+                  }}
                 />
               </Container>
             </CardContent>
@@ -144,6 +155,13 @@ export default function GameCard({ isLogin, gameInfo }) {
             size="xlarge"
             textvalue="temp"
             imgPath={gameInfo.logoImagePath}
+            onClick={() => {
+              history.push({
+                pathname: generatePath(routerInfo.PAGE_URLS.DETAIL, {
+                  gameId: gameInfo.gameId,
+                }),
+              });
+            }}
           />
         </Container>
       </CardContent>
