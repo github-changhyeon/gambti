@@ -1,0 +1,25 @@
+.root{
+  color: #cecece;
+  margin-left: 1rem;
+}
+.header_center {
+  flex: 0.2;
+  position: relative;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-left: 0;
+  width: 185px;
+}
+.input_root {
+  color: white;
+  width: 185px;
+  padding-left: 25px;
+}
+.item {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+} 
