@@ -23,7 +23,7 @@ public class RoomService {
     private static final Logger logger = LoggerFactory.getLogger(RoomService.class);
 
     private final FirebaseTokenUtils firebaseTokenUtils;
-    Firestore db = FirestoreClient.getFirestore();
+    private final Firestore db = FirestoreClient.getFirestore();
 
     public String getRoom(RoomRequest roomRequest, HttpServletRequest httpServletRequest){
 
