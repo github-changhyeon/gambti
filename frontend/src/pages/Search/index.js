@@ -16,6 +16,8 @@ export default function Search({ match }) {
   const [games, setGames] = useState(new Array());
   // const [simpleUsers, setSimpleUsers] = useState(new Array());
   const [users, setUsers] = useState(new Array());
+  const [gameTotalCnt, setGameTotalCnt] = useState(new Array());
+  const [userTotalCnt, setUserTotalCnt] = useState(new Array());
 
   const gameInfo = {
     appName: "Half-Life",
@@ -66,6 +68,7 @@ export default function Search({ match }) {
       (response) => {
         if (response.data.status) {
           console.log("게임", response.data.data);
+          setGameTotalCnt(response.data.data.totalElements);
           setGames(response.data.data.content);
         } else {
           console.log("search game 실패");
@@ -85,6 +88,7 @@ export default function Search({ match }) {
       (response) => {
         if (response.data.status) {
           console.log(response.data.data);
+          setUserTotalCnt(response.data.data.totalElements);
           let simpleUsers = response.data.data.content;
           let tempUsers = new Array();
           for (let i = 0; i < simpleUsers.length; ++i) {
@@ -99,6 +103,9 @@ export default function Search({ match }) {
                   setUsers(tempUsers);
                 }
               });
+          }
+          if (simpleUsers.length === 0) {
+            setUsers(new Array());
           }
         } else {
           console.log("search User 실패");
@@ -116,8 +123,8 @@ export default function Search({ match }) {
 
       <SearchNavigation
         propsMatch={match}
-        gameCnt={games.length}
-        userCnt={users.length}
+        gameCnt={gameTotalCnt}
+        userCnt={userTotalCnt}
         // gameCnt={3}
         // userCnt={3}
       ></SearchNavigation>

@@ -15,7 +15,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
   const [items, setItems] = useState(new Array());
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState(0);
   const [size, setSize] = useState(20);
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -35,7 +35,9 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
-          setPageNum(pageNum + 1);
+          setPageNum((pageNum) => pageNum + 1);
+          // setPageNum(pageNum + 1);
+
           if (response.data.data.last) {
             setIsEnd(true);
           }
@@ -57,7 +59,9 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
-          setPageNum(pageNum + 1);
+          setPageNum((pageNum) => pageNum + 1);
+          // setPageNum(pageNum + 1);
+
           if (response.data.data.last) {
             setIsEnd(true);
           }
@@ -107,17 +111,9 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
   };
 
   useEffect(() => {
-    // scroll event listener 등록
-    // console.log("매치매치", routerMatch);
     setItems(new Array());
-    // console.log("매치 리스트", items);
+    setPageNum(0);
     fetchData();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      // scroll event listener 해제
-
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, [routerMatch]);
 
   useEffect(() => {
@@ -131,7 +127,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
   }, [isFetching]);
 
   return (
-    // <div>aa</div>
     <Container maxWidth="lg" spacing={4}>
       <Grid container spacing={4}>
         {items.map((item, i) => (
