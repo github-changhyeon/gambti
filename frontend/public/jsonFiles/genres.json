@@ -1,6 +1,11 @@
 {
   "genres": [
     {
+      "id": "0",
+      "name": "All",
+      "path": "/images/genres/genre_all.png"
+    },
+    {
       "id": "1",
       "name": "Indie",
       "path": "/images/genres/genre_indie.png"
