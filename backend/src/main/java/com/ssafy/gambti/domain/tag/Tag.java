@@ -1,6 +1,7 @@
 package com.ssafy.gambti.domain.tag;
 
 import com.ssafy.gambti.domain.game.GameTag;
+import com.ssafy.gambti.domain.user.UserLikeTag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +22,11 @@ public class Tag {
 
     private String tagName;
 
-
     @OneToMany(mappedBy = "tag",  cascade = CascadeType.ALL)
     private List<GameTag> gameTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tag",  cascade = CascadeType.ALL)
+    private List<UserLikeTag> userLikeTags = new ArrayList<>();
 
     public static List<String> listOf(List<GameTag> gameTag){
         List<String> tagList = new ArrayList<>();
