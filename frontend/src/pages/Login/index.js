@@ -156,7 +156,7 @@ export default function Login() {
                 Forgot Username or Password
               </a>
             </div>
-          </form>
+          </div>
           <div className={styles.move_page}>
             <a href="/check-gambti" className={styles.link}>
               or Sign Up
