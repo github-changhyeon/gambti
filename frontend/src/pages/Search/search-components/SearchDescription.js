@@ -20,7 +20,11 @@ export default function SearchDescription({}) {
           paddingBottom: "20px",
         }}
       >
-        <img src={"#"} width="55px" height="55px"></img>
+        <img
+          src="/images/gambti/page_search.png"
+          width="55px"
+          height="55px"
+        ></img>
         <div style={{ display: "inline-block", paddingLeft: "40px" }}>
           <Typography
             variant="h5"
