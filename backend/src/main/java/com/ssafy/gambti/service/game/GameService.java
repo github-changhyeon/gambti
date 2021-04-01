@@ -54,6 +54,7 @@ public class GameService {
             return null;
         }
     }
+
     @Transactional(readOnly = true)
     public Page<GameSimpleRes> findGames(Long genreId, Pageable pageable, HttpServletRequest httpServletRequest) {
         //1. 토큰 유무 확인 => 있으면 로그인한 사용자임

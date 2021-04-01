@@ -46,10 +46,10 @@ public class AccountService {
                 User signUpUser = User.builder()
                         .id(uid)
                         .mbti(UserMBTI.valueOf(signUpRequest.getMbti()))
+                        .nickname(signUpRequest.getNickname())
                         .age(signUpRequest.getAge())
                         .gender(UserGender.valueOf(signUpRequest.getGender()))
                         .maxPrice(signUpRequest.getMaxPrice())
-                        .steamId(signUpRequest.getSteamId())
                         .role(UserRole.GUEST) //5. role은 무조건 guest로 설정
                         .build();
 

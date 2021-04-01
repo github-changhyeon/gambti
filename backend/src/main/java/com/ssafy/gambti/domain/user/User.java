@@ -24,7 +24,7 @@ public class User {
     @Column(name="USER_ID", insertable = false, updatable = false)
     private String id;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -63,9 +63,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserBanGame> userBanGames = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserLikeTag> userlikeTags = new ArrayList<>();
+
     @Builder
-    public User(String id, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+    public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
         this.id = id;
+        this.nickname = nickname;
         this.mbti = mbti;
         this.age = age;
         this.gender = gender;

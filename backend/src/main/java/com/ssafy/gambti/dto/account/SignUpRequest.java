@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SignUpRequest {
+    private String nickname;
     private String mbti;
     private String gender;
     private String steamId;

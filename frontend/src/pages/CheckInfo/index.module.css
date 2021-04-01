@@ -1,0 +1,34 @@
+.background {
+  height: calc(100vh - 54px);
+  text-align: center;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.9);
+  background-blend-mode: multiply;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepper_root {
+  width: 100vw;
+}
+
+.question_root {
+  padding: 40px 0;
+}
+
+.question_title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.question_box {
+  color: white;
+}
+
+.button {
+  margin-right: 10px;
+}

@@ -13,5 +13,6 @@ export default {
     GAMES: "/games/:order/:genre",
     SEARCH: "/search/:all?",
     DETAIL: "/detail/:gameName",
+    KIHYEON_TEST: "/kihyeontest"
   },
 };
