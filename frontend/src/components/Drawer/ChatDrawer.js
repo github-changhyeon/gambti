@@ -9,11 +9,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from "@material-ui/core/InputBase";
 import MediumProfile from "src/components/MediumProfile/MediumProfile";
 import Chat from './Chat';
+import fire from 'src/fire';
 
 
 export default function ChatDrawer({ showChat }) {
 
   const [chat, setChat] = React.useState(false);
+  // const currentUser = fire.auth.currentUser;
+  // console.log(currentUser);
 
   const handleChatChange = () => {
     console.log(chat);

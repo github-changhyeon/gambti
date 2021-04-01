@@ -36,21 +36,21 @@ async function makeOneOnOneChatRoom(friendUid) {
 async function sendMessage(roomsId, messageText) {
     var timestamp = + new Date();
     return fire.db.collection('rooms').doc(roomsId).collection('messages').add({
-      name: getUserName(),
-      text: messageText,
-      profilePicUrl: getProfilePicUrl(),
-      timestamp: timestamp
-    }).catch(function(error) {
-      console.error('Error writing new message to database', error);
+        name: getUserName(),
+        text: messageText,
+        profilePicUrl: getProfilePicUrl(),
+        timestamp: timestamp
+    }).catch(function (error) {
+        console.error('Error writing new message to database', error);
     });
 }
-  
+
 //선택한 유저에 대한 채팅방 id 받기
 function getChatRoomId(friendUid) {
     //axios
     const token = localStorage.getItem("idToken");
     const options = {
-        url: 'http://localhost:8081/v1/rooms/get',
+        url: 'https://dev.gambti.com//v1/rooms/get',
         method: 'POST',
         Header: {
             'Accept': 'application/json',
@@ -59,7 +59,7 @@ function getChatRoomId(friendUid) {
         data: {
             maxNumber: 2,
             type: 'OneOnOne',
-            friendUid : friendUid
+            friendUid: friendUid
         },
     }
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -70,13 +70,13 @@ async function getRooms(myUid) {
     var rooms = [];
     await fire.db.collection('users').doc(myUid).get().then((list) => {
         rooms = list.data().rooms;
-        console.log("방 목록 : "+rooms);
+        console.log("방 목록 : " + rooms);
     })
     return rooms;
 }
 //단체 채팅방 만들기
 async function makeGroupChatRoom(numberOfPeople) {
-   
+
 }
 
 async function readMessage(chatRoomId) {
@@ -105,4 +105,4 @@ function getUserUid() {
 }
 
 
-export {getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage};
+export { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage };
