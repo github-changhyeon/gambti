@@ -4,7 +4,6 @@ import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import { useHistory } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
 import $ from 'jquery';
-import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -13,10 +12,6 @@ export default function CheckGambti() {
   const classes = useStyles();
 
   const history = useHistory();
-
-  // const goLink = (event) => {
-  //   history.push('/checkgambti');
-  // };
 
   const [num, setNum] = useState(1);
 
@@ -240,7 +235,7 @@ export default function CheckGambti() {
             </div>
             <div className={styles.result_button}>
               <ButtonComp
-                className={styles.result_button}
+                className={styles.result_button} 
                 size="bold"
                 textvalue="Sign up"
                 color="#CCFF00"
