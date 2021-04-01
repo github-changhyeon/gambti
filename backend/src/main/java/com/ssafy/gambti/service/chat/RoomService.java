@@ -23,9 +23,9 @@ public class RoomService {
     private static final Logger logger = LoggerFactory.getLogger(RoomService.class);
 
     private final FirebaseTokenUtils firebaseTokenUtils;
-    private final Firestore db = FirestoreClient.getFirestore();
 
     public String getRoom(RoomRequest roomRequest, HttpServletRequest httpServletRequest){
+        Firestore db = FirestoreClient.getFirestore();
 
         String uuid = UUID.randomUUID().toString();
         FirebaseToken decodedToken = firebaseTokenUtils.decodedToken(httpServletRequest);
