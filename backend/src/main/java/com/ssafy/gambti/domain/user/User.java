@@ -24,6 +24,10 @@ public class User {
     @Column(name="USER_ID", insertable = false, updatable = false)
     private String id;
 
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "UID")
+    private Long uid;
+
     @Column(nullable = false)
     private String nickname;
 
