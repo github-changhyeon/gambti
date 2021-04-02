@@ -12,7 +12,7 @@ public class UserIdListRes {
     private List<String> userIds;
 
     public UserIdListRes(List<User> users) {
-        this.userIds = users.stream().map(user->user.getId()).collect(Collectors.toList());
+        this.userIds = users.stream().map(user->user.getUid()).collect(Collectors.toList());
     }
 
     public void changeUserIds(List<String> userIds) {

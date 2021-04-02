@@ -44,7 +44,7 @@ public class AccountService {
                 String uid = decodedToken.getUid();
                 //4. SignUpRequest에 담긴 데이터와 uid를 같이 등록한다.
                 User signUpUser = User.builder()
-                        .id(uid)
+                        .uid(uid)
                         .mbti(UserMBTI.valueOf(signUpRequest.getMbti()))
                         .nickname(signUpRequest.getNickname())
                         .age(signUpRequest.getAge())
@@ -107,7 +107,7 @@ public class AccountService {
                 String uid = decodedToken.getUid();
                 //4. SignUpRequest에 담긴 데이터와 uid를 같이 등록한다.
                 User modifyUser = User.builder()
-                        .id(uid)
+                        .uid(uid)
                         .mbti(UserMBTI.valueOf(modifyUserInfoRequest.getMbti()))
                         .age(modifyUserInfoRequest.getAge())
                         .gender(UserGender.valueOf(modifyUserInfoRequest.getGender()))
