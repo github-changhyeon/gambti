@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 import routerInfo from 'src/constants/routerInfo';
 import $ from 'jquery';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Signup from 'src/pages/Signup/index';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -234,7 +235,7 @@ export default function CheckGambti() {
             </div>
             <div className={styles.result_button}>
               <ButtonComp
-                className={styles.result_button} 
+                className={styles.result_button}
                 size="bold"
                 textvalue="Sign up"
                 color="#CCFF00"
@@ -251,6 +252,7 @@ export default function CheckGambti() {
         <p>{valueTF}</p>
         <p>{valueJP}</p> */}
       </div>
+
     </div>
   );
 }

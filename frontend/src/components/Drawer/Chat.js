@@ -19,7 +19,7 @@ export default function Chat({ chat, propsUser }) {
   const [chatRoomId, setChatRoomId] = React.useState('');
 
   const user = useContext(UserContext);
-  const currentUser = fire.auth.currentUser();
+  const currentUser = fire.auth.currentUser;
 
 
   const onClose = () => {
