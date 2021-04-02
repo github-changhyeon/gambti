@@ -7,7 +7,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -85,36 +85,18 @@ export default function CheckInfo() {
         F: '10만원 이상',
       },
     },
+    4: {
+      title: '관심있는 게임 태그 3가지 이상을 선택하세요.',
+    },
   };
 
   function getSteps() {
-    return ['Gender', 'Age Group', 'Price Range'];
+    return ['Gender', 'Age Group', 'Price Range', 'Tags'];
   }
 
   useEffect(() => {
-    if (num <= 3) {
+    if (num <= 4) {
       $('.title').html(step[num]['title']);
-
-      if (num == 1) {
-        $('.option_gender').show();
-        $('.option_age').hide();
-        $('.option_price').hide();
-      } else if (num == 2) {
-        $('.option_gender').hide();
-        $('.option_age').show();
-        $('.option_price').hide();
-      } else if (num == 3) {
-        $('.option_gender').hide();
-        $('.option_age').hide();
-        $('.option_price').show();
-      }
-
-      // $('.option').attr('defaultValue', step[num]['option']['A']);
-      // $('.option').attr('label', step[num]['option']['A']);
-      // $('.option').attr('value', step[num]['option']['A']);
-
-      // setValue(step[num]['option']['A']);
-      // setLabel(step[num]['option']['A']);
     } else if (num == 4) {
       console.log(checked);
     }
@@ -162,83 +144,118 @@ export default function CheckInfo() {
                   <p className="title">문제 제목</p>
                 </div>
                 <div className="option" style={{ color: 'white' }}>
-                  <FormControl component="fieldset" error={error}>
-                    <RadioGroup
-                      aria-label="option"
-                      value={value}
-                      name="customized-radios"
-                      onChange={handleChange}
-                    >
-                      <p className="option_gender">
-                        <FormControlLabel
-                          value={step[num]['value']['A']}
-                          control={<Radio />}
-                          label={step[num]['label']['A']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['B']}
-                          control={<Radio />}
-                          label={step[num]['label']['B']}
-                        />
-                      </p>
-                      <p className="option_age">
-                        <FormControlLabel
-                          value={step[num]['value']['A']}
-                          control={<Radio />}
-                          label={step[num]['label']['A']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['B']}
-                          control={<Radio />}
-                          label={step[num]['label']['B']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['C']}
-                          control={<Radio />}
-                          label={step[num]['label']['C']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['D']}
-                          control={<Radio />}
-                          label={step[num]['label']['D']}
-                        />
-                      </p>
-                      <p className="option_price">
-                        <FormControlLabel
-                          value={step[num]['value']['A']}
-                          control={<Radio />}
-                          label={step[num]['label']['A']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['B']}
-                          control={<Radio />}
-                          label={step[num]['label']['B']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['C']}
-                          control={<Radio />}
-                          label={step[num]['label']['C']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['D']}
-                          control={<Radio />}
-                          label={step[num]['label']['D']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['E']}
-                          control={<Radio />}
-                          label={step[num]['label']['E']}
-                        />
-                        <FormControlLabel
-                          value={step[num]['value']['F']}
-                          control={<Radio />}
-                          label={step[num]['label']['F']}
-                        />
-                      </p>
-                    </RadioGroup>
-                    <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
-                  </FormControl>
+                  {num === 1 && (
+                    <FormControl component="fieldset" error={error}>
+                      <RadioGroup
+                        aria-label="option"
+                        value={value}
+                        name="customized-radios"
+                        onChange={handleChange}
+                        style={{ color: 'white' }}
+                      >
+                        <div className="option_gender">
+                          <FormControlLabel
+                            value={step[num]['value']['A']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['A']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['B']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['B']}
+                          />
+                        </div>
+                      </RadioGroup>
+                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                    </FormControl>
+                  )}
+
+                  {num === 2 && (
+                    <FormControl component="fieldset" error={error}>
+                      <RadioGroup
+                        aria-label="option"
+                        value={value}
+                        name="customized-radios"
+                        onChange={handleChange}
+                        style={{ color: 'white' }}
+                      >
+                        <div className="option_age">
+                          <FormControlLabel
+                            value={step[num]['value']['A']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['A']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['B']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['B']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['C']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['C']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['D']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['D']}
+                          />
+                        </div>
+                      </RadioGroup>
+                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                    </FormControl>
+                  )}
+                  {num === 3 && (
+                    <FormControl component="fieldset" error={error}>
+                      <RadioGroup
+                        aria-label="option"
+                        value={value}
+                        name="customized-radios"
+                        onChange={handleChange}
+                        style={{ color: 'white' }}
+                      >
+                        <div className="option_price">
+                          <FormControlLabel
+                            value={step[num]['value']['A']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['A']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['B']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['B']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['C']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['C']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['D']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['D']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['E']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['E']}
+                          />
+                          <FormControlLabel
+                            value={step[num]['value']['F']}
+                            control={<NeonRadio />}
+                            label={step[num]['label']['F']}
+                          />
+                        </div>
+                      </RadioGroup>
+                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                    </FormControl>
+                  )}
                 </div>
+                {num === 4 && (
+                  <div className="tags" style={{ color: 'white' }}>
+                      <button className={styles.tag_button}>Fill in</button>
+                  </div>
+                )}
               </div>
               <div>
                 {/* <Button
@@ -267,39 +284,12 @@ export default function CheckInfo() {
   );
 }
 
-const useStyles = makeStyles({
+const NeonRadio = withStyles({
   root: {
-    '&:hover': {
-      backgroundColor: 'transparent',
+    color: 'rgba(255,255,255,0.5)',
+    '&$checked': {
+      color: '#ccff00',
     },
   },
-  icon: {
-    borderRadius: '50%',
-    width: 16,
-    height: 16,
-    boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-    backgroundColor: '#f5f8fa',
-    backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
-    '$root.Mui-focusVisible &': {
-      outline: '2px auto rgba(19,124,189,.6)',
-      outlineOffset: 2,
-    },
-    'input:hover ~ &': {
-      backgroundColor: '#ebf1f5',
-    },
-  },
-  checkedIcon: {
-    backgroundColor: '#137cbd',
-    backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
-    '&:before': {
-      display: 'block',
-      width: 16,
-      height: 16,
-      backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
-      content: '""',
-    },
-    'input:hover ~ &': {
-      backgroundColor: '#106ba3',
-    },
-  },
-});
+  checked: {},
+})((props) => <Radio color="default" {...props} />);
