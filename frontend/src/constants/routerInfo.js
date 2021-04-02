@@ -12,6 +12,7 @@ export default {
     FORGOT_SENT: "/forgot/sent",
     GAMES: "/games/:order/:genre",
     SEARCH: "/search/:all?",
-    DETAIL: "/detail/:gameName",
+    DETAIL: "/detail/:gameId/:tab?",
+    KIHYEON_TEST: "/kihyeontest",
   },
 };

@@ -15,6 +15,7 @@ export default function GamesorderBy({ propsMatch }) {
   const [bordorBottom1, setBordorBottom1] = useState("2px solid #666666");
   const [bordorBottom2, setBordorBottom2] = useState("2px solid #666666");
   const [bordorBottom3, setBordorBottom3] = useState("2px solid #666666");
+  const [infScroll, setInfScroll] = useState(null);
 
   const [order, setOrder] = useState("");
   const location = useLocation();
@@ -131,18 +132,20 @@ export default function GamesorderBy({ propsMatch }) {
           New
         </Button>
       </Container>
-
       <Typography
         variant="body2"
         style={{ color: "white", margin: "20px 0px 0px 20px" }}
-        gutterBottom
       >
         &nbsp;
       </Typography>
       <InfiniteScrollCard
-        genreId={location.state.genre.id}
+        params={{
+          type: 0,
+          genreId: location.state.genre.id,
+          order: propsMatch.params.order,
+          word: "",
+        }}
         routerMatch={propsMatch}
-        order={order}
       ></InfiniteScrollCard>
     </div>
   );

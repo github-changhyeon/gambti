@@ -17,7 +17,8 @@ export default function Header({ isLogin }) {
   const history = useHistory();
   const user = useContext(UserContext);
   const [isShownNoti, setIsShownNoti] = React.useState(false);
-  console.log(user)
+  const [searchWord, setSearchWord] = React.useState("");
+  // console.log(user);
 
   // 로그아웃
   const logout = (event) => {
@@ -39,6 +40,10 @@ export default function Header({ isLogin }) {
         uid: user.uid,
       }),
     });
+  };
+
+  const inputChangeFunc = (event) => {
+    setSearchWord(event.target.value);
   };
 
   return (
@@ -70,10 +75,15 @@ export default function Header({ isLogin }) {
           className={styles.input_root}
           placeholder="Search…"
           inputProps={{ "aria-label": "search" }}
+          value={searchWord}
+          onChange={(event) => {
+            inputChangeFunc(event);
+          }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
               history.push({
                 pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
+                search: `?word=${searchWord}`,
               });
             }
           }}
@@ -129,6 +139,7 @@ export default function Header({ isLogin }) {
                 <AvatarComp
                   className={styles.dropbtn}
                   size="xsmall"
+                  // textvalue={user.nickname}
                   textvalue={user.nickname.substring(0, 1)}
                 ></AvatarComp>
                 <div className={styles.dropdown_content} onClick={goProfile}>

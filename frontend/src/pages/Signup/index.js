@@ -1,19 +1,16 @@
-import React, { useContext } from "react";
-import styles from "./index.module.css";
-import ButtonComp from "src/components/ButtonComp/ButtonComp";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import fire from "src/fire";
-import { useHistory } from "react-router";
-import {
-  GoogleLoginButton,
-  TwitterLoginButton,
-} from "react-social-login-buttons";
-import { UserContext } from "src/Context/UserContext";
-import { signup } from "src/common/axios/Account";
-import background from "src/Images/background.jpg";
-import firebase from "firebase";
+import React, { useContext } from 'react';
+import styles from './index.module.css';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import fire from 'src/fire';
+import { useHistory } from 'react-router';
+import { GoogleLoginButton, TwitterLoginButton } from 'react-social-login-buttons';
+import { UserContext } from 'src/Context/UserContext';
+import { signup } from 'src/common/axios/Account';
+import background from 'src/Images/background.jpg';
+import firebase from 'firebase';
 
 export default function Signup() {
   const history = useHistory();
@@ -45,10 +42,10 @@ export default function Signup() {
   };
 
   function PassConfirm() {
-    const pass = document.getElementById("password");
-    const confirm = document.getElementById("passwordConfirm");
+    const pass = document.getElementById('password');
+    const confirm = document.getElementById('passwordConfirm');
     if (pass && confirm != null) {
-      if (pass.value === "" || confirm.value === "") {
+      if (pass.value === '' || confirm.value === '') {
         return <Typography>&nbsp;</Typography>;
       }
       if (pass.value === confirm.value) {
@@ -56,11 +53,7 @@ export default function Signup() {
 
       }
       if (pass.value !== confirm.value) {
-        return (
-          <Typography className={styles.error}>
-            비밀번호가 일치하지 않습니다.
-          </Typography>
-        );
+        return <Typography className={styles.error}>비밀번호가 일치하지 않습니다.</Typography>;
       }
     }
     return <Typography>&nbsp;</Typography>;
@@ -142,23 +135,26 @@ export default function Signup() {
           history.push("/email-confirm");
 
           // token 받아오기
-          fire.auth.currentUser.getIdToken().then(function (idToken) {
-            window.localStorage.setItem('idToken', idToken);
-            // firebase.store에서 정보 가져와서 넣어줌
-            // mbti, gender는 대문자
-            const param = {
-              mbti: 'INFP',
-              gender: 'FEMALE',
-              steamId: '',
-              maxPrice: 0,
-              age: 0
-            }
+          fire.auth.currentUser
+            .getIdToken()
+            .then(function (idToken) {
+              window.localStorage.setItem('idToken', idToken);
+              // firebase.store에서 정보 가져와서 넣어줌
+              // mbti, gender는 대문자
+              const param = {
+                mbti: 'INFP',
+                gender: 'FEMALE',
+                steamId: '',
+                maxPrice: 0,
+                age: 0,
+              };
 
             // add user to db
             fire.db.collection("users").doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
+              uid: currentUser.user.uid,
               mbti: "INFP",
               gender: "FEMALE",
               steamId: "",
@@ -206,17 +202,17 @@ export default function Signup() {
           createdUser
             .sendEmailVerification()
             .then(function () {
-              alert("인증메일 발송 이메일을 확인해주세요");
+              alert('인증메일 발송 이메일을 확인해주세요');
             })
             .catch(function (error) {
-              alert("인증메일 발송에 실패하였습니다.");
+              alert('인증메일 발송에 실패하였습니다.');
             });
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          if (error.code === "auth/email-already-in-use") {
-            alert("해당 이메일은 이미 존재합니다.");
+          if (error.code === 'auth/email-already-in-use') {
+            alert('해당 이메일은 이미 존재합니다.');
           }
           // console.log(errorMessage);
           // ..
@@ -226,7 +222,7 @@ export default function Signup() {
 
   // TODO: preventDefault 알아보기
   const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       onSignup();
     }
