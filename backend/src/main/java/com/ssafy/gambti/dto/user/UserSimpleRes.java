@@ -11,7 +11,7 @@ public class UserSimpleRes {
     private int friendStatus;
 
     public UserSimpleRes(User user, int friendStatus) {
-        this.userId = user.getId();
+        this.userId = user.getUid();
         this.friendStatus = friendStatus;
     }
 

@@ -63,7 +63,7 @@ public class UserService {
         Page<User> searchUsers = userRepository.findByNicknameContaining(word, pageable);
 
         // 로그인 하지 않은 유저가 검색하면 friendStatus를 설정할 필요가 없어서 바로 UserSimpleRes로 만들어 리턴한다.
-        if (loginUser != null) {
+        if (loginUser == null) {
             Page<UserSimpleRes> result = searchUsers.map( user -> new UserSimpleRes(user, 0));
 
             return result;

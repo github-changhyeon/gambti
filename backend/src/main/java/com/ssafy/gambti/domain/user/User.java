@@ -21,12 +21,12 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name="USER_ID", insertable = false, updatable = false)
-    private String id;
-
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "UID")
-    private Long uid;
+    @Column(name = "USER_ID")
+    private Long id;
+
+    @Column(name="UID", insertable = false, updatable = false)
+    private String uid;
 
     @Column(nullable = false)
     private String nickname;
@@ -71,8 +71,8 @@ public class User {
     private List<UserLikeTag> userlikeTags = new ArrayList<>();
 
     @Builder
-    public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
-        this.id = id;
+    public User(String uid, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+        this.uid = uid;
         this.nickname = nickname;
         this.mbti = mbti;
         this.age = age;
