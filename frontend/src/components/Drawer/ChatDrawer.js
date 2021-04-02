@@ -9,19 +9,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from "@material-ui/core/InputBase";
 import MediumProfile from "src/components/MediumProfile/MediumProfile";
 import Chat from './Chat';
+import FriendList from './FriendList';
 import fire from 'src/fire';
 
 
 export default function ChatDrawer({ showChat }) {
 
-  const [chat, setChat] = React.useState(false);
+  // const [chat, setChat] = React.useState(false);
   // const currentUser = fire.auth.currentUser;
   // console.log(currentUser);
 
-  const handleChatChange = () => {
-    console.log(chat);
-    setChat(!chat);
-  }
+  // const handleChatChange = () => {
+  //   console.log(chat);
+  //   setChat(!chat);
+  // }
 
   return (
     <div>
@@ -53,18 +54,10 @@ export default function ChatDrawer({ showChat }) {
               </ListItem>
               <div>
 
-                <ListItem onClick={handleChatChange}>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
                 <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
+                  <FriendList showChat={showChat} />
                 </ListItem>
-                <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
-                <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
+
               </div>
 
 
@@ -73,12 +66,7 @@ export default function ChatDrawer({ showChat }) {
 
         )
       }
-      {/* Chat방 */}
-      {
-        chat &&
-        <div className={styles.chat}>
-          <Chat chat={chat} />
-        </div>}
+
     </div >
   );
 }
