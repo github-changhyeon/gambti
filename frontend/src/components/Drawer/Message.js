@@ -14,18 +14,16 @@ export default function Message({ roomId }) {
 
   useEffect(() => {
     readMessage(roomId);
-    // console.log('messageList', messageList);
   }, []);
 
 
-  var docs = [];
+  
   const readMessage = (chatRoomId) => {
+    var docs = [];
     fire.db.collection('rooms').doc(chatRoomId).collection('messages').orderBy('timestamp')
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          var message = change.doc.data();
-          console.log('message가자', message);
-          docs.push(message);
+          docs.push(change.doc.data());
         })
         setMessageList(docs);
       })
