@@ -29,8 +29,6 @@ export default function Message({ roomId }) {
       })
   }
 
-
-
   return (
     <div className={styles.root}>
       <div>
