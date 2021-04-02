@@ -19,6 +19,7 @@ export default function Chat({ chat, propsUser }) {
   const [chatRoomId, setChatRoomId] = React.useState('');
 
   const user = useContext(UserContext);
+  const currentUser = fire.auth.currentUser();
 
 
   const onClose = () => {
@@ -69,12 +70,11 @@ export default function Chat({ chat, propsUser }) {
     fire.db.collection('rooms').doc(roomsId).collection('messages').add({
       name: user.nickname,
       text: messageText,
-      profilePicUrl: user.uid,
+      profilePicUrl: currentUser.imgPath,
       timestamp: timestamp
     })
       .then(() => {
-
-        console.log('가니...?')
+        console.log('가니...?');
       }
       )
       .catch(function (error) {
