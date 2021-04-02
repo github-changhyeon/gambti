@@ -66,14 +66,20 @@ export default function Chat({ chat, propsUser }) {
   const sendMessage = (roomsId, messageText) => {
     // console.log(roomsId, messageText);
     var timestamp = + new Date();
-    return fire.db.collection('rooms').doc(roomsId).collection('messages').add({
+    fire.db.collection('rooms').doc(roomsId).collection('messages').add({
       name: user.nickname,
       text: messageText,
       profilePicUrl: user.uid,
       timestamp: timestamp
-    }).catch(function (error) {
-      console.error('Error writing new message to database', error);
-    });
+    })
+      .then(() => {
+
+        console.log('가니...?')
+      }
+      )
+      .catch(function (error) {
+        console.error('Error writing new message to database', error);
+      });
   }
 
 
