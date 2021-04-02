@@ -142,46 +142,47 @@ export default function Signup() {
               // firebase.store에서 정보 가져와서 넣어줌
               // mbti, gender는 대문자
               const param = {
-                mbti: 'INFP',
+                mbti: "INFP",
                 gender: 'FEMALE',
                 steamId: '',
                 maxPrice: 0,
                 age: 0,
+                nickname: nickname,
               };
 
-            // add user to db
-            fire.db.collection("users").doc(currentUser.user.uid).set({
-              nickname: nickname,
-              email: currentUser.user.email,
-              emailVerified: currentUser.user.emailVerified,
-              uid: currentUser.user.uid,
-              mbti: "INFP",
-              gender: "FEMALE",
-              steamId: "",
-              maxPrice: 1,
-              rooms: [],
-              age: 0,
-            });
+              // add user to db
+              fire.db.collection("users").doc(currentUser.user.uid).set({
+                nickname: nickname,
+                email: currentUser.user.email,
+                emailVerified: currentUser.user.emailVerified,
+                uid: currentUser.user.uid,
+                mbti: "INFP",
+                gender: "FEMALE",
+                steamId: "",
+                maxPrice: 1,
+                rooms: [],
+                age: 0,
+              });
 
-            // axios
-            // response.data.status: 상태
-            // response.data.message: 메세지
-            // response.data.data: get할 경우 객체 받는거
-            signup(
-              idToken,
-              param,
-              (response) => {
-                // console.log(response, 'response');
-                if (!response.data.status) {
-                } else {
-                  // console.log(response.data.message)
+              // axios
+              // response.data.status: 상태
+              // response.data.message: 메세지
+              // response.data.data: get할 경우 객체 받는거
+              signup(
+                idToken,
+                param,
+                (response) => {
+                  // console.log(response, 'response');
+                  if (!response.data.status) {
+                  } else {
+                    // console.log(response.data.message)
+                  }
+                },
+                (error) => {
+                  // console.log(error);
                 }
-              },
-              (error) => {
-                // console.log(error);
-              }
-            );
-          })
+              );
+            })
             .catch(function (error) {
               // Handle error
             });
