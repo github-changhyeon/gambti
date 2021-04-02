@@ -17,6 +17,7 @@ export default function Message({ roomId }) {
   }, []);
 
 
+  
   const readMessage = (chatRoomId) => {
     var docs = [];
     fire.db.collection('rooms').doc(chatRoomId).collection('messages').orderBy('timestamp')

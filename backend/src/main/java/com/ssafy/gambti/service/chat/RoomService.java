@@ -83,10 +83,6 @@ public class RoomService {
                 logger.error(e.getMessage());
             }
         }
-        //TODO : 멀티 채팅방
-        else if(roomRequest.getType().equals("multi")){
-
-        }
         return uuid;
     }
 }
