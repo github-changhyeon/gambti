@@ -1,0 +1,12 @@
+.chat{
+  left: 350px;
+  top: 120px;
+  width: 700px;
+  height: 500px;
+  background-color: #222222;
+  transition: 300ms;
+  position: fixed;
+  z-index: 1000;
+  border-radius: 10px;
+
+}

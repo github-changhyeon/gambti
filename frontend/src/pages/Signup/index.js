@@ -159,6 +159,7 @@ export default function Signup() {
               gender: "FEMALE",
               steamId: "",
               maxPrice: 1,
+              rooms: [],
               age: 0,
             });
 
