@@ -19,14 +19,13 @@ import java.util.List;
 @Getter
 @ToString
 public class User {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
-    private Long id;
+    @Column(name = "NO", insertable = false, updatable = false)
+    private Long no;
 
-    @Column(name="UID", insertable = false, updatable = false)
-    private String uid;
+    @Column(name="USER_ID", updatable = false)
+    private String id;
 
     @Column(nullable = false)
     private String nickname;
@@ -71,8 +70,8 @@ public class User {
     private List<UserLikeTag> userlikeTags = new ArrayList<>();
 
     @Builder
-    public User(String uid, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
-        this.uid = uid;
+    public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+        this.id = id;
         this.nickname = nickname;
         this.mbti = mbti;
         this.age = age;
