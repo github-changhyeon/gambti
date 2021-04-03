@@ -11,21 +11,26 @@ export default function Message({ roomId }) {
 
   const [messageList, setMessageList] = React.useState(new Array());
 
-
   useEffect(() => {
     readMessage(roomId);
   }, []);
 
 
-  
+
   const readMessage = (chatRoomId) => {
     var docs = [];
     fire.db.collection('rooms').doc(chatRoomId).collection('messages').orderBy('timestamp')
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          docs.push(change.doc.data());
+          if (change.doc.data()) {
+            docs.push(change.doc.data());
+            console.log('되는거ㅑㅇ?')
+          } else {
+            console.log('변화 zero');
+          }
         })
         setMessageList(docs);
+        console.log('들어갓어?', messageList)
       })
   }
 
