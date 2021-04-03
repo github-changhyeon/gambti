@@ -19,9 +19,12 @@ import java.util.List;
 @Getter
 @ToString
 public class User {
-
     @Id
-    @Column(name="USER_ID", insertable = false, updatable = false)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "NO", insertable = false, updatable = false)
+    private Long no;
+
+    @Column(name="USER_ID", updatable = false)
     private String id;
 
     @Column(nullable = false)
