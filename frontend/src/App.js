@@ -91,7 +91,6 @@ const NotLoginRouter = () => {
         <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
         <Route path="/action-url-handler" component={ActionUrlHandler} />
         <Route path="/test" component={Test} />
-        <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
         <Route path="*" component={NoAccess} />
       </Switch>
       <Footer />
@@ -115,7 +114,6 @@ const MainRouter = () => {
           <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
           <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
-          <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
         </Switch>
