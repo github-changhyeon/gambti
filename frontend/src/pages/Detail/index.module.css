@@ -1,0 +1,54 @@
+.drawer {
+  width: 300px;
+  flex-shrink: 0;
+}
+.loginDrawer {
+  top: 54px;
+  width: 300px;
+  background-color: #1a1b1c;
+  align-items: center;
+  left: 64px;
+}
+.logoutDrawer {
+  top: 54px;
+  width: 300px;
+  background-color: #2a2b2c;
+  align-items: center;
+}
+.detail_root {
+  display: flex;
+}
+.detail_game_card {
+  width: 283px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.detail_router_card {
+  margin-top: 15px;
+  position: relative;
+  cursor: pointer;
+  width: 283px;
+  height: 80px;
+  border-radius: 15px;
+  /* border: 1px solid #111111; */
+}
+.detail_router_card_image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  /* filter: blur(0px) grayscale(40%); */
+}
+.detail_router_card_content {
+  position: relative;
+  justify-content: flex-end;
+  display: flex;
+}
+.detail_router_card_name {
+  font-weight: 14px;
+  color: white;
+  background-color: black;
+  width: 80px;
+  border-radius: 8px;
+}

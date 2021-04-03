@@ -15,9 +15,14 @@ const firebaseConfig = {
 // Initialize Firebase
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
+  navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  const token = firebase.messaging().getToken();
+  console.log(token);
 }
+const messaging = firebase.messaging();
 const analytics = firebase.analytics();
 const db = firebase.firestore();
 const auth = firebase.auth();
 const performance = firebase.performance();
-export default { analytics, db, auth, performance};
+
+export default { analytics, db, auth, performance, messaging};

@@ -25,4 +25,13 @@ function getGamesOrderBy(params, success, fail) {
     .catch(fail);
 }
 
-export { getRecommendedGames, joinAndLeave, getGamesOrderBy };
+function getGameDetail(gameId, success, fail) {
+  const token = localStorage.getItem("idToken");
+  const config = getConfig(token);
+  restApi()
+    .get(`/games/${gameId}`, token ? config : null)
+    .then(success)
+    .catch(fail);
+}
+
+export { getRecommendedGames, joinAndLeave, getGamesOrderBy, getGameDetail };
