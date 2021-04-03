@@ -71,7 +71,7 @@ export default function ChatDrawer({ showChat }) {
                   <div>
                     {
                       draw ?
-                        <ChatList /> :
+                        <ChatList showChat={showChat} /> :
                         <FriendList showChat={showChat} />
                     }
                   </div>

@@ -20,21 +20,17 @@ export default function Chat({ chat, propsUser }) {
 
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
-
-  // console.log('hi', currentUser);
+  const [inputs, setInputs] = React.useState('');
 
 
   const onClose = () => {
     setClose(false);
-    // console.log('close', close);
   }
 
   useEffect(() => {
     setClose(chat);
     getChatRoomId(propsUser.uid);
-    // console.log(close);
   }, [])
-  // console.log(propsUser)
 
   async function getChatRoomId(friendUid) {
     //axios
@@ -62,8 +58,12 @@ export default function Chat({ chat, propsUser }) {
   }
 
   const handleSendMessage = (chatRoomId, messageText) => {
-    console.log('가자', chatRoomId, messageText);
+    // console.log('가자', chatRoomId, messageText);
     sendMessage(chatRoomId, messageText);
+    setInputs('');
+  }
+  const handleInputChange = (event) => {
+    setInputs(event.target.value);
   }
 
   const sendMessage = (roomsId, messageText) => {
@@ -76,7 +76,7 @@ export default function Chat({ chat, propsUser }) {
       timestamp: timestamp
     })
       .then(() => {
-        console.log('가니...?');
+        // console.log('가니...?');
       }
       )
       .catch(function (error) {
@@ -125,6 +125,8 @@ export default function Chat({ chat, propsUser }) {
                     className={styles.input_root}
                     placeholder="메시지를 입력하세요"
                     inputProps={{ "aria-label": "search" }}
+                    onChange={handleInputChange}
+                    value={inputs}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {
                         console.log('hi', chatRoomId, event.target.value)
