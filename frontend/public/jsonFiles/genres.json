@@ -1,6 +1,11 @@
 {
   "genres": [
     {
+      "id": "0",
+      "name": "All",
+      "path": "/images/genres/genre_all.png"
+    },
+    {
       "id": "1",
       "name": "Indie",
       "path": "/images/genres/genre_indie.png"
@@ -43,12 +48,12 @@
     {
       "id": "9",
       "name": "Modeling",
-      "path": "/images/genres/genre_Animation.png"
+      "path": "/images/genres/genre_animation.png"
     },
     {
       "id": "10",
       "name": "Design",
-      "path": "/images/genres/genre_Design.png"
+      "path": "/images/genres/genre_design.png"
     },
     {
       "id": "11",

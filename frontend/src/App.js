@@ -8,6 +8,7 @@ import routerInfo from 'src/constants/routerInfo';
 import fire from 'src/fire';
 import { UserContext, UserProvider } from 'src/Context/UserContext';
 import { FirebaseProvider } from 'src/Context/FirebaseContext';
+import firebase from 'firebase';
 
 import {
   Home,
@@ -28,7 +29,8 @@ import {
   Loading,
   NotFound,
   ActionUrlHandler,
-} from './pages';
+  KiHyeonTest
+} from "./pages";
 
 const AppRouter = () => {
   const user = useContext(UserContext);
@@ -41,6 +43,19 @@ const AppRouter = () => {
     if (user.isLoggedIn) {
       // 이메일 인증이 되어 있을 경우
       if (user.emailVerified) {
+        fire.auth
+          .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(() => {
+            console.log('성공');
+
+          })
+          .catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // alert('session', errorMessage);
+
+          });
         return <MainRouter />;
       }
       // 이메일 인증이 안되어 있을 경우
@@ -64,7 +79,10 @@ const NotLoginRouter = () => {
         <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
         <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
         <Route path={routerInfo.PAGE_URLS.CHECK_INFO} component={CheckInfo} />
-        <Route path={routerInfo.PAGE_URLS.CHECK_GAMBTI} component={CheckGambti} />
+        <Route
+          path={routerInfo.PAGE_URLS.CHECK_GAMBTI}
+          component={CheckGambti}
+        />
         <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
         <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
         <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
@@ -86,7 +104,7 @@ const MainRouter = () => {
     <Router>
       <Header isLogin={true} />
       <Nav />
-      <div style={{ paddingLeft: '64px' }}>
+      <div style={{ paddingLeft: "64px" }}>
         <Switch>
           <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
           <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
@@ -94,6 +112,7 @@ const MainRouter = () => {
           <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
           <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
           <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
+          <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
@@ -108,7 +127,11 @@ const EmailConfirmRouter = () => {
     <Router>
       <Header isLogin={true} />
       <Switch>
-        <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+        <Route
+          exact
+          path={routerInfo.PAGE_URLS.EMAIL_CONFIRM}
+          component={EmailConfirm}
+        />
         <Route path="/action-url-handler" component={ActionUrlHandler} />
         <Route path="/test" component={Test} />
         <Route path="*" component={NoAccess} />

@@ -15,9 +15,10 @@ PW = config['DATABASE']['PW']
 DATABASE_URL = 'mysql+pymysql://'+USER+':'+PW+'@'+HOST+':3306/gambti?charset=utf8mb4'
 engine_mariadb = sqlalchemy.create_engine(DATABASE_URL, echo=False)
 
-IMAGE_FILE = os.path.join("image_data.pkl")
-BG_IMAGE_FILE = os.path.join("background_image_data.pkl")
-VIDEO_FILE = os.path.join("video_data.pkl")
+BASE_URL = "./rawdata"
+IMAGE_FILE = os.path.join(BASE_URL, "image_data.pkl")
+BG_IMAGE_FILE = os.path.join(BASE_URL, "background_image_data.pkl")
+VIDEO_FILE = os.path.join(BASE_URL, "video_data.pkl")
 
 def get_data():
     # mariadb의 table 값을 읽어서 DataFrame으로 반환
@@ -74,7 +75,6 @@ def image_scrapy(data):
             video_url = soup.find("div", attrs={"class" : "highlight_movie"})
             if(video_url is not None):
                 video_url = video_url.get('data-webm-source')
-            print(i)
 
         logo_list.append({"game_id":game_id, "logo_image_path":image_url})
         background_list.append({"game_id":game_id, "background_image_path":background_url})

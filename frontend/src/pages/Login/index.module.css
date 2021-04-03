@@ -1,9 +1,12 @@
-.background {
-  background-color: rgba(0, 0, 0, 0.4);
+.background_image {
   height: calc(100vh - 54px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+.background {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 54px);
 }
 .root {
   display: flex;
@@ -47,7 +50,7 @@
 }
 .link {
   text-decoration: none;
-  color: #cecece;
+  color: #000000;
   z-index: 1000;
 }
 .form_holder {

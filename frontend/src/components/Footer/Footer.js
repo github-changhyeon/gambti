@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div className={styles.footer}>
       <div className={styles.footer_logo}>
-        <img src="/images/gambti_logo.png" alt="logo" style={{ height: '20px' }} />
+        <img src="/images/gambti/gambti_logo.png" alt="logo" style={{ height: '20px' }} />
       </div>
       <div className={styles.footer_detail}>
         <div className={styles.footer_detail_section}>

@@ -19,10 +19,16 @@ import java.util.List;
 @Getter
 @ToString
 public class User {
-
     @Id
-    @Column(name="USER_ID", insertable = false, updatable = false)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "NO", insertable = false, updatable = false)
+    private Long no;
+
+    @Column(name="USER_ID", updatable = false)
     private String id;
+
+    @Column(nullable = false)
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -60,9 +66,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserBanGame> userBanGames = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserLikeTag> userlikeTags = new ArrayList<>();
+
     @Builder
-    public User(String id, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
+    public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
         this.id = id;
+        this.nickname = nickname;
         this.mbti = mbti;
         this.age = age;
         this.gender = gender;

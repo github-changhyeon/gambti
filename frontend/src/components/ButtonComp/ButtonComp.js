@@ -13,7 +13,11 @@ export default function ButtonComp({
   if (size === "xsmall") {
     return (
       <div>
-        <Button className={styles.xsmall} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.xsmall}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
@@ -23,7 +27,11 @@ export default function ButtonComp({
   else if (size === "small") {
     return (
       <div>
-        <Button className={styles.small} variant="contained" style={{ backgroundColor: `${color}` }}>
+        <Button
+          className={styles.small}
+          variant="contained"
+          style={{ backgroundColor: `${color}` }}
+        >
           {textvalue}
         </Button>
       </div>
@@ -32,11 +40,15 @@ export default function ButtonComp({
   // GameCard, UserCard, MainButton
   else if (size === "medium") {
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         {joined ? (
           <Button
             className={styles.medium}
-            style={{ backgroundColor: "#00ffcc" }}
+            style={{
+              border: "2px solid " + color,
+              backgroundColor: "transparent",
+              color: "white",
+            }}
             variant="contained"
             onClick={onClick}
           >
@@ -45,6 +57,9 @@ export default function ButtonComp({
         ) : (
           <Button
             className={styles.medium}
+            style={{
+              backgroundColor: `${color}`,
+            }}
             variant="contained"
             onClick={onClick}
           >
@@ -73,6 +88,19 @@ export default function ButtonComp({
       <div>
         <Button
           className={styles.xlarge}
+          style={{ backgroundColor: `${color}` }}
+          variant="contained"
+          onClick={onClick}
+        >
+          {textvalue}
+        </Button>
+      </div>
+    );
+  } else if (size === "bold") {
+    return (
+      <div>
+        <Button
+          className={styles.bold}
           style={{ backgroundColor: `${color}` }}
           variant="contained"
           onClick={onClick}

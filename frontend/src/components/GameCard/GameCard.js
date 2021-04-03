@@ -1,6 +1,6 @@
 import styles from "./GameCard.module.css";
 import AvatarComp from "src/components/AvatarComp/AvatarComp.js";
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,17 +9,22 @@ import Typography from "@material-ui/core/Typography";
 import ButtonComp from "src/components/ButtonComp/ButtonComp.js";
 import Avatar from "@material-ui/core/Avatar";
 import { Container } from "@material-ui/core";
-import ColorThief from "colorthief";
 import { joinAndLeave } from "src/common/axios/Game";
+import { usePalette } from "react-palette";
+import IconButton from "@material-ui/core/IconButton";
+import { useHistory, generatePath } from "react-router-dom";
+import routerInfo from "src/constants/routerInfo";
 
 export default function GameCard({ isLogin, gameInfo }) {
   let descriptionText, buttonText;
-  const [cardColor, setCardColor] = useState("#ffffff");
   const [descriptionNum, setDescriptionNum] = useState(
     gameInfo.joinUserCount
     // Number(gameInfo.joinUserCount).toLocaleString()
   );
   const [joined, setJoined] = useState(gameInfo.joined);
+  const { data, loading, error } = usePalette(gameInfo.backgroundImagePath);
+  const history = useHistory();
+
   if (isLogin) {
     descriptionText = " joined";
   } else {
@@ -33,6 +38,7 @@ export default function GameCard({ isLogin, gameInfo }) {
     // console.log(token);
     if (token === null || token === undefined) {
       alert("로그인 해주세요");
+      return;
     }
 
     joinAndLeave(
@@ -56,79 +62,78 @@ export default function GameCard({ isLogin, gameInfo }) {
     );
   };
 
-  useEffect(() => {
-    const colorThief = new ColorThief();
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = gameInfo.backgroundImagePath;
-    img.addEventListener("load", function () {
-      let arr = colorThief.getColor(img);
-      // setCardColor(`rgb(${arr[0]}, ${arr[1]}, ${arr[2]})`);
-    });
-  }, []);
+  return gameInfo.metascore > 999 ? (
+    <div style={{ width: "100%" }}>
+      <div className={styles["neon-block"]}>
+        <div className={styles.block}>
+          <span className={styles.rainbow}></span>
 
-  return gameInfo.metascore > 958 ? (
-    <div className={styles["neon-block"]}>
-      <div className={styles.block}>
-        <span className={styles.rainbow}></span>
-
-        <Card className={styles.game_card}>
-          <CardMedia
-            className={styles.game_card_background_img}
-            image={gameInfo.backgroundImagePath}
-            title="Contemplative Reptile"
-          />
-          <CardContent className={styles.card_logo_img}>
-            <Container
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <AvatarComp
-                size="xlarge"
-                textvalue="temp"
-                imgPath={gameInfo.logoImagePath}
-              />
-            </Container>
-          </CardContent>
-          <CardContent>
-            <Typography
-              className={styles.game_card_title}
-              gutterBottom
-              variant="h5"
-              component="h2"
-              noWrap={true}
-            >
-              {gameInfo.appName}
-            </Typography>
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              component="span"
-              style={{ color: cardColor }}
-            >
-              {descriptionNum}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="span"
-              style={{ color: cardColor }}
-            >
-              {descriptionText}
-            </Typography>
-          </CardContent>
-          <CardActions className={styles.game_card_button}>
-            <ButtonComp
-              size="medium"
-              joined={joined}
-              textvalue={joined ? "JOINED" : "JOIN GAME"}
-              onClick={clickJoinBtn}
-            ></ButtonComp>
-          </CardActions>
-        </Card>
+          <Card className={styles.game_card}>
+            <CardMedia
+              className={styles.game_card_background_img}
+              image={gameInfo.backgroundImagePath}
+              title="Contemplative Reptile"
+            />
+            <CardContent className={styles.card_logo_img}>
+              <Container
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <AvatarComp
+                  size="xlarge"
+                  textvalue="temp"
+                  imgPath={gameInfo.logoImagePath}
+                  onClick={() => {
+                    history.push({
+                      pathname: generatePath(routerInfo.PAGE_URLS.DETAIL, {
+                        gameId: gameInfo.gameId,
+                      }),
+                    });
+                  }}
+                />
+              </Container>
+            </CardContent>
+            <CardContent style={{}}>
+              <Typography
+                className={styles.game_card_title}
+                gutterBottom
+                variant="h5"
+                component="h2"
+                noWrap={true}
+              >
+                {gameInfo.appName}
+              </Typography>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                component="span"
+                style={{ color: data.lightVibrant }}
+              >
+                {descriptionNum}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="span"
+                style={{ color: data.lightVibrant }}
+              >
+                {descriptionText}
+              </Typography>
+            </CardContent>
+            <CardActions className={styles.game_card_button}>
+              <ButtonComp
+                size="medium"
+                joined={joined}
+                textvalue={joined ? "JOINED" : "JOIN GAME"}
+                onClick={clickJoinBtn}
+                color={data.lightVibrant}
+              ></ButtonComp>
+            </CardActions>
+          </Card>
+        </div>
       </div>
     </div>
   ) : (
@@ -150,6 +155,13 @@ export default function GameCard({ isLogin, gameInfo }) {
             size="xlarge"
             textvalue="temp"
             imgPath={gameInfo.logoImagePath}
+            onClick={() => {
+              history.push({
+                pathname: generatePath(routerInfo.PAGE_URLS.DETAIL, {
+                  gameId: gameInfo.gameId,
+                }),
+              });
+            }}
           />
         </Container>
       </CardContent>
@@ -167,7 +179,7 @@ export default function GameCard({ isLogin, gameInfo }) {
           variant="body1"
           color="textSecondary"
           component="span"
-          style={{ color: cardColor }}
+          style={{ color: data.lightVibrant }}
         >
           {descriptionNum}
         </Typography>
@@ -175,7 +187,7 @@ export default function GameCard({ isLogin, gameInfo }) {
           variant="body2"
           color="textSecondary"
           component="span"
-          style={{ color: cardColor }}
+          style={{ color: data.lightVibrant }}
         >
           {descriptionText}
         </Typography>
@@ -186,6 +198,7 @@ export default function GameCard({ isLogin, gameInfo }) {
           joined={joined}
           textvalue={joined ? "JOINED" : "JOIN GAME"}
           onClick={clickJoinBtn}
+          color={data.lightVibrant}
         ></ButtonComp>
       </CardActions>
     </Card>
