@@ -15,10 +15,26 @@ const firebaseConfig = {
 // Initialize Firebase
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  var permission = Notification.permission;
+  if (permission != 'denied') {
+    registServiceWorker();
+  }
+}
+function registServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+      const message = firebase.messaging();
+      message.requestPermission().then(function() {
+        return message.getToken();
+      }).then(async function (token) {
+        //여기서 FCM 토큰을 확인할 수 있다.
+        console.log(token);
+      })
+    })
   const token = firebase.messaging().getToken();
   console.log(token);
-}
+  }
+} 
 const messaging = firebase.messaging();
 const analytics = firebase.analytics();
 const db = firebase.firestore();
