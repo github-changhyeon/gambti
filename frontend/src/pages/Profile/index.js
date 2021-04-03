@@ -15,6 +15,7 @@ import firebase from 'firebase';
 import $ from 'jquery';
 import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert';
 import EditProfile from 'src/components/EditProfile/EditProfile';
+import EditDetail from 'src/components/EditDetail/EditDetail';
 
 
 export default function Profile() {
@@ -25,18 +26,6 @@ export default function Profile() {
   const currentUser = fire.auth.currentUser;
   const [joinedGame, setJoinedGame] = React.useState(8);
   const [friendNumber, setFriendNumber] = React.useState(1);
-
-  // const [nickname, setNickname] = useState(user.nickname);
-  // const [currentpw, setCurrentpw] = useState('');
-  // const [nickError, setNickError] = useState(false);
-  // const [pwcheck, setPwcheck] = useState(false);
-  // const [pwcheckError, setPwcheckError] = useState(false);
-  // const [password, setPassword] = useState('');
-  // const [passwordError, setPasswordError] = useState(false);
-  // const [passwordConfirm, setPasswordConfirm] = useState('');
-  // const [passwordMatchError, setPasswordMatchError] = useState('');
-  // const [test, setTest] = useState(user.nickname);
-
 
   const [value, setValue] = React.useState(0);
 
@@ -146,7 +135,7 @@ export default function Profile() {
           </div>
         </TabPanel>
         <TabPanel value={value} index={1} className={styles.tab_panel}>
-          MY GAMES
+          <EditDetail />
         </TabPanel>
       </Box>
 
