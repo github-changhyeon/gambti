@@ -29,7 +29,7 @@ function getGameDetail(gameId, success, fail) {
   const token = localStorage.getItem("idToken");
   const config = getConfig(token);
   restApi()
-    .get(`/games/${gameId}`, token ? config : null)
+    .get(`/games/detail/${gameId}`, token ? config : null)
     .then(success)
     .catch(fail);
 }
