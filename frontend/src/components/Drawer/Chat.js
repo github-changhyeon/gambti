@@ -21,6 +21,8 @@ export default function Chat({ chat, propsUser }) {
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
+  // console.log('hi', currentUser);
+
 
   const onClose = () => {
     setClose(false);
@@ -70,7 +72,7 @@ export default function Chat({ chat, propsUser }) {
     fire.db.collection('rooms').doc(roomsId).collection('messages').add({
       name: user.nickname,
       text: messageText,
-      profilePicUrl: currentUser.imgPath,
+      profilePicUrl: currentUser.photoURL,
       timestamp: timestamp
     })
       .then(() => {

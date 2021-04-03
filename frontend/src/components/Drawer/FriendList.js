@@ -32,7 +32,7 @@ export default function FriendList({ showChat }) {
 
 
   return (
-    <div>
+    <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
         {friendList.map((user, i) =>
           <div key={i} style={{ width: '195px' }}

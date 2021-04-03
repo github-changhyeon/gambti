@@ -139,6 +139,7 @@ export default function Header({ isLogin }) {
                 <AvatarComp
                   className={styles.dropbtn}
                   size="xsmall"
+                  badge='badge'
                   // textvalue={user.nickname}
                   textvalue={user.nickname.substring(0, 1)}
                 ></AvatarComp>

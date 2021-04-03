@@ -1,12 +1,12 @@
-.chat{
-  left: 350px;
-  top: 120px;
-  width: 700px;
-  height: 500px;
-  background-color: #222222;
-  transition: 300ms;
-  position: fixed;
-  z-index: 1000;
-  border-radius: 10px;
 
+.friend_list{
+  /* left: 350px; */
+  top: 160px;
+  width: 250px;
+  height: calc(100vh - 200px);
+  position: fixed;
+  overflow: auto;
+}
+.div::-webkit-scrollbar {
+  display: none;
 }
