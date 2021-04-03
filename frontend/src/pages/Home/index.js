@@ -25,6 +25,7 @@ export default function Home({ match }) {
   // const [uid, setUid] = useState('')
   // const [emailVerified, setEmailVerified] = useState('')
   // 전역변수 usertoken 가져오기
+  console.log(match);
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
