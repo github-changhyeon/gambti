@@ -10,12 +10,11 @@ import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameRepository;
-import com.ssafy.gambti.repository.genre.GenreRepository;
-import com.ssafy.gambti.repository.user.UserBanGameRepository;
 import com.ssafy.gambti.repository.user.UserJoinGameRepository;
 import com.ssafy.gambti.repository.user.UserOwnGameRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.security.SecurityService;
+import com.ssafy.gambti.utils.FirebaseTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,17 +35,29 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
-    private final GenreRepository genreRepository;
     private final UserJoinGameRepository userJoinGameRepository;
     private final UserOwnGameRepository userOwnGameRepository;
-    private final UserBanGameRepository userBanGameRepository;
     private final SecurityService securityService;
+    private final FirebaseTokenUtils firebaseTokenUtils;
 
+    public GameDetailRes gameDetail(Long gameId, HttpServletRequest httpServletRequest) {
 
-    public GameDetailRes gameDetail(Long gameId) {
+        FirebaseToken token = firebaseTokenUtils.decodedToken(httpServletRequest);
         Optional<Game> gameDetail = gameRepository.findById(gameId);
         if(gameDetail.isPresent()) {
-            return GameDetailRes.of(gameDetail.orElseGet(Game::new));
+            //GameDetail에 필요한 데이터를 받아온다.
+            GameDetailRes gameDetailRes = GameDetailRes.of(gameDetail.orElseGet(Game::new));
+            //조인된 사람의 수를 구한다.
+            gameDetailRes.setJoinUserCount(userJoinGameRepository.countByGameId(gameId));
+            //토큰이 포함되어 있다면 유저에 정보까지 넣는다.
+            if(token!=null) {
+
+                //해당 유저가 가지고 있는 게임인지 확인한다.
+                gameDetailRes.setOwned(userOwnGameRepository.existsByUserId(token.getUid()));
+                //유저가 이미 조인하고 있는 게임인지 확인한다.
+                gameDetailRes.setJoined(userJoinGameRepository.existsByUserIdAndGameId(token.getUid(), gameId));
+            }
+            return gameDetailRes;
         }
         else{
             return null;
