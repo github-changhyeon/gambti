@@ -115,8 +115,8 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
             appName: propsGameInfo.appName,
             backgroundImagePath: propsGameInfo.backgroundImagePath,
             logoImagePath: propsGameInfo.logoImagePath,
-            joined: false,
-            joinUserCount: -1,
+            joined: propsGameInfo.joined,
+            joinUserCount: propsGameInfo.joinUserCount,
             metascore: propsGameInfo.metascore,
           }}
         ></GameCard>
