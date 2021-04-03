@@ -60,10 +60,10 @@ public class GameController {
 //    }
 
 
-    @GetMapping(value="/{gameId}")
+    @GetMapping(value="/detail/{gameId}")
     @Operation(summary = "선택된 게임의 detail 정보를 조회", description = "gameId를 통해 하나의 게임의 detail을 조회한다.")
-    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId){
-        GameDetailRes gameDetail = gameService.gameDetail(gameId);
+    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
+        GameDetailRes gameDetail = gameService.gameDetail(gameId, httpServletRequest);
         if (gameDetail != null) {
             return new ResponseEntity<>(new Response(SUCCESS, "게임 디테일 조회 성공", gameDetail), HttpStatus.OK);
         } else {
