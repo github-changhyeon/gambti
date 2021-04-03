@@ -27,10 +27,10 @@ spring:
         #https://dololak.tistory.com/465, https://gigas-blog.tistory.com/119
         dialect: org.hibernate.dialect.MariaDBDialect
         #하이버네이트가 실행하는 모든 SQL문을 콘솔로 출력해 준다.
-        show_sql: true #콘솔에 출력되는 JPA 실행 쿼리를 가독성있게 표현한다.
-        format_sql: true
+        show_sql: false #콘솔에 출력되는 JPA 실행 쿼리를 가독성있게 표현한다.
+        format_sql: false
         #디버깅이 용이하도록 SQL문 이외에 추가적인 정보를 출력해 준다.
-        use_sql_comments: true
+        use_sql_comments: false
 
 security:
   firebase-props:
@@ -124,11 +124,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-#로컬용 redis 만들어지면 넣기
-  redis:
-    host: ec2-54-180-105-93.ap-northeast-2.compute.amazonaws.com
-    port: 6380
-
 server:
   port: 8081
   servlet:
@@ -144,11 +139,6 @@ spring:
   jpa: #JPA 설정
     hibernate:
       ddl-auto: none
-
-#redis서버 만들어지면 넣기
-  redis:
-    host: redis
-    port: 6379
 
 server:
   port: 8081
@@ -166,10 +156,6 @@ spring:
   jpa: #JPA 설정
     hibernate:
       ddl-auto: none
-
-  redis:
-    host: redis
-    port: 6379
 
 server:
   port: 8081
