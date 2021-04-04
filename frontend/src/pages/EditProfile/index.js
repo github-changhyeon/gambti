@@ -11,7 +11,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
 import EditProfiles from 'src/components/EditProfiles/EditProfiles';
-import EditDetail from 'src/components/EditDetail/EditDetail';
 
 
 export default function EditProfile() {

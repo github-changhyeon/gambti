@@ -9,8 +9,6 @@ import Divider from '@material-ui/core/Divider';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
-import EditProfile from 'src/components/EditProfiles/EditProfiles';
-import EditDetail from 'src/components/EditDetail/EditDetail';
 
 
 export default function Profile() {
