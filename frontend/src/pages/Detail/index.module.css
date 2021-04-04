@@ -16,7 +16,10 @@
   align-items: center;
 }
 .detail_root {
+  overflow: hidden;
+
   display: flex;
+  background-color: #222222;
 }
 .detail_game_card {
   width: 283px;
@@ -51,4 +54,22 @@
   background-color: black;
   width: 80px;
   border-radius: 8px;
+}
+
+.detail_left_container {
+  width: 67%;
+  /* margin-top: 20px; */
+  float: left;
+  background-color: chartreuse;
+}
+
+.detail_right_container {
+  width: 33%;
+  float: right;
+  box-sizing: border-box;
+}
+.detail_right_fixed {
+  background-color: red;
+  padding: 10px;
+  position: fixed;
 }

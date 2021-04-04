@@ -11,6 +11,7 @@ import { getGameDetail } from "src/common/axios/Game";
 const useStyles = makeStyles((theme) => ({
   content: {
     // flexGrow: 1,
+    width: "100%",
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -64,32 +65,40 @@ export default function Detail({ match }) {
           [classes.contentShift]: true,
         })}
       >
-        {match.params.tab === null || match.params.tab === undefined ? (
-          gameInfo ? (
-            <DetailMain
-              propsMatch={match}
-              propsGameInfo={gameInfo}
-            ></DetailMain>
-          ) : null
-        ) : null}
+        <div className={styles.detail_left_container}>
+          {match.params.tab === null || match.params.tab === undefined ? (
+            gameInfo ? (
+              <DetailMain
+                propsMatch={match}
+                propsGameInfo={gameInfo}
+              ></DetailMain>
+            ) : null
+          ) : null}
 
-        {match.params.tab === "youtube" ? (
-          gameInfo ? (
-            <DetailYoutube
-              propsMatch={match}
-              propsGameInfo={gameInfo}
-            ></DetailYoutube>
-          ) : null
-        ) : null}
+          {match.params.tab === "youtube" ? (
+            gameInfo ? (
+              <DetailYoutube
+                propsMatch={match}
+                propsGameInfo={gameInfo}
+              ></DetailYoutube>
+            ) : null
+          ) : null}
 
-        {match.params.tab === "news" ? (
-          gameInfo ? (
-            <DetailNews
-              propsMatch={match}
-              propsGameInfo={gameInfo}
-            ></DetailNews>
-          ) : null
-        ) : null}
+          {match.params.tab === "news" ? (
+            gameInfo ? (
+              <DetailNews
+                propsMatch={match}
+                propsGameInfo={gameInfo}
+              ></DetailNews>
+            ) : null
+          ) : null}
+        </div>
+        <div className={styles.detail_right_container}>
+          <div className={styles.detail_right_fixed}>
+            여기에 오른쪽 컴포넌트 , 백그라운드 컬러는 index.mudule.css에
+            detail_right_container에서 바꾸3
+          </div>
+        </div>
       </div>
     </div>
   );
