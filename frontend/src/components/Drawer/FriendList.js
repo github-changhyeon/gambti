@@ -25,6 +25,7 @@ export default function FriendList({ showChat }) {
   const handleChatChange = (user) => {
     setFriend(user);
     setChat(!chat);
+    // console.log(user);
     // console.log(friend, chat);
     // console.log(showChat);
 
