@@ -16,10 +16,10 @@ export default function Signup() {
   const history = useHistory();
   // const user = useContext(UserContext);
 
-  const [nickname, setNickname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordConfirm, setPasswordConfirm] = React.useState("");
+  const [nickname, setNickname] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
   const [nullError, setNullError] = React.useState(false);
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
@@ -161,14 +161,13 @@ export default function Signup() {
       fire.auth
         .createUserWithEmailAndPassword(email, password)
         .then((currentUser) => {
-          history.push("/email-confirm");
+          history.push('/email-confirm');
 
           // token 받아오기
           fire.auth.currentUser
             .getIdToken()
             .then(function (idToken) {
               window.localStorage.setItem('idToken', idToken);
-              // firebase.store에서 정보 가져와서 넣어줌
               // mbti, gender는 대문자
               const param = {
                 mbti: "INFP",
@@ -331,7 +330,7 @@ export default function Signup() {
           <div className={styles.move_page}>
             <a href="/login" className={styles.link}>
               or Log In
-              </a>
+            </a>
           </div>
         </div>
       </Container>
