@@ -16,10 +16,10 @@ export default function Signup() {
   const history = useHistory();
   const user = useContext(UserContext);
 
-  const [nickname, setNickname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordConfirm, setPasswordConfirm] = React.useState("");
+  const [nickname, setNickname] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
   const [nullError, setNullError] = React.useState(false);
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
@@ -50,7 +50,6 @@ export default function Signup() {
       }
       if (pass.value === confirm.value) {
         return <Typography>&nbsp;</Typography>;
-
       }
       if (pass.value !== confirm.value) {
         return <Typography className={styles.error}>비밀번호가 일치하지 않습니다.</Typography>;
@@ -62,7 +61,6 @@ export default function Signup() {
   // TODO: 두번 눌러야 해결됨
   // firebase signup
   const onSignup = (event) => {
-
     setNullError(false);
     setNicknameError(false);
     setEmailVarifiedError(false);
@@ -70,47 +68,46 @@ export default function Signup() {
     setNullPasswordLengthError(false);
     setPasswordMatchError(false);
 
-
-    console.log(nullError)
+    console.log(nullError);
     console.log(Boolean(email), Boolean(password), Boolean(passwordConfirm), Boolean(nickname));
 
     if (!email || !password || !passwordConfirm || !nickname) {
       setNullError(true);
       console.log(nullError);
       console.log('모든 입력값');
-      alert("모든 입력값을 채워주세요.");
+      alert('모든 입력값을 채워주세요.');
       return;
     }
     if (1 > nickname.length || nickname.length > 10) {
       setNicknameError(true);
       console.log('닉네임을 10자 이하 입니다.');
-      alert("닉네임을 10자 이하 입니다.");
+      alert('닉네임을 10자 이하 입니다.');
       return;
     }
     let valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!valid.test(email)) {
       setEmailVarifiedError(true);
       console.log('이메일 형식이 아닙니다.');
-      alert("이메일 형식이 아닙니다.");
+      alert('이메일 형식이 아닙니다.');
       return;
     }
     if (email.length > 30) {
       setEmailLengthError(true);
       console.log('이메일은 30자 이하 입니다.');
-      alert("이메일은 30자 이하 입니다.");
+      alert('이메일은 30자 이하 입니다.');
       return;
     }
     const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
     if (!reg.test(password)) {
       setNullPasswordLengthError(true);
       console.log('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하 입니다.');
-      alert("비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하 입니다.");
+      alert('비밀번호는 소문자/숫자 포함 8자 이상, 20자 이하 입니다.');
       return;
     }
     if (password != passwordConfirm) {
       setPasswordMatchError(true);
       console.log('비밀번호 확인이 일치하지 않습니다.');
-      alert("비밀번호 확인이 일치하지 않습니다.");
+      alert('비밀번호 확인이 일치하지 않습니다.');
       return;
     }
     console.log(nullError);
@@ -132,55 +129,56 @@ export default function Signup() {
       fire.auth
         .createUserWithEmailAndPassword(email, password)
         .then((currentUser) => {
-          history.push("/email-confirm");
+          history.push('/email-confirm');
 
           // token 받아오기
           fire.auth.currentUser
             .getIdToken()
             .then(function (idToken) {
               window.localStorage.setItem('idToken', idToken);
-              // firebase.store에서 정보 가져와서 넣어줌
               // mbti, gender는 대문자
               const param = {
+                nickname: '닉네임',
                 mbti: 'INFP',
                 gender: 'FEMALE',
                 steamId: '',
                 maxPrice: 0,
                 age: 0,
+                userLikeTags: [35, 14, 1],
               };
 
-            // add user to db
-            fire.db.collection("users").doc(currentUser.user.uid).set({
-              nickname: nickname,
-              email: currentUser.user.email,
-              emailVerified: currentUser.user.emailVerified,
-              uid: currentUser.user.uid,
-              mbti: "INFP",
-              gender: "FEMALE",
-              steamId: "",
-              maxPrice: 1,
-              age: 0,
-            });
+              // add user to db
+              fire.db.collection('users').doc(currentUser.user.uid).set({
+                nickname: nickname,
+                email: currentUser.user.email,
+                emailVerified: currentUser.user.emailVerified,
+                uid: currentUser.user.uid,
+                mbti: 'INFP',
+                gender: 'FEMALE',
+                steamId: '',
+                maxPrice: 1,
+                age: 0,
+              });
 
-            // axios
-            // response.data.status: 상태
-            // response.data.message: 메세지
-            // response.data.data: get할 경우 객체 받는거
-            signup(
-              idToken,
-              param,
-              (response) => {
-                // console.log(response, 'response');
-                if (!response.data.status) {
-                } else {
-                  // console.log(response.data.message)
+              // axios
+              // response.data.status: 상태
+              // response.data.message: 메세지
+              // response.data.data: get할 경우 객체 받는거
+              signup(
+                idToken,
+                param,
+                (response) => {
+                  // console.log(response, 'response');
+                  if (!response.data.status) {
+                  } else {
+                    // console.log(response.data.message)
+                  }
+                },
+                (error) => {
+                  // console.log(error);
                 }
-              },
-              (error) => {
-                // console.log(error);
-              }
-            );
-          })
+              );
+            })
             .catch(function (error) {
               // Handle error
             });
@@ -239,9 +237,9 @@ export default function Signup() {
         <div className={styles.root}>
           <form noValidate className={styles.form}>
             <Typography className={styles.policy}>
-              By signing up, you agree to the Terms of User and Privacy
-              Policy, including the Cookie Policy.
-              </Typography>
+              By signing up, you agree to the Terms of User and Privacy Policy, including the Cookie
+              Policy.
+            </Typography>
             {/* 소셜 로그인 */}
             {/* <div className={styles.buttons}> */}
             {/* <GoogleLoginButton style={{ width: '330px' }} onClick={() => alert("Hellohihi")}>
@@ -311,7 +309,7 @@ export default function Signup() {
           <div className={styles.move_page}>
             <a href="/login" className={styles.link}>
               or Log In
-              </a>
+            </a>
           </div>
         </div>
       </Container>
