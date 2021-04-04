@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { StylesProvider } from '@material-ui/core/styles';
-import Header from 'src/components/Header/Header';
-import Nav from 'src/components/Nav/Nav';
-import Footer from 'src/components/Footer/Footer';
-import routerInfo from 'src/constants/routerInfo';
-import fire from 'src/fire';
-import { UserContext, UserProvider } from 'src/Context/UserContext';
-import { FirebaseProvider } from 'src/Context/FirebaseContext';
-import firebase from 'firebase';
+import React, { useEffect, useContext } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { StylesProvider } from "@material-ui/core/styles";
+import Header from "src/components/Header/Header";
+import Nav from "src/components/Nav/Nav";
+import Footer from "src/components/Footer/Footer";
+import routerInfo from "src/constants/routerInfo";
+import fire from "src/fire";
+import { UserContext, UserProvider } from "src/Context/UserContext";
+import { FirebaseProvider } from "src/Context/FirebaseContext";
+import firebase from "firebase";
+import { useHistory } from "react-router-dom";
 
 import {
   Home,
@@ -29,12 +30,37 @@ import {
   Loading,
   NotFound,
   ActionUrlHandler,
-  KiHyeonTest
+  // KiHyeonTest
 } from "./pages";
 
 const AppRouter = () => {
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
+  const history = useHistory();
+
+  // 사용자가 탭을 닫거나 브라우저를 종료할 때 로그아웃을 한다.
+
+  useEffect(() => {
+    // 로그인한 유저가 있다면 탭/브라우저 종료시 logout 을 실행한다.
+    if (fire.auth) {
+      window.addEventListener("unload", logout);
+      return () => {
+        window.removeEventListener("unload", logout);
+      };
+    }
+  });
+
+  const logout = () => {
+    fire.auth
+      .signOut()
+      .then(() => {
+        window.localStorage.clear();
+        history.push("/");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   if (user.isLoggedIn === null) {
     return <Loading />;
@@ -46,15 +72,13 @@ const AppRouter = () => {
         fire.auth
           .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
           .then(() => {
-            console.log('성공');
-
+            console.log("성공");
           })
           .catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             // alert('session', errorMessage);
-
           });
         return <MainRouter />;
       }
@@ -91,7 +115,7 @@ const NotLoginRouter = () => {
         <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
         <Route path="/action-url-handler" component={ActionUrlHandler} />
         <Route path="/test" component={Test} />
-        <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
+        {/* <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} /> */}
         <Route path="*" component={NoAccess} />
       </Switch>
       <Footer />
@@ -101,6 +125,7 @@ const NotLoginRouter = () => {
 
 const MainRouter = () => {
   const user = useContext(UserContext);
+
   return (
     <Router>
       <Header isLogin={true} />
@@ -111,11 +136,22 @@ const MainRouter = () => {
           <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
           <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
           <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
-          <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
-          <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
-          <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+          <Route
+            exact
+            path={routerInfo.PAGE_URLS.PROFILE}
+            component={Profile}
+          />
+          <Route
+            path={routerInfo.PAGE_URLS.PROFILE_EDIT}
+            component={EditProfile}
+          />
+          <Route
+            exact
+            path={routerInfo.PAGE_URLS.EMAIL_CONFIRM}
+            component={EmailConfirm}
+          />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
-          <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} />
+          {/* <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} /> */}
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
         </Switch>
@@ -144,6 +180,10 @@ const EmailConfirmRouter = () => {
 };
 
 function App() {
+  useEffect(() => {
+    console.log("app.js");
+  }, []);
+
   return (
     <StylesProvider injectFirst>
       <FirebaseProvider>

@@ -4,23 +4,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.ssafy.gambti.domain.game.Game;
-import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
+import com.ssafy.gambti.dto.game.JoinGamesRes;
+import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameRepository;
-import com.ssafy.gambti.repository.genre.GenreRepository;
-import com.ssafy.gambti.repository.user.UserBanGameRepository;
 import com.ssafy.gambti.repository.user.UserJoinGameRepository;
 import com.ssafy.gambti.repository.user.UserOwnGameRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.security.SecurityService;
+import com.ssafy.gambti.utils.FirebaseTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -38,17 +36,29 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
-    private final GenreRepository genreRepository;
     private final UserJoinGameRepository userJoinGameRepository;
     private final UserOwnGameRepository userOwnGameRepository;
-    private final UserBanGameRepository userBanGameRepository;
     private final SecurityService securityService;
+    private final FirebaseTokenUtils firebaseTokenUtils;
 
+    public GameDetailRes gameDetail(Long gameId, HttpServletRequest httpServletRequest) {
 
-    public GameDetailRes gameDetail(Long gameId) {
+        FirebaseToken token = firebaseTokenUtils.decodedToken(httpServletRequest);
         Optional<Game> gameDetail = gameRepository.findById(gameId);
         if(gameDetail.isPresent()) {
-            return GameDetailRes.of(gameDetail.orElseGet(Game::new));
+            //GameDetail에 필요한 데이터를 받아온다.
+            GameDetailRes gameDetailRes = GameDetailRes.of(gameDetail.orElseGet(Game::new));
+            //조인된 사람의 수를 구한다.
+            gameDetailRes.setJoinUserCount(userJoinGameRepository.countByGameId(gameId));
+            //토큰이 포함되어 있다면 유저에 정보까지 넣는다.
+            if(token!=null) {
+
+                //해당 유저가 가지고 있는 게임인지 확인한다.
+                gameDetailRes.setOwned(userOwnGameRepository.existsByUserId(token.getUid()));
+                //유저가 이미 조인하고 있는 게임인지 확인한다.
+                gameDetailRes.setJoined(userJoinGameRepository.existsByUserIdAndGameId(token.getUid(), gameId));
+            }
+            return gameDetailRes;
         }
         else{
             return null;
@@ -107,8 +117,8 @@ public class GameService {
                 //5. 만약에 존재하지 않는다면
                 if(!userJoinGameRepository.existsByUserIdAndGameId(uid, gameId)){
                     userJoinGameRepository.save(new UserJoinGame(
-                            userRepository.findById(uid).orElseThrow(NoSuchElementException::new),
-                            gameRepository.findById(gameId).orElseThrow(NoSuchElementException::new)));
+                            userRepository.findById(uid).orElseThrow(GameListException::new),
+                            gameRepository.findById(gameId).orElseThrow(GameListException::new)));
                 }
                 else{
                     //6. 존재하고 있다면 탈퇴 시킴
@@ -201,6 +211,22 @@ public class GameService {
         }
         return gameSimpleResPage;
 
+    }
+
+    public List<JoinGamesRes> joinGame(HttpServletRequest httpServletRequest) {
+        FirebaseToken token = firebaseTokenUtils.decodedToken(httpServletRequest);
+        if(token != null){
+            String uid = token.getUid();
+
+            //찾아온 유저 no로 join한 게임 list를 가지고온다.
+            List<UserJoinGame> joinGames = userJoinGameRepository.findByUserId(uid);
+            List<JoinGamesRes> joinGamesResList = new ArrayList<>();
+            for (UserJoinGame ujg : joinGames) {
+                joinGamesResList.add(new JoinGamesRes(ujg.getGame()));
+            }
+            return joinGamesResList;
+        }
+        return null;
     }
 
     // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 

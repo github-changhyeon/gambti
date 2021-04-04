@@ -76,7 +76,7 @@ export default function Test() {
 
       <MediumProfile propsUser={{ nickname: "aa", email: "bb" }} />
       <SmallProfile />
-      <UserCard />
+      {/* <UserCard /> */}
       <GenreList propsOrder="all"></GenreList>
       {/* <InfiniteScrollCard /> */}
     </div>

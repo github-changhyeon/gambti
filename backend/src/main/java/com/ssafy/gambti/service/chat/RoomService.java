@@ -58,6 +58,8 @@ public class RoomService {
                         //방이 없다면 rooms 컬렉션에 해당 방을 등록한다.
                         Map<String, Object> docData = new HashMap<>();
                         docData.put("lastMessageText", "");
+                        docData.put("roomId", uuid);
+                        docData.put("roomName", roomRequest.getRoomName());
                         docData.put("max", roomRequest.getMaxNumber());
                         docData.put("type", roomRequest.getType());
 
@@ -82,10 +84,6 @@ public class RoomService {
             } catch (ExecutionException e) {
                 logger.error(e.getMessage());
             }
-        }
-        //TODO : 멀티 채팅방
-        else if(roomRequest.getType().equals("multi")){
-
         }
         return uuid;
     }
