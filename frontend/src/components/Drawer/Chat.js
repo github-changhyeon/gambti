@@ -14,13 +14,15 @@ import { UserContext } from 'src/Context/UserContext';
 
 
 
-export default function Chat({ chat, propsUser, currentRoomId }) {
+export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, youId }) {
   const [close, setClose] = React.useState(chat);
   const [chatRoomId, setChatRoomId] = React.useState('');
 
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
   const [inputs, setInputs] = React.useState('');
+
+  const [youInfo, setYouInfo] = React.useState('');
 
 
   const onClose = () => {
@@ -36,6 +38,20 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
         getChatRoomId(propsUser.uid);
     }
   }, [])
+
+  useEffect(() => {
+    ReadYou(youId);
+  })
+
+  const ReadYou = (youId) => {
+    fire.db.collection("users").doc(youId).get()
+      .then((doc) => {
+        setYouInfo(doc.data());
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
 
   async function getChatRoomId(friendUid) {
     //axios
@@ -81,7 +97,6 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
       timestamp: timestamp
     })
       .then(() => {
-        // console.log('가니...?');
       }
       )
       .catch(function (error) {
@@ -105,9 +120,13 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
                       <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
                     </div>
                     :
-                    <div className={styles.header_profile}>
-                      <MediumProfile propsUser={{ nickname: currentRoomId, email: '' }} />
-                    </div>
+                    youId ?
+                      <div className={styles.header_profile}>
+                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email }} />
+                      </div> :
+                      <div className={styles.header_profile}>
+                        <MediumProfile propsUser={{ nickname: currentRoomName, email: '' }} />
+                      </div>
                 }
 
                 <div>

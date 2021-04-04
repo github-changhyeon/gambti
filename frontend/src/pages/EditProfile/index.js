@@ -24,6 +24,7 @@ export default function EditProfile() {
 
   const [value, setValue] = React.useState(0);
 
+
   // tab 설정
   const handleChange = (event, newValue) => {
     setValue(newValue);
