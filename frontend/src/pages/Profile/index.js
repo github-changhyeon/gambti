@@ -6,15 +6,10 @@ import Typography from "@material-ui/core/Typography";
 import Box from '@material-ui/core/Box';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 import Divider from '@material-ui/core/Divider';
-import Button from "@material-ui/core/Button";
-import RecFriend from './RecFriend';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
-import firebase from 'firebase';
-import $ from 'jquery';
-import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert';
-import EditProfile from 'src/components/EditProfile/EditProfile';
+import EditProfile from 'src/components/EditProfiles/EditProfiles';
 import EditDetail from 'src/components/EditDetail/EditDetail';
 
 
@@ -88,16 +83,16 @@ export default function Profile() {
         {/* 추천 친구 리스트 */}
         <div className={styles.section2}>
           <Box className={styles.friend_box}>
-            <Typography className={styles.rec_title}>RECOMMEND FRIEND</Typography>
+            <Typography className={styles.rec_title}>FRIENDS</Typography>
             <div className={styles.friend_list}>
+              {/* <RecFriend></RecFriend>
               <RecFriend></RecFriend>
               <RecFriend></RecFriend>
               <RecFriend></RecFriend>
               <RecFriend></RecFriend>
               <RecFriend></RecFriend>
               <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
+              <RecFriend></RecFriend> */}
             </div>
           </Box>
         </div>
@@ -112,8 +107,6 @@ export default function Profile() {
           style={{ color: 'white', margin: '0rem 0rem 0rem 3rem' }}
         >
           <Tab label="MY PROFILE" {...a11yProps(0)} className={styles.tab}
-          />
-          <Tab label="MY DETAIL" {...a11yProps(1)} className={styles.tab}
           />
         </Tabs>
 
@@ -131,12 +124,9 @@ export default function Profile() {
                 <Typography className={styles.profile_sub}>용맹한 사자</Typography>
               </div>
             </Box>
-            <EditProfile />
           </div>
         </TabPanel>
-        <TabPanel value={value} index={1} className={styles.tab_panel}>
-          <EditDetail />
-        </TabPanel>
+
       </Box>
 
     </div>
