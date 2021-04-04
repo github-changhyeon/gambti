@@ -39,14 +39,18 @@ const AppRouter = () => {
   const history = useHistory();
 
   // 사용자가 탭을 닫거나 브라우저를 종료할 때 로그아웃을 한다.
+
   useEffect(() => {
+    // 로그인한 유저가 있다면 탭/브라우저 종료시 logout 을 실행한다.
+    if (fire.auth) { 
       window.addEventListener('unload', logout)
       return () => {
-          window.removeEventListener('unload', logout)
+        window.removeEventListener('unload', logout)
       }
+    }
   })
   
-  const logout = (event) => {
+  const logout = () => {
     fire.auth.signOut().then(() => {
       window.localStorage.clear();
       history.push('/');
@@ -66,7 +70,6 @@ const AppRouter = () => {
           .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
           .then(() => {
             console.log('성공');
-
           })
           .catch((error) => {
             // Handle Errors here.
@@ -120,6 +123,7 @@ const NotLoginRouter = () => {
 
 const MainRouter = () => {
   const user = useContext(UserContext);
+
   return (
     <Router>
       <Header isLogin={true} />
