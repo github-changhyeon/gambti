@@ -24,6 +24,7 @@ function checkTokenExpiration() {
         fire.auth.signOut()
         .then(() => {
           window.localStorage.clear();
+        // TODO: 홈으로 이동   
         })
         .catch(err => {
           // An error happened.
