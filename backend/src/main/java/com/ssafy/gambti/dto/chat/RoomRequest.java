@@ -8,5 +8,6 @@ import lombok.Setter;
 public class RoomRequest {
     private String FriendUid;
     private int maxNumber;
+    private String roomName;
     private String type;
 }
