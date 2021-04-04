@@ -4,11 +4,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.ssafy.gambti.domain.game.Game;
-import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
+import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.user.UserJoinGameRepository;
@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -212,6 +211,22 @@ public class GameService {
         }
         return gameSimpleResPage;
 
+    }
+
+    public List<JoinGamesRes> joinGame(HttpServletRequest httpServletRequest) {
+        FirebaseToken token = firebaseTokenUtils.decodedToken(httpServletRequest);
+        if(token != null){
+            String uid = token.getUid();
+
+            //찾아온 유저 no로 join한 게임 list를 가지고온다.
+            List<UserJoinGame> joinGames = userJoinGameRepository.findByUserId(uid);
+            List<JoinGamesRes> joinGamesResList = new ArrayList<>();
+            for (UserJoinGame ujg : joinGames) {
+                joinGamesResList.add(new JoinGamesRes(ujg.getGame()));
+            }
+            return joinGamesResList;
+        }
+        return null;
     }
 
     // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 
