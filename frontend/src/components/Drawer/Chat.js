@@ -14,7 +14,7 @@ import { UserContext } from 'src/Context/UserContext';
 
 
 
-export default function Chat({ chat, propsUser }) {
+export default function Chat({ chat, propsUser, currentRoomId }) {
   const [close, setClose] = React.useState(chat);
   const [chatRoomId, setChatRoomId] = React.useState('');
 
@@ -29,7 +29,12 @@ export default function Chat({ chat, propsUser }) {
 
   useEffect(() => {
     setClose(chat);
-    getChatRoomId(propsUser.uid);
+    {
+      currentRoomId ?
+        setChatRoomId(currentRoomId)
+        :
+        getChatRoomId(propsUser.uid);
+    }
   }, [])
 
   async function getChatRoomId(friendUid) {
@@ -93,9 +98,18 @@ export default function Chat({ chat, propsUser }) {
           <div className={styles.chat}>
             <div className={styles.root}>
               <div className={styles.header}>
-                <div className={styles.header_profile}>
-                  <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
-                </div>
+                {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
+                {
+                  propsUser ?
+                    <div className={styles.header_profile}>
+                      <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
+                    </div>
+                    :
+                    <div className={styles.header_profile}>
+                      <MediumProfile propsUser={{ nickname: currentRoomId, email: '' }} />
+                    </div>
+                }
+
                 <div>
                   <CloseButton color="#cecece"
                     onClick={onClose}
