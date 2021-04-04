@@ -40,7 +40,6 @@ public class AccountController {
     @Operation(summary = "회원 가입", description = "비회원이 회원 가입을 요청한다.")
     public ResponseEntity<? extends Response> signUpUser(@RequestBody SignUpRequest signUpRequest, HttpServletRequest httpServletRequest){
 
-        //TODO : 백엔드 협의 해야할 내용 : 변수명 and boolean으로 받을것인가?
         boolean result = accountService.signUp(signUpRequest, httpServletRequest);
 
         if(result) {

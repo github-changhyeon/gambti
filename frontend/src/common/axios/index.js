@@ -1,4 +1,5 @@
 import axios from "axios";
+import fire from 'src/fire';
 
 function restApi() {
   return axios.create({
@@ -9,8 +10,36 @@ function restApi() {
   });
 }
 
+function checkTokenExpiration() {
+  // 현재 로그인한 유저가 있는지 가져온다
+  var currentUser = fire.auth.currentUser;
+  
+  // 로그인한 유저가 있다면
+  if (currentUser) {
+    // 로그인한 유저의 토큰정보를 가져와서
+    currentUser.getIdTokenResult()
+    .then(res => {
+      // 토큰의 만료시간과 현재시간을 비교해서 만료시간이 지났다면 로그아웃 시킨다.
+      if (new Date(res.expirationTime).getTime() - new Date().getTime() < 0) {
+        fire.auth.signOut()
+        .then(() => {
+          window.localStorage.clear();
+        // TODO: 홈으로 이동   
+        })
+        .catch(err => {
+          // An error happened.
+        });
+      }
+    })
+    .catch(err => {
+      alert(err)
+    })
+  }
+}
+
 function getConfig(token) {
-  // const token = localStorage.getItem("idToken");
+  // 현재 토큰이 유요한 토큰인지 확인 한 후 만료된 토큰이면 로그아웃 하는 함수
+  checkTokenExpiration()
 
   const config = {
     headers: {

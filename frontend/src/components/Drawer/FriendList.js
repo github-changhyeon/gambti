@@ -25,6 +25,7 @@ export default function FriendList({ showChat }) {
   const handleChatChange = (user) => {
     setFriend(user);
     setChat(!chat);
+    // console.log(user);
     // console.log(friend, chat);
     // console.log(showChat);
 
@@ -45,15 +46,12 @@ export default function FriendList({ showChat }) {
               }
             />
             <hr />
-            {/* Chat방 */}
-            {/* <button onClick={() => makeOOOchatRoom(user.uid)}>1:1 대화 하기</button> */}
           </div>
         )}
         {/* {
           chat && */}
         {
           chat ?
-            // <div className={styles.chat}>
             <div>
               <Chat propsUser={friend} chat={chat} />
             </div> :

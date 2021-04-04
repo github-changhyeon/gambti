@@ -7,6 +7,6 @@
   position: fixed;
   overflow: auto;
 }
-.div::-webkit-scrollbar {
+.friend_list::-webkit-scrollbar {
   display: none;
 }

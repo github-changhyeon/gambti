@@ -18,7 +18,7 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class ExceptionController {
-    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
     //400
     @ExceptionHandler({RuntimeException.class, GameListException.class})
