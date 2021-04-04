@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StylesProvider } from '@material-ui/core/styles';
 import Header from 'src/components/Header/Header';
@@ -9,6 +9,7 @@ import fire from 'src/fire';
 import { UserContext, UserProvider } from 'src/Context/UserContext';
 import { FirebaseProvider } from 'src/Context/FirebaseContext';
 import firebase from 'firebase';
+import { useHistory } from 'react-router-dom';
 
 import {
   Home,
@@ -35,6 +36,24 @@ import {
 const AppRouter = () => {
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
+  const history = useHistory();
+
+  // 사용자가 탭을 닫거나 브라우저를 종료할 때 로그아웃을 한다.
+  useEffect(() => {
+      window.addEventListener('unload', logout)
+      return () => {
+          window.removeEventListener('unload', logout)
+      }
+  })
+  
+  const logout = (event) => {
+    fire.auth.signOut().then(() => {
+      window.localStorage.clear();
+      history.push('/');
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
 
   if (user.isLoggedIn === null) {
     return <Loading />;
