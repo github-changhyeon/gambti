@@ -36,7 +36,7 @@ export default function Header({ isLogin }) {
 
   const goProfile = (event) => {
     history.push({
-      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
         uid: user.uid,
       }),
     });

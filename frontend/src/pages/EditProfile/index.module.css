@@ -1,0 +1,188 @@
+.root {
+  height: 115vh;
+  background-color: #222222;
+}
+.upper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.section {
+  width: 70%;
+}
+.section2{
+  width: 30%;
+}
+.box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+  background-color: #2a2c2d;
+  height: 207px;
+  margin: 2rem 0rem 4rem 4rem;
+  border-radius: 15px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* margin: 3rem; */
+  width: 50%;
+}
+.main_nick {
+  font-weight: bold;
+  font-size: 2rem;
+  margin-left: 2rem;
+  color: white;
+}
+.info{
+  /* margin: 4rem; */
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 50%;
+}
+.info_group{
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.info_title{
+  /* color: white; */
+  font-size: 0.7rem;
+}
+.info_number{
+  font-weight: bold;
+  font-size: 2.7rem;
+}
+.divider {
+  position: relative;
+  border-top: 14px solid #2a2c2d;
+  border-bottom: 14px solid #2a2c2d;
+  border-left: none;
+  border-right: none;
+  background-color: #cecece;  
+}
+.friend_box{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #2a2c2d;
+  height: 300px;
+  margin: 2rem 4rem;
+  border-radius: 15px;
+}
+.rec_title{
+  margin: 1rem 0rem 0.5rem 1rem;
+  color: #cecece;
+  font-weight: bold;
+}
+.friend_list{
+  overflow: auto;
+  margin-left: 0.4rem;
+}
+/* TODO: 스크롤 보이는지 확인 */
+.box::-webkit-scrollbar {
+  display: none;
+}
+/* 수정페이지 */
+
+.tab {
+  background-color: #2a2c2d;
+  border-radius: 10px 10px 0px 0px;
+  margin-right: 0.09rem;
+
+}
+.tab_panel{
+  background-color: #2a2c2d;
+}
+.default{
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  width: 100%;
+  /* background-color: red; */
+  border: 1px solid #cecece;
+  border-radius: 5px;  
+  color: white;
+}
+.profile_content{
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  padding-left: 1.2rem;
+}
+.profile_title{
+  color: #cecece;
+  font-size: 11px;
+}
+.profile_sub{
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+}
+.edit{
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  width: 100%;
+  /* background-color: red; */
+  color: white;
+  margin-top: 3rem;
+}
+.edit_content{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+}
+.edit_title{
+  margin: 1rem 1rem 0rem 1rem;
+  /* padding-left: 1.2rem; */
+  color: #cecece;
+  font-size: 11px;
+  font-weight: bold;
+}
+.edit_sub{
+  width: 90%;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #cecece;
+  /* width: 100%; */
+  font-size: 15px;
+  background-color: #2a2c2d;
+  color: #cecece;
+  margin-top: 0.3rem;
+}
+
+.error{
+  width: 90%;
+  color: orange;
+  display: flex;
+  justify-content: flex-end;   
+  font-size: 14px;              
+}
+.edit_pw{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 1rem;
+}
