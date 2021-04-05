@@ -60,7 +60,6 @@
   width: 67%;
   /* margin-top: 20px; */
   float: left;
-  background-color: chartreuse;
 }
 
 .detail_right_container {
@@ -72,4 +71,89 @@
   background-color: red;
   padding: 10px;
   position: fixed;
+}
+.detail_youtube_card {
+  width: 98%;
+  margin: 6px 0px 6px 0px;
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid dimgrey;
+  box-sizing: border-box;
+}
+.detail_youtube_card_root {
+  margin-top: 10px;
+  background-color: #333333;
+  display: flex;
+  justify-content: center;
+  box-shadow: 5px 5px 5px;
+  border-radius: 10px;
+}
+.detail_youtube_card_image {
+  width: 50%;
+  cursor: pointer;
+}
+.detail_youtube_card_content {
+  width: 50%;
+  background-color: #111111;
+  overflow: hidden;
+}
+.detail_youtube_card_title {
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.detail_youtube_card_text {
+  color: grey;
+  font-size: 14px;
+  font-weight: 500;
+}
+.detail_youtube_card_text_wrap {
+  display: flex;
+  margin-bottom: 15px;
+}
+.detail_youtube_card_channel {
+  display: flex;
+  align-items: center;
+}
+.detail_youtube_card_avatar {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.detail_youtube_card_channel_title {
+  color: grey;
+  font-size: 15px;
+  font-weight: 550;
+  box-sizing: border-box;
+  padding-left: 15px;
+  cursor: pointer;
+}
+.detail_youtube_card_description {
+  margin-top: 15px;
+}
+.detail_youtube_card_description_text {
+  color: grey;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 56px;
+}
+.detail_youtube_cards {
+  height: 100vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.detail_youtube_cards::-webkit-scrollbar {
+  background-color: #222222;
+}
+
+.detail_youtube_cards::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 5px solid transparent;
 }
