@@ -165,7 +165,7 @@ public class RoomService {
 
                                 //해당 room의 궁합도 점수를 산출한다.
                                 // 방에 있는 유저 수 * 100점 - 각 유저의 MBTI * 100/16 = 6.25
-                                double score = (long)room.get("currentCnt") * 100 - sumOfindex * 6.25;
+                                double score = ((long)room.get("currentCnt") * 100 - sumOfindex * 6.25)/(long)room.get("currentCnt");
                                 logger.info("방에 대한 최종 점수는 ? : " + score);
 
                                 //50점이 넘어야하며 선택된 방보다 더 크면 선택된 방을 바꾼다.
@@ -189,6 +189,10 @@ public class RoomService {
                             update.put("roomName", selectedRoomName + "_" + myNickname);
                             update.put("currentCnt", selectedRoomCnt + 1);
                             roomsRef.document(selectedRoomId).set(update, SetOptions.merge());
+
+                            DocumentReference usersRef = db.collection("users").document(myUid);
+                            usersRef.update("rooms", FieldValue.arrayUnion(selectedRoomId));
+
                             return selectedRoomId;
                         }
                     }
