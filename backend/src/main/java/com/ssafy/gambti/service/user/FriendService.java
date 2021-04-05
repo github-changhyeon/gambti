@@ -1,19 +1,25 @@
 package com.ssafy.gambti.service.user;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 
+import com.google.firebase.cloud.FirestoreClient;
+import com.google.firebase.messaging.Notification;
 import com.ssafy.gambti.domain.mapping.Friend;
 import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserBanFriend;
 import com.ssafy.gambti.domain.user.UserMBTI;
+import com.ssafy.gambti.dto.NotificationDto;
 import com.ssafy.gambti.dto.user.UserIdListRes;
 import com.ssafy.gambti.repository.user.FriendRepository;
 import com.ssafy.gambti.repository.user.UserBanFriendRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.caching.CachingService;
 import com.ssafy.gambti.service.security.SecurityService;
+import com.ssafy.gambti.utils.NotificationUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +41,7 @@ public class FriendService {
     private final UserBanFriendRepository userBanFriendRepository;
     private final SecurityService securityService;
     private final CachingService cachingService;
+    private final NotificationUtils notificationUtils;
 
     // 현재 로그인한 유저의 토큰을 디코딩하여 로그인 유저 객체를 가져오는 getter
     public User getLoginUser(HttpServletRequest httpServletRequest){
@@ -62,9 +70,17 @@ public class FriendService {
     }
 
     public boolean addFriend(String toUserId, HttpServletRequest httpServletRequest) {
+
         // 1. 친구 관계를 요청/수락 할 두 유저 객체를 가져온다. fromUser(로그인 유저), toUser(친구 요청/수락 대상)
         User fromUser = getLoginUser(httpServletRequest);
         User toUser = userRepository.findById(toUserId).get();
+
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference usersRef = db.collection("users");
+        DocumentReference toUsersRef = usersRef.document(toUserId);
+
+        ApiFuture<DocumentSnapshot> toUserSnapShot = toUsersRef.get();
+
 
         // 이미 친구요청을 보낸 적이 있으면 예외처리
         friendRepository.findByFromAndTo(fromUser, toUser).ifPresent(
@@ -80,6 +96,11 @@ public class FriendService {
         // 3. fromUser와 toUser가 존재한다면 친구 요청 또는 수락을 할것임
         if (fromUser != null && toUser != null) {
             // 3.1 이전에 상대방이 나에게 친구 요청을 한 내역이 있다면 친구 수락을 해야함
+            NotificationDto notificationDto = NotificationDto.builder()
+                    .receiverUid(toUser.getId())
+                    .senderUid(fromUser.getId())
+                    .type("friend").build();
+
             if (previousRequest.isPresent()) {
                 // 3.1.1 이전에 보낸 친구 요청의 승인 상태를 true로 바꾼다.
                 previousRequest.get().changeApproved();
@@ -92,6 +113,23 @@ public class FriendService {
                         .build();
 
                 friendRepository.save(friend);
+
+                // TODO: (firestore 관련) fromUser와 toUser의 users-{userid}-friends에 서로를 친구관계(code:2)로 추가해야함
+                try {
+                    logger.info(toUserSnapShot.get().get("friends").toString());
+                } catch (InterruptedException e) {
+                    logger.error(e.getMessage());
+                } catch (ExecutionException e) {
+                    logger.error(e.getMessage());
+                }
+
+                // TODO: (FCM 관련) toUser에게 친구요청이 수락되었다는 Noti를 줘야함
+                // users 컬렉션 - {toUserId} document - notification 컬렉션에 다음 필드를 가지는 document 추가
+                notificationDto.setMessage(toUser.getNickname()+"님께서 친구요청을 수락하셨습니다.");
+                notificationDto.setMessage(null);
+
+
+
             // 3.2 이전에 상대방이 나에게 친구 요청을 한 내역이 없다면 친구 요청을 해야함
             } else {
                 // 3.2.1 한쪽 유저에서 처음 보낸 친구 요청이라면 상대방에서 아직 승인을 하지 않았기 때문에 isApproved는 false
@@ -102,7 +140,43 @@ public class FriendService {
                         .build();
 
                 friendRepository.save(friend);
+                // TODO: (firestore 관련) fromUser의 users-{fromUserid}-friends에 toUser를 친구 요청 대기자로(code:0) 추가해야함
+                // TODO: (firestore 관련) toUser의 users-{toUserid}-friends에 fromUser를 친구 요청자 (code:1) 추가해야함
+                try {
+                    toUserSnapShot.get();
+                } catch (InterruptedException e) {
+                    logger.error(e.getMessage());
+                } catch (ExecutionException e) {
+                    logger.error(e.getMessage());
+                }
+
+                // TODO: toUser에게 친구요청이 왔다는 Noti를 줘야함
+                notificationDto.setMessage(toUser.getNickname()+"님께서 친구요청을 하셨습니다.");
+                notificationDto.setUrl("http://localhost:8081/v1/friends/"+fromUser.getId());
+
             }
+
+            notificationUtils.registNotification(notificationDto);
+
+
+            // toUser에게 background 메세지 보내기
+//            Notification notification = Notification.builder()
+//                    .setBody(fromUser.getNickname()+"님에게서 새로운 알림이 왔습니다.")
+//                    .setImage("images/gambti/gambti_icon.png")
+//                    .setTitle("GAMBTI의 새로운 알림").build();
+//
+//            // toUserFcmToken 가져오기
+//            try {
+//                DocumentSnapshot document = toUserSnapShot.get();
+//                String fcmToken = document.getData().get("fcmToken").toString();
+//                notificationUtils.send(fcmToken, notification);
+//            } catch (InterruptedException e) {
+//                logger.error(e.getMessage());
+//            } catch (ExecutionException e) {
+//               logger.error(e.getMessage());
+//            }
+
+
         } else {
             return false;
         }
