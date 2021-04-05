@@ -11,12 +11,17 @@ import fire from "src/fire";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FaceIcon from "@material-ui/icons/Face";
 import { UserContext } from "src/Context/UserContext";
+import Notifications from "src/components/Notifications/Notifications";
 import { event } from "jquery";
+import Box from '@material-ui/core/Box';
+import NotiList from 'src/components/Notifications/NotiList';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 
 export default function Header({ isLogin }) {
   const history = useHistory();
   const user = useContext(UserContext);
   const [isShownNoti, setIsShownNoti] = React.useState(false);
+  const [isNoti, setIsNoti] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
   // console.log(user);
 
@@ -124,15 +129,37 @@ export default function Header({ isLogin }) {
               className={styles.header_right_item}
               onMouseEnter={() => setIsShownNoti(true)}
               onMouseLeave={() => setIsShownNoti(false)}
+              onClick={() => {
+                setIsNoti(!isNoti);
+                console.log('isNoti', isNoti)
+              }}
             >
               <NotificationsIcon
                 className={styles.header_right_icon}
                 style={{ color: "#d1d1d1" }}
+
               />
-              {isShownNoti && (
+              {isShownNoti && !isNoti && (
                 <div className={styles.textarea}>Notifications</div>
               )}
             </div>
+            {isNoti && (
+              <div className={styles.noti}>
+                <div >
+                  <Box className={styles.paper}>
+                    <div className={styles.title}>
+                      Notifications
+                    </div>
+                    <div className={styles.noti_list}>
+                      <NotiList />
+                    </div>
+                    <div className={styles.button}>
+                      <ButtonComp textvalue="Close" size="noti" color="#ccff00" onClick={() => setIsNoti(false)} />
+                    </div>
+                  </Box>
+                </div>
+              </div>
+            )}
             {/* 프로필 버튼 */}
             <div className={styles.header_right_item}>
               <div className={styles.dropdown}>
@@ -162,6 +189,6 @@ export default function Header({ isLogin }) {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 }

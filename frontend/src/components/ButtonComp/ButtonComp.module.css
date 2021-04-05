@@ -33,3 +33,10 @@
   border-radius: 15px;
   font-size: 20px;
 }
+.noti {
+  width: 200px;
+  height: 35px;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 15px;
+}

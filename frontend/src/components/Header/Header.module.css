@@ -164,3 +164,33 @@
   font-size: 0.8rem;
   border-radius: 5px;
 }
+.noti {
+  position: absolute;
+  top: 65px;
+  right: 70px;
+  background-color: #2a2c2d;
+  width: 300px;
+  /* padding: 4px 0px; */
+  color: white;
+  padding: 20px;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px #343535;
+  /* visibility: hidden; */
+}
+
+.paper {
+  background-color: #2a2c2d;
+
+  }
+  .title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .noti_list{
+    margin: 1rem;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+  }
