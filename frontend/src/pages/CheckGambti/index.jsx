@@ -246,6 +246,9 @@ export default function CheckGambti() {
     // }
   }
 
+  const [propsMbti, setPropsMbti] = useState('');
+  const [propsMbtiExplain, setPropsMbtiExplain] = useState('');
+
   useEffect(() => {
     if (num == 14) {
       $('.question').hide();
@@ -260,6 +263,8 @@ export default function CheckGambti() {
       $('.result_img').attr('src', result[mbti]['img']);
       $('.gambti').html(result[mbti]['gambti']);
       $('.explain').html(result[mbti]['explain']);
+      setPropsMbti(mbti); // signup으로 넘겨줄 mbti
+      setPropsMbtiExplain(result[mbti]['gambti']); // signup으로 넘겨줄 mbti 설명
       console.log(mbti + ' ' + result[mbti]['gambti']); // 최종 결과 : mbti, 해당 mbti 역할
     }
   }, [num]);
@@ -380,7 +385,10 @@ export default function CheckGambti() {
                 textvalue="Sign up"
                 color="#CCFF00"
                 onClick={() => {
-                  history.push(routerInfo.PAGE_URLS.SIGNUP);
+                  history.push({
+                    pathname: routerInfo.PAGE_URLS.SIGNUP,
+                    state: { mbti: propsMbti, mbtiExplain: propsMbtiExplain },
+                  });
                 }}
               ></ButtonComp>
             </div>
@@ -392,7 +400,6 @@ export default function CheckGambti() {
         <p>{valueTF}</p>
         <p>{valueJP}</p> */}
       </div>
-
     </div>
   );
 }
