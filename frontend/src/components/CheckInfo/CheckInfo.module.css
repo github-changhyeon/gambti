@@ -14,7 +14,7 @@
 }
 
 .question_root {
-  padding: 40px 0;
+  padding: 40px 200px;
 }
 
 .question_title {
@@ -27,6 +27,7 @@
 
 .question_box {
   color: white;
+  height: 40vh;
 }
 
 .tags {

@@ -387,7 +387,7 @@ export default function CheckGambti() {
                 onClick={() => {
                   history.push({
                     pathname: routerInfo.PAGE_URLS.SIGNUP,
-                    state: { mbti: propsMbti, mbtiExplain: propsMbtiExplain },
+                    state: { mbti: propsMbti, mbtiSub: propsMbtiExplain },
                   });
                 }}
               ></ButtonComp>
