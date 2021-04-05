@@ -1,8 +1,12 @@
 package com.ssafy.gambti.service.game;
 
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.FieldValue;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.cloud.FirestoreClient;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
@@ -25,9 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -105,24 +107,45 @@ public class GameService {
 
     @Transactional
     public boolean joinOrLeaveToGame(long gameId, HttpServletRequest httpServletRequest) {
+
+        Firestore db = FirestoreClient.getFirestore();
+
         //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
         String token = securityService.getBearerToken(httpServletRequest);
         FirebaseToken decodedToken = null;
+
         if(token!=null){
             try {
                 //3. 토큰을 디코딩한다.
                 decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
                 //4. uid를 가지고온다.
                 String uid = decodedToken.getUid();
+
+                CollectionReference joinGamesRef = db.collection("users").document(uid).collection("joinGames");
+
                 //5. 만약에 존재하지 않는다면
                 if(!userJoinGameRepository.existsByUserIdAndGameId(uid, gameId)){
                     userJoinGameRepository.save(new UserJoinGame(
                             userRepository.findById(uid).orElseThrow(GameListException::new),
                             gameRepository.findById(gameId).orElseThrow(GameListException::new)));
+                    Optional<Game> game = gameRepository.findById(gameId);
+
+                    Map<String, Object> document = new HashMap<>();
+                    document.put("gameId", game.get().getId());
+                    document.put("imgPath",game.get().getLogoImagePath());
+                    document.put("timestamp", FieldValue.serverTimestamp());
+                    joinGamesRef.document(Long.toString(gameId)).set(document);
+                    logger.info("등록했음");
                 }
                 else{
                     //6. 존재하고 있다면 탈퇴 시킴
-                    return userJoinGameRepository.deleteByUserIdAndGameId(uid, gameId) == 1? true : false;
+                    boolean res = false;
+                    if(userJoinGameRepository.deleteByUserIdAndGameId(uid, gameId) == 1){
+                        res = true;
+                        joinGamesRef.document(Long.toString(gameId)).delete();
+                        logger.info("지웠음");
+                    }
+                    return res;
                 }
             }
             catch (FirebaseAuthException e){
