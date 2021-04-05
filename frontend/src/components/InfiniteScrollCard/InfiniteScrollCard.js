@@ -15,7 +15,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
   const [items, setItems] = useState(new Array());
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const [size, setSize] = useState(20);
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -33,6 +33,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         },
         (response) => {
           console.log("무한스크롤", response.data.data.content);
+          console.log("여기야", pageNum);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
           setPageNum((pageNum) => pageNum + 1);
@@ -81,7 +82,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
-          setPageNum(pageNum + 1);
+          setPageNum((pageNum) => pageNum + 1);
           if (response.data.data.last) {
             setIsEnd(true);
           }
@@ -110,9 +111,14 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
 
   useEffect(() => {
     setItems(new Array());
-    setPageNum(0);
-    fetchData();
+    setPageNum(1);
   }, [routerMatch]);
+
+  useEffect(() => {
+    if (pageNum === 1) {
+      fetchData();
+    }
+  }, [pageNum]);
 
   useEffect(() => {
     // scroll event listener 등록
