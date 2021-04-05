@@ -87,4 +87,28 @@ public class RoomService {
         }
         return uuid;
     }
+    public void getGroupRoom(RoomRequest roomRequest, HttpServletRequest httpServletRequest){
+        Firestore db = FirestoreClient.getFirestore();
+        FirebaseToken decodedToken = firebaseTokenUtils.decodedToken(httpServletRequest);
+        String myUid = decodedToken.getUid();
+        String myMbti = null;
+        DocumentReference myRef = db.collection("users").document(myUid);
+        try {
+            DocumentSnapshot myDoc = myRef.get().get();
+            if(myDoc.exists()){
+                myMbti = myDoc.getData().get("mbti").toString();
+                logger.info("요청자 MBTI는 : ",myMbti);
+            }
+            else{
+                return;
+            }
+            //해당 게임의 타이틀로 검색해서 rooms를 받아온다.
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 }
