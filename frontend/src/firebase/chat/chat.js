@@ -10,7 +10,7 @@ async function getFriends() {
     }).catch((error) => {
         console.log("리스트 불러오기 실패 : ", error);
     });
-    console.log(docs);
+    // console.log(docs);
     return docs;
 }
 //내가 포함된 채팅방 받아오기
@@ -33,7 +33,8 @@ async function makeOneOnOneChatRoom(friendUid) {
 }
 
 // Saves a new message to your Cloud Firestore database.
-async function sendMessage(roomsId, messageText) {
+function sendMessage(roomsId, messageText) {
+    console.log(roomsId, messageText);
     var timestamp = + new Date();
     return fire.db.collection('rooms').doc(roomsId).collection('messages').add({
         name: getUserName(),
@@ -79,18 +80,20 @@ async function makeGroupChatRoom(numberOfPeople) {
 
 }
 
-async function readMessage(chatRoomId) {
-    console.log(chatRoomId);
+function readMessage(chatRoomId) {
+
     var docs = [];
-    await fire.db.collection('rooms').doc(chatRoomId).collection('messages').get().then((list) => {
-        list.forEach((doc) => {
-            console.log(doc.data());
-            docs.push(doc.data());
-        });
-    }).catch((error) => {
-        console.log("리스트 불러오기 실패 : ", error);
-    });
+    fire.db.collection('rooms').doc(chatRoomId).collection('messages').orderBy('timestamp')
+        .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                var message = change.doc.data();
+                console.log('message가자', message);
+                docs.push(message);
+            })
+            console.log('docs', docs)
+        })
     return docs;
+
 }
 
 function getProfilePicUrl() {

@@ -5,6 +5,7 @@ import com.ssafy.gambti.dto.basicResponse.Response;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendDto;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
+import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.service.game.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,10 +61,10 @@ public class GameController {
 //    }
 
 
-    @GetMapping(value="/{gameId}")
+    @GetMapping(value="/detail/{gameId}")
     @Operation(summary = "선택된 게임의 detail 정보를 조회", description = "gameId를 통해 하나의 게임의 detail을 조회한다.")
-    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId){
-        GameDetailRes gameDetail = gameService.gameDetail(gameId);
+    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
+        GameDetailRes gameDetail = gameService.gameDetail(gameId, httpServletRequest);
         if (gameDetail != null) {
             return new ResponseEntity<>(new Response(SUCCESS, "게임 디테일 조회 성공", gameDetail), HttpStatus.OK);
         } else {
@@ -81,6 +82,12 @@ public class GameController {
         else{
             return new ResponseEntity<>(new Response(SUCCESS, "변경 실패", null), HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping(value = "/joinGames")
+    @Operation(summary = "유저가 join한 게임 리스트 받기", description = "유저가 이전에 join했던 게임을 받아온다.")
+    public ResponseEntity<? extends Response> joinGames(HttpServletRequest httpServletRequest){
+        List<JoinGamesRes> joinGamesRes = gameService.joinGame(httpServletRequest);
+        return new ResponseEntity<>(new Response(SUCCESS, "유저가 join한 게임 정보", joinGamesRes), HttpStatus.OK);
     }
 
         //TODO : 주석처리 요청은 다른 service로 합친것 들

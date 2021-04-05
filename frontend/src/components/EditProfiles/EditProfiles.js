@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import styles from './EditProfile.module.css';
+import styles from './EditProfiles.module.css';
 import { UserContext } from 'src/Context/UserContext';
 import fire from 'src/fire';
 import firebase from 'firebase';

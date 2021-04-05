@@ -36,7 +36,7 @@ export default function Header({ isLogin }) {
 
   const goProfile = (event) => {
     history.push({
-      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
         uid: user.uid,
       }),
     });
@@ -139,6 +139,7 @@ export default function Header({ isLogin }) {
                 <AvatarComp
                   className={styles.dropbtn}
                   size="xsmall"
+                  badge='badge'
                   // textvalue={user.nickname}
                   textvalue={user.nickname.substring(0, 1)}
                 ></AvatarComp>

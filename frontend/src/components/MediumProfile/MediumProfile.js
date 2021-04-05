@@ -3,12 +3,13 @@ import styles from "./MediumProfile.module.css";
 import AvatarComp from "src/components/AvatarComp/AvatarComp";
 import Typography from "@material-ui/core/Typography";
 
-export default function MediumProfile({ propsUser }) {
+export default function MediumProfile({ propsUser, onClick }) {
   // const [nickName, setNickName] = useState("김싸피");
   // const [email, setEmail] = useState("ssafy@naver.com");
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} onClick={onClick}>
+      {/* TODO: 사진 or nickname substring 넣기 */}
       <AvatarComp size="medium"></AvatarComp>
       <div className={styles.text_margin}>
         <Typography noWrap={true} className={styles.nick}>

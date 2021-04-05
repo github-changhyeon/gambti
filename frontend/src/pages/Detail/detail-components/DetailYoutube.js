@@ -1,5 +1,13 @@
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 
-export default function DetailYoutube() {
-  return <div>detail youtube</div>;
+import YoutubeCards from "src/pages/Detail/detail-components/YoutubeCards";
+
+export default function DetailYoutube({ propsMatch, propsGameInfo }) {
+  useEffect(() => {}, []);
+
+  return (
+    <div>
+      <YoutubeCards propsAppName={propsGameInfo.appName}></YoutubeCards>
+    </div>
+  );
 }

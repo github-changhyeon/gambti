@@ -36,8 +36,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
           setPageNum((pageNum) => pageNum + 1);
-          // setPageNum(pageNum + 1);
-
           if (response.data.data.last) {
             setIsEnd(true);
           }

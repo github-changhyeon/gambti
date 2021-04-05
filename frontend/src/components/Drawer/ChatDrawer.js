@@ -4,24 +4,26 @@ import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from "@material-ui/core/InputBase";
-import MediumProfile from "src/components/MediumProfile/MediumProfile";
-import Chat from './Chat';
+import FriendList from './FriendList';
+import ChatList from './ChatList';
 import fire from 'src/fire';
+import Button from "@material-ui/core/Button";
+
 
 
 export default function ChatDrawer({ showChat }) {
 
-  const [chat, setChat] = React.useState(false);
+  // const [chat, setChat] = React.useState(false);
   // const currentUser = fire.auth.currentUser;
   // console.log(currentUser);
 
-  const handleChatChange = () => {
-    console.log(chat);
-    setChat(!chat);
-  }
+  // const handleChatChange = () => {
+  //   console.log(chat);
+  //   setChat(!chat);
+  // }
+  const [draw, setDraw] = React.useState(true);
 
   return (
     <div>
@@ -30,12 +32,25 @@ export default function ChatDrawer({ showChat }) {
           <div className={styles.root}>
             <List>
               <ListItem>
-                <ListItemText className={styles.title}>
+                <Button
+                  className={
+                    draw ? styles.main_title : styles.title
+                  }
+                  onClick={() => {
+                    setDraw(true);
+                  }}
+                >
                   Chat
-                </ListItemText>
-                <ListItemText className={styles.title}>
+                </Button>
+                <Button
+                  className={
+                    draw ? styles.title : styles.main_title
+                  }
+                  onClick={() => {
+                    setDraw(false);
+                  }}>
                   Friends
-                </ListItemText>
+                </Button>
               </ListItem>
               <ListItem>
                 <div className={styles.header_center}>
@@ -51,20 +66,17 @@ export default function ChatDrawer({ showChat }) {
                   />
                 </div>
               </ListItem>
-              <div>
+              <div className={styles.chat_friend}>
+                <ListItem>
+                  <div>
+                    {
+                      draw ?
+                        <ChatList showChat={showChat} /> :
+                        <FriendList showChat={showChat} />
+                    }
+                  </div>
+                </ListItem>
 
-                <ListItem onClick={handleChatChange}>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
-                <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
-                <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
-                <ListItem>
-                  <MediumProfile propsUser={{ nickname: "김싸피", email: "ssafy@test.com" }} />
-                </ListItem>
               </div>
 
 
@@ -73,12 +85,7 @@ export default function ChatDrawer({ showChat }) {
 
         )
       }
-      {/* Chat방 */}
-      {
-        chat &&
-        <div className={styles.chat}>
-          <Chat chat={chat} />
-        </div>}
+
     </div >
   );
 }

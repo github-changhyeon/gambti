@@ -26,6 +26,9 @@ public class GameDetailRes {
     private String backgroundImagePath;
     private List<String> tags;
     private List<String> genres;
+    private boolean isJoined;
+    private boolean isOwned;
+    private int joinUserCount;
 
     public static GameDetailRes of(Game game){
         GameDetailRes gameDetailRes = GameDetailRes.builder()
@@ -45,5 +48,17 @@ public class GameDetailRes {
                 .genres(Genre.listOf(game.getGameGenres()))
                 .build();
         return gameDetailRes;
+    }
+
+    public void setJoined(boolean joined) {
+        isJoined = joined;
+    }
+
+    public void setOwned(boolean owned) {
+        isOwned = owned;
+    }
+
+    public void setJoinUserCount(int joinUserCount) {
+        this.joinUserCount = joinUserCount;
     }
 }
