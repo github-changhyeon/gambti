@@ -109,5 +109,18 @@ export default function ButtonComp({
         </Button>
       </div>
     );
+  } else if (size === "noti") {
+    return (
+      <div>
+        <Button
+          className={styles.noti}
+          style={{ backgroundColor: `${color}` }}
+          variant="contained"
+          onClick={onClick}
+        >
+          {textvalue}
+        </Button>
+      </div>
+    );
   }
 }

@@ -59,7 +59,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
   }, [propsMatch.params.genre]);
 
   return (
-    <div>
+    <div style={{ minHeight: "372px" }}>
       <Container
         style={{
           boxSizing: "border-box",

@@ -11,21 +11,26 @@ import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import { addFriend } from 'src/common/axios/Friends';
+import RecommendedFriends from 'src/components/RecommendedFriends/RecommendedFriends';
 
 
 export default function Profile({ match }) {
   const location = useLocation();
   const history = useHistory();
-  const user = match.params.uid;
+
+  // 나 전체
+  const fromUser = useContext(UserContext);
+  // 상대방
+  const toUser = match.params.uid;
   const [joinedGame, setJoinedGame] = React.useState(8);
   const [friendNumber, setFriendNumber] = React.useState(1);
-  const [userInfo, setUserInfo] = React.useState('');
+  const [toUserInfo, setToUserInfo] = React.useState('');
 
   const [value, setValue] = React.useState(0);
 
   useEffect(() => {
-    ReadUserInfo(user)
-  }, [user])
+    ReadToUserInfo(toUser)
+  }, [toUser])
 
   // tab 설정
   const handleChange = (event, newValue) => {
@@ -58,16 +63,19 @@ export default function Profile({ match }) {
     );
   }
 
-  const ReadUserInfo = (userId) => {
-    fire.db.collection("users").doc(userId).get()
+  const ReadToUserInfo = (toUser) => {
+    fire.db.collection("users").doc(toUser).get()
       .then((doc) => {
-        setUserInfo(doc.data());
+        setToUserInfo(doc.data());
       })
   }
 
-  const handleAddFriend = (userId) => {
+  // axios 요청
+  const handleAddFriend = (toUserId) => {
+    const idToken = window.localStorage.getItem('idToken');
+    // console.log('idToken', idToken);
 
-    addFriend(userId, (response) => {
+    addFriend(toUserId, idToken, (response) => {
       console.log(response);
     })
   }
@@ -80,9 +88,9 @@ export default function Profile({ match }) {
         <div className={styles.section}>
           <Box className={styles.box}>
             <div className={styles.profile}>
-              <AvatarComp size="superlarge" textvalue={userInfo.nickname} ></AvatarComp>
+              <AvatarComp size="superlarge" textvalue={toUserInfo.nickname} ></AvatarComp>
               {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
-              <Typography className={styles.main_nick}>{userInfo.nickname}</Typography>
+              <Typography className={styles.main_nick}>{toUserInfo.nickname}</Typography>
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
             <div className={styles.info}>
@@ -99,14 +107,10 @@ export default function Profile({ match }) {
         </div>
         {/* 추천 친구 리스트 */}
         <div className={styles.section2}>
-          <Box className={styles.friend_box}>
-            <ButtonComp size='xlarge' textvalue='친구 추가' color='#ccff00'
-              onClick={() => {
-                handleAddFriend(user);
-              }}></ButtonComp>
-          </Box>
+          <RecommendedFriends />
         </div>
       </div>
+
 
       <br />
       <Box>
@@ -126,13 +130,22 @@ export default function Profile({ match }) {
             <Box className={styles.default}>
               <div className={styles.profile_content}>
                 <Typography className={styles.profile_title}>EMAIL</Typography>
-                <Typography className={styles.profile_sub}>{userInfo.email}</Typography>
+                <Typography className={styles.profile_sub}>{toUserInfo.email}</Typography>
               </div>
               <Divider orientation="vertical" flexItem className={styles.divider} />
               <div className={styles.profile_content}>
                 <Typography className={styles.profile_title}>GAMBTI</Typography>
-                <Typography className={styles.profile_sub}>용맹한 사자</Typography>
+                <Typography className={styles.profile_sub}>{toUserInfo.mbti}</Typography>
               </div>
+            </Box>
+          </div>
+          {/* 친구 추가 */}
+          <div className={styles.section2}>
+            <Box className={styles.friend_box}>
+              <ButtonComp size='xlarge' textvalue='친구 추가' color='#ccff00'
+                onClick={() => {
+                  handleAddFriend(toUser);
+                }}></ButtonComp>
             </Box>
           </div>
         </TabPanel>
