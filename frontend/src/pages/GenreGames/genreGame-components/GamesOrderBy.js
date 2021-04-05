@@ -44,7 +44,7 @@ export default function GamesorderBy({ propsMatch }) {
   }, [propsMatch]);
 
   return (
-    <div>
+    <div style={{ minHeight: "600px" }}>
       <Container
         style={{
           boxSizing: "border-box",

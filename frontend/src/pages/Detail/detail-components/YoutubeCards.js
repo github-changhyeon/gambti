@@ -17,7 +17,7 @@ export default function YoutubeCards({ propsAppName }) {
         setItems(
           searchItems.map((searchItem, i) => ({
             videoId: searchItem.id.videoId,
-            videoTitle: searchItem.id.videoTitle,
+            videoTitle: searchItem.snippet.title,
             channelId: searchItem.snippet.channelId,
             channelTitle: searchItem.snippet.channelTitle,
             description: searchItem.snippet.description,
