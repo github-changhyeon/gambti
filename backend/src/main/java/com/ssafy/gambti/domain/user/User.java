@@ -67,7 +67,7 @@ public class User {
     private List<UserBanGame> userBanGames = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserLikeTag> userlikeTags = new ArrayList<>();
+    private List<UserLikeTag> userLikeTags = new ArrayList<>();
 
     @Builder
     public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {

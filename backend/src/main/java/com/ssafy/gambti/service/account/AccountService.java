@@ -3,18 +3,18 @@ package com.ssafy.gambti.service.account;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import com.ssafy.gambti.domain.user.User;
-import com.ssafy.gambti.domain.user.UserGender;
-import com.ssafy.gambti.domain.user.UserMBTI;
-import com.ssafy.gambti.domain.user.UserRole;
+import com.ssafy.gambti.domain.user.*;
 import com.ssafy.gambti.dto.account.ModifyUserInfoRequest;
 import com.ssafy.gambti.dto.account.SignUpRequest;
 import com.ssafy.gambti.repository.account.AccountRepository;
+import com.ssafy.gambti.repository.tag.TagRepository;
+import com.ssafy.gambti.repository.user.UserLikeTagRepository;
 import com.ssafy.gambti.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +25,8 @@ public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
+    private final UserLikeTagRepository userLikeTagRepository;
     private final SecurityService securityService;
 
     public boolean signIn(){
@@ -32,6 +34,7 @@ public class AccountService {
         return true;
     }
 
+    @Transactional
     public boolean signUp(SignUpRequest signUpRequest, HttpServletRequest httpServletRequest) {
         //1. 토큰을 가지고온다.
         String token = securityService.getBearerToken(httpServletRequest);
@@ -52,6 +55,9 @@ public class AccountService {
                         .maxPrice(signUpRequest.getMaxPrice())
                         .role(UserRole.GUEST) //5. role은 무조건 guest로 설정
                         .build();
+
+                signUpRequest.getUserLikeTagIds().stream()
+                        .forEach(aLong -> userLikeTagRepository.save(new UserLikeTag(signUpUser, tagRepository.findById(aLong).get())));
 
                 accountRepository.save(signUpUser);
             }

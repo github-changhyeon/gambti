@@ -6,39 +6,26 @@ import Typography from "@material-ui/core/Typography";
 import Box from '@material-ui/core/Box';
 import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 import Divider from '@material-ui/core/Divider';
-import Button from "@material-ui/core/Button";
-import RecFriend from './RecFriend';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
-import firebase from 'firebase';
-import $ from 'jquery';
-import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert';
-import EditProfile from 'src/components/EditProfile/EditProfile';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
+import { addFriend } from 'src/common/axios/Friends';
 
 
-export default function Profile() {
-
+export default function Profile({ match }) {
   const location = useLocation();
   const history = useHistory();
-  const user = useContext(UserContext);
-  const currentUser = fire.auth.currentUser;
+  const user = match.params.uid;
   const [joinedGame, setJoinedGame] = React.useState(8);
   const [friendNumber, setFriendNumber] = React.useState(1);
-
-  // const [nickname, setNickname] = useState(user.nickname);
-  // const [currentpw, setCurrentpw] = useState('');
-  // const [nickError, setNickError] = useState(false);
-  // const [pwcheck, setPwcheck] = useState(false);
-  // const [pwcheckError, setPwcheckError] = useState(false);
-  // const [password, setPassword] = useState('');
-  // const [passwordError, setPasswordError] = useState(false);
-  // const [passwordConfirm, setPasswordConfirm] = useState('');
-  // const [passwordMatchError, setPasswordMatchError] = useState('');
-  // const [test, setTest] = useState(user.nickname);
-
+  const [userInfo, setUserInfo] = React.useState('');
 
   const [value, setValue] = React.useState(0);
+
+  useEffect(() => {
+    ReadUserInfo(user)
+  }, [user])
 
   // tab 설정
   const handleChange = (event, newValue) => {
@@ -71,6 +58,19 @@ export default function Profile() {
     );
   }
 
+  const ReadUserInfo = (userId) => {
+    fire.db.collection("users").doc(userId).get()
+      .then((doc) => {
+        setUserInfo(doc.data());
+      })
+  }
+
+  const handleAddFriend = (userId) => {
+
+    addFriend(userId, (response) => {
+      console.log(response);
+    })
+  }
 
   return (
     <div className={styles.root}>
@@ -80,8 +80,9 @@ export default function Profile() {
         <div className={styles.section}>
           <Box className={styles.box}>
             <div className={styles.profile}>
-              <AvatarComp size="superlarge" textvalue={user.nickname.substring(0, 1)} ></AvatarComp>
-              <Typography className={styles.main_nick}>{user.nickname}</Typography>
+              <AvatarComp size="superlarge" textvalue={userInfo.nickname} ></AvatarComp>
+              {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
+              <Typography className={styles.main_nick}>{userInfo.nickname}</Typography>
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
             <div className={styles.info}>
@@ -99,17 +100,10 @@ export default function Profile() {
         {/* 추천 친구 리스트 */}
         <div className={styles.section2}>
           <Box className={styles.friend_box}>
-            <Typography className={styles.rec_title}>RECOMMEND FRIEND</Typography>
-            <div className={styles.friend_list}>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-            </div>
+            <ButtonComp size='xlarge' textvalue='친구 추가' color='#ccff00'
+              onClick={() => {
+                handleAddFriend(user);
+              }}></ButtonComp>
           </Box>
         </div>
       </div>
@@ -124,8 +118,6 @@ export default function Profile() {
         >
           <Tab label="MY PROFILE" {...a11yProps(0)} className={styles.tab}
           />
-          <Tab label="MY DETAIL" {...a11yProps(1)} className={styles.tab}
-          />
         </Tabs>
 
         {/* MY Profile edit */}
@@ -134,7 +126,7 @@ export default function Profile() {
             <Box className={styles.default}>
               <div className={styles.profile_content}>
                 <Typography className={styles.profile_title}>EMAIL</Typography>
-                <Typography className={styles.profile_sub}>{user.email}</Typography>
+                <Typography className={styles.profile_sub}>{userInfo.email}</Typography>
               </div>
               <Divider orientation="vertical" flexItem className={styles.divider} />
               <div className={styles.profile_content}>
@@ -142,12 +134,9 @@ export default function Profile() {
                 <Typography className={styles.profile_sub}>용맹한 사자</Typography>
               </div>
             </Box>
-            <EditProfile />
           </div>
         </TabPanel>
-        <TabPanel value={value} index={1} className={styles.tab_panel}>
-          MY GAMES
-        </TabPanel>
+
       </Box>
 
     </div>
