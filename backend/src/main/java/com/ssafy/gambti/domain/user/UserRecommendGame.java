@@ -23,7 +23,7 @@ public class UserRecommendGame {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    private float rating;
+    private double rating;
 
     public UserRecommendGame(User user, Game game, float rating) {
         this.user = user;
