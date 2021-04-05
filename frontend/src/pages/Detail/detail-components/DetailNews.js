@@ -492,10 +492,36 @@ export default function DetailNews() {
     //   });
 
     const urlMetadata = require("url-metadata");
-    urlMetadata("http://bit.ly/2ePIrDy").then(
+    urlMetadata(
+      "https://steamstore-a.akamaihd.net/news/externalpost/pcgamer/3657414904104164249"
+    ).then(
       function (metadata) {
         // success handler
-        console.log(metadata);
+        console.log("1번 뉴스", metadata);
+      },
+      function (error) {
+        // failure handler
+        console.log(error);
+      }
+    );
+    urlMetadata(
+      "https://steamstore-a.akamaihd.net/news/externalpost/eurogamer/3657414904105612622"
+    ).then(
+      function (metadata) {
+        // success handler
+        console.log("2번 뉴스", metadata);
+      },
+      function (error) {
+        // failure handler
+        console.log(error);
+      }
+    );
+    urlMetadata(
+      "https://steamstore-a.akamaihd.net/news/externalpost/rps/2468465044717082825"
+    ).then(
+      function (metadata) {
+        // success handler
+        console.log("3번 뉴스", metadata);
       },
       function (error) {
         // failure handler
