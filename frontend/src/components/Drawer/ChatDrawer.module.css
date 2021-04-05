@@ -1,9 +1,14 @@
 .root{
   color: #cecece;
   margin-left: 0.7rem;
+  /* overflow: auto; */
+}
+.main_title{
+  font-weight: bold;
+  color: #ccff00;
 }
 .title{
-  font-weight: bold;
+  color: #cecece;
 }
 .header_center {
   flex: 0.2;
@@ -36,5 +41,8 @@
   position: fixed;
   z-index: 1000;
   border-radius: 10px;
-
 }
+/* .chat_friend{
+  position: fixed;
+  overflow: auto;
+} */

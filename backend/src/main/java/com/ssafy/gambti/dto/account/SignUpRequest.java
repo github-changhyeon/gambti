@@ -3,6 +3,8 @@ package com.ssafy.gambti.dto.account;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class SignUpRequest {
@@ -12,4 +14,5 @@ public class SignUpRequest {
     private String steamId;
     private int maxPrice;
     private int age;
+    private List<Long> userLikeTagIds;
 }

@@ -1,0 +1,160 @@
+.drawer {
+  width: 300px;
+  flex-shrink: 0;
+}
+.loginDrawer {
+  top: 54px;
+  width: 300px;
+  background-color: #1a1b1c;
+  align-items: center;
+  left: 64px;
+}
+.logoutDrawer {
+  top: 54px;
+  width: 300px;
+  background-color: #2a2b2c;
+  align-items: center;
+}
+.detail_root {
+  overflow: hidden;
+
+  display: flex;
+  background-color: #222222;
+}
+.detail_game_card {
+  width: 283px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.detail_router_card {
+  margin-top: 15px;
+  position: relative;
+  cursor: pointer;
+  width: 283px;
+  height: 80px;
+  border-radius: 15px;
+  /* border: 1px solid #111111; */
+}
+.detail_router_card_image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  /* filter: blur(0px) grayscale(40%); */
+}
+.detail_router_card_content {
+  position: relative;
+  justify-content: flex-end;
+  display: flex;
+}
+.detail_router_card_name {
+  font-weight: 14px;
+  color: white;
+  background-color: black;
+  width: 80px;
+  border-radius: 8px;
+}
+
+.detail_left_container {
+  width: 67%;
+  /* margin-top: 20px; */
+  float: left;
+}
+
+.detail_right_container {
+  width: 33%;
+  float: right;
+  box-sizing: border-box;
+}
+.detail_right_fixed {
+  background-color: red;
+  padding: 10px;
+  position: fixed;
+}
+.detail_youtube_card {
+  width: 98%;
+  margin: 6px 0px 6px 0px;
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid dimgrey;
+  box-sizing: border-box;
+}
+.detail_youtube_card_root {
+  margin-top: 10px;
+  background-color: #333333;
+  display: flex;
+  justify-content: center;
+  box-shadow: 5px 5px 5px;
+  border-radius: 10px;
+}
+.detail_youtube_card_image {
+  width: 50%;
+  cursor: pointer;
+}
+.detail_youtube_card_content {
+  width: 50%;
+  background-color: #111111;
+  overflow: hidden;
+}
+.detail_youtube_card_title {
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.detail_youtube_card_text {
+  color: grey;
+  font-size: 14px;
+  font-weight: 500;
+}
+.detail_youtube_card_text_wrap {
+  display: flex;
+  margin-bottom: 15px;
+}
+.detail_youtube_card_channel {
+  display: flex;
+  align-items: center;
+}
+.detail_youtube_card_avatar {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.detail_youtube_card_channel_title {
+  color: grey;
+  font-size: 15px;
+  font-weight: 550;
+  box-sizing: border-box;
+  padding-left: 15px;
+  cursor: pointer;
+}
+.detail_youtube_card_description {
+  margin-top: 15px;
+}
+.detail_youtube_card_description_text {
+  color: grey;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 56px;
+}
+.detail_youtube_cards {
+  height: 100vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 15px;
+}
+
+.detail_youtube_cards::-webkit-scrollbar {
+  background-color: #222222;
+}
+
+.detail_youtube_cards::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 5px solid transparent;
+}

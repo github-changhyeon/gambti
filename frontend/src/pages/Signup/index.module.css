@@ -53,10 +53,11 @@
 .form_holder {
   border-radius: 6px;
   overflow: hidden;
-  margin-top: 0.7rem;
+  margin-top: 0.3rem;
   opacity: 1;
   visibility: visible;
   width: 300px;
+  height: 220px;
   /* -webkit-transition: all .3s ease; */
 }
 .newinput {
@@ -66,7 +67,7 @@
   display: block;
   height: 30px;
   line-height: 30px;
-  padding: 8px 15px;
+  padding: 5px 15px;
   border-bottom: 1px solid #ccff00;
   width: 100%;
   font-size: 12px;
@@ -74,17 +75,16 @@
   color: #cecece;
   margin-top: 0.3rem;
 }
-.error {
-  color: red;
+
+.error{
+  width: 100%;
+  color: orange;
   display: flex;
-  font-size: 14px;
-  margin-left: 0.3rem;
-  margin-top: 0.2rem;
+  justify-content: flex-end;   
+  font-size: 12px;
+  height: 6px;  
+  z-index: 1000;     
 }
-.yes {
-  color: green;
-  display: flex;
-  font-size: 14px;
-  margin-left: 0.3rem;
-  margin-top: 0.2rem;
+.error_message{
+  height: 6px;       
 }
