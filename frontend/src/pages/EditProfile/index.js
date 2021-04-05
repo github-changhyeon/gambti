@@ -4,15 +4,13 @@ import { UserContext } from 'src/Context/UserContext';
 import { useLocation, useHistory, generatePath } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Box from '@material-ui/core/Box';
-import AvatarComp from 'src/components/AvatarComp/AvatarComp';
 import Divider from '@material-ui/core/Divider';
-import RecFriend from './RecFriend';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
 import EditProfiles from 'src/components/EditProfiles/EditProfiles';
-import Badge from '@material-ui/core/Badge';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import RecommendedFriends from 'src/components/RecommendedFriends/RecommendedFriends';
 
 export default function EditProfile() {
 
@@ -116,19 +114,7 @@ export default function EditProfile() {
         </div>
         {/* 추천 친구 리스트 */}
         <div className={styles.section2}>
-          <Box className={styles.friend_box}>
-            <Typography className={styles.rec_title}>RECOMMEND FRIEND</Typography>
-            <div className={styles.friend_list}>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-              <RecFriend></RecFriend>
-            </div>
-          </Box>
+          <RecommendedFriends />
         </div>
       </div>
 
@@ -155,7 +141,7 @@ export default function EditProfile() {
               <Divider orientation="vertical" flexItem className={styles.divider} />
               <div className={styles.profile_content}>
                 <Typography className={styles.profile_title}>GAMBTI</Typography>
-                <Typography className={styles.profile_sub}>용맹한 사자</Typography>
+                <Typography className={styles.profile_sub}>{user.mbti}</Typography>
               </div>
             </Box>
             <EditProfiles />

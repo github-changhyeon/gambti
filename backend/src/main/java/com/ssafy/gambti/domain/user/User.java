@@ -69,6 +69,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserLikeTag> userLikeTags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserRecommendGame> userRecommendGames = new ArrayList<>();
+
     @Builder
     public User(String id, String nickname, UserMBTI mbti, int age, UserGender gender, long maxPrice, String steamId, UserRole role) {
         this.id = id;
