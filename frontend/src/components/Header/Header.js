@@ -30,9 +30,9 @@ export default function Header({ isLogin }) {
     fire.auth
       .signOut()
       .then(() => {
-        history.push("/");
+        history.push('/');
         window.localStorage.clear();
-        alert("로그아웃 되었습니다 !!");
+        alert('로그아웃 되었습니다 !!');
       })
       .catch((error) => {
         // An error happened.
@@ -79,13 +79,14 @@ export default function Header({ isLogin }) {
         <InputBase
           className={styles.input_root}
           placeholder="Search…"
-          inputProps={{ "aria-label": "search" }}
+          inputProps={{ 'aria-label': 'search' }}
           value={searchWord}
           onChange={(event) => {
             inputChangeFunc(event);
           }}
           onKeyPress={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === 'Enter') {
+              setSearchWord(''); // 검색 후 searchWord 초기화
               history.push({
                 pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
                 search: `?word=${searchWord}`,
@@ -102,7 +103,7 @@ export default function Header({ isLogin }) {
             {/* 로그인 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: "54px", width: "65px" }}
+              style={{ height: '54px', width: '65px' }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.LOGIN);
               }}
@@ -112,7 +113,7 @@ export default function Header({ isLogin }) {
             {/* 회원가입 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: "54px", width: "65px" }}
+              style={{ height: '54px', width: '65px' }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.CHECK_GAMBTI);
               }}
@@ -166,7 +167,7 @@ export default function Header({ isLogin }) {
                 <AvatarComp
                   className={styles.dropbtn}
                   size="xsmall"
-                  badge='badge'
+                  badge="badge"
                   // textvalue={user.nickname}
                   textvalue={user.nickname.substring(0, 1)}
                 ></AvatarComp>

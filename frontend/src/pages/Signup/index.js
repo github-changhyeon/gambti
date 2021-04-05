@@ -32,7 +32,7 @@ export default function Signup() {
 
   // check-gambti 에서 받아온 정보
   const mbti = location.state.mbti;
-  const mbtiExplain = location.state.mbtiExplain;
+  const mbtiSub = location.state.mbtiSub;
 
   // check-info 에서 받아온 정보
   const gender = location.state.gender;
@@ -181,7 +181,7 @@ export default function Signup() {
       console.log('가격: ' + maxPrice);
       console.log('태그: ' + userLikeTagIds);
       console.log('mbti: ' + mbti);
-      console.log('mbtiExplain: ' + mbtiExplain);
+      console.log('mbtiSub: ' + mbtiSub);
       console.log('============================');
 
       onSignup();
@@ -219,7 +219,7 @@ export default function Signup() {
               emailVerified: currentUser.user.emailVerified,
               uid: currentUser.user.uid,
               mbti: mbti,
-              mbti: mbtiExplain,
+              mbti: mbtiSub,
               rooms: [],
             });
 
@@ -290,7 +290,7 @@ export default function Signup() {
 
   useEffect(() => {
     console.log('mbti: ' + mbti);
-    console.log('mbtiExplain: ' + mbtiExplain);
+    console.log('mbtiSub: ' + mbtiSub);
   }, [mbti]);
 
   return (
@@ -300,7 +300,7 @@ export default function Signup() {
         backgroundImage: `url(${background})`,
       }}
     >
-      {isNext && <CheckGambti mbti={mbti} mbtiExplain={mbtiExplain} />}
+      {isNext && <CheckGambti mbti={mbti} mbtiSub={mbtiSub} />}
       {!isNext && (
         <Container component="main" maxWidth="xs">
           <div className={styles.root}>

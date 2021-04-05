@@ -1,18 +1,21 @@
 import { React, useEffect, useContext, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './index.module.css';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import DetailYoutube from 'src/pages/Detail/detail-components/DetailYoutube';
 import DetailDrawer from 'src/pages/Detail/detail-components/DetailDrawer';
 import DetailMain from 'src/pages/Detail/detail-components/DetailMain';
 import DetailNews from 'src/pages/Detail/detail-components/DetailNews';
 import clsx from 'clsx';
 import { getGameDetail } from 'src/common/axios/Game';
+import { usePalette } from 'react-palette';
 
 const useStyles = makeStyles((theme) => ({
   content: {
     // flexGrow: 1,
     width: '100%',
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -60,10 +63,26 @@ export default function Detail({ match }) {
           [classes.contentShift]: true,
         })}
       >
-        <div className={styles.detail_left_container}>
+        <div
+          className={
+            match.params.tab === null || match.params.tab === undefined
+              ? styles.detail_left_container_default
+              : styles.detail_left_container
+          }
+        >
           {match.params.tab === null || match.params.tab === undefined ? (
             gameInfo ? (
-              <DetailMain propsMatch={match} propsGameInfo={gameInfo}></DetailMain>
+              <>
+                <div
+                  className={styles.detail_main_img}
+                  style={{
+                    backgroundImage: `url(${gameInfo.backgroundImagePath})`,
+                  }}
+                >
+                  <div className={styles.detail_main_img_after}></div>
+                </div>
+                <DetailMain propsGameInfo={gameInfo}></DetailMain>
+              </>
             ) : null
           ) : null}
 
@@ -80,9 +99,45 @@ export default function Detail({ match }) {
           ) : null}
         </div>
         <div className={styles.detail_right_container}>
-          <div className={styles.detail_right_fixed}>
-            여기에 오른쪽 컴포넌트 , 백그라운드 컬러는 index.mudule.css에 detail_right_c
-            ontainer에서 바꾸3
+          <div
+            className={
+              match.params.tab === null || match.params.tab === undefined
+                ? styles.detail_right_non_fixed
+                : styles.detail_right_fixed
+            }
+          >
+            {gameInfo ? (
+              <div>
+                <div style={{ padding: '5px 0 10px 0' }}>
+                  <Typography className={styles.detail_right_info_title}>출시날짜</Typography>
+                  <Typography className={styles.detail_right_info_detail}>
+                    {gameInfo.releaseDate}
+                  </Typography>
+                </div>
+                <div style={{ padding: '10px 0 2px 0' }}>
+                  <Typography className={styles.detail_right_info_title}>개발자</Typography>
+                  <Typography className={styles.detail_right_info_detail}>
+                    {gameInfo.developer}
+                  </Typography>
+                </div>
+                <div style={{ padding: '2px 0 10px 0' }}>
+                  <Typography className={styles.detail_right_info_title}>배급사</Typography>
+                  <Typography className={styles.detail_right_info_detail}>
+                    {gameInfo.publisher}
+                  </Typography>
+                </div>
+                <div style={{ padding: '5px 0 0 0' }}>
+                  <Typography className={styles.detail_right_info_popular}>
+                    이 제품의 인기 태그
+                  </Typography>
+                  <div>
+                    {gameInfo.tags.map((tag) => {
+                      return <Button className={styles.tag}>{tag}</Button>;
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
