@@ -98,7 +98,7 @@ def main():
     game_data = get_data()
     print("[*] done..")
     print("[+] url 크롤링")
-    image_scrapy(game_data)
+    # image_scrapy(game_data)
 
     logo_image_data = load_dataframes(IMAGE_FILE)
     background_image_data = load_dataframes(BG_IMAGE_FILE)

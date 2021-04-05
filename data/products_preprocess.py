@@ -56,7 +56,31 @@ def import_data(data_path=DATA_FILE):
     #id 중복인 것에 대해서 duplicate drop
     data = data.drop_duplicates(["id"])
 
-    games = data[[*game_columns, "tags", "specs", "genres"]]  #게임관련 데이터 테이블 + tag, specs
+    data = data.dropna(subset=["developer"])
+
+    lists = []
+    for idx, row in data.iterrows():
+        game_id = row["id"]
+        rawdata = row["developer"]
+        tmp = rawdata.replace('Publisher:', 'Release Date:').split('Release Date:')
+        length = len(tmp)
+        if(length==3):
+            developer = tmp[0]
+            publisher = tmp[1]
+            date = tmp[2]
+            lists.append({"id": game_id, "developer":developer, "publisher": publisher, "release_date":date})
+
+        else:
+            # tmp 길이가 2인 경우 developer와 date만 존재
+            developer = tmp[0]
+            date = tmp[1]
+            lists.append({"id": game_id, "developer":developer, "release_date":date})
+    
+    df = pd.DataFrame(lists)
+    data = data.drop(columns=["developer", "publisher", "release_date"])
+
+    game_res = pd.merge(data, df, on="id", how="inner")
+    games = game_res[[*game_columns, "tags", "specs", "genres"]]  #게임관련 데이터 테이블 + tag, specs
 
     return {"games": games}
 
@@ -81,7 +105,7 @@ def save_mariadb(data, table_name):
 
     #duplicate 문제를 해결하기 위해 data 저장 전에 truncate table을 먼저 수행
     # if table_name == "game":
-    #     engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
+        # engine_mariadb.connect().execute("TRUNCATE TABLE "+table_name) 
 
     data.to_sql(name=table_name, con=engine_mariadb, index=False, if_exists='append') 
 
@@ -130,6 +154,7 @@ def add_image_path(data):
     
     return df_result
 
+
 def main():
     print("[*] Parsing data...")
     data = import_data()
@@ -155,15 +180,16 @@ def main():
 
     #image주소가 포함된 df
     game_df = add_image_path(game_df)
-
+    
+    # save_mariadb(game_df, 'game')
+    save_mariadb(game_genre_df, 'game_genre')
     '''
     #maria DB에 저장
     save_mariadb(genre_df, 'genre')
     save_mariadb(tag_df, 'tag')
-    save_mariadb(game_genre_df, 'game_genre')
     save_mariadb(game_tag_df, 'game_tag')
-    save_mariadb(game_df, 'game')
     '''
+    
 
 if __name__ == "__main__":
     main()
