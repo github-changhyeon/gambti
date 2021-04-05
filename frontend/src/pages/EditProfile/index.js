@@ -11,7 +11,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
 import EditProfiles from 'src/components/EditProfiles/EditProfiles';
-
+import Badge from '@material-ui/core/Badge';
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
 
 export default function EditProfile() {
 
@@ -21,8 +22,11 @@ export default function EditProfile() {
   const currentUser = fire.auth.currentUser;
   const [joinedGame, setJoinedGame] = React.useState(8);
   const [friendNumber, setFriendNumber] = React.useState(1);
+  const [img, setImg] = useState(user.imgPath);
+
 
   const [value, setValue] = React.useState(0);
+
 
   // tab 설정
   const handleChange = (event, newValue) => {
@@ -55,6 +59,27 @@ export default function EditProfile() {
     );
   }
 
+  // 이미지 추가
+  const handleChangeFile = (event) => {
+    setImg(event.target.files[0])
+
+    const reader = new FileReader()
+
+    reader.readAsDataURL(event.target.files[0])
+    reader.onloadend = (e) => {
+      document.getElementById('imgView').setAttribute('src', e.target.result)
+      // firestore에 img 저장
+      fire.db.collection("users").doc(currentUser.uid).update({
+        imgPath: e.target.result
+      })
+    }
+  }
+  console.log(user);
+
+  const handleRemove = () => {
+    setImg('/images/default-images.png')
+  };
+
 
   return (
     <div className={styles.root}>
@@ -64,7 +89,16 @@ export default function EditProfile() {
         <div className={styles.section}>
           <Box className={styles.box}>
             <div className={styles.profile}>
-              <AvatarComp size="superlarge" textvalue={user.nickname.substring(0, 1)} ></AvatarComp>
+              <div className={styles.file_box}>
+                <input id="propic" type="file" name="Inputfile" onChange={handleChangeFile} className={styles.file} />
+                <img id="imgView" src={img ? img : "/images/default-image.png"} onClick={handleRemove} alt="" className={styles.file_profile} />
+                <label className={styles.attach_icon}>
+                  {/* <i className="fas fa-camera-retro color_black" style={{ fontSize: "1.0m", height: "100%" }}></i> */}
+                  {/* <p style={{ fontSize: "3em", height: "100%", color: "white" }}>+</p> */}
+                  <ControlPointIcon style={{ fontSize: "2em", height: "100%", color: "white" }} />
+                </label>
+              </div>
+
               <Typography className={styles.main_nick}>{user.nickname}</Typography>
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
@@ -129,6 +163,6 @@ export default function EditProfile() {
         </TabPanel>
       </Box>
 
-    </div>
+    </div >
   );
 }

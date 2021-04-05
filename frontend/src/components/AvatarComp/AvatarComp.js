@@ -91,6 +91,7 @@ export default function AvatarComp({ size, textvalue, imgPath, onClick, badge })
   // editProfile
   else if (size === "superlarge") {
     return (
+
       <Avatar className={styles.super_large} src={imgPath}>
         {textvalue}
       </Avatar>

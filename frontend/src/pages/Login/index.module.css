@@ -60,6 +60,7 @@
   opacity: 1;
   visibility: visible;
   width: 300px;
+  height: 130px;
   /* -webkit-transition: all .3s ease; */
 }
 .newinput {

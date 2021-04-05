@@ -11,16 +11,21 @@ import fire from 'src/fire';
 import Box from '@material-ui/core/Box';
 import { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage } from 'src/firebase/chat/chat';
 import { UserContext } from 'src/Context/UserContext';
+import routerInfo from "src/constants/routerInfo";
+import { useHistory, generatePath } from "react-router";
 
 
 
-export default function Chat({ chat, propsUser, currentRoomId }) {
+export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, youId }) {
+  const history = useHistory();
   const [close, setClose] = React.useState(chat);
   const [chatRoomId, setChatRoomId] = React.useState('');
 
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
   const [inputs, setInputs] = React.useState('');
+
+  const [youInfo, setYouInfo] = React.useState('');
 
 
   const onClose = () => {
@@ -36,6 +41,20 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
         getChatRoomId(propsUser.uid);
     }
   }, [])
+
+  useEffect(() => {
+    ReadYou(youId);
+  })
+
+  const ReadYou = (youId) => {
+    fire.db.collection("users").doc(youId).get()
+      .then((doc) => {
+        setYouInfo(doc.data());
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
 
   async function getChatRoomId(friendUid) {
     //axios
@@ -81,7 +100,6 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
       timestamp: timestamp
     })
       .then(() => {
-        // console.log('가니...?');
       }
       )
       .catch(function (error) {
@@ -101,13 +119,25 @@ export default function Chat({ chat, propsUser, currentRoomId }) {
                 {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
                 {
                   propsUser ?
-                    <div className={styles.header_profile}>
+                    <div className={styles.header_profile} >
                       <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
                     </div>
                     :
-                    <div className={styles.header_profile}>
-                      <MediumProfile propsUser={{ nickname: currentRoomId, email: '' }} />
-                    </div>
+                    youId ?
+                      <div className={styles.header_profile}
+                        onClick={() => {
+                          history.push({
+                            pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+                              uid: youInfo.uid,
+                            }),
+                          });
+                          onClose();
+                        }}>
+                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email }} />
+                      </div> :
+                      <div className={styles.header_profile}>
+                        <MediumProfile propsUser={{ nickname: currentRoomName, email: '' }} />
+                      </div>
                 }
 
                 <div>
