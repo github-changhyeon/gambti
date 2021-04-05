@@ -1,5 +1,6 @@
 package com.ssafy.gambti.dto.game;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.math.BigInteger;
 
 @Getter
 @Setter
+@Builder
 public class GameRecommendDto {
     private Long gameId;
     private String appName;
@@ -16,6 +18,7 @@ public class GameRecommendDto {
     private boolean isJoined;
     private boolean isOwned;
     private int joinUserCount;
+    private double rating;
 
     public GameRecommendDto(Object [] o){
         this.gameId = ((BigInteger) o[0]).longValue();

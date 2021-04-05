@@ -41,12 +41,12 @@ public class GameController {
     }
 
 
-    @GetMapping(value = "/recommends/{genreId}")
+    @GetMapping(value = "/recommends", params = {"genreId"})
     @Operation(summary = "추천 게임 조회 ", description = "추천 게임 list를 조회한다.")
-    public ResponseEntity<? extends Response> gameRecommends(@PathVariable Long genreId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<? extends Response> gameRecommends(Long genreId, final PageRequest pageable, HttpServletRequest httpServletRequest){
         //지금은 우선 random으로 섞어서 주자(페이징 필요 없음)
-        List<GameRecommendDto> gameSimpleResList = gameService.gameRecommends(genreId, httpServletRequest);
-        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", gameSimpleResList), HttpStatus.OK);
+        Page<GameRecommendDto> pagingRecommendGames = gameService.gameRecommends(genreId, pageable.of(), httpServletRequest);
+        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", pagingRecommendGames), HttpStatus.OK);
     }
 
 // TODO: 2021-03-26 추천 알고리즘 완료 후 진행
