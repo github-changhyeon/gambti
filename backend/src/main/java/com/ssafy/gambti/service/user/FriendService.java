@@ -13,6 +13,7 @@ import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserBanFriend;
 import com.ssafy.gambti.domain.user.UserMBTI;
 import com.ssafy.gambti.dto.NotificationDto;
+import com.ssafy.gambti.dto.user.FireStoreFriendRes;
 import com.ssafy.gambti.dto.user.UserIdListRes;
 import com.ssafy.gambti.repository.user.FriendRepository;
 import com.ssafy.gambti.repository.user.UserBanFriendRepository;
@@ -75,13 +76,6 @@ public class FriendService {
         User fromUser = getLoginUser(httpServletRequest);
         User toUser = userRepository.findById(toUserId).get();
 
-        Firestore db = FirestoreClient.getFirestore();
-        CollectionReference usersRef = db.collection("users");
-        DocumentReference toUsersRef = usersRef.document(toUserId);
-
-        ApiFuture<DocumentSnapshot> toUserSnapShot = toUsersRef.get();
-
-
         // 이미 친구요청을 보낸 적이 있으면 예외처리
         friendRepository.findByFromAndTo(fromUser, toUser).ifPresent(
                 m -> {
@@ -89,18 +83,27 @@ public class FriendService {
                 }
         );
 
+        // FireStore에서 필요한 데이터들을 초기화 한다.
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference usersRef = db.collection("users");
+        DocumentReference toUsersRef = usersRef.document(toUserId);
+        DocumentReference fromUsersRef = usersRef.document(fromUser.getId());
+        ApiFuture<DocumentSnapshot> toUserSnapShot = toUsersRef.get();
+
         // 2. 이전에 toUser(상대방)이 나에게 친구요청을 한적이 있는지 확인한다.
         // 만약 있다면, 친구 수락을 해줘야 하는 요청이기때문에 isApproved 변수를 둘다 true로 만들어 줘야 한다.
         Optional<Friend> previousRequest = friendRepository.findByFromAndTo(toUser, fromUser);
 
         // 3. fromUser와 toUser가 존재한다면 친구 요청 또는 수락을 할것임
         if (fromUser != null && toUser != null) {
-            // 3.1 이전에 상대방이 나에게 친구 요청을 한 내역이 있다면 친구 수락을 해야함
+            // FireStore users-{toUserId}-notification 컬렉션에 다음 필드를 가지는 document 추가
+            // 아래에서 notificationDto에 message와 url을 setting 하고 save 할 것임
             NotificationDto notificationDto = NotificationDto.builder()
                     .receiverUid(toUser.getId())
                     .senderUid(fromUser.getId())
                     .type("friend").build();
 
+            // 3.1 이전에 상대방이 나에게 친구 요청을 한 내역이 있다면 친구 수락을 해야함
             if (previousRequest.isPresent()) {
                 // 3.1.1 이전에 보낸 친구 요청의 승인 상태를 true로 바꾼다.
                 previousRequest.get().changeApproved();
@@ -114,21 +117,12 @@ public class FriendService {
 
                 friendRepository.save(friend);
 
-                // TODO: (firestore 관련) fromUser와 toUser의 users-{userid}-friends에 서로를 친구관계(code:2)로 추가해야함
-                try {
-                    logger.info(toUserSnapShot.get().get("friends").toString());
-                } catch (InterruptedException e) {
-                    logger.error(e.getMessage());
-                } catch (ExecutionException e) {
-                    logger.error(e.getMessage());
-                }
+                // FireStore에 fromUser와 toUser의 users-{userid}-friends에 서로를 친구관계(code:2)로 추가해야함
+                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 2)));
+                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 2)));
 
-                // TODO: (FCM 관련) toUser에게 친구요청이 수락되었다는 Noti를 줘야함
-                // users 컬렉션 - {toUserId} document - notification 컬렉션에 다음 필드를 가지는 document 추가
-                notificationDto.setMessage(toUser.getNickname()+"님께서 친구요청을 수락하셨습니다.");
-                notificationDto.setMessage(null);
-
-
+                // notificationDto의 메세지 설정
+                notificationDto.setMessage(fromUser.getNickname()+"님께서 친구요청을 수락하셨습니다.");
 
             // 3.2 이전에 상대방이 나에게 친구 요청을 한 내역이 없다면 친구 요청을 해야함
             } else {
@@ -140,43 +134,37 @@ public class FriendService {
                         .build();
 
                 friendRepository.save(friend);
-                // TODO: (firestore 관련) fromUser의 users-{fromUserid}-friends에 toUser를 친구 요청 대기자로(code:0) 추가해야함
-                // TODO: (firestore 관련) toUser의 users-{toUserid}-friends에 fromUser를 친구 요청자 (code:1) 추가해야함
-                try {
-                    toUserSnapShot.get();
-                } catch (InterruptedException e) {
-                    logger.error(e.getMessage());
-                } catch (ExecutionException e) {
-                    logger.error(e.getMessage());
-                }
 
-                // TODO: toUser에게 친구요청이 왔다는 Noti를 줘야함
-                notificationDto.setMessage(toUser.getNickname()+"님께서 친구요청을 하셨습니다.");
+                // FireStore에서 fromUser의 users-{fromUserid}-friends에 toUser를 친구 요청 대기자로(code:0) 추가해야함
+                // FireStore에서 toUser의 users-{toUserid}-friends에 fromUser를 친구 요청자 (code:1) 추가해야함
+                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 0)));
+                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 1)));
+
+                // notificationDto의 메세지 및 url(노티에서 친구요청을 바로 할수 있도록 url) 설정
+                notificationDto.setMessage(fromUser.getNickname()+"님께서 친구요청을 하셨습니다.");
                 notificationDto.setUrl("http://localhost:8081/v1/friends/"+fromUser.getId());
 
             }
-
+            // FireStore users-{toUserId}-notification 컬렉션 하위에 노티에 관한 내용을 담는 notificationDto 저장
             notificationUtils.registNotification(notificationDto);
 
+            // 4. toUser에게 background 메세지 보내기
+            Notification notification = Notification.builder()
+                    .setBody(fromUser.getNickname()+"님에게서 새로운 알림이 왔습니다.")
+                    .setImage("images/gambti/gambti_icon.png")
+                    .setTitle("GAMBTI의 새로운 알림").build();
 
-            // toUser에게 background 메세지 보내기
-//            Notification notification = Notification.builder()
-//                    .setBody(fromUser.getNickname()+"님에게서 새로운 알림이 왔습니다.")
-//                    .setImage("images/gambti/gambti_icon.png")
-//                    .setTitle("GAMBTI의 새로운 알림").build();
-//
-//            // toUserFcmToken 가져오기
-//            try {
-//                DocumentSnapshot document = toUserSnapShot.get();
-//                String fcmToken = document.getData().get("fcmToken").toString();
-//                notificationUtils.send(fcmToken, notification);
-//            } catch (InterruptedException e) {
-//                logger.error(e.getMessage());
-//            } catch (ExecutionException e) {
-//               logger.error(e.getMessage());
-//            }
-
-
+            try {
+                DocumentSnapshot document = toUserSnapShot.get();
+                // 4.1. toUserFcmToken 가져오기
+                String fcmToken = document.getData().get("fcmToken").toString();
+                // 4.2. 메세지 보내기
+                notificationUtils.send(fcmToken, notification);
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage());
+            } catch (ExecutionException e) {
+               logger.error(e.getMessage());
+            }
         } else {
             return false;
         }
