@@ -145,6 +145,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 15px;
 }
 
 .detail_youtube_cards::-webkit-scrollbar {
