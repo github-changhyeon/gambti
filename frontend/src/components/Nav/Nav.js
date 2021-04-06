@@ -26,16 +26,30 @@ export default function Nav() {
     setShowChat(!showChat);
   }
   useEffect(() => {
+    setJoinGameList([]);
     return readJoinGame();
   }, []);
 
   const readJoinGame = () => {
     // message collection 변화값이 있는지 감시
-    return fire.db.collection('users').doc(fire.auth.currentUser.uid).collection('joinGames').orderBy('timestamp')
+     fire.db.collection('users').doc(fire.auth.currentUser.uid).collection('joinGames').orderBy('timestamp')
       .onSnapshot((snapshot) => {
         // changes에 변화된 값만 넣어서 return
+        let isRemoved = false;
         const changes = snapshot.docChanges().map((change) => {
-          return change.doc.data();
+          if (change.type === "removed") {
+            console.log(change.doc.id);
+            // alert(joinGameList.length)
+            // joinGameList.forEach((item, i) => { console.log("아이디", item.gameId) });
+            isRemoved = true;
+            console.log("줄이기 전에 배열", joinGameList)
+            console.log("줄이기 전에 배열", joinGameRef.current)
+            console.log("다르면 새로 배열 만들어라", joinGameRef.current.filter((item, i) => (item.gameId != change.doc.id)))
+            return joinGameRef.current.filter((item, i) => (item.gameId != change.doc.id));            
+          }
+          if (change.type === "added") {
+            return change.doc.data();
+        }
         });
 
         // 이거했을때 messageList=[]여서 값이 쌓여서 안보임
@@ -43,8 +57,13 @@ export default function Nav() {
 
         // 기존의 messageList+ changes를 SetMessage에 넣어줌
         // ref는 항상 최신 값을 참조해서 메시지가 다보임
-        setJoinGameList([...joinGameRef.current, ...changes]);
-
+        
+        if (isRemoved) {
+          console.log("배열", changes)
+          setJoinGameList(...changes);
+        } else {
+          setJoinGameList([...joinGameRef.current, ...changes]);
+        }
       })
   }
 
@@ -69,7 +88,7 @@ export default function Nav() {
             onMouseLeave={() => setIsShownChat(false)}
             onClick={handleShowChatChange}
           >
-            <AvatarComp size="medium" imgPath="/images/nav/chat.png"></AvatarComp>
+            <AvatarComp  size="medium" imgPath="/images/nav/chat.png"></AvatarComp>
             {isShownChat && <div className={styles.textarea}>Chat and Friends List</div>}
           </div>
          
