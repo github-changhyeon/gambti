@@ -38,7 +38,7 @@ export default function GenreList({ propsOrder }) {
                 history.push({
                   pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
                     order: propsOrder,
-                    genre: genre.name,
+                    genre: genre.name.toLowerCase(),
                   }),
                   state: { genre: genre },
                 });

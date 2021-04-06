@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GameCard from "src/components/GameCard/GameCard";
 import styles from "./InfiniteScrollCard.module.css";
@@ -6,12 +6,15 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { getGamesOrderBy } from "src/common/axios/Game";
+import { getGamesOrderBy, getRecommendedGames } from "src/common/axios/Game";
 import { searchGames, searchUsers } from "src/common/axios/Search";
 import UserCard from "src/components/UserCard/UserCard";
+import { UserContext } from "src/Context/UserContext";
+import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
+import $ from "jquery";
 
 export default function InfiniteScrollCard({ params, routerMatch }) {
-  // 새로운 state 변수를 선언하고, count라 부르겠습니다.
+  const user = useContext(UserContext);
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
   const [items, setItems] = useState(new Array());
@@ -20,16 +23,48 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
+  // $(".close")
+  //   .off()
+  //   .on("click", function () {
+  //     // alert("haha");
+  //     console.log("안녕", this);
+  //     var $target = $(this).parents(".abc");
+  //     console.log($target);
+  //     $target.hide("slow", function () {
+  //       $target.css("display", "none");
+  //     });
+  //   });
+
+  const clickDeleteBtnFunc = (params) => {
+    let $pTarget = $(params.target).parents(".parentGrid");
+    console.log($pTarget);
+    $pTarget.hide("slow", function () {
+      $pTarget.css("display", "none");
+    });
+  };
+
   const fetchData = () => {
     //TODO: change
     setIsFetching(true);
 
     if (params.type === 0) {
+      // find
+      let direction = params.direction;
+      let colName = params.colName;
+      if (colName === "price") {
+        direction = "ASC";
+      } else if (colName === "hot") {
+        colName = "metascore";
+      } else if (colName === "new") {
+        colName = "releaseDate";
+      }
       getGamesOrderBy(
         {
           genreId: params.genreId,
           pageNum: pageNum,
           size: size,
+          direction: direction,
+          colName: colName,
         },
         (response) => {
           console.log("무한스크롤", response.data.data.content);
@@ -47,6 +82,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         }
       );
     } else if (params.type === 1) {
+      // search games
       searchGames(
         {
           word: params.word,
@@ -71,6 +107,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         }
       );
     } else if (params.type === 2) {
+      // search users
       searchUsers(
         {
           word: params.word,
@@ -92,6 +129,53 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log(error);
         }
       );
+    } else if (params.type === 3) {
+      // recommends
+      console.log("왜0?", pageNum);
+      getRecommendedGames(
+        {
+          isLogin: user.isLoggedIn,
+          genreId: params.genreId,
+          pageNum: pageNum,
+          size: size,
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum((pageNum) => pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 4) {
+      // friend
+      // searchUsers(
+      //   {
+      //     word: params.word,
+      //     pageNum: pageNum,
+      //     size: size,
+      //     colName: "nickname",
+      //   },
+      //   (response) => {
+      //     console.log("무한스크롤", response.data.data.content);
+      //     setItems((items) => [...items, ...response.data.data.content]);
+      //     // setItems([...items, ...response.data.data.content]);
+      //     setPageNum((pageNum) => pageNum + 1);
+      //     if (response.data.data.last) {
+      //       setIsEnd(true);
+      //     }
+      //     setIsFetching(false);
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   }
+      // );
     }
   };
 
@@ -136,18 +220,32 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         {items.map((item, i) => (
           <Grid
             item
-            key={i}
             xs={12}
             sm={6}
             md={4}
             lg={3}
-            style={{ display: "flex", justifyContent: "center" }}
+            key={i}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            className="parentGrid"
           >
             {params.type === 2 ? (
               <UserCard isLogin={true} simpleUserInfo={item}></UserCard>
-            ) : (
-              <GameCard isLogin={true} gameInfo={item}></GameCard>
-            )}
+            ) : null}
+            {params.type === 3 ? (
+              <RecommendedGameCard
+                gameInfo={item}
+                className="close"
+                clickDeleteBtn={(params) => {
+                  clickDeleteBtnFunc(params);
+                }}
+              ></RecommendedGameCard>
+            ) : null}
+            {params.type === 0 || params.type === 1 ? (
+              <GameCard gameInfo={item}></GameCard>
+            ) : null}
           </Grid>
         ))}
       </Grid>

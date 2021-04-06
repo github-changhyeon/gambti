@@ -1,8 +1,8 @@
 import React from "react";
-import GameCard from "src/components/GameCard/GameCard";
+import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
 import styles from "src/pages/GenreGames/index.module.css";
 
-export default function VideoAndCard({ gameInfo }) {
+export default function VideoAndCard({ gameInfo, clickDeleteBtn }) {
   return (
     <div
       style={{
@@ -15,7 +15,10 @@ export default function VideoAndCard({ gameInfo }) {
       }}
     >
       <div style={{ width: "280px" }}>
-        <GameCard gameInfo={gameInfo}></GameCard>
+        <RecommendedGameCard
+          clickDeleteBtn={clickDeleteBtn}
+          gameInfo={gameInfo}
+        ></RecommendedGameCard>
       </div>
       <div style={{ padding: "0px 0px 0px 40px" }}>
         <div
