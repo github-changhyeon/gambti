@@ -182,14 +182,18 @@ def main():
     game_df = add_image_path(game_df)
     
     # save_mariadb(game_df, 'game')
-    save_mariadb(game_genre_df, 'game_genre')
+    # save_mariadb(game_genre_df, 'game_genre')
+    save_mariadb(game_tag_df, 'game_tag')
     '''
     #maria DB에 저장
     save_mariadb(genre_df, 'genre')
     save_mariadb(tag_df, 'tag')
-    save_mariadb(game_tag_df, 'game_tag')
     '''
     
 
 if __name__ == "__main__":
     main()
+
+
+
+
