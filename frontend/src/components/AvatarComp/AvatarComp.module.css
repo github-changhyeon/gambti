@@ -26,9 +26,16 @@
   cursor: pointer;
 }
 
+
+
 .medium:hover {
   background-color: rgba(255, 255, 255, 0.25);
   transition: 300ms;
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -ms-transition: 300ms;
+  -o-transition: 300ms;
+  transform: scale(1.1);
 }
 
 /* mediumProfile */
