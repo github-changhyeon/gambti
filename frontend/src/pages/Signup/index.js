@@ -225,11 +225,13 @@ export default function Signup() {
             fire.db.collection('users').doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
-              emailVerified: currentUser.user.emailVerified,
+              // emailVerified: currentUser.user.emailVerified,
+              emailVerified: true,
               uid: currentUser.user.uid,
               mbti: mbti,
               mbtiSub: mbtiSub,
               rooms: [],
+              friends: [],
               imgPath: basicImg
 
             });
