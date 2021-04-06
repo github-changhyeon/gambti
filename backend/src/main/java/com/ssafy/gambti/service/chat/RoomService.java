@@ -4,9 +4,12 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.cloud.FirestoreClient;
+import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.dto.chat.GroupRoomRequest;
 import com.ssafy.gambti.dto.chat.RoomRequest;
+import com.ssafy.gambti.exception.GameListException;
+import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.caching.CachingService;
 import com.ssafy.gambti.utils.FirebaseTokenUtils;
@@ -27,6 +30,7 @@ public class RoomService {
     private final FirebaseTokenUtils firebaseTokenUtils;
     private final CachingService cachingService;
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
     public String getRoom(RoomRequest roomRequest, HttpServletRequest httpServletRequest){
         Firestore db = FirestoreClient.getFirestore();
@@ -153,7 +157,7 @@ public class RoomService {
                             List<Object> roomUsersValue = new ArrayList<>(roomUsers.values());
 
                             //만약에 room이 꽉 차있으면 다음 방을 검색한다.
-                            if ((long)room.get("currentCnt") < 4) {
+                            if ((long)room.get("currentCnt") < 4) { 
                                 //해당방 유저 리스트를 받은 후, 각 유저의 mbti를 찾는다.
                                 for (Object uid : roomUsersValue) {
                                     user = userRepository.findById(uid.toString());
@@ -198,6 +202,8 @@ public class RoomService {
                     }
                     //조건에 부합하는 방이 없다면 해당 게임의 room을 만든다.
                     //방이 없다면 rooms 컬렉션에 해당 방을 등록한다.
+                    Game game = gameRepository.findById(groupRoomRequest.getGameId()).orElseThrow(GameListException::new);
+
                     logger.info("50점 미만이라서 새로운 방을 만들었다.");
                     Map<String, Object> docData = new HashMap<>();
                     docData.put("lastMessageText", "");
@@ -205,6 +211,7 @@ public class RoomService {
                     docData.put("roomName", myNickname);
                     docData.put("currentCnt", 1);
                     docData.put("gameName", groupRoomRequest.getGameName());
+                    docData.put("imgPath", game.getLogoImagePath());
                     docData.put("max", groupRoomRequest.getMaxNumber());
                     docData.put("type", groupRoomRequest.getType());
 

@@ -9,4 +9,5 @@ public class GroupRoomRequest {
     private String type;
     private int maxNumber;
     private String gameName;
+    private long gameId;
 }
