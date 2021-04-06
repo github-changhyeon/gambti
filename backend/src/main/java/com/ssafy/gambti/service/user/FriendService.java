@@ -118,8 +118,11 @@ public class FriendService {
                 friendRepository.save(friend);
 
                 // FireStore에 fromUser와 toUser의 users-{userid}-friends에 서로를 친구관계(code:2)로 추가해야함
-                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 2)));
-                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 2)));
+//                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 2)));
+//                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 2)));
+
+                fromUsersRef.update("friends/"+toUser.getId(), 2);
+                toUsersRef.update("friends/"+fromUser.getId(), 2);
 
                 // notificationDto의 메세지 설정
                 notificationDto.setMessage(fromUser.getNickname()+"님께서 친구요청을 수락하셨습니다.");
@@ -137,8 +140,10 @@ public class FriendService {
 
                 // FireStore에서 fromUser의 users-{fromUserid}-friends에 toUser를 친구 요청 대기자로(code:0) 추가해야함
                 // FireStore에서 toUser의 users-{toUserid}-friends에 fromUser를 친구 요청자 (code:1) 추가해야함
-                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 0)));
-                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 1)));
+//                fromUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(toUserId, 0)));
+//                toUsersRef.update("friends", FieldValue.arrayUnion(new FireStoreFriendRes(fromUser.getId(), 1)));
+                fromUsersRef.update("friends/"+toUser.getId(), 0);
+                toUsersRef.update("friends/"+fromUser.getId(), 1);
 
                 // notificationDto의 메세지 및 url(노티에서 친구요청을 바로 할수 있도록 url) 설정
                 notificationDto.setMessage(fromUser.getNickname()+"님께서 친구요청을 하셨습니다.");
