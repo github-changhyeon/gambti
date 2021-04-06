@@ -171,6 +171,15 @@ export default function Signup() {
     }
   };
 
+  useEffect(()=>{
+    if (gender === 'MALE') {
+      setBasicImg('/images/male.png');
+    } else {
+      setBasicImg('/image/female.png');
+    }
+  
+  }, [])
+
   useEffect(() => {
     if (gender === 'MALE') {
       setBasicImg(`/images/male.png`);
