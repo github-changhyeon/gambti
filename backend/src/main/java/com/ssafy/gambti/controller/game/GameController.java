@@ -50,6 +50,7 @@ public class GameController {
         return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", pagingRecommendGames), HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/recommends/{genreId}")
     @Operation(summary = "장르 별 추천 게임 리스트 조회", description = "장르 별 추천 게임 리스트 조회")
     public ResponseEntity<? extends Response> gameRecommends(@PathVariable Long genreId, HttpServletRequest httpServletRequest){
@@ -59,16 +60,20 @@ public class GameController {
         return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", recommendGenreGames), HttpStatus.OK);
     }
 
-// TODO: 2021-03-26 추천 알고리즘 완료 후 진행
 
-//    @PostMapping(value = "/recommends/{gameId}")
-//    @Operation(summary = "추천게임 중 필요없는 게임 제거", description = "gameId를 이용해 게임 추천 제거")
-//    public ResponseEntity<? extends Response> banFromGameRecommends(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
-//        //bangame에 등록해두고 하나 받아서 주자.
-//        GameSimpleRes gameSimpleRes = gameService.banFromGameRecommend(gameId, httpServletRequest);
-//
-//        return new ResponseEntity<>(new Response(SUCCESS, "test", gameSimpleRes), HttpStatus.OK);
-//    }
+    @PostMapping(value = "/recommends/{gameId}/ban")
+    @Operation(summary = "추천게임 중 필요없는 게임 제거", description = "gameId를 이용해 게임 추천 제거")
+    public ResponseEntity<? extends Response> banFromGameRecommends(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
+
+        boolean result = gameService.banFromGameRecommend(gameId, httpServletRequest);
+
+        if (result) {
+            return new ResponseEntity<>(new Response(SUCCESS, "추천친구 밴 성공", null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new Response(FAIL, "추천친구 밴 실패", null), HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
 
     @GetMapping(value="/detail/{gameId}")
