@@ -1,13 +1,14 @@
 package com.ssafy.gambti.dto.game;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
 
 @Getter
-@Setter
-public class GameRecommendDto {
+@Builder
+public class GameRecommendRes {
     private Long gameId;
     private String appName;
     private String logoImagePath;
@@ -16,12 +17,5 @@ public class GameRecommendDto {
     private boolean isJoined;
     private boolean isOwned;
     private int joinUserCount;
-
-    public GameRecommendDto(Object [] o){
-        this.gameId = ((BigInteger) o[0]).longValue();
-        this.appName = (String)o[1];
-        this.logoImagePath = (String)o[2];
-        this.backgroundImagePath = (String)o[3];
-        this.videoUrl = (String)o[4];
-    }
+    private double rating;
 }
