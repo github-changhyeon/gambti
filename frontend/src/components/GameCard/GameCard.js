@@ -1,19 +1,19 @@
-import styles from "./GameCard.module.css";
-import AvatarComp from "src/components/AvatarComp/AvatarComp.js";
-import { React, useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import ButtonComp from "src/components/ButtonComp/ButtonComp.js";
-import Avatar from "@material-ui/core/Avatar";
-import { Container } from "@material-ui/core";
-import { joinAndLeave } from "src/common/axios/Game";
-import { usePalette } from "react-palette";
-import IconButton from "@material-ui/core/IconButton";
-import { useHistory, generatePath } from "react-router-dom";
-import routerInfo from "src/constants/routerInfo";
+import styles from './GameCard.module.css';
+import AvatarComp from 'src/components/AvatarComp/AvatarComp.js';
+import { React, useState } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp.js';
+import Avatar from '@material-ui/core/Avatar';
+import { Container } from '@material-ui/core';
+import { joinAndLeave } from 'src/common/axios/Game';
+import { usePalette } from 'react-palette';
+import IconButton from '@material-ui/core/IconButton';
+import { useHistory, generatePath } from 'react-router-dom';
+import routerInfo from 'src/constants/routerInfo';
 
 export default function GameCard({ isLogin, gameInfo }) {
   let descriptionText, buttonText;
@@ -26,25 +26,25 @@ export default function GameCard({ isLogin, gameInfo }) {
   const history = useHistory();
 
   if (isLogin) {
-    descriptionText = " joined";
+    descriptionText = ' joined';
   } else {
-    descriptionText = " joined";
+    descriptionText = ' joined';
     // descriptionNum = gameInfo.metascore + "%";
     // descriptionText = " suited";
   }
 
   const clickJoinBtn = () => {
-    const token = localStorage.getItem("idToken");
+    const token = localStorage.getItem('idToken');
     // console.log(token);
     if (token === null || token === undefined) {
-      alert("로그인 해주세요");
+      alert('로그인 해주세요');
       return;
     }
 
     joinAndLeave(
       gameInfo.gameId,
       (response) => {
-        if (response.data.status === "success") {
+        if (response.data.status === 'success') {
           // setDescriptionNum(res.data.data);
 
           if (joined) {
@@ -63,8 +63,8 @@ export default function GameCard({ isLogin, gameInfo }) {
   };
 
   return gameInfo.metascore > 999 ? (
-    <div style={{ width: "100%" }}>
-      <div className={styles["neon-block"]}>
+    <div style={{ width: '100%' }}>
+      <div className={styles['neon-block']}>
         <div className={styles.block}>
           <span className={styles.rainbow}></span>
 
@@ -77,9 +77,9 @@ export default function GameCard({ isLogin, gameInfo }) {
             <CardContent className={styles.card_logo_img}>
               <Container
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
                 }}
               >
                 <AvatarComp
@@ -127,7 +127,7 @@ export default function GameCard({ isLogin, gameInfo }) {
               <ButtonComp
                 size="medium"
                 joined={joined}
-                textvalue={joined ? "JOINED" : "JOIN GAME"}
+                textvalue={joined ? 'JOINED' : 'JOIN GAME'}
                 onClick={clickJoinBtn}
                 color={data.lightVibrant}
               ></ButtonComp>
@@ -146,9 +146,9 @@ export default function GameCard({ isLogin, gameInfo }) {
       <CardContent className={styles.card_logo_img}>
         <Container
           style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
           }}
         >
           <AvatarComp
@@ -196,7 +196,7 @@ export default function GameCard({ isLogin, gameInfo }) {
         <ButtonComp
           size="medium"
           joined={joined}
-          textvalue={joined ? "JOINED" : "JOIN GAME"}
+          textvalue={joined ? 'JOINED' : 'JOIN GAME'}
           onClick={clickJoinBtn}
           color={data.lightVibrant}
         ></ButtonComp>
