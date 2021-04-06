@@ -3,7 +3,7 @@ package com.ssafy.gambti.controller.game;
 import com.ssafy.gambti.commons.PageRequest;
 import com.ssafy.gambti.dto.basicResponse.Response;
 import com.ssafy.gambti.dto.game.GameDetailRes;
-import com.ssafy.gambti.dto.game.GameRecommendDto;
+import com.ssafy.gambti.dto.game.GameRecommendRes;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.service.game.GameService;
@@ -41,12 +41,22 @@ public class GameController {
     }
 
 
-    @GetMapping(value = "/recommends", params = {"genreId"})
-    @Operation(summary = "추천 게임 조회 ", description = "추천 게임 list를 조회한다.")
-    public ResponseEntity<? extends Response> gameRecommends(Long genreId, final PageRequest pageable, HttpServletRequest httpServletRequest){
-        //지금은 우선 random으로 섞어서 주자(페이징 필요 없음)
-        Page<GameRecommendDto> pagingRecommendGames = gameService.gameRecommends(genreId, pageable.of(), httpServletRequest);
+    @GetMapping(value = "/recommends")
+    @Operation(summary = "모든 추천 게임 페이징 처리 조회 ", description = "모든 추천 게임을 페이징 처리하여 조회한다.")
+    public ResponseEntity<? extends Response> gameRecommends(final PageRequest pageable, HttpServletRequest httpServletRequest){
+
+        Page<GameRecommendRes> pagingRecommendGames = gameService.gameRecommends(pageable.of(), httpServletRequest);
+
         return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", pagingRecommendGames), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/recommends/{genreId}")
+    @Operation(summary = "장르 별 추천 게임 리스트 조회", description = "장르 별 추천 게임 리스트 조회")
+    public ResponseEntity<? extends Response> gameRecommends(@PathVariable Long genreId, HttpServletRequest httpServletRequest){
+
+        List<GameRecommendRes> recommendGenreGames = gameService.gameGenreRecommends(genreId, httpServletRequest);
+
+        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", recommendGenreGames), HttpStatus.OK);
     }
 
 // TODO: 2021-03-26 추천 알고리즘 완료 후 진행

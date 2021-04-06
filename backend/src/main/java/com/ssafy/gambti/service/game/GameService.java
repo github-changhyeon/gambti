@@ -6,12 +6,12 @@ import com.google.firebase.auth.FirebaseToken;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserJoinGame;
-import com.ssafy.gambti.domain.user.UserRecommendGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
-import com.ssafy.gambti.dto.game.GameRecommendDto;
+import com.ssafy.gambti.dto.game.GameRecommendRes;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
 import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.exception.GameListException;
+import com.ssafy.gambti.repository.game.GameGenreRepository;
 import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.user.UserJoinGameRepository;
 import com.ssafy.gambti.repository.user.UserOwnGameRepository;
@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final GameGenreRepository gameGenreRepository;
     private final UserJoinGameRepository userJoinGameRepository;
     private final UserOwnGameRepository userOwnGameRepository;
     private final SecurityService securityService;
@@ -138,7 +140,7 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Page<GameRecommendDto> gameRecommends(Long genreId, Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Page<GameRecommendRes> gameRecommends(Pageable pageable, HttpServletRequest httpServletRequest) {
         String token = securityService.getBearerToken(httpServletRequest);
         FirebaseToken decodedToken = null;
 
@@ -160,61 +162,22 @@ public class GameService {
             logger.error("Firebase Exception : ", e.getLocalizedMessage());
         }
 
-        User finalLoginUser = loginUser;
-        Page<GameRecommendDto> gameRecommendDtos = loginUser.getUserRecommendGames().get(0);
-//                .forEach(userRecommendGame -> {
-//                        Game game = userRecommendGame.getGame();
-//
-//                        return GameRecommendDto.builder()
-//                        .gameId(game.getId())
-//                        .appName(game.getAppName())
-//                        .logoImagePath(game.getLogoImagePath())
-//                        .backgroundImagePath(game.getBackgroundImagePath())
-//                        .videoUrl(game.getVideoUrl())
-//                        .isJoined(false)
-//                        .isOwned(false)
-//                        .joinUserCount(33)
-//                        .build();
-//                        }
-//                );
+        List<Game> userJoinGames = loginUser.getUserJoinGames().stream().map(userJoinGame -> userJoinGame.getGame()).collect(Collectors.toList());
 
-//        List<Object[]> result;
-//        //2. 장르 아이디로 장르까지 판단한다.
-//        //TODO: size 데이터 받아서 설정하도록 해줘야 함
-//        if(genreId==0) {
-//            result = gameRepository.findAllRecommendGamesOrderByRandom();
-//            for (int i = 0; i<20; i++){
-//                gameRecommendResList.add(new GameRecommendDto(result.get(i)));
-//            }
-//        }
-//        else{
-//            result = gameRepository.findRecommendGamesOrderByRandom(genreId);
-//            for (int i = 0; i<20; i++){
-//                gameRecommendResList.add(new GameRecommendDto(result.get(i)));
-//            }
-//        }
-//        //3. 유저 카운트를 가지고 온다.
-//        for (GameRecommendDto grr : gameRecommendResList) {
-//            //4. 게임 커뮤니티에 참여하고 있는 사람 수 받아와서 set시켜준다.
-//            grr.setJoinUserCount(userJoinGameRepository.countByGameId(grr.getGameId()));
-//            if(token!=null){
-//                try {
-//                    //5. 토큰을 디코딩한다.
-//                    decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-//                    //6. uid를 가지고온다.
-//                    String uid = decodedToken.getUid();
-//                    //7. 해당 유저가 가지고 있는 게임인지 확인한다.
-//                    grr.setOwned(userOwnGameRepository.existsByUserId(uid));
-//                    //8. 유저가 이미 조인하고 있는 게임인지 확인한다.
-//                    grr.setJoined(userJoinGameRepository.existsByUserIdAndGameId(uid, grr.getGameId()));
-//                }
-//                catch (FirebaseAuthException e){
-//                    logger.error("Firebase Exception : ", e.getLocalizedMessage());
-//                    return null;
-//                }
-//            }
-//        }
-        return gameRecommendResList;
+        Page<GameRecommendRes> gameRecommendDtoPage = userRecommendGameRepository.findByUserIdAndUserJoinGameIn(loginUser.getId(), userJoinGames, pageable).
+                map(userRecommendGame -> GameRecommendRes.builder()
+                        .gameId(userRecommendGame.getGame().getId())
+                        .appName(userRecommendGame.getGame().getAppName())
+                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
+                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
+                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                        .rating(userRecommendGame.getRating())
+                        .build());
+
+        return gameRecommendDtoPage;
     }
 
     public Page<GameSimpleRes> searchGameByAppName(String word, Pageable pageable, HttpServletRequest httpServletRequest) {
@@ -265,6 +228,48 @@ public class GameService {
             return joinGamesResList;
         }
         return null;
+    }
+
+    public List<GameRecommendRes> gameGenreRecommends(Long genreId, HttpServletRequest httpServletRequest) {
+
+        String token = securityService.getBearerToken(httpServletRequest);
+        FirebaseToken decodedToken = null;
+
+        User loginUser = null;
+
+        try {
+            if(token!=null){
+                //2.1 토큰을 디코딩한다.
+                decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+                //2.2 uid를 가지고온다.
+                String loginUserId = decodedToken.getUid();
+                //2.3 각각의 userId로 객체를 할당한다.
+//                fromUser = userRepository.findUserById(fromUserId);
+                loginUser = userRepository.findById(loginUserId).get();
+            }
+        }
+        // 3. 중간에 애러났으면 false
+        catch (FirebaseAuthException e){
+            logger.error("Firebase Exception : ", e.getLocalizedMessage());
+        }
+
+        List<Game> userJoinGames = loginUser.getUserJoinGames().stream().map(userJoinGame -> userJoinGame.getGame()).collect(Collectors.toList());
+
+        List<GameRecommendRes> gameGenreRecommendResList = userRecommendGameRepository.findByUserIdAndUserJoinGameIn(loginUser.getId(), userJoinGames).stream()
+                .filter(userRecommendGame -> gameGenreRepository.findByGameIdAndGenreId(userRecommendGame.getGame().getId(), genreId).isPresent())
+                .map(userRecommendGame -> GameRecommendRes.builder()
+                        .gameId(userRecommendGame.getGame().getId())
+                        .appName(userRecommendGame.getGame().getAppName())
+                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
+                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
+                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                        .rating(userRecommendGame.getRating())
+                        .build()).limit(15).collect(Collectors.toList());
+
+        return gameGenreRecommendResList;
     }
 
     // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 

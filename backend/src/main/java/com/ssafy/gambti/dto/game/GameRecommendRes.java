@@ -7,9 +7,8 @@ import lombok.Setter;
 import java.math.BigInteger;
 
 @Getter
-@Setter
 @Builder
-public class GameRecommendDto {
+public class GameRecommendRes {
     private Long gameId;
     private String appName;
     private String logoImagePath;
@@ -19,12 +18,4 @@ public class GameRecommendDto {
     private boolean isOwned;
     private int joinUserCount;
     private double rating;
-
-    public GameRecommendDto(Object [] o){
-        this.gameId = ((BigInteger) o[0]).longValue();
-        this.appName = (String)o[1];
-        this.logoImagePath = (String)o[2];
-        this.backgroundImagePath = (String)o[3];
-        this.videoUrl = (String)o[4];
-    }
 }
