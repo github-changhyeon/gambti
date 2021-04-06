@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.cloud.FirestoreClient;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.User;
+import com.ssafy.gambti.domain.user.UserBanGame;
 import com.ssafy.gambti.domain.user.UserJoinGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendRes;
@@ -17,10 +18,7 @@ import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameGenreRepository;
 import com.ssafy.gambti.repository.game.GameRepository;
-import com.ssafy.gambti.repository.user.UserJoinGameRepository;
-import com.ssafy.gambti.repository.user.UserOwnGameRepository;
-import com.ssafy.gambti.repository.user.UserRecommendGameRepository;
-import com.ssafy.gambti.repository.user.UserRepository;
+import com.ssafy.gambti.repository.user.*;
 import com.ssafy.gambti.service.security.SecurityService;
 import com.ssafy.gambti.utils.FirebaseTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +43,35 @@ public class GameService {
     private final GameGenreRepository gameGenreRepository;
     private final UserJoinGameRepository userJoinGameRepository;
     private final UserOwnGameRepository userOwnGameRepository;
+    private final UserBanGameRepository userBanGameRepository;
     private final SecurityService securityService;
     private final FirebaseTokenUtils firebaseTokenUtils;
     private final UserRecommendGameRepository userRecommendGameRepository;
+
+    public User getLoginUser(HttpServletRequest httpServletRequest){
+        String token = securityService.getBearerToken(httpServletRequest);
+        FirebaseToken decodedToken = null;
+
+        User loginUser = null;
+
+        try {
+            if(token!=null){
+                //2.1 토큰을 디코딩한다.
+                decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+                //2.2 uid를 가지고온다.
+                String loginUserId = decodedToken.getUid();
+                //2.3 각각의 userId로 객체를 할당한다.
+//                fromUser = userRepository.findUserById(fromUserId);
+                loginUser = userRepository.findById(loginUserId).get();
+            }
+        }
+        // 3. 중간에 애러났으면 false
+        catch (FirebaseAuthException e){
+            logger.error("Firebase Exception : ", e.getLocalizedMessage());
+        }
+
+        return loginUser;
+    }
 
     public GameDetailRes gameDetail(Long gameId, HttpServletRequest httpServletRequest) {
 
@@ -295,10 +319,25 @@ public class GameService {
         return gameGenreRecommendResList;
     }
 
-    // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 
-//    public GameSimpleRes banFromGameRecommend(Long gameId, HttpServletRequest httpServletRequest) {
-//
-//    }
+    public boolean banFromGameRecommend(Long gameId, HttpServletRequest httpServletRequest) {
+        User loginUser = getLoginUser(httpServletRequest);
+        Game banTargetGame = gameRepository.findById(gameId).get();
+
+        if (userBanGameRepository.existsByUserAndGame(loginUser, banTargetGame)) {
+            throw new IllegalStateException("이미 추천에서 삭제한 게임입니다.");
+        }
+
+        if (loginUser != null && banTargetGame != null) {
+            // 2.1 UserBanFriend 테이블에 저장해 다음부터 추천 받지 않도록 한다.
+            UserBanGame userBanGame = new UserBanGame(loginUser, banTargetGame);
+
+            userBanGameRepository.save(userBanGame);
+        } else {
+            return false;
+        }
+        return true;
+    }
+
 //    public Page<Game> findGamesInGenre(Long genreId, Pageable pageable, HttpServletRequest httpServletRequest) {
 //        //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
 //        String token = securityService.getBearerToken(httpServletRequest);
