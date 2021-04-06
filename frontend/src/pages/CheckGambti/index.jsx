@@ -9,10 +9,12 @@ import Signup from 'src/pages/Signup/index';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+
 export default function CheckGambti() {
   const classes = useStyles();
 
   const history = useHistory();
+
 
   const [num, setNum] = useState(1);
 
@@ -389,6 +391,7 @@ export default function CheckGambti() {
                     pathname: routerInfo.PAGE_URLS.SIGNUP,
                     state: { mbti: propsMbti, mbtiSub: propsMbtiExplain },
                   });
+
                 }}
               ></ButtonComp>
             </div>

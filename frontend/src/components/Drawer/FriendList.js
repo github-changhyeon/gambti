@@ -24,7 +24,7 @@ export default function FriendList({ showChat }) {
 
   const handleChatChange = (fuser) => {
     setFriend(fuser);
-    makeOOOchatRoom(fuser)
+    makeOOOchatRoom(fuser);
     setChat(!chat);
     // console.log(user);
     // console.log(friend, chat);
