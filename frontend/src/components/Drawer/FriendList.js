@@ -22,8 +22,9 @@ export default function FriendList({ showChat }) {
     makeOneOnOneChatRoom(fuid);
   }
 
-  const handleChatChange = (user) => {
-    setFriend(user);
+  const handleChatChange = (fuser) => {
+    setFriend(fuser);
+    makeOOOchatRoom(fuser)
     setChat(!chat);
     // console.log(user);
     // console.log(friend, chat);
@@ -35,13 +36,13 @@ export default function FriendList({ showChat }) {
   return (
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
-        {friendList.map((user, i) =>
+        {friendList.map((fuser, i) =>
           <div key={i} style={{ width: '195px' }}
           >
             <MediumProfile
-              propsUser={user}
+              propsUser={fuser}
               onClick={() => {
-                handleChatChange(user)
+                handleChatChange(fuser)
               }
               }
             />
