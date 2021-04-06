@@ -2,9 +2,12 @@ import { restApi, getConfig } from "./index";
 
 function getRecommendedGames(params, success, fail) {
   if (params.isLogin) {
+    const token = localStorage.getItem("idToken");
+    const config = getConfig(token);
     restApi()
       .get(
-        `/games/recommends?page=${params.pageNum}&size=${params.size}&direction=DESC&colName=rating`
+        `/games/recommends?page=${params.pageNum}&size=${params.size}&direction=DESC&colName=rating`,
+        config
       )
       .then(success)
       .catch(fail);
@@ -19,8 +22,10 @@ function getRecommendedGames(params, success, fail) {
 }
 function getRecommendedGenreGames(params, success, fail) {
   if (params.isLogin) {
+    const token = localStorage.getItem("idToken");
+    const config = getConfig(token);
     restApi()
-      .get(`/games/recommends/${params.genreId}`)
+      .get(`/games/recommends/${params.genreId}`, config)
       .then(success)
       .catch(fail);
   } else {
@@ -63,10 +68,20 @@ function getGameDetail(gameId, success, fail) {
     .catch(fail);
 }
 
+function deleteGame(gameId, success, fail) {
+  const token = localStorage.getItem("idToken");
+  const config = getConfig(token);
+  restApi()
+    .post(`v1/games/recommends/${gameId}/ban`, {}, config)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   getRecommendedGames,
   getRecommendedGenreGames,
   joinAndLeave,
   getGamesOrderBy,
   getGameDetail,
+  deleteGame,
 };

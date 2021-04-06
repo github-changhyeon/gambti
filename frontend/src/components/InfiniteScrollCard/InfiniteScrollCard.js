@@ -6,7 +6,11 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { getGamesOrderBy, getRecommendedGames } from "src/common/axios/Game";
+import {
+  getGamesOrderBy,
+  getRecommendedGames,
+  deleteGame,
+} from "src/common/axios/Game";
 import { searchGames, searchUsers } from "src/common/axios/Search";
 import UserCard from "src/components/UserCard/UserCard";
 import { UserContext } from "src/Context/UserContext";
@@ -36,11 +40,22 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
   //   });
 
   const clickDeleteBtnFunc = (params) => {
-    let $pTarget = $(params.target).parents(".parentGrid");
+    let $pTarget = $(params.element.target).parents(".parentGrid");
     console.log($pTarget);
     $pTarget.hide("slow", function () {
       $pTarget.css("display", "none");
     });
+    deleteGame(
+      params.gameId,
+      (response) => {
+        if (response.data.status !== "success") {
+          console.log("delete error");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   const fetchData = () => {
@@ -239,7 +254,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
                 gameInfo={item}
                 className="close"
                 clickDeleteBtn={(params) => {
-                  clickDeleteBtnFunc(params);
+                  clickDeleteBtnFunc({ element: params, id: item.gameId });
                 }}
               ></RecommendedGameCard>
             ) : null}

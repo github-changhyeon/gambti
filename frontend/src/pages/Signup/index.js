@@ -1,33 +1,38 @@
-import React, { useContext, useEffect } from 'react';
-import styles from './index.module.css';
-import ButtonComp from 'src/components/ButtonComp/ButtonComp';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import fire from 'src/fire';
-import { GoogleLoginButton, TwitterLoginButton } from 'react-social-login-buttons';
+import React, { useContext, useEffect } from "react";
+import styles from "./index.module.css";
+import ButtonComp from "src/components/ButtonComp/ButtonComp";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import fire from "src/fire";
+import {
+  GoogleLoginButton,
+  TwitterLoginButton,
+} from "react-social-login-buttons";
 // import { UserContext } from 'src/Context/UserContext';
-import { signup } from 'src/common/axios/Account';
-import background from 'src/Images/background.jpg';
-import firebase from 'firebase';
-import CheckInfo from 'src/pages/CheckInfo/index';
-import CheckGambti from 'src/components/CheckInfo/CheckInfo';
-import { useHistory, useLocation } from 'react-router';
+import { signup } from "src/common/axios/Account";
+import background from "src/Images/background.jpg";
+import firebase from "firebase";
+import CheckInfo from "src/pages/CheckInfo/index";
+import CheckGambti from "src/components/CheckInfo/CheckInfo";
+import { useHistory, useLocation } from "react-router";
 
 export default function Signup() {
   const history = useHistory();
   const location = useLocation();
   // const user = useContext(UserContext);
 
-  const [nickname, setNickname] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirm, setPasswordConfirm] = React.useState('');
+  const [nickname, setNickname] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
 
   const [nullError, setNullError] = React.useState(false);
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
-  const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
+  const [passwordLengthError, setNullPasswordLengthError] = React.useState(
+    false
+  );
   const [nicknameError, setNicknameError] = React.useState(false);
 
   // check-gambti 에서 받아온 정보
@@ -57,16 +62,20 @@ export default function Signup() {
 
   function Nickname() {
     // 닉네임 확인
-    const nick = document.getElementById('nickname');
+    const nick = document.getElementById("nickname");
     if (nick != null) {
-      if (nick.value === '') {
+      if (nick.value === "") {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
       if (1 > nick.value.length || nick.value.length > 10) {
         setNullError(false);
         setNicknameError(true);
-        return <Typography className={styles.error}>닉네임은 10자 이하입니다.</Typography>;
+        return (
+          <Typography className={styles.error}>
+            닉네임은 10자 이하입니다.
+          </Typography>
+        );
       } else {
         setNullError(false);
         setNicknameError(false);
@@ -80,16 +89,20 @@ export default function Signup() {
   // 이메일 형식
   const valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   function Email() {
-    const email = document.getElementById('email');
+    const email = document.getElementById("email");
     if (email != null) {
-      if (email.value === '') {
+      if (email.value === "") {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
       if (!valid.test(email.value)) {
         setNullError(false);
         setEmailVarifiedError(true);
-        return <Typography className={styles.error}>이메일 형식이 아닙니다.</Typography>;
+        return (
+          <Typography className={styles.error}>
+            이메일 형식이 아닙니다.
+          </Typography>
+        );
       } else {
         setNullError(false);
         setEmailVarifiedError(false);
@@ -103,9 +116,9 @@ export default function Signup() {
   // 비밀번호 규칙
   const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
   function Pass() {
-    const pass = document.getElementById('password');
+    const pass = document.getElementById("password");
     if (pass != null) {
-      if (pass.value === '') {
+      if (pass.value === "") {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
@@ -129,10 +142,10 @@ export default function Signup() {
 
   // 비밀번호 === 비밀번호 확인
   function PassConfirm() {
-    const pass = document.getElementById('password');
-    const confirm = document.getElementById('passwordConfirm');
+    const pass = document.getElementById("password");
+    const confirm = document.getElementById("passwordConfirm");
     if (pass && confirm != null) {
-      if (pass.value === '' || confirm.value === '') {
+      if (pass.value === "" || confirm.value === "") {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
@@ -144,7 +157,11 @@ export default function Signup() {
       if (pass.value !== confirm.value) {
         setNullError(false);
         setPasswordMatchError(true);
-        return <Typography className={styles.error}>비밀번호가 일치하지 않습니다.</Typography>;
+        return (
+          <Typography className={styles.error}>
+            비밀번호가 일치하지 않습니다.
+          </Typography>
+        );
       }
     }
     // setNullError(true);
@@ -161,7 +178,7 @@ export default function Signup() {
       nicknameError ||
       passwordLengthError
     ) {
-      alert('조건에 적합하지 않은 부분이 있습니다.');
+      alert("조건에 적합하지 않은 부분이 있습니다.");
     } else {
       setIsNext(true);
     }
@@ -169,20 +186,20 @@ export default function Signup() {
 
   useEffect(() => {
     if (isNext) {
-      console.log('이즈넥스트!!');
+      console.log("이즈넥스트!!");
     } else return;
   }, [isNext]);
 
   useEffect(() => {
     if (isSignup === true) {
-      console.log('============================');
-      console.log('성별: ' + gender);
-      console.log('연령: ' + age);
-      console.log('가격: ' + maxPrice);
-      console.log('태그: ' + userLikeTagIds);
-      console.log('mbti: ' + mbti);
-      console.log('mbtiSub: ' + mbtiSub);
-      console.log('============================');
+      console.log("============================");
+      console.log("성별: " + gender);
+      console.log("연령: " + age);
+      console.log("가격: " + maxPrice);
+      console.log("태그: " + userLikeTagIds);
+      console.log("mbti: " + mbti);
+      console.log("mbtiSub: " + mbtiSub);
+      console.log("============================");
 
       onSignup();
     } else return;
@@ -194,18 +211,18 @@ export default function Signup() {
     fire.auth
       .createUserWithEmailAndPassword(email, password)
       .then((currentUser) => {
-        history.push('/email-confirm');
+        history.push("/email-confirm");
 
         // token 받아오기
         fire.auth.currentUser
           .getIdToken()
           .then(function (idToken) {
-            window.localStorage.setItem('idToken', idToken);
+            window.localStorage.setItem("idToken", idToken);
             // mbti, gender는 대문자
             const param = {
               mbti: mbti,
               gender: gender,
-              steamId: '',
+              steamId: "",
               maxPrice: maxPrice,
               age: age,
               nickname: nickname,
@@ -213,7 +230,7 @@ export default function Signup() {
             };
 
             // add user to db
-            fire.db.collection('users').doc(currentUser.user.uid).set({
+            fire.db.collection("users").doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
               emailVerified: currentUser.user.emailVerified,
@@ -263,17 +280,17 @@ export default function Signup() {
         createdUser
           .sendEmailVerification()
           .then(function () {
-            alert('인증메일 발송 이메일을 확인해주세요');
+            alert("인증메일 발송 이메일을 확인해주세요");
           })
           .catch(function (error) {
-            alert('인증메일 발송에 실패하였습니다.');
+            alert("인증메일 발송에 실패하였습니다.");
           });
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        if (error.code === 'auth/email-already-in-use') {
-          alert('해당 이메일은 이미 존재합니다.');
+        if (error.code === "auth/email-already-in-use") {
+          alert("해당 이메일은 이미 존재합니다.");
         }
         // console.log(errorMessage);
         // ..
@@ -282,15 +299,15 @@ export default function Signup() {
 
   // TODO: preventDefault 알아보기
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
       onNext();
     }
   };
 
   useEffect(() => {
-    console.log('mbti: ' + mbti);
-    console.log('mbtiSub: ' + mbtiSub);
+    console.log("mbti: " + mbti);
+    console.log("mbtiSub: " + mbtiSub);
   }, [mbti]);
 
   return (
@@ -306,8 +323,8 @@ export default function Signup() {
           <div className={styles.root}>
             <form noValidate className={styles.form}>
               <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy Policy, including the
-                Cookie Policy.
+                By signing up, you agree to the Terms of User and Privacy
+                Policy, including the Cookie Policy.
               </Typography>
 
               <div className={styles.form_holder}>

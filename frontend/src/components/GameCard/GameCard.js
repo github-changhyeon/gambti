@@ -27,7 +27,9 @@ export default function GameCard({ gameInfo }) {
 
   const clickJoinBtn = () => {
     // console.log(token);
-    if (user.isLoggedIn) {
+
+    console.log(user);
+    if (!user.isLoggedIn) {
       alert("로그인 해주세요");
       return;
     }

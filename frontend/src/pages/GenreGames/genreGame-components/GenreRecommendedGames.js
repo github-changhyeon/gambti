@@ -5,10 +5,11 @@ import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedG
 import VideoAndCard from "src/pages/GenreGames/genreGame-components/VideoAndCard";
 import { Carousel } from "3d-react-carousal";
 import Typography from "@material-ui/core/Typography";
-import { getRecommendedGenreGames } from "src/common/axios/Game";
+import { getRecommendedGenreGames, deleteGame } from "src/common/axios/Game";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { UserContext } from "src/Context/UserContext";
+import { SignalCellularNoSimOutlined } from "@material-ui/icons";
 
 export default function GenreRecommendedGames({ propsMatch }) {
   const user = useContext(UserContext);
@@ -16,7 +17,6 @@ export default function GenreRecommendedGames({ propsMatch }) {
   const [recommendGames, setRecommendGames] = useState(new Array());
   const [videoAndCards, setVideoAndCards] = useState(new Array());
   const [isFetchEnd, setIsFetchEnd] = useState(false);
-  const gameIds = useRef(new Array());
 
   const location = useLocation();
   // const isWide = MediaQuery ({
@@ -24,42 +24,74 @@ export default function GenreRecommendedGames({ propsMatch }) {
   // });//
 
   const clickDeleteBtnFunc = (gameId) => {
-    console.log("파람파람", gameId);
-    console.log("게임아이디스", gameIds);
-    let idx = -1;
-    for (let i = 0; i < gameIds.current.length; ++i) {
-      if (gameIds.current[i] === gameId) {
-        idx = i;
-        break;
-      }
-    }
-    console.log(idx);
-    if (idx === -1) {
-      return;
-    }
+    deleteGame(
+      gameId,
+      (response) => {
+        if (response.data.status === "success") {
+          getRecommendedGenreGames(
+            {
+              isLogin: user.isLoggedIn,
+              genreId: location.state.genre.id,
+              pageNum: 1,
+              size: 15,
+            },
+            (response) => {
+              let gameInfos = response.data.data.content;
+              if (user.isLoggedIn) {
+                gameInfos = response.data.data;
+              }
+              console.log("이녀석", gameInfos);
+              let tempVideoAndCards = new Array();
+              let tempRecommendedCards = new Array();
+              for (let i = 0; i < gameInfos.length; ++i) {
+                // setGameIds((gameIds) => [...gameIds, gameInfos[i].gameId]);
+                // TODO: 빈배열일때 SLIDE 에러
+                tempVideoAndCards.push(
+                  <VideoAndCard
+                    clickDeleteBtn={() => {
+                      clickDeleteBtnFunc(gameInfos[i].gameId);
+                    }}
+                    gameInfo={gameInfos[i]}
+                  ></VideoAndCard>
+                );
 
-    console.log("인덱스!!", idx);
-    console.log("지우기전", gameIds.current);
-    console.log(gameIds.current.splice(idx, 1));
-    console.log("지웠다", gameIds.current);
-    setVideoAndCards((videoAndCards) =>
-      videoAndCards.filter((item, i) => i !== idx)
+                if (i === gameInfos.length - 1) {
+                  setVideoAndCards(tempVideoAndCards);
+                }
+                tempRecommendedCards.push(
+                  <div style={{ width: "283px" }}>
+                    <RecommendedGameCard
+                      clickDeleteBtn={() => {
+                        clickDeleteBtnFunc(gameInfos[i].gameId);
+                      }}
+                      gameInfo={gameInfos[i]}
+                    ></RecommendedGameCard>
+                  </div>
+                );
+                if (i === gameInfos.length - 1) {
+                  setRecommendGames(tempRecommendedCards);
+                }
+              }
+              setIsFetchEnd(true);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
     );
-    // setVideoAndCards(videoAndCards.filter((item, i) => i !== idx));
   };
 
   useEffect(() => {
     // TODO: AXIOS
 
-    // console.log(location.state.genreId);
     setVideoAndCards(new Array());
     setRecommendGames(new Array());
-    // setGameIds(new Array());
-    gameIds.current = new Array();
     setIsFetchEnd(false);
-
-    // console.log(tempArr);
-    // setRecommendGames(new Array());
   }, [propsMatch.params.genre]);
 
   useEffect(() => {
@@ -76,33 +108,40 @@ export default function GenreRecommendedGames({ propsMatch }) {
       },
       (response) => {
         let gameInfos = response.data.data.content;
+        if (user.isLoggedIn) {
+          gameInfos = response.data.data;
+        }
         console.log("이녀석", gameInfos);
+        let tempVideoAndCards = new Array();
+        let tempRecommendedCards = new Array();
         for (let i = 0; i < gameInfos.length; ++i) {
           // setGameIds((gameIds) => [...gameIds, gameInfos[i].gameId]);
-          gameIds.current.push(gameInfos[i].gameId);
-          setVideoAndCards((videoAndCards) => [
-            ...videoAndCards,
-
+          // TODO: 빈배열일때 SLIDE 에러
+          tempVideoAndCards.push(
             <VideoAndCard
               clickDeleteBtn={() => {
                 clickDeleteBtnFunc(gameInfos[i].gameId);
               }}
               gameInfo={gameInfos[i]}
-            ></VideoAndCard>,
-          ]);
-          setRecommendGames((recommendGames) => [
-            ...recommendGames,
+            ></VideoAndCard>
+          );
 
-            //TODO: VALUE
-            <div style={{ width: "238px" }}>
+          if (i === gameInfos.length - 1) {
+            setVideoAndCards(tempVideoAndCards);
+          }
+          tempRecommendedCards.push(
+            <div style={{ width: "283px" }}>
               <RecommendedGameCard
                 clickDeleteBtn={() => {
                   clickDeleteBtnFunc(gameInfos[i].gameId);
                 }}
                 gameInfo={gameInfos[i]}
               ></RecommendedGameCard>
-            </div>,
-          ]);
+            </div>
+          );
+          if (i === gameInfos.length - 1) {
+            setRecommendGames(tempRecommendedCards);
+          }
         }
         setIsFetchEnd(true);
       },

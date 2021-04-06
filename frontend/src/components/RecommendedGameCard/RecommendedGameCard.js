@@ -28,7 +28,7 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
 
   const clickJoinBtn = () => {
     // console.log(token);
-    if (user.isLoggedIn) {
+    if (!user.isLoggedIn) {
       alert("로그인 해주세요");
       return;
     }
@@ -61,7 +61,9 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
           <span className={styles.rainbow}></span>
 
           <Card className={styles.game_card}>
-            <CloseButton onClick={clickDeleteBtn}></CloseButton>
+            {user.isLoggedIn ? (
+              <CloseButton onClick={clickDeleteBtn}></CloseButton>
+            ) : null}
 
             <CardMedia
               className={styles.game_card_background_img}

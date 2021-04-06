@@ -24,6 +24,7 @@ export default function GenreList({ propsOrder }) {
       .catch((error) => {
         console.log(error);
       });
+    return () => setGenres(new Array());
   }, []);
 
   return (
