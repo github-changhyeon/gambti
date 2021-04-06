@@ -53,7 +53,7 @@ export default function Message({ roomId }) {
       <div>
         {messageList.map((message, i) =>
           <div key={i} >
-            <SmallProfile name={message.name}></SmallProfile>
+            <SmallProfile name={message.name} imgPath={message.profilePicUrl}></SmallProfile>
             <Typo text={message.text} ></Typo>
           </div>
         )}

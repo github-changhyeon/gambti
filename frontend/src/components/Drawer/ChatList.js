@@ -25,13 +25,14 @@ export default function ChatList({ showChat }) {
 
   const user = useContext(UserContext);
   const roomId = user.rooms;
-  // console.log(roomId);
 
 
   useEffect(() => {
     ReadChats(roomId);
     // console.log('mount');
   }, []);
+
+
 
   const ReadChats = async (roomIds) => {
     // map을 햇을경우 promise 약속값이 가지고 잇음
@@ -57,6 +58,7 @@ export default function ChatList({ showChat }) {
     const extendedRoomInfos = await Promise.all(extendedRoomInfosPromise);
     setChatList(extendedRoomInfos);
   }
+  console.log('chatList', chatList);
 
 
 
@@ -89,23 +91,58 @@ export default function ChatList({ showChat }) {
 
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
-        {chatList.map((room, i) =>
-          <div key={i} style={{ width: '195px' }}
-          >
-            <MediumProfile
-              propsUser={{
-                nickname: room.otherUser.nickname,
-                email: room.otherUser.email,
-              }}
-              onClick={() => {
-                handleChatChange(room);
-              }}
-            />
-            <hr />
-          </div>
-        )}
+        {
+          chatList.length === 0 ?
+            <div>
+              채팅이 없습니다.
+          </div> :
+            <div>
+              {
+                chatList.map((room, i) => {
+                  if (room.type === 'OneOnOne') {
+                    return (
+                      <div key={i} style={{ width: '195px' }}
+                      >
+                        <MediumProfile
+                          propsUser={{
+                            nickname: room.otherUser.nickname,
+                            email: room.otherUser.email,
+                            imgPath: room.otherUser.imgPath
+
+                          }}
+                          onClick={() => {
+                            handleChatChange(room);
+                          }}
+                        />
+                        <hr />
+                      </div>
+                    )
+                  }
+                  else {
+                    return (
+                      <div key={i} style={{ width: '195px' }}
+                      >
+                        <MediumProfile
+                          propsUser={{
+                            nickname: room.gameName,
+                            email: room.roomName,
+                            imgPath: room.imgPath
+                          }}
+                          onClick={() => {
+                            handleChatChange(room);
+                          }}
+                        />
+                        <hr />
+                      </div>
+                    )
+                  }
+                }
+                )
+              }
+            </div>
+        }
         {/* {
-          chat && */}
+        chat && */}
         {
           chat ?
             <div>

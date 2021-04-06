@@ -279,6 +279,7 @@ export default function Header({ isLogin }) {
                   badge="badge"
                   // textvalue={user.nickname}
                   textvalue={user.nickname.substring(0, 1)}
+                  imgPath={user.imgPath}
                 ></AvatarComp>
                 <div className={styles.dropdown_content} onClick={goProfile}>
                   <div className={styles.dropdown_menu}>
