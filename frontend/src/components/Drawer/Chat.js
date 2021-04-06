@@ -96,7 +96,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
     fire.db.collection('rooms').doc(roomsId).collection('messages').add({
       name: user.nickname,
       text: messageText,
-      profilePicUrl: currentUser.photoURL,
+      profilePicUrl: user.imgPath,
       timestamp: timestamp
     })
       .then(() => {
@@ -120,7 +120,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
                 {
                   propsUser ?
                     <div className={styles.header_profile} >
-                      <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
+                      <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email, imgPath: propsUser.imgPath }} />
                     </div>
                     :
                     youId ?
@@ -133,7 +133,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
                           });
                           onClose();
                         }}>
-                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email }} />
+                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email, imgPath: youInfo.imgPath }} />
                       </div> :
                       <div className={styles.header_profile}>
                         <MediumProfile propsUser={{ nickname: currentRoomName, email: '' }} />

@@ -47,6 +47,12 @@ export default function Signup() {
 
   const isSignup = location.state.isSignup;
 
+  useEffect(() => {
+    console.log("시작");
+  });
+
+  const [basicImg, setBasicImg] = React.useState("");
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -185,6 +191,22 @@ export default function Signup() {
   };
 
   useEffect(() => {
+    if (gender === "MALE") {
+      setBasicImg("/images/male.png");
+    } else {
+      setBasicImg("/image/female.png");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (gender === "MALE") {
+      setBasicImg(`/images/male.png`);
+    } else {
+      setBasicImg(`/images/female.png`);
+    }
+  }, []);
+
+  useEffect(() => {
     if (isNext) {
       console.log("이즈넥스트!!");
     } else return;
@@ -233,11 +255,14 @@ export default function Signup() {
             fire.db.collection("users").doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
-              emailVerified: currentUser.user.emailVerified,
+              // emailVerified: currentUser.user.emailVerified,
+              emailVerified: true,
               uid: currentUser.user.uid,
               mbti: mbti,
-              mbti: mbtiSub,
+              mbtiSub: mbtiSub,
               rooms: [],
+              friends: [],
+              imgPath: basicImg,
             });
 
             // axios
@@ -306,8 +331,11 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    console.log("mbti: " + mbti);
-    console.log("mbtiSub: " + mbtiSub);
+    if (mbti === null || mbti === undefined) return;
+    else {
+      console.log("이것의 mbti: " + mbti);
+      console.log("mbtiSub: " + mbtiSub);
+    }
   }, [mbti]);
 
   return (

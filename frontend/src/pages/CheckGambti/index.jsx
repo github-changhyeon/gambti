@@ -9,10 +9,12 @@ import Signup from 'src/pages/Signup/index';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+
 export default function CheckGambti() {
   const classes = useStyles();
 
   const history = useHistory();
+
 
   const [num, setNum] = useState(1);
 
@@ -247,7 +249,7 @@ export default function CheckGambti() {
   }
 
   const [propsMbti, setPropsMbti] = useState('');
-  const [propsMbtiExplain, setPropsMbtiExplain] = useState('');
+  const [propsMbtiSub, setPropsMbtiSub] = useState('');
 
   useEffect(() => {
     if (num == 14) {
@@ -264,7 +266,7 @@ export default function CheckGambti() {
       $('.gambti').html(result[mbti]['gambti']);
       $('.explain').html(result[mbti]['explain']);
       setPropsMbti(mbti); // signup으로 넘겨줄 mbti
-      setPropsMbtiExplain(result[mbti]['gambti']); // signup으로 넘겨줄 mbti 설명
+      setPropsMbtiSub(result[mbti]['gambti']); // signup으로 넘겨줄 mbti 설명
       console.log(mbti + ' ' + result[mbti]['gambti']); // 최종 결과 : mbti, 해당 mbti 역할
     }
   }, [num]);
@@ -387,8 +389,9 @@ export default function CheckGambti() {
                 onClick={() => {
                   history.push({
                     pathname: routerInfo.PAGE_URLS.SIGNUP,
-                    state: { mbti: propsMbti, mbtiSub: propsMbtiExplain },
+                    state: { mbti: propsMbti, mbtiSub: propsMbtiSub },
                   });
+
                 }}
               ></ButtonComp>
             </div>

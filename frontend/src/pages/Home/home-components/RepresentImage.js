@@ -12,7 +12,7 @@ export default function RepresentImage() {
   return (
     <Paper
       className={styles.main_post}
-      style={{ backgroundImage: 'url(/images/home_represent_image.jpg)' }}
+      style={{ backgroundImage: 'url(/images/home_represent_castle.jpg)' }}
     >
       {/* Increase the priority of the hero background image */}
       <div className={styles.overlay} />

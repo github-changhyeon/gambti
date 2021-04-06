@@ -1,11 +1,15 @@
 import { React, useEffect } from 'react';
 import styles from '../index.module.css';
+import { usePalette } from 'react-palette';
 import Typography from '@material-ui/core/Typography';
 
 export default function DetailMain({ propsGameInfo }) {
+  const { data, loading, error } = usePalette(propsGameInfo.backgroundImagePath);
+
   useEffect(() => {
     console.log(propsGameInfo);
   });
+
   return (
     <div className={styles.detail_main_container}>
       <div style={{ paddingLeft: '110px' }}>
@@ -15,9 +19,16 @@ export default function DetailMain({ propsGameInfo }) {
       </div>
       <div className={styles.detail_main_root}>
         {propsGameInfo.videoUrl === null ? (
-          ''
+          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
+            <div style={{ padding: '10px 0' }}>
+              <Typography className={styles.detail_main_title}>Main Image</Typography>
+            </div>
+            <div className={styles.detail_main_video}>
+              <img src={propsGameInfo.logoImagePath} className={styles.detail_main_video}></img>
+            </div>
+          </div>
         ) : (
-          <div className={styles.detail_main_item}>
+          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
             <div style={{ padding: '10px 0' }}>
               <Typography className={styles.detail_main_title}>Intro Video</Typography>
             </div>
@@ -38,7 +49,7 @@ export default function DetailMain({ propsGameInfo }) {
           ''
         ) : (
           <>
-            <div className={styles.detail_main_item}>
+            <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
               <div style={{ padding: '10px 0' }}>
                 <Typography className={styles.detail_main_title}>About</Typography>
                 <Typography className={styles.detail_main_title_plus}>

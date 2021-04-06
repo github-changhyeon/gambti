@@ -75,19 +75,22 @@ export default function Header({ isLogin }) {
   const ReadNoti = (userId) => {
     // .where('type', '==', 'friend');
     docs.onSnapshot((snapshot) => {
+      let isRemoved = false;
       const changes = snapshot.docChanges().map((change) => {
-        // console.log('change.type', change.type)
-        if (change.type === "modified") {
-          return change.id;
+        if (change.type === "removed") {
+          isRemoved = true;
+
+          return notiRef.current.filter((item, i) => item.id != change.doc.id);
         }
         return change.doc;
       });
 
       // TODO: modified된 값 리스트에서 지워줘야함
-
-      console.log(changes);
-
-      setNotiList([...notiRef.current, ...changes]);
+      if (isRemoved) {
+        setNotiList(...changes);
+      } else {
+        setNotiList([...notiRef.current, ...changes]);
+      }
     });
   };
 
@@ -107,7 +110,7 @@ export default function Header({ isLogin }) {
       .update({
         isRead: true,
       });
-    console.log("noti", noti.data().isRead);
+    // console.log('noti', noti.data().isRead);
   };
 
   // firestore timeStamp 변환
@@ -303,7 +306,8 @@ export default function Header({ isLogin }) {
                   size="xsmall"
                   badge="badge"
                   // textvalue={user.nickname}
-                  textvalue={user.nickname.substring(0, 1)}
+                  // textvalue={user.nickname.substring(0, 1)}
+                  imgPath={user.imgPath}
                 ></AvatarComp>
                 <div className={styles.dropdown_content} onClick={goProfile}>
                   <div className={styles.dropdown_menu}>
