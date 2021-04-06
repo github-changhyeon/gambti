@@ -72,7 +72,7 @@ function deleteGame(gameId, success, fail) {
   const token = localStorage.getItem("idToken");
   const config = getConfig(token);
   restApi()
-    .post(`v1/games/recommends/${gameId}/ban`, {}, config)
+    .post(`games/recommends/${gameId}/ban`, {}, config)
     .then(success)
     .catch(fail);
 }

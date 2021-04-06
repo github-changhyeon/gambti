@@ -254,7 +254,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
                 gameInfo={item}
                 className="close"
                 clickDeleteBtn={(params) => {
-                  clickDeleteBtnFunc({ element: params, id: item.gameId });
+                  clickDeleteBtnFunc({ element: params, gameId: item.gameId });
                 }}
               ></RecommendedGameCard>
             ) : null}
