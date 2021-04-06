@@ -28,16 +28,16 @@ export default function GamesorderBy({ propsMatch }) {
     setBordorBottom2("2px solid #666666");
     setButtonColor3("#ffffff");
     setBordorBottom3("2px solid #666666");
-    if (propsMatch.params.order === "Random") {
-      setOrder("random");
+    if (propsMatch.params.order === "hot") {
+      setOrder("hot");
       setButtonColor1("#ccff00");
       setBordorBottom1("0px solid #666666");
-    } else if (propsMatch.params.order === "Hot") {
-      setOrder("hot");
+    } else if (propsMatch.params.order === "new") {
+      setOrder("new");
       setButtonColor2("#ccff00");
       setBordorBottom2("0px solid #666666");
-    } else if (propsMatch.params.order === "New") {
-      setOrder("new");
+    } else if (propsMatch.params.order === "price") {
+      setOrder("price");
       setButtonColor3("#ccff00");
       setBordorBottom3("0px solid #666666");
     }
@@ -70,14 +70,14 @@ export default function GamesorderBy({ propsMatch }) {
           onClick={() => {
             history.push({
               pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
-                order: "Random",
-                genre: location.state.genre.name,
+                order: "hot",
+                genre: location.state.genre.name.toLowerCase(),
               }),
               state: { genre: location.state.genre },
             });
           }}
         >
-          Random
+          Hot
         </Button>
         <Button
           variant="outlined"
@@ -96,14 +96,14 @@ export default function GamesorderBy({ propsMatch }) {
           onClick={() => {
             history.push({
               pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
-                order: "Hot",
-                genre: location.state.genre.name,
+                order: "new",
+                genre: location.state.genre.name.toLowerCase(),
               }),
               state: { genre: location.state.genre },
             });
           }}
         >
-          Hot
+          New
         </Button>
         <Button
           variant="outlined"
@@ -122,14 +122,14 @@ export default function GamesorderBy({ propsMatch }) {
           onClick={() => {
             history.push({
               pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
-                order: "New",
-                genre: location.state.genre.name,
+                order: "price",
+                genre: location.state.genre.name.toLowerCase(),
               }),
               state: { genre: location.state.genre },
             });
           }}
         >
-          New
+          Price
         </Button>
       </Container>
       <Typography
@@ -142,8 +142,9 @@ export default function GamesorderBy({ propsMatch }) {
         params={{
           type: 0,
           genreId: location.state.genre.id,
-          order: propsMatch.params.order,
+          colName: propsMatch.params.order,
           word: "",
+          direction: "DESC",
         }}
         routerMatch={propsMatch}
       ></InfiniteScrollCard>
