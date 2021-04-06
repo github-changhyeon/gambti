@@ -44,11 +44,7 @@ export default function Signup() {
   const isSignup = location.state.isSignup;
 
   const [basicImg, setBasicImg] = React.useState('');
-  if (gender === 'MALE') {
-    setBasicImg('/images/male.png');
-  } else {
-    setBasicImg('/image/female.png');
-  }
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -176,6 +172,15 @@ export default function Signup() {
   };
 
   useEffect(() => {
+    if (gender === 'MALE') {
+      setBasicImg('/images/male.png');
+    } else {
+      setBasicImg('/image/female.png');
+    }
+
+  }, [])
+
+  useEffect(() => {
     if (isNext) {
       console.log('이즈넥스트!!');
     } else return;
@@ -220,9 +225,8 @@ export default function Signup() {
               userLikeTagIds: userLikeTagIds,
             };
 
-
             // add user to db
-            fire.db.collection('users').doc(currentUser.user.uid).set({
+            fire.db.collection("users").doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
               // emailVerified: currentUser.user.emailVerified,
@@ -233,7 +237,6 @@ export default function Signup() {
               rooms: [],
               friends: [],
               imgPath: basicImg
-
             });
 
             // axios
