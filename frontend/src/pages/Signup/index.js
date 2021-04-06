@@ -14,7 +14,6 @@ import CheckInfo from 'src/pages/CheckInfo/index';
 import CheckGambti from 'src/components/CheckInfo/CheckInfo';
 import { useHistory, useLocation } from 'react-router';
 
-
 export default function Signup() {
   const history = useHistory();
   const location = useLocation();
@@ -43,8 +42,11 @@ export default function Signup() {
 
   const isSignup = location.state.isSignup;
 
-  const [basicImg, setBasicImg] = React.useState('');
+  useEffect(() => {
+    console.log('시작');
+  });
 
+  const [basicImg, setBasicImg] = React.useState('');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -171,14 +173,13 @@ export default function Signup() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (gender === 'MALE') {
       setBasicImg('/images/male.png');
     } else {
       setBasicImg('/image/female.png');
     }
-  
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (gender === 'MALE') {
@@ -186,8 +187,7 @@ export default function Signup() {
     } else {
       setBasicImg(`/images/female.png`);
     }
-
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (isNext) {
@@ -235,7 +235,7 @@ export default function Signup() {
             };
 
             // add user to db
-            fire.db.collection("users").doc(currentUser.user.uid).set({
+            fire.db.collection('users').doc(currentUser.user.uid).set({
               nickname: nickname,
               email: currentUser.user.email,
               // emailVerified: currentUser.user.emailVerified,
@@ -245,7 +245,7 @@ export default function Signup() {
               mbtiSub: mbtiSub,
               rooms: [],
               friends: [],
-              imgPath: basicImg
+              imgPath: basicImg,
             });
 
             // axios
@@ -314,8 +314,11 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    console.log('mbti: ' + mbti);
-    console.log('mbtiSub: ' + mbtiSub);
+    if (mbti === null || mbti === undefined) return;
+    else {
+      console.log('이것의 mbti: ' + mbti);
+      console.log('mbtiSub: ' + mbtiSub);
+    }
   }, [mbti]);
 
   return (

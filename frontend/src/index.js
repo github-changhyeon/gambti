@@ -3,20 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createMuiTheme } from '@material-ui/core';
-import { MuiThemeProvider } from 'material-ui/styles';
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: 'Roboto Slab',
-  },
-});
 
 ReactDOM.render(
   <React.StrictMode>
-    <MuiThemeProvider theme={theme}>
-      <App />
-    </MuiThemeProvider>
+    <App />
   </React.StrictMode>,
 
   document.getElementById('root')
