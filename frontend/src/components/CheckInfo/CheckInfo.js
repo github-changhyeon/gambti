@@ -16,7 +16,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { convertColorToString } from 'material-ui/utils/colorManipulator';
 import { useHistory } from 'react-router';
 
-export default function CheckInfo({ mbti, mbtiExplain }) {
+export default function CheckInfo({ mbti, mbtiSub }) {
   const history = useHistory();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -216,7 +216,7 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                       maxPrice: parseInt(checked[2]),
                       userLikeTagIds: checkedTags,
                       mbti: mbti,
-                      mbtiExplain: mbtiExplain,
+                      mbtiSub: mbtiSub,
                     },
                   });
                 }}
@@ -229,7 +229,7 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                       maxPrice: parseInt(checked[2]),
                       userLikeTagIds: checkedTags,
                       mbti: mbti,
-                      mbtiExplain: mbtiExplain,
+                      mbtiSub: mbtiSub,
                     },
                   });
                 }}

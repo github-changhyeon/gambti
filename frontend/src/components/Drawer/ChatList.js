@@ -85,8 +85,6 @@ export default function ChatList({ showChat }) {
 
 
 
-
-
   return (
 
     <div className={styles.friend_list}>

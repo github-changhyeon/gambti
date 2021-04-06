@@ -36,7 +36,6 @@ export default function VideoAndCard({ gameInfo, clickDeleteBtn }) {
         >
           {gameInfo.videoUrl === null ? (
             <img
-              className={styles.round}
               width="100%"
               height="auto"
               style={{ maxHeight: "283px" }}
@@ -50,7 +49,6 @@ export default function VideoAndCard({ gameInfo, clickDeleteBtn }) {
               width="100%"
               height="auto"
               controls={false}
-              className={styles.round}
             >
               <source src={gameInfo.videoUrl} type="video/mp4" />
             </video>

@@ -14,7 +14,7 @@
 }
 
 .question_root {
-  padding: 40px 0;
+  padding: 40px 200px;
 }
 
 .question_title {
@@ -39,7 +39,20 @@
   margin-right: 10px;
 }
 
-button {
+.button_true:hover,
+.button_true:focus,
+.button_false:hover,
+.button_false:focus {
+  box-shadow: inset 0 0 0 2em adjust-hue(#a972cb, 45deg);
+  border-color: adjust-hue(#a972cb, 45deg);
+  color: #fff;
+}
+
+.button_true {
+  border-color: #a972cb;
+  color: #fff;
+  background-color: #a972cb;
+
   color: #a972cb;
   transition: 0.25s;
   background: none;
@@ -50,20 +63,16 @@ button {
   padding: 1em 2em;
 }
 
-button:hover,
-button:focus {
-  box-shadow: inset 0 0 0 2em adjust-hue(#a972cb, 45deg);
-  border-color: adjust-hue(#a972cb, 45deg);
-  color: #fff;
-}
-
-.button_true {
-  border-color: #a972cb;
-  color: #fff;
-  background-color: #a972cb;
-}
-
 .button_false {
   border-color: #a972cb;
   color: #fff;
+
+  color: #a972cb;
+  transition: 0.25s;
+  background: none;
+  border: 2px solid;
+  font: inherit;
+  line-height: 1;
+  margin: 0.5em;
+  padding: 1em 2em;
 }
