@@ -16,12 +16,16 @@ export default function Login() {
 
   const user = useContext(UserContext);
 
+
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const [nullError, setNullError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
+
+
 
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
@@ -113,9 +117,21 @@ export default function Login() {
               // alert('session', errorMessage);
             });
 
+          fire.messaging.getToken()
+            .then((res) => {
+              console.log('res', res);
+              fire.db.collection("users").doc(currentUser.user.uid).update({
+                fcmToken: res
+              })
+            });
+
+
+
           if (currentUser.user.emailVerified) {
             console.log(currentUser.user);
             history.push('/');
+
+
           } else {
             history.push('/email-confirm');
           }
