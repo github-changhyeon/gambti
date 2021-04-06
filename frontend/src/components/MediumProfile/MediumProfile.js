@@ -10,7 +10,7 @@ export default function MediumProfile({ propsUser, onClick }) {
   return (
     <div className={styles.root} onClick={onClick}>
       {/* TODO: 사진 or nickname substring 넣기 */}
-      <AvatarComp size="medium"></AvatarComp>
+      <AvatarComp size="medium" imgPath={propsUser.imgPath}></AvatarComp>
       <div className={styles.text_margin}>
         <Typography noWrap={true} className={styles.nick}>
           {propsUser.nickname}

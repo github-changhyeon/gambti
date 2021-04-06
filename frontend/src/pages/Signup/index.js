@@ -14,6 +14,7 @@ import CheckInfo from 'src/pages/CheckInfo/index';
 import CheckGambti from 'src/components/CheckInfo/CheckInfo';
 import { useHistory, useLocation } from 'react-router';
 
+
 export default function Signup() {
   const history = useHistory();
   const location = useLocation();
@@ -41,6 +42,13 @@ export default function Signup() {
   const userLikeTagIds = location.state.userLikeTagIds;
 
   const isSignup = location.state.isSignup;
+
+  const [basicImg, setBasicImg] = React.useState('');
+  if (gender === 'MALE') {
+    setBasicImg('/images/male.png');
+  } else {
+    setBasicImg('/image/female.png');
+  }
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -212,6 +220,7 @@ export default function Signup() {
               userLikeTagIds: userLikeTagIds,
             };
 
+
             // add user to db
             fire.db.collection('users').doc(currentUser.user.uid).set({
               nickname: nickname,
@@ -219,8 +228,10 @@ export default function Signup() {
               emailVerified: currentUser.user.emailVerified,
               uid: currentUser.user.uid,
               mbti: mbti,
-              mbti: mbtiSub,
+              mbtiSub: mbtiSub,
               rooms: [],
+              imgPath: basicImg
+
             });
 
             // axios
