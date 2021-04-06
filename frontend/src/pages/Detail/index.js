@@ -1,15 +1,13 @@
 import { React, useEffect, useContext, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './index.module.css';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import DetailInfo from 'src/pages/Detail/detail-components/DetailInfo';
 import DetailYoutube from 'src/pages/Detail/detail-components/DetailYoutube';
 import DetailDrawer from 'src/pages/Detail/detail-components/DetailDrawer';
 import DetailMain from 'src/pages/Detail/detail-components/DetailMain';
 import DetailNews from 'src/pages/Detail/detail-components/DetailNews';
 import clsx from 'clsx';
 import { getGameDetail } from 'src/common/axios/Game';
-import { usePalette } from 'react-palette';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -106,38 +104,7 @@ export default function Detail({ match }) {
                 : styles.detail_right_fixed
             }
           >
-            {gameInfo ? (
-              <div>
-                <div style={{ padding: '5px 0 10px 0' }}>
-                  <Typography className={styles.detail_right_info_title}>출시날짜</Typography>
-                  <Typography className={styles.detail_right_info_detail}>
-                    {gameInfo.releaseDate}
-                  </Typography>
-                </div>
-                <div style={{ padding: '10px 0 2px 0' }}>
-                  <Typography className={styles.detail_right_info_title}>개발자</Typography>
-                  <Typography className={styles.detail_right_info_detail}>
-                    {gameInfo.developer}
-                  </Typography>
-                </div>
-                <div style={{ padding: '2px 0 10px 0' }}>
-                  <Typography className={styles.detail_right_info_title}>배급사</Typography>
-                  <Typography className={styles.detail_right_info_detail}>
-                    {gameInfo.publisher}
-                  </Typography>
-                </div>
-                <div style={{ padding: '5px 0 0 0' }}>
-                  <Typography className={styles.detail_right_info_popular}>
-                    이 제품의 인기 태그
-                  </Typography>
-                  <div>
-                    {gameInfo.tags.map((tag) => {
-                      return <Button className={styles.tag}>{tag}</Button>;
-                    })}
-                  </div>
-                </div>
-              </div>
-            ) : null}
+            {gameInfo ? <DetailInfo propsGameInfo={gameInfo} /> : null}
           </div>
         </div>
       </div>
