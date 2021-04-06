@@ -157,7 +157,7 @@ public class RoomService {
                             List<Object> roomUsersValue = new ArrayList<>(roomUsers.values());
 
                             //만약에 room이 꽉 차있으면 다음 방을 검색한다.
-                            if ((long)room.get("currentCnt") < 4) {
+                            if ((long)room.get("currentCnt") < 4) { 
                                 //해당방 유저 리스트를 받은 후, 각 유저의 mbti를 찾는다.
                                 for (Object uid : roomUsersValue) {
                                     user = userRepository.findById(uid.toString());
