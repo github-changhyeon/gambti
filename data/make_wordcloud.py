@@ -4,9 +4,10 @@ from konlpy.tag import Okt
 import pandas as pd
 import os
 import numpy as np
+import json
 
 BASE_URL = "./rawdata"
-DATA_FILE = os.path.join(BASE_URL, "reviews.jl")
+DATA_FILE = os.path.join(BASE_URL, "reviews_new2.jl")
 DUMP_FILE = os.path.join(BASE_URL, "review_data.pkl")
 
 STOPWORDS = ["를", "접", "정말", "게임"]
