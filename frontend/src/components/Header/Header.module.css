@@ -168,29 +168,135 @@
   position: absolute;
   top: 65px;
   right: 70px;
-  background-color: #2a2c2d;
+  background-color: #f9f9f9;
   width: 300px;
   /* padding: 4px 0px; */
-  color: white;
   padding: 20px;
   font-size: 0.8rem;
   border-radius: 5px;
-  box-shadow: 0px 1px 5px #343535;
+  /* box-shadow: 0px 1px 5px #343535; */
+  box-shadow: 0px 3px 5px lightgrey;
+
   /* visibility: hidden; */
 }
 
 .paper {
-  background-color: #2a2c2d;
+  background-color: #f9f9f9;
 
   }
   .title {
     font-weight: bold;
     font-size: 20px;
+    color: #222222;
   }
   .noti_list{
-    margin: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0rem;
+
   }
   .button {
     display: flex;
     justify-content: center;
   }
+
+
+
+
+
+  /* noti */
+  .root{
+    width: 265px;
+    overflow-y: scroll;
+    height: 263px;
+  }
+  .root::-webkit-scrollbar {
+    display: none;
+  }
+  .shopping_cart_items {
+    padding-top: 10px;
+  }
+  
+  .no_noti {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    font-size: 20px;
+    margin-top: 2em;
+    /* font-weight: bold; */
+  }
+  .sad_icon{
+    width: 100px;
+    height: 100px;
+    color: #222222;
+  }
+  
+  
+  /*Notification item*/
+  .cart_item{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ebe5e5;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding-left: 12px;
+    margin-left: 0px;
+    height: 53px;
+  }
+  
+  .cart_item:hover{
+    box-shadow: 0px 2px 1px #ebe5e5;
+    transition: .4s;
+     transform: translate(0, -1px);
+    transform: translate3d(0, -1px, 0);
+  }
+  .cart_item_header{
+    position:relative;
+    color: rgb(80, 80, 80);
+    font-size: 15px;
+    font-weight: 600;
+    top: 14px;
+    /* left: 10px; */
+    margin-bottom: 1rem;
+  }
+  
+  .cart_item_date{
+    position:relative;
+    color: rgb(80, 80, 80);
+    font-size: 12px;
+    font-weight: 600;
+    left: 165px;
+  }
+  
+  
+  .cart_date{
+    font-size: 14px;
+    color: rgb(160, 160, 160);
+    position: relative;
+    left: 0px;
+    top: -5px;
+  }
+  
+  .shopping_cart:after {
+    bottom: 100%;
+    left: 89%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: white;
+    border-width: 8px;
+    margin-left: -8px;
+  }
+  
+  .cart_icon {
+    color: #515783;
+    font-size: 24px;
+    margin-right: 7px;
+    float: left;
+  }
+  
