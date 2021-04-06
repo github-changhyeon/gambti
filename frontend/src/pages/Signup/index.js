@@ -44,11 +44,6 @@ export default function Signup() {
   const isSignup = location.state.isSignup;
 
   const [basicImg, setBasicImg] = React.useState('');
-  if (gender === 'MALE') {
-    setBasicImg('/images/male.png');
-  } else {
-    setBasicImg('/image/female.png');
-  }
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -174,6 +169,15 @@ export default function Signup() {
       setIsNext(true);
     }
   };
+
+  useEffect(()=>{
+    if (gender === 'MALE') {
+      setBasicImg('/images/male.png');
+    } else {
+      setBasicImg('/image/female.png');
+    }
+  
+  }, [])
 
   useEffect(() => {
     if (isNext) {
