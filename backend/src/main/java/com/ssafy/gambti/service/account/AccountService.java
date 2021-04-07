@@ -9,6 +9,7 @@ import com.ssafy.gambti.dto.account.SignUpRequest;
 import com.ssafy.gambti.repository.account.AccountRepository;
 import com.ssafy.gambti.repository.tag.TagRepository;
 import com.ssafy.gambti.repository.user.UserLikeTagRepository;
+import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final UserLikeTagRepository userLikeTagRepository;
     private final SecurityService securityService;
@@ -112,16 +114,11 @@ public class AccountService {
                 //3. uid를 가지고온다.
                 String uid = decodedToken.getUid();
                 //4. SignUpRequest에 담긴 데이터와 uid를 같이 등록한다.
-                User modifyUser = User.builder()
-                        .id(uid)
-                        .mbti(UserMBTI.valueOf(modifyUserInfoRequest.getMbti()))
-                        .age(modifyUserInfoRequest.getAge())
-                        .gender(UserGender.valueOf(modifyUserInfoRequest.getGender()))
-                        .maxPrice(modifyUserInfoRequest.getMaxPrice())
-                        .steamId(modifyUserInfoRequest.getSteamId())
-                        .build();
+                User loginUser = userRepository.findById(uid).get();
 
-                accountRepository.save(modifyUser);
+                loginUser.changeNickName(modifyUserInfoRequest.getNickname());
+
+                userRepository.save(loginUser);
             }
             else{
                 return false;

@@ -83,5 +83,9 @@ public class User {
         this.steamId = steamId;
         this.role = role;
     }
+
+    public void changeNickName(String nickname) {
+        this.nickname = nickname;
+    }
 }
 
