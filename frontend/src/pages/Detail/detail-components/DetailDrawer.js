@@ -57,18 +57,6 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
     setOpen(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (!open) {
-  //     setOpen(true);
-  //   }
-  // }, [open]);
-
-  // useEffect(() => {
-  //   // setOpen(false);
-  //   console.log("여기야");
-  //   console.log(open);
-  // }, [propsMatch.params.gameId]);
-
   useEffect(() => {
     // setOpen(false);
     if (propsMatch.params.tab === null || propsMatch.params.tab === undefined) {
@@ -134,7 +122,16 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
           }}
         ></GameCard>
       </div>
-
+      {/* <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      > */}
+      {/* <div style={{ width: "100%", height: "80px" }}></div> */}
       <Card
         className={styles.detail_router_card}
         onClick={() => {
@@ -193,6 +190,7 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
           </Typography>
         </CardContent>
       </Card>
+      {/* </div> */}
     </Drawer>
   );
 }

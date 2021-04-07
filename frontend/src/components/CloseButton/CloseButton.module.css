@@ -1,11 +1,11 @@
 .closeButton {
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   background-color: rgba(0, 0, 0, 0.15);
   border-radius: 50%;
   cursor: pointer;
   display: inline-block;
-  margin: 10px 20px;
+  margin: 10px 12px;
   position: absolute;
   right: 0px;
   transition: 200ms cubic-bezier(0.175, 0.885, 0.52, 1.775);
