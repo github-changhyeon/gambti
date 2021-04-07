@@ -39,7 +39,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
       currentRoomId ?
         setChatRoomId(currentRoomId)
         :
-        getChatRoomId(propsUser.uid);
+        getChatRoomId(propsUser.id);
     }
   }, [])
 

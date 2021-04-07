@@ -48,15 +48,11 @@ export default function FriendList({ showChat }) {
       })
   }
 
-  const makeOOOchatRoom = (fuid) => {
-    // console.log("1:1 챗방 : " + fuid);
-    makeOneOnOneChatRoom(fuid);
-  }
+
 
   const handleChatChange = (fuser) => {
     console.log('fuser', fuser)
     setFriend(fuser);
-    makeOOOchatRoom(fuser.id);
     setChat(!chat);
   }
 
