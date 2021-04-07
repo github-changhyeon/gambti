@@ -261,7 +261,6 @@ export default function CheckGambti() {
       valueSN < 2 ? (mbti += 'N') : (mbti += 'S');
       valueTF < 2 ? (mbti += 'F') : (mbti += 'T');
       valueJP < 2 ? (mbti += 'P') : (mbti += 'J');
-      alert(mbti);
       $('.result_img').attr('src', result[mbti]['img']);
       $('.gambti').html(result[mbti]['gambti']);
       $('.explain').html(result[mbti]['explain']);

@@ -175,17 +175,6 @@ export default function CheckInfo() {
                 <div className={styles.question_title}>
                   <p>모든 정보 등록이 완료되었습니다.</p>
                 </div>
-                <div style={{ color: 'white', listStyle: 'none' }}>
-                  <li>성별 : {checked[0]}</li>
-                  <li>연령대 : {checked[1]}</li>
-                  <li>가격대 : {checked[2]}</li>
-                  <li>
-                    선호 태그 :{' '}
-                    {checkedTags.map((t) => {
-                      return t + ' / ';
-                    })}
-                  </li>
-                </div>
               </div>
               <Button
                 variant="contained"
