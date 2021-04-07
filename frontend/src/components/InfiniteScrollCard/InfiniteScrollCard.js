@@ -16,6 +16,7 @@ import UserCard from "src/components/UserCard/UserCard";
 import { UserContext } from "src/Context/UserContext";
 import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
 import $ from "jquery";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 export default function InfiniteScrollCard({ params, routerMatch }) {
   const user = useContext(UserContext);
@@ -265,22 +266,41 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         ))}
       </Grid>
       {isFetching ? (
+        <div style={{
+          flexFlow: 'nowrap',
+          flexDirection: 'row',
+          display: 'Flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          zIndex: '100'
+        }}>
         <Typography
-          variant="h5"
-          style={{ color: "white", margin: "10px 0px 0px 0px" }}
+            variant="h7"
+            className={styles.dataLoading}
+            data-text='데이터를 받아오는 중입니다.'
+          style={{ color: "white", margin: "10px 0px 0px 0px", fontFamily: 'DungGeunMo'}}
           gutterBottom
         >
-          데이터를 받아오는 중입니다.
+            데이터를 받아오는 중입니다.
         </Typography>
+        </div>
       ) : null}
       {isEnd ? (
+        <div style={{
+          flexFlow: 'nowrap',
+          flexDirection: 'row',
+          display: 'Flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          zIndex: 100}}>
         <Typography
-          variant="h5"
-          style={{ color: "white", margin: "10px 0px 0px 0px" }}
+          variant="h7"
+          style={{ color: "white", margin: "10px 0px 0px 0px",  fontFamily:'DungGeunMo' }}
           gutterBottom
         >
-          불러올 데이터가 없습니다.
+            불러올 데이터가 없습니다.
         </Typography>
+        </div>
       ) : null}
     </Container>
   );
