@@ -1,7 +1,11 @@
 import java.util.Properties
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql._
+import spark.implicits._
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
+
 
 
 case class Genre(mgenre_id: Int, mgenre: String, sgenre_id: Int)
@@ -125,17 +129,25 @@ val user_game = final_rating.drop("m_rating", "g_rating", "a_rating", "metascore
 /* als model */
 // val Array(training, test) = user_game.randomSplit(Array(0.8, 0.2))
 val als = new ALS()
-  .setMaxIter(10)
-  .setRegParam(0.01)
-  .setUserCol("no")
-  .setItemCol("game_id")
-  .setRatingCol("rating")
-  .setImplicitPrefs(true)
+  				.setMaxIter(10)
+  				.setRegParam(0.01)
+  				.setUserCol("no")
+ 			 	.setItemCol("game_id")
+ 			 	.setRatingCol("rating")
 
 val model = als.fit(user_game)
 
 //모든 user에 대해서 10개의 게임 추천
-val userRecs = model.recommendForAllUsers(10)
+val userRecs = model.recommendForAllUsers(100)
 
 //user_id, game_id, rating 컬럼을 가지는 dataFrame으로 변환
-val user_rec_game = userRecs.select($"no", explode($"recommendations")).select($"no", $"col.game_id", $"col.rating")
+val user_rec_game = userRecs.select($"no", explode($"recommendations")).select($"no", $"col.game_id", $"col.rating").withColumnRenamed("no", "user_id")
+
+val w = Window.orderBy("user_id")
+val add_index = user_rec_game.withColumn("id", row_number().over(w).cast(LongType))
+val cast_type = add_index.withColumn("user_id", $"user_id".cast(LongType)).withColumn("game_id", $"game_id".cast(LongType)).withColumn("rating", $"rating".cast(DoubleType))
+//id: Long, user_id: Long, game_id: Long, rating: Double 
+
+
+cast_type.write.mode(SaveMode.Overwrite).jdbc(url, "user_recommend_game", prop)
+print("[*] Save MariaDB Success")
