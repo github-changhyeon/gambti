@@ -1,28 +1,29 @@
-.background {
-  background-color: rgba(0, 0, 0, 0.4);
+.background_image {
+  background-color: rgba(24, 9, 9, 0.4);
   height: calc(100vh - 54px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+}
+.background {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 54px);
 }
 .root {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
 }
 .logo {
-  width: 70%;
+  margin-top: 7rem;
+  width: 90%;
   height: auto;
-  margin: 1rem;
 }
-.button_group{
+.button_group {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
-.button{
-  margin: 2rem;
+.button {
+  margin: 1rem;
 }
