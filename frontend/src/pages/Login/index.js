@@ -4,7 +4,6 @@ import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
 import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { UserContext } from 'src/Context/UserContext';
@@ -16,16 +15,12 @@ export default function Login() {
 
   const user = useContext(UserContext);
 
-
-
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const [nullError, setNullError] = React.useState(false);
   const [emailVarifiedError, setEmailVarifiedError] = React.useState(false);
   const [passwordLengthError, setNullPasswordLengthError] = React.useState(false);
-
-
 
   const handleEmailChange = (event) => {
     setEmail(event.currentTarget.value);
@@ -36,20 +31,16 @@ export default function Login() {
 
   const valid = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   function Email() {
-    const email = document.getElementById("email");
+    const email = document.getElementById('email');
     if (email != null) {
-      if (email.value === "") {
+      if (email.value === '') {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
       if (!valid.test(email.value)) {
         setNullError(false);
         setEmailVarifiedError(true);
-        return (
-          <Typography className={styles.error}>
-            이메일 형식이 아닙니다.
-          </Typography>
-        );
+        return <Typography className={styles.error}>이메일 형식이 아닙니다.</Typography>;
       } else {
         setNullError(false);
         setEmailVarifiedError(false);
@@ -63,9 +54,9 @@ export default function Login() {
   // 비밀번호 규칙
   const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
   function Pass() {
-    const pass = document.getElementById("password");
+    const pass = document.getElementById('password');
     if (pass != null) {
-      if (pass.value === "") {
+      if (pass.value === '') {
         setNullError(true);
         return <Typography className={styles.error_message}>&nbsp;</Typography>;
       }
@@ -86,7 +77,6 @@ export default function Login() {
     // setNullError(true);
     return <Typography>&nbsp;</Typography>;
   }
-
 
   const onLogin = (event) => {
     if (nullError || emailVarifiedError || passwordLengthError) {
@@ -117,21 +107,16 @@ export default function Login() {
               // alert('session', errorMessage);
             });
 
-          fire.messaging.getToken()
-            .then((res) => {
-              console.log('res', res);
-              fire.db.collection("users").doc(currentUser.user.uid).update({
-                fcmToken: res
-              })
+          fire.messaging.getToken().then((res) => {
+            console.log('res', res);
+            fire.db.collection('users').doc(currentUser.user.uid).update({
+              fcmToken: res,
             });
-
-
+          });
 
           if (currentUser.user.emailVerified) {
             console.log(currentUser.user);
             history.push('/');
-
-
           } else {
             history.push('/email-confirm');
           }
@@ -139,9 +124,14 @@ export default function Login() {
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          if (errorMessage === 'There is no user record corresponding to this identifier. The user may have been deleted.') {
+          if (
+            errorMessage ===
+            'There is no user record corresponding to this identifier. The user may have been deleted.'
+          ) {
             alert('사용자가 존재하지 않습니다.');
-          } else if (errorMessage === 'The password is invalid or the user does not have a password.') {
+          } else if (
+            errorMessage === 'The password is invalid or the user does not have a password.'
+          ) {
             alert('비밀번호가 일치하지 않습니다.');
           }
         });
@@ -166,6 +156,7 @@ export default function Login() {
         <Container component="main" maxWidth="xs">
           <div className={styles.root}>
             <form noValidate className={styles.form}>
+              <Typography className={styles.title}>Login</Typography>
               <Typography className={styles.policy}>
                 By signing up, you agree to the Terms of User and Privacy Policy, including the
                 Cookie Policy.
@@ -211,20 +202,13 @@ export default function Login() {
             </form>
             <div className={styles.move_page}>
               <a href="/check-gambti" className={styles.link}>
-                or Sign Up
+                Sign Up
               </a>
+              &nbsp;&nbsp;or&nbsp;&nbsp;
               <a href="/forgot" className={styles.link}>
-                Forgot Username or Password
+                Forgot Password
               </a>
             </div>
-          </div>
-          <div className={styles.move_page}>
-            <a href="/check-gambti" className={styles.link}>
-              or Sign Up
-            </a>
-            <a href="/forgot" className={styles.link}>
-              Forgot Password
-            </a>
           </div>
         </Container>
       </div>

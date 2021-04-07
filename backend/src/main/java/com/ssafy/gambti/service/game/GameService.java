@@ -9,7 +9,9 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.cloud.FirestoreClient;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.User;
+import com.ssafy.gambti.domain.user.UserBanGame;
 import com.ssafy.gambti.domain.user.UserJoinGame;
+import com.ssafy.gambti.domain.user.UserRecommendGame;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendRes;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
@@ -17,10 +19,7 @@ import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.exception.GameListException;
 import com.ssafy.gambti.repository.game.GameGenreRepository;
 import com.ssafy.gambti.repository.game.GameRepository;
-import com.ssafy.gambti.repository.user.UserJoinGameRepository;
-import com.ssafy.gambti.repository.user.UserOwnGameRepository;
-import com.ssafy.gambti.repository.user.UserRecommendGameRepository;
-import com.ssafy.gambti.repository.user.UserRepository;
+import com.ssafy.gambti.repository.user.*;
 import com.ssafy.gambti.service.security.SecurityService;
 import com.ssafy.gambti.utils.FirebaseTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +44,35 @@ public class GameService {
     private final GameGenreRepository gameGenreRepository;
     private final UserJoinGameRepository userJoinGameRepository;
     private final UserOwnGameRepository userOwnGameRepository;
+    private final UserBanGameRepository userBanGameRepository;
     private final SecurityService securityService;
     private final FirebaseTokenUtils firebaseTokenUtils;
     private final UserRecommendGameRepository userRecommendGameRepository;
+
+    public User getLoginUser(HttpServletRequest httpServletRequest){
+        String token = securityService.getBearerToken(httpServletRequest);
+        FirebaseToken decodedToken = null;
+
+        User loginUser = null;
+
+        try {
+            if(token!=null){
+                //2.1 토큰을 디코딩한다.
+                decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+                //2.2 uid를 가지고온다.
+                String loginUserId = decodedToken.getUid();
+                //2.3 각각의 userId로 객체를 할당한다.
+//                fromUser = userRepository.findUserById(fromUserId);
+                loginUser = userRepository.findById(loginUserId).get();
+            }
+        }
+        // 3. 중간에 애러났으면 false
+        catch (FirebaseAuthException e){
+            logger.error("Firebase Exception : ", e.getLocalizedMessage());
+        }
+
+        return loginUser;
+    }
 
     public GameDetailRes gameDetail(Long gameId, HttpServletRequest httpServletRequest) {
 
@@ -162,47 +187,6 @@ public class GameService {
         return true;
     }
 
-    @Transactional(readOnly = true)
-    public Page<GameRecommendRes> gameRecommends(Pageable pageable, HttpServletRequest httpServletRequest) {
-        String token = securityService.getBearerToken(httpServletRequest);
-        FirebaseToken decodedToken = null;
-
-        User loginUser = null;
-
-        try {
-            if(token!=null){
-                //2.1 토큰을 디코딩한다.
-                decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-                //2.2 uid를 가지고온다.
-                String loginUserId = decodedToken.getUid();
-                //2.3 각각의 userId로 객체를 할당한다.
-//                fromUser = userRepository.findUserById(fromUserId);
-                loginUser = userRepository.findById(loginUserId).get();
-            }
-        }
-        // 3. 중간에 애러났으면 false
-        catch (FirebaseAuthException e){
-            logger.error("Firebase Exception : ", e.getLocalizedMessage());
-        }
-
-        List<Game> userJoinGames = loginUser.getUserJoinGames().stream().map(userJoinGame -> userJoinGame.getGame()).collect(Collectors.toList());
-
-        Page<GameRecommendRes> gameRecommendDtoPage = userRecommendGameRepository.findByUserIdAndUserJoinGameIn(loginUser.getId(), userJoinGames, pageable).
-                map(userRecommendGame -> GameRecommendRes.builder()
-                        .gameId(userRecommendGame.getGame().getId())
-                        .appName(userRecommendGame.getGame().getAppName())
-                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
-                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
-                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
-                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
-                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
-                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
-                        .rating(userRecommendGame.getRating())
-                        .build());
-
-        return gameRecommendDtoPage;
-    }
-
     public Page<GameSimpleRes> searchGameByAppName(String word, Pageable pageable, HttpServletRequest httpServletRequest) {
 
         //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
@@ -253,32 +237,74 @@ public class GameService {
         return null;
     }
 
-    public List<GameRecommendRes> gameGenreRecommends(Long genreId, HttpServletRequest httpServletRequest) {
+    @Transactional(readOnly = true)
+    public Page<GameRecommendRes> gameRecommends(Pageable pageable, HttpServletRequest httpServletRequest) {
+        // 1. 현재 로그인된 유저를 가져온다
+        User loginUser = getLoginUser(httpServletRequest);
 
-        String token = securityService.getBearerToken(httpServletRequest);
-        FirebaseToken decodedToken = null;
-
-        User loginUser = null;
-
-        try {
-            if(token!=null){
-                //2.1 토큰을 디코딩한다.
-                decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-                //2.2 uid를 가지고온다.
-                String loginUserId = decodedToken.getUid();
-                //2.3 각각의 userId로 객체를 할당한다.
-//                fromUser = userRepository.findUserById(fromUserId);
-                loginUser = userRepository.findById(loginUserId).get();
-            }
-        }
-        // 3. 중간에 애러났으면 false
-        catch (FirebaseAuthException e){
-            logger.error("Firebase Exception : ", e.getLocalizedMessage());
-        }
-
+        // 2. 해당 유저가 Join하거나 Ban한 게임을 불러와서 Set에 담아 추천에서 배제할 목록을 만든다.
+        // 2.1. Join, Ban 게임 불러오기
         List<Game> userJoinGames = loginUser.getUserJoinGames().stream().map(userJoinGame -> userJoinGame.getGame()).collect(Collectors.toList());
+        List<Game> userBanGames = loginUser.getUserBanGames().stream().map(userBanGame -> userBanGame.getGame()).collect(Collectors.toList());
 
-        List<GameRecommendRes> gameGenreRecommendResList = userRecommendGameRepository.findByUserIdAndUserJoinGameIn(loginUser.getId(), userJoinGames).stream()
+        // 2.2. Set 선언 후 Join, Ban 목록을 담아 중복될지 모르는 항목을 제거한다.
+        Set<Game> exclusiveGames = new HashSet<>();
+
+        exclusiveGames.addAll(userJoinGames);
+        exclusiveGames.addAll(userBanGames);
+
+        // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져와서 페이징 처리하고
+        // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 후 페이징 처리한다.
+        Page<UserRecommendGame> userRecommendGames;
+
+        if (exclusiveGames.isEmpty()) {
+            userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId(), pageable);
+        } else {
+            userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames, pageable);
+        }
+
+        Page<GameRecommendRes> gameRecommendRes = userRecommendGames
+                .map(userRecommendGame -> GameRecommendRes.builder()
+                        .gameId(userRecommendGame.getGame().getId())
+                        .appName(userRecommendGame.getGame().getAppName())
+                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
+                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
+                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                        .rating(userRecommendGame.getRating())
+                        .build());
+
+        return gameRecommendRes;
+    }
+
+    public List<GameRecommendRes> gameGenreRecommends(Long genreId, HttpServletRequest httpServletRequest) {
+        // 1. 현재 로그인된 유저를 가져온다
+        User loginUser = getLoginUser(httpServletRequest);
+
+        // 2. 해당 유저가 Join하거나 Ban한 게임을 불러와서 Set에 담아 추천에서 배제할 목록을 만든다.
+        // 2.1. Join, Ban 게임 불러오기
+        List<Game> userJoinGames = loginUser.getUserJoinGames().stream().map(userJoinGame -> userJoinGame.getGame()).collect(Collectors.toList());
+        List<Game> userBanGames = loginUser.getUserBanGames().stream().map(userBanGame -> userBanGame.getGame()).collect(Collectors.toList());
+
+        // 2.2. Set 선언 후 Join, Ban 목록을 담아 중복될지 모르는 항목을 제거한다.
+        Set<Game> exclusiveGames = new HashSet<>();
+
+        exclusiveGames.addAll(userJoinGames);
+        exclusiveGames.addAll(userBanGames);
+
+        // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져오고
+        // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 한다.
+        List<UserRecommendGame> userRecommendGames;
+
+        if (exclusiveGames.isEmpty()) {
+            userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId());
+        } else {
+            userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames);
+        }
+
+        List<GameRecommendRes> gameRecommendRes = userRecommendGames.stream()
                 .filter(userRecommendGame -> gameGenreRepository.findByGameIdAndGenreId(userRecommendGame.getGame().getId(), genreId).isPresent())
                 .map(userRecommendGame -> GameRecommendRes.builder()
                         .gameId(userRecommendGame.getGame().getId())
@@ -290,15 +316,30 @@ public class GameService {
                         .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
                         .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
                         .rating(userRecommendGame.getRating())
-                        .build()).limit(15).collect(Collectors.toList());
+                        .build()).collect(Collectors.toList());
 
-        return gameGenreRecommendResList;
+        return gameRecommendRes;
     }
 
-    // TODO: 2021-03-26 추천 알고리즘 완성되면 추가해야 함 
-//    public GameSimpleRes banFromGameRecommend(Long gameId, HttpServletRequest httpServletRequest) {
-//
-//    }
+    public boolean banFromGameRecommend(Long gameId, HttpServletRequest httpServletRequest) {
+        User loginUser = getLoginUser(httpServletRequest);
+        Game banTargetGame = gameRepository.findById(gameId).get();
+
+        if (userBanGameRepository.existsByUserAndGame(loginUser, banTargetGame)) {
+            throw new IllegalStateException("이미 추천에서 삭제한 게임입니다.");
+        }
+
+        if (loginUser != null && banTargetGame != null) {
+            // 2.1 UserBanFriend 테이블에 저장해 다음부터 추천 받지 않도록 한다.
+            UserBanGame userBanGame = new UserBanGame(loginUser, banTargetGame);
+
+            userBanGameRepository.save(userBanGame);
+        } else {
+            return false;
+        }
+        return true;
+    }
+
 //    public Page<Game> findGamesInGenre(Long genreId, Pageable pageable, HttpServletRequest httpServletRequest) {
 //        //1. 토큰 유무 확인 => 있으면 로그인한 사용자임
 //        String token = securityService.getBearerToken(httpServletRequest);

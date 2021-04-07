@@ -10,17 +10,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface UserRecommendGameRepository extends JpaRepository<UserRecommendGame, Long> {
 
     Page<UserRecommendGame> findByUserId(String userId, Pageable pageable);
 
-    // 해당 유저가 조인한 게임을 제외한 게임을 반환한다.
-    @Query("SELECT urg FROM UserRecommendGame urg WHERE urg.user.id = :uid AND urg.game NOT IN :ujg")
-    Page<UserRecommendGame> findByUserIdAndUserJoinGameIn(@Param("uid") String uid, @Param("ujg") List<Game> ujg, Pageable pageable);
+    List<UserRecommendGame> findByUserId(String userId);
 
-    @Query("SELECT urg FROM UserRecommendGame urg WHERE urg.user.id = :uid AND urg.game NOT IN :ujg")
-    List<UserRecommendGame> findByUserIdAndUserJoinGameIn(@Param("uid") String uid, @Param("ujg") List<Game> ujg);
+    @Query("SELECT urg FROM UserRecommendGame urg WHERE urg.user.id = :userId AND urg.game NOT IN :exclusives")
+    Page<UserRecommendGame> findByUserIdAndExclusivesNotIn(@Param("userId") String userId, @Param("exclusives") Set<Game> Exclusives, Pageable pageable);
+
+    @Query("SELECT urg FROM UserRecommendGame urg WHERE urg.user.id = :userId AND urg.game NOT IN :exclusives")
+    List<UserRecommendGame> findByUserIdAndExclusivesNotIn(@Param("userId") String userId, @Param("exclusives") Set<Game> Exclusives);
 
 }

@@ -41,19 +41,22 @@
   
 }
 .input {
-  flex: 0.2;
-  position: relative;
+  /* flex: 0.8; */
+  position: fixed;
+  bottom: 160px;
   border-radius: 10px;
   /* background-color: rgba(255, 255, 255, 0.3); */
-  
   border: 1px solid #cecece;
-  margin-left: 0;
   width: 600px;
+  height: 50px;
+  margin-bottom: 2rem;
+
 }
 .input_root {
   color: white;
   width: 600px;
   padding-left: 20px;
+  height: 50px;
 }
 .search_icon {
   padding-left: 560px;

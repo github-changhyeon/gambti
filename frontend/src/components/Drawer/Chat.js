@@ -16,7 +16,7 @@ import { useHistory, generatePath } from "react-router";
 
 
 
-export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, youId }) {
+export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youId }) {
   const history = useHistory();
   const [close, setClose] = React.useState(chat);
   const [chatRoomId, setChatRoomId] = React.useState('');
@@ -26,6 +26,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
   const [inputs, setInputs] = React.useState('');
 
   const [youInfo, setYouInfo] = React.useState('');
+  // console.log('propsUser', propsUser)
 
 
   const onClose = () => {
@@ -38,7 +39,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
       currentRoomId ?
         setChatRoomId(currentRoomId)
         :
-        getChatRoomId(propsUser.uid);
+        getChatRoomId(propsUser.id);
     }
   }, [])
 
@@ -96,8 +97,9 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
     fire.db.collection('rooms').doc(roomsId).collection('messages').add({
       name: user.nickname,
       text: messageText,
-      profilePicUrl: currentUser.photoURL,
-      timestamp: timestamp
+      profilePicUrl: user.imgPath,
+      timestamp: timestamp,
+      isRead: false,
     })
       .then(() => {
       }
@@ -119,8 +121,17 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
                 {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
                 {
                   propsUser ?
-                    <div className={styles.header_profile} >
-                      <MediumProfile propsUser={{ nickname: propsUser.nickname, email: propsUser.email }} />
+                    <div className={styles.header_profile}
+                      onClick={() => {
+                        history.push({
+                          pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+                            uid: propsUser.id,
+                          }),
+                        });
+                        onClose();
+                      }}
+                    >
+                      <MediumProfile propsUser={{ nickname: propsUser.data().nickname, email: propsUser.data().email, imgPath: propsUser.data().imgPath }} />
                     </div>
                     :
                     youId ?
@@ -133,10 +144,10 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
                           });
                           onClose();
                         }}>
-                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email }} />
+                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email, imgPath: youInfo.imgPath }} />
                       </div> :
                       <div className={styles.header_profile}>
-                        <MediumProfile propsUser={{ nickname: currentRoomName, email: '' }} />
+                        <MediumProfile propsUser={{ nickname: currentRoom.gameName, email: currentRoom.roomName, imgPath: currentRoom.imgPath }} />
                       </div>
                 }
 
@@ -155,16 +166,6 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoomName, 
               {/* Input */}
               <div className={styles.input_position}>
                 <div className={styles.input}>
-                  <div
-                    className={styles.search_icon}
-                    onClick={(event) => {
-                      if (chatRoomId && event.target.value) {
-                        handleSendMessage(chatRoomId, event.target.value);
-                      }
-                    }}
-                  >
-                    <NearMeIcon />
-                  </div>
                   <InputBase
                     className={styles.input_root}
                     placeholder="메시지를 입력하세요"
