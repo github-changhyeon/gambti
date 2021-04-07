@@ -5,7 +5,7 @@ import fire from 'src/fire';
 import SmallProfile from "src/components/SmallProfile/SmallProfile";
 import Typo from "src/components/Typo/Typo";
 // import { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage } from 'src/firebase/chat/chat';
-
+import firebase from 'firebase';
 
 export default function Message({ roomId }) {
 
@@ -48,12 +48,13 @@ export default function Message({ roomId }) {
       })
   }
 
+
   return (
     <div className={styles.root}>
       <div>
         {messageList.map((message, i) =>
           <div key={i} >
-            <SmallProfile name={message.name} imgPath={message.profilePicUrl}></SmallProfile>
+            <SmallProfile name={message.name} imgPath={message.profilePicUrl} ></SmallProfile>
             <Typo text={message.text} ></Typo>
           </div>
         )}

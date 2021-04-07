@@ -20,6 +20,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
   const history = useHistory();
   const [close, setClose] = React.useState(chat);
   const [chatRoomId, setChatRoomId] = React.useState('');
+  const [chatRoomInfo, setChatRoomInfo] = React.useState('');
 
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
@@ -40,12 +41,28 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
         setChatRoomId(currentRoomId)
         :
         getChatRoomId(propsUser.id);
+
     }
-  }, [])
+  }, [chat])
 
   useEffect(() => {
     ReadYou(youId);
-  })
+  }, [chat])
+
+  useEffect(() => {
+    checkType(chatRoomId);
+  }, [chatRoomId])
+
+  const checkType = (roomId) => {
+    if (roomId === '') {
+      return;
+    }
+    fire.db.collection("rooms").doc(roomId).get()
+      .then((doc) => {
+        // console.log('check', doc.data());
+        setChatRoomInfo(doc.data());
+      })
+  }
 
   const ReadYou = (youId) => {
     fire.db.collection("users").doc(youId).get()
@@ -56,6 +73,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
         console.log(error);
       })
   }
+
 
   async function getChatRoomId(friendUid) {
     //axios
@@ -120,35 +138,40 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
               <div className={styles.header}>
                 {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
                 {
-                  propsUser ?
-                    <div className={styles.header_profile}
-                      onClick={() => {
-                        history.push({
-                          pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
-                            uid: propsUser.id,
-                          }),
-                        });
-                        onClose();
-                      }}
-                    >
-                      <MediumProfile propsUser={{ nickname: propsUser.data().nickname, email: propsUser.data().email, imgPath: propsUser.data().imgPath }} />
-                    </div>
-                    :
-                    youId ?
+                  chatRoomInfo.type === 'Group' ?
+                    <div className={styles.header_profile}>
+                      <MediumProfile propsUser={{ nickname: chatRoomInfo.gameName, email: chatRoomInfo.roomName, imgPath: chatRoomInfo.imgPath }} />
+                    </div> :
+                    propsUser ?
                       <div className={styles.header_profile}
                         onClick={() => {
                           history.push({
                             pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
-                              uid: youInfo.uid,
+                              uid: propsUser.id,
                             }),
                           });
                           onClose();
-                        }}>
-                        <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email, imgPath: youInfo.imgPath }} />
-                      </div> :
-                      <div className={styles.header_profile}>
-                        <MediumProfile propsUser={{ nickname: currentRoom.gameName, email: currentRoom.roomName, imgPath: currentRoom.imgPath }} />
+                        }}
+                      >
+                        <MediumProfile propsUser={{ nickname: propsUser.data().nickname, email: propsUser.data().email, imgPath: propsUser.data().imgPath }} />
                       </div>
+                      :
+                      youId ?
+                        <div className={styles.header_profile}
+                          onClick={() => {
+                            history.push({
+                              pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+                                uid: youInfo.uid,
+                              }),
+                            });
+                            onClose();
+                          }}>
+                          <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email, imgPath: youInfo.imgPath }} />
+                        </div> :
+                        <div>
+
+                        </div>
+
                 }
 
                 <div>
