@@ -122,6 +122,11 @@ button:hover {
   color: #fff;
 }
 li{
-  font-family: 'DungGeunMo';
+  font-family: DungGeunMo;
   font-size: 15px;
+}
+
+
+.font_DungGeunMo{
+  font-family: DungGeunMo;
 }

@@ -21,6 +21,8 @@ import PropTypes from 'prop-types';
 import Check from '@material-ui/icons/Check';
 
 export default function CheckInfo({ mbti, mbtiSub }) {
+  const classes = labelStyles();
+
   const history = useHistory();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -229,23 +231,6 @@ export default function CheckInfo({ mbti, mbtiSub }) {
     }
   }, [num]);
 
-  useEffect(() => {
-    if (activeStep === steps.length) {
-      //   history.push({
-      //     state: {
-      //       gender: checked[0],
-      //       age: parseInt(checked[1]),
-      //       maxPrice: parseInt(checked[2]),
-      //       userLikeTagIds: checkedTags,
-      //     },
-      //   });
-      console.log('성별: ' + checked[0]);
-      console.log('연령: ' + parseInt(checked[1]));
-      console.log('가격: ' + parseInt(checked[2]));
-      console.log('태그: ' + checkedTags);
-    }
-  }, [activeStep]);
-
   return (
     <div className={styles.background}>
       <div className={styles.stepper_root} color='primary'>
@@ -263,17 +248,6 @@ export default function CheckInfo({ mbti, mbtiSub }) {
               <div className={styles.question_root}>
                 <div className={styles.question_title}>
                   <p>모든 정보 등록이 완료되었습니다.</p>
-                </div>
-                <div style={{ color: 'white', listStyle: 'none'}}>
-                  <li>성별 : {checked[0]}</li>
-                  <li>연령대 : {checked[1]}</li>
-                  <li>가격대 : {checked[2]}</li>
-                  <li>
-                    선호 태그 :{' '}
-                    {checkedTags.map((t) => {
-                      return t + ' / ';
-                    })}
-                  </li>
                 </div>
               </div>
               <Button
@@ -333,19 +307,27 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_gender">
-                          <FormControlLabel
+                            <FormControlLabel
+                               classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
                         </div>
                       </RadioGroup>
-                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                        <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center'}}>{helperText}</FormHelperText>
                     </FormControl>
                   )}
 
@@ -359,34 +341,54 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_age">
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['C']}
                             control={<NeonRadio />}
                             label={step[num]['label']['C']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['D']}
                             control={<NeonRadio />}
                             label={step[num]['label']['D']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['E']}
                             control={<NeonRadio />}
                             label={step[num]['label']['E']}
                           />
                         </div>
                       </RadioGroup>
-                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                      <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
                     </FormControl>
                   )}
                   {num === 3 && (
@@ -399,39 +401,63 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_price">
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['C']}
                             control={<NeonRadio />}
                             label={step[num]['label']['C']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['D']}
                             control={<NeonRadio />}
                             label={step[num]['label']['D']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['E']}
                             control={<NeonRadio />}
                             label={step[num]['label']['E']}
                           />
-                          <FormControlLabel
+                            <FormControlLabel
+                              classes={{
+                                root: classes.root,
+                                label: classes.label
+                              }}
                             value={step[num]['value']['F']}
                             control={<NeonRadio />}
                             label={step[num]['label']['F']}
                           />
                         </div>
                       </RadioGroup>
-                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                      <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
                     </FormControl>
                   )}
                 </div>
@@ -454,7 +480,7 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                           </button>
                         );
                       })}
-                      <FormHelperText style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                        <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center'}}>{helperText}</FormHelperText>
                     </div>
                   </FormControl>
                 )}
@@ -494,3 +520,12 @@ const NeonRadio = withStyles({
   },
   checked: {},
 })((props) => <Radio color="default" {...props} />);
+
+const labelStyles = makeStyles({
+  root: {
+  },
+  label: {
+    fontFamily: 'DungGeunMo',
+    color: 'white',
+  },
+});
