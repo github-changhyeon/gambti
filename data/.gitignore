@@ -185,3 +185,7 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+# raw data 파일
+*.jl
+*.pkl

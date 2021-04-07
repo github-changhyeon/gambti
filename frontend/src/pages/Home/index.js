@@ -52,7 +52,7 @@ export default function Home({ match }) {
       >
         Type of Games
       </Typography>
-      <GenreList propsOrder="Random"></GenreList>
+      <GenreList propsOrder="hot"></GenreList>
       <Typography
         variant="h5"
         style={{ color: "white", margin: "20px 0px" }}
@@ -70,15 +70,19 @@ export default function Home({ match }) {
         Discover, follow, and play games!
       </Typography>
       {/* TODO: 인피니티 스크롤 router 이동에 따라서 랜더링 다시 안되는 부분 수정 */}
-      <InfiniteScrollCard
-        params={{
-          type: 0,
-          genreId: 0,
-          order: "DESC",
-          word: "",
-        }}
-        routerMatch={match}
-      />
+      <div>
+        <div>
+          <InfiniteScrollCard
+            params={{
+              type: 3,
+              genreId: 0,
+              order: "DESC",
+              word: "",
+            }}
+            routerMatch={match}
+          />
+        </div>
+      </div>
       {/* <h1>Hello Home</h1>
       <a href="/test">Test Page</a>
       { user != null ?

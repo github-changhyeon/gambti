@@ -1,4 +1,13 @@
+
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .background {
+  font-family: DungGeunMo;
   height: calc(100vh - 54px);
   text-align: center;
   background-size: cover;
@@ -10,11 +19,13 @@
 }
 
 .stepper_root {
+  font-family: DungGeunMo;
   width: 100vw;
 }
 
 .question_root {
-  padding: 40px 0;
+  font-family: DungGeunMo;
+  padding: 40px 200px;
 }
 
 .question_title {
@@ -22,11 +33,12 @@
   margin-bottom: 10px;
   color: white;
   font-size: 2rem;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 .question_box {
   color: white;
+  height: 40vh;
 }
 
 .tags {
@@ -36,22 +48,64 @@
 }
 
 .button {
+  font-family: DungGeunMo;
   margin-right: 10px;
+  transition: 0.25s;
+  background: none;
+  /* background-color: #ccff00; */
+  border: 2px solid white;
+  color: white;
 }
 
 button {
+  font-family: DungGeunMo;
   color: #a972cb;
   transition: 0.25s;
   background: none;
   border: 2px solid;
-  font: inherit;
+  /* font: inherit; */
   line-height: 1;
   margin: 0.5em;
   padding: 1em 2em;
 }
+.button:hover {
+  background-color: #ccff00;
+  color: #000;
+}
 
-button:hover,
-button:focus {
+
+.button_reset{
+  font-family: DungGeunMo;
+  margin-right: 10px;
+  transition: 0.25s;
+  background: none;
+  /* background-color: #ccff00; */
+  border: 2px solid white;
+  color: white;
+}
+.button_signup{
+  font-family: DungGeunMo;
+  margin-right: 10px;
+  transition: 0.25s;
+  background: none;
+  /* background-color: #ccff00; */
+  border: 2px solid white;
+  color: white;
+}
+.button_reset:hover,
+.button_reset:focus {
+  background-color: #a972cb;
+  color: #000;
+}
+.button_signup:hover,
+.button_signup:focus {
+  background-color: #ccff00;
+  color: #000;
+}
+
+
+button:hover {
+  background-color: #a972cb;
   box-shadow: inset 0 0 0 2em adjust-hue(#a972cb, 45deg);
   border-color: adjust-hue(#a972cb, 45deg);
   color: #fff;
@@ -66,4 +120,8 @@ button:focus {
 .button_false {
   border-color: #a972cb;
   color: #fff;
+}
+li{
+  font-family: 'DungGeunMo';
+  font-size: 15px;
 }

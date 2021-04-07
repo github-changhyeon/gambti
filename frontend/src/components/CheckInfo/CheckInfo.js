@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './CheckInfo.module.css';
 import $ from 'jquery';
+import clsx from 'clsx';
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -15,8 +16,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { convertColorToString } from 'material-ui/utils/colorManipulator';
 import { useHistory } from 'react-router';
+import StepConnector from '@material-ui/core/StepConnector';
+import PropTypes from 'prop-types';
+import Check from '@material-ui/icons/Check';
 
-export default function CheckInfo({ mbti, mbtiExplain }) {
+export default function CheckInfo({ mbti, mbtiSub }) {
   const history = useHistory();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -30,6 +34,78 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
   const [helperText, setHelperText] = useState('선택해주세요.');
 
   const [checkedTags, setCheckedTags] = useState([]);
+
+  //stepper 디자인 커스텀
+  const QontoConnector = withStyles({
+    alternativeLabel: {
+      top: 10,
+      left: 'calc(-50% + 16px)',
+      right: 'calc(50% + 16px)',
+    },
+    active: {
+      '& $line': {
+        borderColor: '#ccff00',
+      },
+    },
+    completed: {
+      '& $line': {
+        borderColor: '#ccff00',
+      },
+    },
+    line: {
+      borderColor: '#eaeaf0',
+      borderTopWidth: 3,
+      borderRadius: 1,
+    },
+  })(StepConnector);
+
+  const useQontoStepIconStyles = makeStyles({
+    root: {
+      color: '#eaeaf0',
+      display: 'flex',
+      height: 22,
+      alignItems: 'center',
+    },
+    active: {
+      color: '#ccff00',
+    },
+    circle: {
+      width: 20,
+      height: 20,
+      borderRadius: '50%',
+      backgroundColor: 'currentColor',
+    },
+    completed: {
+      color: '#ccff00',
+      zIndex: 1,
+      fontSize: 30,
+    },
+  });
+  
+  function QontoStepIcon(props) {
+    const classes = useQontoStepIconStyles();
+    const { active, completed } = props;
+  
+    return (
+      <div
+        className={clsx(classes.root, {
+          [classes.active]: active,
+        })}
+      >
+        {completed ? <Check className={classes.completed} /> : <div className={classes.circle} />}
+      </div>
+    );
+  }
+  QontoStepIcon.propTypes = {
+    /**
+     * Whether this step is active.
+     */
+    active: PropTypes.bool,
+    /**
+     * Mark the step as completed. Is passed to child components.
+     */
+    completed: PropTypes.bool,
+  };
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -128,7 +204,8 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
   });
 
   function getSteps() {
-    return ['Gender', 'Age Group', 'Price Range', 'Tags'];
+    // return ['Gender', 'Age Group', 'Price Range', 'Tags'];
+    return ['','','',''];
   }
 
   const onClickTag = (event, index_tag) => {
@@ -171,11 +248,12 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
 
   return (
     <div className={styles.background}>
-      <div className={styles.stepper_root}>
-        <Stepper alternativeLabel activeStep={activeStep}>
+      <div className={styles.stepper_root} color='primary'>
+        <Stepper style={{ background: 'none' }} alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
           {steps.map((index_step) => (
             <Step key={index_step}>
-              <StepLabel>{index_step}</StepLabel>
+              <StepLabel StepIconComponent={QontoStepIcon}>{index_step}</StepLabel>
+              
             </Step>
           ))}
         </Stepper>
@@ -186,7 +264,7 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                 <div className={styles.question_title}>
                   <p>모든 정보 등록이 완료되었습니다.</p>
                 </div>
-                <div style={{ color: 'white', listStyle: 'none' }}>
+                <div style={{ color: 'white', listStyle: 'none'}}>
                   <li>성별 : {checked[0]}</li>
                   <li>연령대 : {checked[1]}</li>
                   <li>가격대 : {checked[2]}</li>
@@ -200,9 +278,8 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
               </div>
               <Button
                 variant="contained"
-                color="secondary"
                 onClick={handleReset}
-                className={styles.button}
+                className={styles.button_reset}
               >
                 다시 선택
               </Button>
@@ -216,7 +293,7 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                       maxPrice: parseInt(checked[2]),
                       userLikeTagIds: checkedTags,
                       mbti: mbti,
-                      mbtiExplain: mbtiExplain,
+                      mbtiSub: mbtiSub,
                     },
                   });
                 }}
@@ -229,13 +306,12 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                       maxPrice: parseInt(checked[2]),
                       userLikeTagIds: checkedTags,
                       mbti: mbti,
-                      mbtiExplain: mbtiExplain,
+                      mbtiSub: mbtiSub,
                     },
                   });
                 }}
                 variant="contained"
-                color="primary"
-                className={styles.button}
+                className={styles.button_signup}
               >
                 회원가입
               </Button>
@@ -395,7 +471,6 @@ export default function CheckInfo({ mbti, mbtiExplain }) {
                 </Button> */}
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={handleNext}
                   className={styles.button}
                 >
