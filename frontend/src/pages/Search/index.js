@@ -1,15 +1,15 @@
-import { React, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import styles from './index.module.css';
-import SearchDescription from 'src/pages/Search/search-components/SearchDescription';
-import SearchNavigation from 'src/pages/Search/search-components/SearchNavigation';
-import SearchAll from 'src/pages/Search/search-components/SearchAll';
-import SearchGames from 'src/pages/Search/search-components/SearchGames';
-import SearchUsers from 'src/pages/Search/search-components/SearchUsers';
-import { searchGames, searchUsers } from 'src/common/axios/Search';
-import MediumProfile from 'src/components/MediumProfile/MediumProfile';
-import queryString from 'query-string';
-import fire from 'src/fire';
+import { React, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import styles from "./index.module.css";
+import SearchDescription from "src/pages/Search/search-components/SearchDescription";
+import SearchNavigation from "src/pages/Search/search-components/SearchNavigation";
+import SearchAll from "src/pages/Search/search-components/SearchAll";
+import SearchGames from "src/pages/Search/search-components/SearchGames";
+import SearchUsers from "src/pages/Search/search-components/SearchUsers";
+import { searchGames, searchUsers } from "src/common/axios/Search";
+import MediumProfile from "src/components/MediumProfile/MediumProfile";
+import queryString from "query-string";
+import fire from "src/fire";
 
 export default function Search({ match }) {
   const location = useLocation();
@@ -20,22 +20,23 @@ export default function Search({ match }) {
   const [userTotalCnt, setUserTotalCnt] = useState(new Array());
 
   const gameInfo = {
-    appName: 'Half-Life',
+    appName: "Half-Life",
     backgroundImagePath:
-      'https://cdn.akamai.steamstatic.com/steam/apps/70/0000002354.1920x1080.jpg?t=1591048039',
+      "https://cdn.akamai.steamstatic.com/steam/apps/70/0000002354.1920x1080.jpg?t=1591048039",
     gameId: 70,
     joinUserCount: 0,
     joined: false,
-    logoImagePath: 'https://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg?t=1591048039',
+    logoImagePath:
+      "https://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg?t=1591048039",
     metascore: 96,
     owned: false,
     price: 10500,
-    sentiment: 'Overwhelmingly Positive',
+    sentiment: "Overwhelmingly Positive",
     videoUrl: null,
   };
 
   const userInfo = {
-    userId: '5HP2HV5S2GgP0q5if4CydTMA1x32',
+    userId: "5HP2HV5S2GgP0q5if4CydTMA1x32",
     friendStatus: 1,
   };
 
@@ -62,15 +63,15 @@ export default function Search({ match }) {
         word: queryString.parse(location.search).word,
         pageNum: 0,
         size: 9,
-        colName: 'appName',
+        colName: "appName",
       },
       (response) => {
         if (response.data.status) {
-          console.log('게임', response.data.data);
+          console.log("게임", response.data.data);
           setGameTotalCnt(response.data.data.totalElements);
           setGames(response.data.data.content);
         } else {
-          console.log('search game 실패');
+          console.log("search game 실패");
         }
       },
       (error) => {
@@ -82,7 +83,7 @@ export default function Search({ match }) {
         word: queryString.parse(location.search).word,
         pageNum: 0,
         size: 11,
-        colName: 'nickname',
+        colName: "nickname",
       },
       (response) => {
         if (response.data.status) {
@@ -90,14 +91,17 @@ export default function Search({ match }) {
           setUserTotalCnt(response.data.data.totalElements);
           let simpleUsers = response.data.data.content;
           let tempUsers = new Array();
+          // setUsers(simpleUsers);
           for (let i = 0; i < simpleUsers.length; ++i) {
             fire.db
-              .collection('users')
+              .collection("users")
               .doc(simpleUsers[i].userId)
               .get()
               .then((user) => {
-                // console.log("유저", user.data());
-                tempUsers.push(user.data());
+                console.log("유저", user.data());
+                if (user.data() !== null && user.data() !== undefined) {
+                  tempUsers.push(user.data());
+                }
                 if (i === simpleUsers.length - 1) {
                   setUsers(tempUsers);
                 }
@@ -107,7 +111,7 @@ export default function Search({ match }) {
             setUsers(new Array());
           }
         } else {
-          console.log('search User 실패');
+          console.log("search User 실패");
         }
       },
       (error) => {
@@ -117,7 +121,9 @@ export default function Search({ match }) {
   }, [match]);
 
   return (
-    <div style={{ backgroundColor: '#222222', minHeight: 'calc(100vh - 54px)' }}>
+    <div
+      style={{ backgroundColor: "#222222", minHeight: "calc(100vh - 54px)" }}
+    >
       <SearchDescription></SearchDescription>
 
       <SearchNavigation
@@ -131,8 +137,12 @@ export default function Search({ match }) {
       {match.params.all === null || match.params.all === undefined ? (
         <SearchAll propsGames={games} propsUsers={users}></SearchAll>
       ) : null}
-      {match.params.all === 'games' ? <SearchGames propsMatch={match}></SearchGames> : null}
-      {match.params.all === 'users' ? <SearchUsers propsMatch={match}></SearchUsers> : null}
+      {match.params.all === "games" ? (
+        <SearchGames propsMatch={match}></SearchGames>
+      ) : null}
+      {match.params.all === "users" ? (
+        <SearchUsers propsMatch={match}></SearchUsers>
+      ) : null}
     </div>
   );
 }
