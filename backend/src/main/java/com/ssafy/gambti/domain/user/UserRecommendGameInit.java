@@ -15,8 +15,9 @@ public class UserRecommendGameInit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long game_id;
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @Column(nullable = false)
     private double rating;
@@ -28,4 +29,5 @@ public class UserRecommendGameInit {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserGender gender;
+
 }
