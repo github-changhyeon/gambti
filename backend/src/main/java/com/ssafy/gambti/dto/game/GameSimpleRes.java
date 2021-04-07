@@ -36,6 +36,7 @@ public class GameSimpleRes {
         this.sentiment = game.getSentiment();
         this.logoImagePath = game.getLogoImagePath();
         this.backgroundImagePath = game.getBackgroundImagePath();
+        this.videoUrl = game.getVideoUrl();
     }
 
     public void setJoinUserCount(int joinUserCount) {
