@@ -1,10 +1,13 @@
-import { React, useEffect } from 'react';
-import styles from '../index.module.css';
-import { usePalette } from 'react-palette';
-import Typography from '@material-ui/core/Typography';
+import { React, useEffect, useState } from "react";
+import styles from "../index.module.css";
+import { usePalette } from "react-palette";
+import Typography from "@material-ui/core/Typography";
+import { Button } from "@material-ui/core";
 
 export default function DetailMain({ propsGameInfo }) {
-  const { data, loading, error } = usePalette(propsGameInfo.backgroundImagePath);
+  const { data, loading, error } = usePalette(
+    propsGameInfo.backgroundImagePath
+  );
 
   useEffect(() => {
     console.log(propsGameInfo);
@@ -12,25 +15,55 @@ export default function DetailMain({ propsGameInfo }) {
 
   return (
     <div className={styles.detail_main_container}>
-      <div style={{ paddingLeft: '110px' }}>
+      <div style={{ paddingLeft: "110px" }}>
         <Typography className={styles.detail_main_default_title}>
           {propsGameInfo.appName}
         </Typography>
       </div>
       <div className={styles.detail_main_root}>
-        {propsGameInfo.videoUrl === null ? (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
+        <div
+          className={styles.detail_main_item}
+          style={{ borderColor: data.lightVibrant }}
+        >
+          {/* <div style={{ padding: '10px 0' }}>
               <Typography className={styles.detail_main_title}>Main Image</Typography>
+            </div> */}
+          <div className={styles.detail_div_center}>
+            <Button
+              className={styles.detail_match_button}
+              style={{ backgroundColor: data.lightVibrant }}
+            >
+              {" "}
+              btn
+            </Button>
+          </div>
+        </div>
+        {propsGameInfo.videoUrl === null ? (
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                Main Image
+              </Typography>
             </div>
             <div className={styles.detail_main_video}>
-              <img src={propsGameInfo.logoImagePath} className={styles.detail_main_video}></img>
+              <img
+                src={propsGameInfo.logoImagePath}
+                className={styles.detail_main_video}
+              ></img>
             </div>
           </div>
         ) : (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
-              <Typography className={styles.detail_main_title}>Intro Video</Typography>
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                Intro Video
+              </Typography>
             </div>
             <div className={styles.detail_main_video}>
               <video
@@ -39,6 +72,7 @@ export default function DetailMain({ propsGameInfo }) {
                 loop={true}
                 controls={false}
                 className={styles.detail_main_video}
+                key={propsGameInfo.gameId}
               >
                 <source src={propsGameInfo.videoUrl} type="video/mp4" />
               </video>
@@ -46,12 +80,17 @@ export default function DetailMain({ propsGameInfo }) {
           </div>
         )}
         {propsGameInfo.videoUrl === null ? (
-          ''
+          ""
         ) : (
           <>
-            <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-              <div style={{ padding: '10px 0' }}>
-                <Typography className={styles.detail_main_title}>About</Typography>
+            <div
+              className={styles.detail_main_item}
+              style={{ borderColor: data.lightVibrant }}
+            >
+              <div style={{ padding: "10px 0" }}>
+                <Typography className={styles.detail_main_title}>
+                  About
+                </Typography>
                 <Typography className={styles.detail_main_title_plus}>
                   in {propsGameInfo.appName}
                 </Typography>
@@ -63,6 +102,7 @@ export default function DetailMain({ propsGameInfo }) {
                   loop={true}
                   controls={false}
                   className={styles.detail_main_video}
+                  key={propsGameInfo.gameId}
                 >
                   <source src={propsGameInfo.videoUrl} type="video/mp4" />
                 </video>

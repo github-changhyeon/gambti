@@ -1,13 +1,14 @@
-.root{
+.root {
   color: #cecece;
   margin-left: 0.7rem;
   /* overflow: auto; */
+  /* z-index: 1000; */
 }
-.main_title{
+.main_title {
   font-weight: bold;
   color: #ccff00;
 }
-.title{
+.title {
   color: #cecece;
 }
 .header_center {
@@ -30,8 +31,8 @@
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-} 
-.chat{
+}
+.chat {
   left: 350px;
   top: 120px;
   width: 700px;

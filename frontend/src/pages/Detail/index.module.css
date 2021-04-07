@@ -253,6 +253,7 @@
     0 1px 8px 0 rgb(0 0 0 / 9%);
   transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid;
+  box-shadow: 5px 5px 5px;
 }
 
 .detail_main_default_title {
@@ -282,3 +283,18 @@
   height: auto;
   width: 600px;
 }
+
+.detail_div_center {
+  display: flex;
+  justify-content: center;
+}
+
+.detail_match_button {
+  width: 182px;
+  height: 44px;
+  margin-top: 50px;
+  margin-bottom: 25px;
+}
+/* .detail_match_button:hover {
+  color: black;
+} */

@@ -138,11 +138,21 @@ export default function GamesorderBy({ propsMatch }) {
       >
         &nbsp;
       </Typography>
-      <InfiniteScrollCard
+      {/* <InfiniteScrollCard
         params={{
           type: 0,
           genreId: location.state.genre.id,
           colName: propsMatch.params.order,
+          word: "",
+          direction: "DESC",
+        }}
+        routerMatch={propsMatch}
+      ></InfiniteScrollCard> */}
+      <InfiniteScrollCard
+        params={{
+          type: 0,
+          genreId: 0,
+          colName: "new",
           word: "",
           direction: "DESC",
         }}
