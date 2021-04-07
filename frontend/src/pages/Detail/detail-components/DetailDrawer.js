@@ -57,7 +57,20 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
     setOpen(true);
   }, []);
 
+  // useEffect(() => {
+  //   if (!open) {
+  //     setOpen(true);
+  //   }
+  // }, [open]);
+
+  // useEffect(() => {
+  //   // setOpen(false);
+  //   console.log("여기야");
+  //   console.log(open);
+  // }, [propsMatch.params.gameId]);
+
   useEffect(() => {
+    // setOpen(false);
     if (propsMatch.params.tab === null || propsMatch.params.tab === undefined) {
       setNowCardId(0);
       setFilters(
