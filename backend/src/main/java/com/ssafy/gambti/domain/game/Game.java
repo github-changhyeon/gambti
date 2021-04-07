@@ -1,9 +1,6 @@
 package com.ssafy.gambti.domain.game;
 
-import com.ssafy.gambti.domain.user.UserBanGame;
-import com.ssafy.gambti.domain.user.UserJoinGame;
-import com.ssafy.gambti.domain.user.UserOwnGame;
-import com.ssafy.gambti.domain.user.UserRecommendGame;
+import com.ssafy.gambti.domain.user.*;
 import com.ssafy.gambti.domain.wordcloud.WordCloud;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,6 +59,9 @@ public class Game {
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<UserRecommendGame> userRecommendGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<UserRecommendGameInit> userInitRecommendGames = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<WordCloud> keywords = new ArrayList<>();

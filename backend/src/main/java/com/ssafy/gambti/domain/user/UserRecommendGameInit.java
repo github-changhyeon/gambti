@@ -7,27 +7,27 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_recommend_game")
+@Table(name = "user_recommend_game_init")
 @NoArgsConstructor
 @Getter
-public class UserRecommendGame {
+public class UserRecommendGameInit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @Column(nullable = false)
     private double rating;
 
-    public UserRecommendGame(User user, Game game, float rating) {
-        this.user = user;
-        this.game = game;
-        this.rating = rating;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserMBTI mbti;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserGender gender;
+
 }
