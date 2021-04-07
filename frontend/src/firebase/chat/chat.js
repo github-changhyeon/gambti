@@ -29,6 +29,7 @@ async function getChatRooms() {
 async function makeOneOnOneChatRoom(friendUid) {
     if (friendUid == undefined || friendUid == null) return;
     const myUid = fire.auth.currentUser.uid;
+    console.log('방만들자', friendUid);
     getChatRoomId(friendUid);
 }
 
@@ -47,8 +48,9 @@ function sendMessage(roomsId, messageText) {
 }
 
 //선택한 유저에 대한 채팅방 id 받기
-function getChatRoomId(friendUid) {
+function getChatRoomId(fUid) {
     //axios
+    console.log('채틷id받자', fUid);
     const token = localStorage.getItem("idToken");
     const options = {
         url: 'https://dev.gambti.com//v1/rooms/get',
@@ -60,7 +62,7 @@ function getChatRoomId(friendUid) {
         data: {
             maxNumber: 2,
             type: 'OneOnOne',
-            friendUid: friendUid
+            friendUid: fUid,
         },
     }
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

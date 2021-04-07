@@ -1,27 +1,27 @@
-import { React, useEffect, useContext, useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import styles from './index.module.css';
-import DetailInfo from 'src/pages/Detail/detail-components/DetailInfo';
-import DetailYoutube from 'src/pages/Detail/detail-components/DetailYoutube';
-import DetailDrawer from 'src/pages/Detail/detail-components/DetailDrawer';
-import DetailMain from 'src/pages/Detail/detail-components/DetailMain';
-import DetailNews from 'src/pages/Detail/detail-components/DetailNews';
-import clsx from 'clsx';
-import { getGameDetail } from 'src/common/axios/Game';
+import { React, useEffect, useContext, useState } from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import styles from "./index.module.css";
+import DetailInfo from "src/pages/Detail/detail-components/DetailInfo";
+import DetailYoutube from "src/pages/Detail/detail-components/DetailYoutube";
+import DetailDrawer from "src/pages/Detail/detail-components/DetailDrawer";
+import DetailMain from "src/pages/Detail/detail-components/DetailMain";
+import DetailNews from "src/pages/Detail/detail-components/DetailNews";
+import clsx from "clsx";
+import { getGameDetail } from "src/common/axios/Game";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     // flexGrow: 1,
-    width: '100%',
+    width: "100%",
     // padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -300,
   },
   contentShift: {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -43,7 +43,7 @@ export default function Detail({ match }) {
           console.log(response.data.data);
           setGameInfo(response.data.data);
         } else {
-          console.log('game detail 받아오기 실패');
+          console.log("game detail 받아오기 실패");
         }
       },
       (error) => {
@@ -51,11 +51,16 @@ export default function Detail({ match }) {
       }
     );
     //로그인여부에 따라 left width 64
-  }, []);
+  }, [match]);
 
   return (
     <div className={styles.detail_root}>
-      {gameInfo ? <DetailDrawer propsMatch={match} propsGameInfo={gameInfo}></DetailDrawer> : null}
+      {gameInfo ? (
+        <DetailDrawer
+          propsMatch={match}
+          propsGameInfo={gameInfo}
+        ></DetailDrawer>
+      ) : null}
       <div
         className={clsx(classes.content, {
           [classes.contentShift]: true,
@@ -84,15 +89,21 @@ export default function Detail({ match }) {
             ) : null
           ) : null}
 
-          {match.params.tab === 'youtube' ? (
+          {match.params.tab === "youtube" ? (
             gameInfo ? (
-              <DetailYoutube propsMatch={match} propsGameInfo={gameInfo}></DetailYoutube>
+              <DetailYoutube
+                propsMatch={match}
+                propsGameInfo={gameInfo}
+              ></DetailYoutube>
             ) : null
           ) : null}
 
-          {match.params.tab === 'news' ? (
+          {match.params.tab === "news" ? (
             gameInfo ? (
-              <DetailNews propsMatch={match} propsGameInfo={gameInfo}></DetailNews>
+              <DetailNews
+                propsMatch={match}
+                propsGameInfo={gameInfo}
+              ></DetailNews>
             ) : null
           ) : null}
         </div>

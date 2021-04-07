@@ -8,7 +8,7 @@ export default function GenreGames({ match }) {
   return (
     <div style={{ backgroundColor: "#222222" }}>
       <DescriptionPage propsMatch={match}></DescriptionPage>
-      <GenreList propsOrder="Random"></GenreList>
+      <GenreList propsOrder="hot"></GenreList>
       <GenreRecommendedGames propsMatch={match}></GenreRecommendedGames>
       <GamesOrderBy propsMatch={match}></GamesOrderBy>
     </div>

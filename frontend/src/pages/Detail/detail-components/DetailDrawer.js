@@ -57,7 +57,20 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
     setOpen(true);
   }, []);
 
+  // useEffect(() => {
+  //   if (!open) {
+  //     setOpen(true);
+  //   }
+  // }, [open]);
+
+  // useEffect(() => {
+  //   // setOpen(false);
+  //   console.log("여기야");
+  //   console.log(open);
+  // }, [propsMatch.params.gameId]);
+
   useEffect(() => {
+    // setOpen(false);
     if (propsMatch.params.tab === null || propsMatch.params.tab === undefined) {
       setNowCardId(0);
       setFilters(
@@ -177,37 +190,6 @@ export default function DetailDrawer({ propsMatch, propsGameInfo }) {
         <CardContent className={styles.detail_router_card_content}>
           <Typography className={styles.detail_router_card_name} align="center">
             Youtube
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card
-        className={styles.detail_router_card}
-        onClick={() => {
-          clickBtnFunc(
-            generatePath(routerInfo.PAGE_URLS.DETAIL, {
-              gameId: propsGameInfo.gameId,
-              tab: "news",
-            })
-          );
-        }}
-        style={{ filter: filters[2] }}
-        onMouseOver={() => {
-          mouseOverFunc(2);
-        }}
-        onMouseOut={() => {
-          mouseOutFunc(2);
-        }}
-      >
-        {/* <CardActionArea style={{ position: "relative" }}> */}
-        <CardMedia
-          image="/images/gambti/detail_router_3.jpg"
-          title="Contemplative Reptile"
-          className={styles.detail_router_card_image}
-        />
-        <CardContent className={styles.detail_router_card_content}>
-          <Typography className={styles.detail_router_card_name} align="center">
-            News
           </Typography>
         </CardContent>
       </Card>
