@@ -3,6 +3,7 @@ import styles from "../index.module.css";
 import { usePalette } from "react-palette";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { getGroupRoom } from "src/common/axios/Chat";
 
 export default function DetailMain({ propsGameInfo }) {
   const { data, loading, error } = usePalette(
@@ -11,14 +12,26 @@ export default function DetailMain({ propsGameInfo }) {
   const wsThis = "/images/wordcloud/wc_" + propsGameInfo.gameId + ".png";
   const [isWC, setIsWC] = useState(false); // 밑에서 불러오기 !!
 
+  const clickMatchFunc = () => {
+    getGroupRoom(
+      (response) => {
+        console.log(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   useEffect(() => {
     console.log(propsGameInfo);
 
     isImage();
-  }, []);
+  }, [propsGameInfo]);
 
   function isImage() {
-    var img = new Image();
+    let img = new Image();
+    img.src = wsThis;
 
     img.onload = function () {
       console.log("워드클라우드 있지롱");
@@ -27,9 +40,8 @@ export default function DetailMain({ propsGameInfo }) {
 
     img.onerror = function () {
       console.log("워드클라우드 없어 ㅠㅠㅠ");
+      setIsWC(false);
     };
-
-    img.src = wsThis;
   }
 
   return (
@@ -51,9 +63,11 @@ export default function DetailMain({ propsGameInfo }) {
             <Button
               className={styles.detail_match_button}
               style={{ backgroundColor: data.lightVibrant }}
+              onClick={() => {
+                clickMatchFunc();
+              }}
             >
-              {" "}
-              btn
+              Match
             </Button>
           </div>
         </div>
