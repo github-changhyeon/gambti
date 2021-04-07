@@ -190,21 +190,15 @@ export default function Signup() {
     }
   };
 
+  // TODO: male 처리;
   useEffect(() => {
     if (gender === "MALE") {
       setBasicImg("/images/male.png");
     } else {
       setBasicImg("/image/female.png");
     }
-  }, []);
+  }, [gender]);
 
-  useEffect(() => {
-    if (gender === "MALE") {
-      setBasicImg(`/images/male.png`);
-    } else {
-      setBasicImg(`/images/female.png`);
-    }
-  }, []);
 
   useEffect(() => {
     if (isNext) {
@@ -262,6 +256,7 @@ export default function Signup() {
               mbtiSub: mbtiSub,
               rooms: [],
               imgPath: basicImg,
+
             });
 
             // axios
