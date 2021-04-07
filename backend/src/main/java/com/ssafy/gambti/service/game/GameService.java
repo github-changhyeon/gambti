@@ -337,7 +337,12 @@ public class GameService {
             }
 
             gameRecommendRes = userRecommendGames.stream().parallel()
-                    .filter(userRecommendGame -> gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId))
+                    .filter(userRecommendGame -> {
+                        if (genreId == 0) {
+                            return true;
+                        }
+                        return gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId);
+                    })
                     .limit(15)
                     .map(userRecommendGame -> GameRecommendRes.builder()
                             .gameId(userRecommendGame.getGame().getId())
@@ -362,7 +367,12 @@ public class GameService {
             }
 
             gameRecommendRes = userRecommendGames.stream().parallel()
-                    .filter(userRecommendGame -> gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId))
+                    .filter(userRecommendGame -> {
+                        if (genreId == 0) {
+                            return true;
+                        }
+                        return gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId);
+                    })
                     .limit(15)
                     .map(userRecommendGame -> GameRecommendRes.builder()
                             .gameId(userRecommendGame.getGame().getId())
