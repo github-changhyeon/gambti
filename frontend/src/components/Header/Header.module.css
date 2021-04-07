@@ -224,7 +224,7 @@
     align-items: center;
     color: black;
     font-size: 20px;
-    margin-top: 2em;
+    /* margin-top: 1em; */
     /* font-weight: bold; */
   }
   .sad_icon{
@@ -300,3 +300,133 @@
     float: left;
   }
   
+
+  /* 눈물 흘리는거 */
+.eyes {
+  width: 230px;
+  height: 100px;
+  margin-bottom: 10px;
+  display: Flex;
+  flex-flow: nowrap;
+  flex-direction: row;
+  justify-content: space-around;
+  position: relative;
+  align-items: center;
+}
+.eyes:before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 80% 0 55% 50%/55% 0 80% 50%;
+  border: 3px solid #90fdca;
+  transform: rotate(-45deg);
+  background: #90fdca;
+  top: 85px;
+  left: 155px;
+  -webkit-animation: cry 3s infinite;
+  /*Safari4.0-8.0*/animation: cry 3s infinite;
+  z-index: 9999;
+}
+.eyes .eye {
+  width: 25px;
+  height: 40px;
+  background: #363832;
+  border-radius: 50%;
+  position: relative;
+}
+.eyes .eye:first-child:after {
+  content: "";
+  width: 10px;
+  height: 15px;
+  background: #FFE8BD;
+  display: block;
+  border-radius: 50%;
+  position: Absolute;
+  bottom: 12.5%;
+  right: 22.5%;
+  transform: rotate(10deg);
+}
+.eyes .eye:first-child:before {
+  content: "";
+  display: Block;
+  height: 5px;
+  width: 35px;
+  background: #363832;
+  transform: rotate(-35deg);
+  position: Absolute;
+  top: -20%;
+  left: -40%;
+}
+/* 눈알 */
+.eyes .eye:last-child:before {
+  content: "";
+  width: 10px;
+  height: 15px;
+  background: #FFE8BD;
+  display: block;
+  border-radius: 50%;
+  position: Absolute;
+  bottom: 12.5%;
+  right: 22.5%;
+  transform: rotate(12deg);
+}
+.eyes .eye:last-child:after {
+  content: "";
+  display: Block;
+  height: 5px;
+  width: 35px;
+  background: #363832;
+  transform: rotate(35deg);
+  position: Absolute;
+  top: -20%;
+  right: -50%;
+}
+
+.sad {
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  /*margin-top: 50px;
+  */transform: rotate(45deg);
+  border-left: 6px solid #363832;
+  border-top: 6px solid #363832;
+  border-radius: 50%;
+  position: relative;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.sad:after {
+  content: "";
+  width: 120%;
+  height: 100%;
+  transform: rotate(-45deg);
+  background: #f9f9f9;
+  display: block;
+  position: Absolute;
+  bottom: -10%;
+  left: 6%;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes cry {
+  0% {
+    top: 85px;
+  }
+  100% {
+    top: 300px;
+    opacity: 0;
+  }
+}
+/* Standard syntax */
+@keyframes cry {
+  0% {
+    top: 85px;
+  }
+  100% {
+    top: 500px;
+    opacity: 0;
+  }
+}
