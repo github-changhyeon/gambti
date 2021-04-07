@@ -11,4 +11,5 @@ public class GambtiApplication {
     public static void main(String[] args) {
         SpringApplication.run(GambtiApplication.class, args);
     }
+
 }
