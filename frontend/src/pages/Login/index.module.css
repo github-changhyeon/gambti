@@ -80,10 +80,11 @@
 }
 .error{
   width: 100%;
+  font-family: 'DungGeunMo';
   color: orange;
   display: flex;
   justify-content: flex-end;   
-  font-size: 12px;     
+  font-size: 10px;     
   height: 6px;       
   
 }
