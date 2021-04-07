@@ -1,51 +1,147 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext, useRef } from "react";
 import MediaQuery from "react-responsive";
 import { useLocation } from "react-router-dom";
-import GameCard from "src/components/GameCard/GameCard";
+import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
 import VideoAndCard from "src/pages/GenreGames/genreGame-components/VideoAndCard";
 import { Carousel } from "3d-react-carousal";
 import Typography from "@material-ui/core/Typography";
-import { getRecommendedGames } from "src/common/axios/Game";
+import { getRecommendedGenreGames, deleteGame } from "src/common/axios/Game";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
+import { UserContext } from "src/Context/UserContext";
+import { SignalCellularNoSimOutlined } from "@material-ui/icons";
 
 export default function GenreRecommendedGames({ propsMatch }) {
+  const user = useContext(UserContext);
+
   const [recommendGames, setRecommendGames] = useState(new Array());
   const [videoAndCards, setVideoAndCards] = useState(new Array());
   const [isFetchEnd, setIsFetchEnd] = useState(false);
+
   const location = useLocation();
   // const isWide = MediaQuery ({
   //   query: "(min-width:1024px)"
-  // });
+  // });//
+
+  const clickDeleteBtnFunc = (gameId) => {
+    deleteGame(
+      gameId,
+      (response) => {
+        if (response.data.status === "success") {
+          getRecommendedGenreGames(
+            {
+              isLogin: user.isLoggedIn,
+              genreId: location.state.genre.id,
+              pageNum: 1,
+              size: 15,
+            },
+            (response) => {
+              let gameInfos = response.data.data.content;
+              if (user.isLoggedIn) {
+                gameInfos = response.data.data;
+              }
+              console.log("이녀석", gameInfos);
+              let tempVideoAndCards = new Array();
+              let tempRecommendedCards = new Array();
+              for (let i = 0; i < gameInfos.length; ++i) {
+                // setGameIds((gameIds) => [...gameIds, gameInfos[i].gameId]);
+                // TODO: 빈배열일때 SLIDE 에러
+                tempVideoAndCards.push(
+                  <VideoAndCard
+                    clickDeleteBtn={() => {
+                      clickDeleteBtnFunc(gameInfos[i].gameId);
+                    }}
+                    gameInfo={gameInfos[i]}
+                  ></VideoAndCard>
+                );
+
+                if (i === gameInfos.length - 1) {
+                  setVideoAndCards(tempVideoAndCards);
+                }
+                tempRecommendedCards.push(
+                  <div style={{ width: "283px" }}>
+                    <RecommendedGameCard
+                      clickDeleteBtn={() => {
+                        clickDeleteBtnFunc(gameInfos[i].gameId);
+                      }}
+                      gameInfo={gameInfos[i]}
+                    ></RecommendedGameCard>
+                  </div>
+                );
+                if (i === gameInfos.length - 1) {
+                  setRecommendGames(tempRecommendedCards);
+                }
+              }
+              setIsFetchEnd(true);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
   useEffect(() => {
     // TODO: AXIOS
 
-    // console.log(location.state.genreId);
     setVideoAndCards(new Array());
     setRecommendGames(new Array());
     setIsFetchEnd(false);
+  }, [propsMatch.params.genre]);
 
-    getRecommendedGames(
-      location.state.genre.id,
+  useEffect(() => {
+    if (isFetchEnd) {
+      return;
+    }
+
+    getRecommendedGenreGames(
+      {
+        isLogin: user.isLoggedIn,
+        genreId: location.state.genre.id,
+        pageNum: 1,
+        size: 15,
+      },
       (response) => {
-        let gameInfos = response.data.data;
+        let gameInfos = response.data.data.content;
+        if (user.isLoggedIn) {
+          gameInfos = response.data.data;
+        }
+        console.log("이녀석", gameInfos);
+        let tempVideoAndCards = new Array();
+        let tempRecommendedCards = new Array();
         for (let i = 0; i < gameInfos.length; ++i) {
-          //TODO: METASCORE 임의로 넣어줌 -> 제거
-          gameInfos[i].metascore = 1000;
+          // setGameIds((gameIds) => [...gameIds, gameInfos[i].gameId]);
+          // TODO: 빈배열일때 SLIDE 에러
+          tempVideoAndCards.push(
+            <VideoAndCard
+              clickDeleteBtn={() => {
+                clickDeleteBtnFunc(gameInfos[i].gameId);
+              }}
+              gameInfo={gameInfos[i]}
+            ></VideoAndCard>
+          );
 
-          setVideoAndCards((videoAndCards) => [
-            ...videoAndCards,
-
-            <VideoAndCard gameInfo={gameInfos[i]}></VideoAndCard>,
-          ]);
-          setRecommendGames((recommendGames) => [
-            ...recommendGames,
-
-            //TODO: VALUE
-            <div style={{ width: "238px" }}>
-              <GameCard gameInfo={gameInfos[i]}></GameCard>
-            </div>,
-          ]);
+          if (i === gameInfos.length - 1) {
+            setVideoAndCards(tempVideoAndCards);
+          }
+          tempRecommendedCards.push(
+            <div style={{ width: "283px" }}>
+              <RecommendedGameCard
+                clickDeleteBtn={() => {
+                  clickDeleteBtnFunc(gameInfos[i].gameId);
+                }}
+                gameInfo={gameInfos[i]}
+              ></RecommendedGameCard>
+            </div>
+          );
+          if (i === gameInfos.length - 1) {
+            setRecommendGames(tempRecommendedCards);
+          }
         }
         setIsFetchEnd(true);
       },
@@ -53,13 +149,11 @@ export default function GenreRecommendedGames({ propsMatch }) {
         console.log(error);
       }
     );
-
-    // console.log(tempArr);
-    // setRecommendGames(new Array());
-  }, [propsMatch.params.genre]);
+  }, [isFetchEnd]);
 
   return (
     <div style={{ minHeight: "372px" }}>
+      {/* {gameIds.map((item, i) => item)} */}
       <Container
         style={{
           boxSizing: "border-box",

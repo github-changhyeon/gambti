@@ -24,6 +24,7 @@ export default function GenreList({ propsOrder }) {
       .catch((error) => {
         console.log(error);
       });
+    return () => setGenres(new Array());
   }, []);
 
   return (
@@ -38,7 +39,7 @@ export default function GenreList({ propsOrder }) {
                 history.push({
                   pathname: generatePath(routerInfo.PAGE_URLS.GAMES, {
                     order: propsOrder,
-                    genre: genre.name,
+                    genre: genre.name.toLowerCase(),
                   }),
                   state: { genre: genre },
                 });

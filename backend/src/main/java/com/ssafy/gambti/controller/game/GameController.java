@@ -68,9 +68,9 @@ public class GameController {
         boolean result = gameService.banFromGameRecommend(gameId, httpServletRequest);
 
         if (result) {
-            return new ResponseEntity<>(new Response(SUCCESS, "추천친구 밴 성공", null), HttpStatus.OK);
+            return new ResponseEntity<>(new Response(SUCCESS, "추천게임 밴 성공", null), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new Response(FAIL, "추천친구 밴 실패", null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(FAIL, "추천게임 밴 실패", null), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -98,6 +98,8 @@ public class GameController {
             return new ResponseEntity<>(new Response(SUCCESS, "변경 실패", null), HttpStatus.BAD_REQUEST);
         }
     }
+
+
     @GetMapping(value = "/joinGames")
     @Operation(summary = "유저가 join한 게임 리스트 받기", description = "유저가 이전에 join했던 게임을 받아온다.")
     public ResponseEntity<? extends Response> joinGames(HttpServletRequest httpServletRequest){
