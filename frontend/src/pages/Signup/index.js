@@ -190,21 +190,15 @@ export default function Signup() {
     }
   };
 
+  // TODO: male 처리;
   useEffect(() => {
     if (gender === "MALE") {
       setBasicImg("/images/male.png");
     } else {
       setBasicImg("/image/female.png");
     }
-  }, []);
+  }, [gender]);
 
-  useEffect(() => {
-    if (gender === "MALE") {
-      setBasicImg(`/images/male.png`);
-    } else {
-      setBasicImg(`/images/female.png`);
-    }
-  }, []);
 
   useEffect(() => {
     if (isNext) {
@@ -261,8 +255,8 @@ export default function Signup() {
               mbti: mbti,
               mbtiSub: mbtiSub,
               rooms: [],
-              friends: [],
               imgPath: basicImg,
+
             });
 
             // axios
@@ -340,89 +334,87 @@ export default function Signup() {
 
   return (
     <div
-      className={styles.background}
+      className={styles.background_image}
       style={{
         backgroundImage: `url(${background})`,
       }}
     >
       {isNext && <CheckGambti mbti={mbti} mbtiSub={mbtiSub} />}
       {!isNext && (
-        <Container component="main" maxWidth="xs">
-          <div className={styles.root}>
-            <form noValidate className={styles.form}>
-              <Typography className={styles.policy}>
-                By signing up, you agree to the Terms of User and Privacy
-                Policy, including the Cookie Policy.
-              </Typography>
+        <div className={styles.background}>
+          <Container component="main" maxWidth="xs">
+            <div className={styles.root}>
+              <form noValidate className={styles.form}>
+                <Typography className={styles.title}>Sign Up</Typography>
+                <Typography className={styles.policy}>
+                  By signing up, you agree to the Terms of User and Privacy Policy, including the
+                  Cookie Policy.
+                </Typography>
 
-              <div className={styles.form_holder}>
-                {/* nickname */}
-                <input
-                  id="nickname"
-                  type="text"
-                  className={styles.newinput}
-                  autofocus
-                  placeholder="Nickname"
-                  required
-                  onChange={handleUserChange}
-                />
-                <Nickname className={styles.error} />
-                {/* Email */}
-                <input
-                  id="email"
-                  type="email"
-                  className={styles.newinput}
-                  placeholder="Email"
-                  required
-                  onChange={handleEmailChange}
-                />
-                <Email className={styles.error} />
-                {/* password */}
-                <input
-                  id="password"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="Password"
-                  required
-                  onChange={handlePasswordChange}
-                />
-                <Pass className={styles.error} />
-                <input
-                  id="passwordConfirm"
-                  type="password"
-                  className={styles.newinput}
-                  placeholder="PasswordConfirm"
-                  required
-                  onChange={handlePasswordConfirmChange}
-                  onKeyPress={handleKeyPress}
-                />
-                <PassConfirm className={styles.error}></PassConfirm>
-              </div>
+                <div className={styles.form_holder}>
+                  {/* nickname */}
+                  <input
+                    id="nickname"
+                    type="text"
+                    className={styles.newinput}
+                    autofocus
+                    placeholder="Nickname"
+                    required
+                    onChange={handleUserChange}
+                  />
+                  <Nickname className={styles.error} />
+                  {/* Email */}
+                  <input
+                    id="email"
+                    type="email"
+                    className={styles.newinput}
+                    placeholder="Email"
+                    required
+                    onChange={handleEmailChange}
+                  />
+                  <Email className={styles.error} />
+                  {/* password */}
+                  <input
+                    id="password"
+                    type="password"
+                    className={styles.newinput}
+                    placeholder="Password"
+                    required
+                    onChange={handlePasswordChange}
+                  />
+                  <Pass className={styles.error} />
+                  <input
+                    id="passwordConfirm"
+                    type="password"
+                    className={styles.newinput}
+                    placeholder="PasswordConfirm"
+                    required
+                    onChange={handlePasswordConfirmChange}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <PassConfirm className={styles.error}></PassConfirm>
+                </div>
 
-              <div className={styles.buttons}>
-                <ButtonComp
-                  size="large"
-                  textvalue="NEXT"
-                  color="#CCFF00"
-                  onClick={onNext}
-                  onKeyPress={onNext}
-                ></ButtonComp>
-                {/* <ButtonComp
+                <div className={styles.buttons}>
+                  <ButtonComp
+                    size="large"
+                    textvalue="NEXT"
+                    color="#CCFF00"
+                    onClick={onNext}
+                    onKeyPress={onNext}
+                  ></ButtonComp>
+                  {/* <ButtonComp
               size="large"
               textvalue="SIGN UP"
               color="#CCFF00"
               onClick={onSignup}
               onKeyPress={onSignup}
             ></ButtonComp> */}
-              </div>
-            </form>
-            <div className={styles.move_page}>
-              <a href="/login" className={styles.link}>
-                or Log In
-              </a>
+                </div>
+              </form>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       )}
     </div>
   );

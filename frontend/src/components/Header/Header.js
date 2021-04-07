@@ -26,6 +26,7 @@ export default function Header({ isLogin }) {
   const [isShownNoti, setIsShownNoti] = React.useState(false);
   const [isNoti, setIsNoti] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
+
   // console.log(user);
 
   // 로그아웃
@@ -90,6 +91,11 @@ export default function Header({ isLogin }) {
         setNotiList(...changes);
       } else {
         setNotiList([...notiRef.current, ...changes]);
+
+        // TODO: noti 재로딩할때 문제 생기니까 다시 해주기
+        fire.db.collection("users").doc(user.uid).update({
+          notificationsCount: changes.length,
+        })
       }
     });
   };
@@ -224,11 +230,14 @@ export default function Header({ isLogin }) {
               onMouseEnter={() => setIsShownNoti(true)}
               onMouseLeave={() => setIsShownNoti(false)}
               onClick={() => {
+                fire.db.collection("users").doc(user.uid).update({
+                  notificationsCount: 0,
+                })
                 setIsNoti(!isNoti);
-                console.log("isNoti", isNoti);
+                // console.log('notiCount', user.notificationsCount);
               }}
             >
-              <Badge badgeContent={notiList.length} color="primary">
+              <Badge badgeContent={user.notificationsCount} color="primary">
                 <NotificationsIcon
                   className={styles.header_right_icon}
                   style={{ color: "#d1d1d1" }}
@@ -249,9 +258,27 @@ export default function Header({ isLogin }) {
                       {notiList.length === 0 ? (
                         <div className={styles.no_noti}>
                           <div>
-                            <MoodBadIcon className={styles.sad_icon} />
+                            {
+                              notiList.map((noti) => {
+                                const time = toDate(noti.data().timeStamp);
+                                return (
+                                  <div className={styles.shopping_cart_items} onClick={() => { gotoFriend(noti) }}>
+                                    {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
+                                    <div className={styles.cart_item}>
+                                      <div className={styles.cart_item_header}> {noti.data().message}</div>
+                                      <Moment className={styles.cart_item_date} format="MM.DD HH:mm">{time}</Moment>
+                                    </div >
+                                  </div >
+                                );
+                              })
+                            }
                           </div>
-                          <div style={{ marginTop: "1rem" }}>
+                          <div className={styles.eyes }>
+                              <div className={styles.eye }></div>
+                              <div className={styles.eye }></div>
+                          </div>
+                          <div className={styles.sad}></div>
+                          <div style={{fontFamily:'DungGeunMo', zIndex: '500'}}>
                             새로운 알람이 없습니다.
                           </div>
                         </div>

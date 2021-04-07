@@ -14,7 +14,7 @@ export default function ChatList({ showChat }) {
 
   const [chat, setChat] = React.useState(!showChat);
   const [currentRoomId, setCurrentRoomId] = React.useState('');
-  const [currentRoomName, setCurrentRoomName] = React.useState('');
+  const [currentRoom, setCurrentRoom] = React.useState('');
 
   const [youId, setYouId] = React.useState('');
   const [you, setYou] = React.useState('');
@@ -50,6 +50,7 @@ export default function ChatList({ showChat }) {
       if (!roomInfo?.users)
         return undefined;
       const otherUser = roomInfo.users[1] !== user.uid ? roomInfo.users[1] : roomInfo.users[2];
+      // console.log('otherUser', roomInfo, otherUser);
       return fire.db.collection("users").doc(otherUser).get().then((doc) => {
         return { ...roomInfo, otherUser: doc.data() };
       });
@@ -58,7 +59,7 @@ export default function ChatList({ showChat }) {
     const extendedRoomInfos = await Promise.all(extendedRoomInfosPromise);
     setChatList(extendedRoomInfos);
   }
-  console.log('chatList', chatList);
+  // console.log('chatList', chatList);
 
 
 
@@ -81,7 +82,7 @@ export default function ChatList({ showChat }) {
     }
     // 1:N 채팅이면 방이름 넣어줌
     else {
-      setCurrentRoomName(room.roomName);
+      setCurrentRoom(room);
     }
   }
 
@@ -150,7 +151,7 @@ export default function ChatList({ showChat }) {
                 youId ?
                   <Chat youId={youId} currentRoomId={currentRoomId} chat={chat} />
                   :
-                  <Chat currentRoomId={currentRoomId} chat={chat} currentRoomName={currentRoomName} />
+                  <Chat currentRoomId={currentRoomId} chat={chat} currentRoom={currentRoom} />
               }
             </div> :
             <div>

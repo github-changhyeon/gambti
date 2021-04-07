@@ -41,7 +41,7 @@ export default function RecommendedFriends() {
             // setRecFriendList([...recFriendListRef.current, doc.data()])
             tempArray.push(doc.data());
             if (i === response.data.data.userIds.length - 1) {
-              console.log('temp', tempArray);
+              // console.log('temp', tempArray);
               setRecFriendList(tempArray);
             }
 
@@ -85,7 +85,7 @@ export default function RecommendedFriends() {
                     });
                   }}>
                   <MediumProfile
-                    propsUser={{ nickname: recFriend.nickname, email: recFriend.email }}
+                    propsUser={{ nickname: recFriend.nickname, email: recFriend.email, imgPath: recFriend.imgPath }}
                   ></MediumProfile>
                 </div>
 

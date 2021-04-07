@@ -1,53 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from './FriendList.module.css';
-import { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage } from 'src/firebase/chat/chat';
+import { makeOneOnOneChatRoom } from 'src/firebase/chat/chat';
 import MediumProfile from 'src/components/MediumProfile/MediumProfile';
 import Chat from './Chat';
+import { UserContext } from 'src/Context/UserContext';
+import fire from 'src/fire';
 
 export default function FriendList({ showChat }) {
 
   const [friend, setFriend] = React.useState('');
   const [chat, setChat] = React.useState(!showChat);
+  const user = useContext(UserContext);
 
 
   const [friendList, setFriendList] = useState(new Array());
-  useEffect(() => {
-    getFriends().then((list) => {
-      setFriendList(list);
-    });
-  }, [getFriends]);
+  const friendListRef = React.useRef;
+  friendListRef.current = friendList;
 
-  const makeOOOchatRoom = (fuid) => {
-    // console.log("1:1 챗방 : " + fuid);
-    makeOneOnOneChatRoom(fuid);
+
+  useEffect(() => {
+    setFriendList(new Array());
+    getFriends();
+  }, []);
+
+  const getFriends = () => {
+    fire.db.collection("users").doc(user.uid).collection("friends").where("status", "==", 2)
+      .onSnapshot((snapshot) => {
+        const changes = snapshot.docs.map((change) => {
+          // console.log('change정보:', change.data());
+          // console.log('들어갓냐', fire.db.collection("users").doc(change.id).get())
+          return fire.db.collection("users").doc(change.id).get()
+        })
+
+        // console.log('changes', changes);
+
+        let temp = new Array();
+        changes.forEach((item, i) => {
+          item.then((info) => {
+            // console.log('info', info.data());
+            temp.push(info)
+            if (i === changes.length - 1) {
+              setFriendList([...friendListRef.current, ...temp]);
+            }
+          }
+          )
+        })
+      })
   }
+
+
 
   const handleChatChange = (fuser) => {
+    console.log('fuser', fuser)
     setFriend(fuser);
-    makeOOOchatRoom(fuser);
     setChat(!chat);
-    // console.log(user);
-    // console.log(friend, chat);
-    // console.log(showChat);
-
   }
 
-
+  // TODO: friend status:2 인것만 출력, friend에 user의 데이터 넣어줘야해서
+  // 그냥 위에서 불러서 돌려주는게 나음... 
   return (
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
-        {friendList.map((fuser, i) =>
-          <div key={i} style={{ width: '195px' }}
-          >
-            <MediumProfile
-              propsUser={fuser}
-              onClick={() => {
-                handleChatChange(fuser)
-              }
-              }
-            />
-            <hr />
-          </div>
+        {friendList.map((fuser, i) => {
+          return (
+            <div key={i} style={{ width: '195px' }}
+            >
+              <MediumProfile
+                propsUser={{ nickname: fuser.data().nickname, email: fuser.data().email, imgPath: fuser.data().imgPath }}
+                onClick={() => {
+                  handleChatChange(fuser)
+                }
+                }
+              />
+              <hr />
+            </div>
+
+          );
+
+        }
         )}
         {/* {
           chat && */}

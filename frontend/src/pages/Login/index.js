@@ -4,7 +4,6 @@ import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
 import fire from 'src/fire';
 import { useHistory } from 'react-router';
 import { UserContext } from 'src/Context/UserContext';

@@ -1,4 +1,4 @@
-import { restApi, getConfig } from "./index";
+import { restApi, getConfig } from './index';
 
 function getRecommendedGames(params, success, fail) {
   if (params.isLogin) {
@@ -39,7 +39,7 @@ function getRecommendedGenreGames(params, success, fail) {
 }
 
 function joinAndLeave(gameId, success, fail) {
-  const token = localStorage.getItem("idToken");
+  const token = localStorage.getItem('idToken');
   const config = getConfig(token);
   restApi()
     .post(`/games/joinLeave/${gameId}`, {}, token ? config : null)
@@ -48,7 +48,7 @@ function joinAndLeave(gameId, success, fail) {
 }
 
 function getGamesOrderBy(params, success, fail) {
-  const token = localStorage.getItem("idToken");
+  const token = localStorage.getItem('idToken');
   const config = getConfig(token);
   restApi()
     .get(
@@ -60,7 +60,7 @@ function getGamesOrderBy(params, success, fail) {
 }
 
 function getGameDetail(gameId, success, fail) {
-  const token = localStorage.getItem("idToken");
+  const token = localStorage.getItem('idToken');
   const config = getConfig(token);
   restApi()
     .get(`/games/detail/${gameId}`, token ? config : null)
