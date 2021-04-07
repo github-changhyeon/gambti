@@ -24,10 +24,10 @@ export default function RepresentImage() {
       >
         <Grid item md={6}>
           <div className={styles.main_post_content}>
-            <Typography component="h1" variant="h3" style={{ color: 'white' }} gutterBottom>
+            <Typography component="h1" variant="h2" style={{ color: 'white', fontFamily:'DungGeunMo'}} gutterBottom>
               Welcome Gambti
             </Typography>
-            <Typography variant="h5" style={{ color: 'white' }} paragraph align="center">
+            <Typography variant="h5" style={{ color: 'white', fontFamily:'DungGeunMo'}} paragraph align="center">
               What I really love about Gambti is that it makes me possible to select funny games!
             </Typography>
             <Button

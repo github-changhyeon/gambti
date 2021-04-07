@@ -273,7 +273,12 @@ export default function Header({ isLogin }) {
                               })
                             }
                           </div>
-                          <div style={{ marginTop: "1rem" }}>
+                          <div className={styles.eyes }>
+                              <div className={styles.eye }></div>
+                              <div className={styles.eye }></div>
+                          </div>
+                          <div className={styles.sad}></div>
+                          <div style={{fontFamily:'DungGeunMo', zIndex: '500'}}>
                             새로운 알람이 없습니다.
                           </div>
                         </div>
