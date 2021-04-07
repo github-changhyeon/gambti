@@ -12,6 +12,9 @@ import fire from 'src/fire';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import { addFriend } from 'src/common/axios/Friends';
 import RecommendedFriends from 'src/components/RecommendedFriends/RecommendedFriends';
+import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
+import Button from "@material-ui/core/Button";
+
 
 
 export default function Profile({ match }) {
@@ -25,12 +28,15 @@ export default function Profile({ match }) {
   const [joinedGame, setJoinedGame] = React.useState(0);
   const [friendNumber, setFriendNumber] = React.useState(1);
   const [toUserInfo, setToUserInfo] = React.useState('');
+  const [friendStatus, setFriendStatus] = React.useState(null);
 
   const [value, setValue] = React.useState(0);
 
-  //게임 정보 출력
+
+
   useEffect(() => {
-    ReadToUserInfo(toUser)
+    setFriendStatus(null);
+    ReadToUserInfo(toUser);
   }, [toUser])
 
   // 게임 갯수 출력
@@ -74,8 +80,29 @@ export default function Profile({ match }) {
     fire.db.collection("users").doc(toUser).get()
       .then((doc) => {
         setToUserInfo(doc.data());
-        setFriendNumber(doc.data().friends.length)
+        setFriendNumber(doc.data().friends.length);
       })
+    fire.db.collection("users").doc(fromUser.uid).collection("friends")
+      .onSnapshot((onSnapshot) => {
+        onSnapshot.docs.map((doc) => {
+          console.log('doc.id', doc.id)
+          if (doc.id === toUser) {
+            fire.db.collection("users").doc(fromUser.uid).collection("friends").doc(toUser)
+              .onSnapshot((userInfo) => {
+                setFriendStatus(userInfo.data().status);
+              })
+          }
+        })
+      })
+
+
+    // doc(toUser)
+    //   .onSnapshot((snapshot) => {
+    //     if (snapshot.data().status === undefined) {
+    //       setFriendStatus(null);
+    //     }
+    //     setFriendStatus(snapshot.data().status);
+    //   })
   }
 
   // 유저 조인 게임 갯수
@@ -111,11 +138,33 @@ export default function Profile({ match }) {
               <AvatarComp size="superlarge" imgPath={toUserInfo.imgPath} textvalue={toUserInfo.nickname} ></AvatarComp>
               {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
               <Typography className={styles.main_nick}>{toUserInfo.nickname}</Typography>
-              <div className={styles.add_btn}>
-                <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
-                  handleAddFriend(toUser);
-                }}></ButtonComp>
-              </div>
+              {/* 버튼 구분 */}
+              {
+                // 친구 요청됨
+                friendStatus === 0 ?
+                  <div className={styles.add_btn}>
+                    <Button className={styles.fix_btn}>SEㅋ</Button>
+                  </div>
+                  :
+                  // 친구 수락/ 거절
+                  friendStatus === 1 ?
+                    <div className={styles.add_btn}>
+                      <ButtonComp size='noti' color='#ccff00' textvalue='ACCEPT' onClick={() => {
+                        handleAddFriend(toUser);
+                      }}></ButtonComp>
+                    </div> :
+                    // 친구 관계
+                    friendStatus === 2 ?
+                      <div className={styles.add_btn}>
+                        <Button className={styles.fix_btn}>FRIEND</Button>
+                      </div> :
+                      // 친구 추가
+                      <div className={styles.add_btn}>
+                        <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
+                          handleAddFriend(toUser);
+                        }}></ButtonComp>
+                      </div>
+              }
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
             <div className={styles.info}>
@@ -162,13 +211,19 @@ export default function Profile({ match }) {
           />
         </Tabs>
 
-        {/* MY Profile edit */}
         <TabPanel value={value} index={0} className={styles.tab_panel}>
 
-          {/* TODO: 게임 */}
-          <div className={styles.section2}>
-            게임
-          </div>
+          {/* TODO: 조인 게임 리스트 받기*/}
+          {/* <InfiniteScrollCard
+            params={{
+              type: 0,
+              genreId: 0,
+              colName: "new",
+              word: "",
+              direction: "DESC",
+            }}
+            routerMatch={match}
+          ></InfiniteScrollCard> */}
         </TabPanel>
 
       </Box>
