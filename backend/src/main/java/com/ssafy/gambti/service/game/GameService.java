@@ -8,10 +8,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.cloud.FirestoreClient;
 import com.ssafy.gambti.domain.game.Game;
-import com.ssafy.gambti.domain.user.User;
-import com.ssafy.gambti.domain.user.UserBanGame;
-import com.ssafy.gambti.domain.user.UserJoinGame;
-import com.ssafy.gambti.domain.user.UserRecommendGame;
+import com.ssafy.gambti.domain.user.*;
 import com.ssafy.gambti.dto.game.GameDetailRes;
 import com.ssafy.gambti.dto.game.GameRecommendRes;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
@@ -48,6 +45,7 @@ public class GameService {
     private final SecurityService securityService;
     private final FirebaseTokenUtils firebaseTokenUtils;
     private final UserRecommendGameRepository userRecommendGameRepository;
+    private final UserRecommendGameInitRepository userRecommendGameInitRepository;
 
     public User getLoginUser(HttpServletRequest httpServletRequest){
         String token = securityService.getBearerToken(httpServletRequest);
@@ -253,28 +251,58 @@ public class GameService {
         exclusiveGames.addAll(userJoinGames);
         exclusiveGames.addAll(userBanGames);
 
-        // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져와서 페이징 처리하고
-        // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 후 페이징 처리한다.
-        Page<UserRecommendGame> userRecommendGames;
+        // 최종 반환 될 gameRecommendRes를 우선 선언한다.
+        Page<GameRecommendRes> gameRecommendRes;
 
-        if (exclusiveGames.isEmpty()) {
-            userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId(), pageable);
+        // UserRecommendGame 테이블에 분석된 데이터가 있다면 분석된 추천게임을 보여줄 것이고
+        // 없다면 UserRecommendGameInit 테이블에 담긴 MBTI와 성별로 클러스터링된 추천 게임 셋을 보여줄 것이다.
+        if (userRecommendGameRepository.existsByUser(loginUser)) {
+            Page<UserRecommendGame> userRecommendGames;
+
+            // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져와서 페이징 처리하고
+            // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 후 페이징 처리한다.
+            if (exclusiveGames.isEmpty()) {
+                userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId(), pageable);
+            } else {
+                userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames, pageable);
+            }
+
+            gameRecommendRes = userRecommendGames
+                    .map(userRecommendGame -> GameRecommendRes.builder()
+                            .gameId(userRecommendGame.getGame().getId())
+                            .appName(userRecommendGame.getGame().getAppName())
+                            .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                            .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                            .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                            .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
+                            .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
+                            .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                            .rating(userRecommendGame.getRating())
+                            .build());
         } else {
-            userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames, pageable);
-        }
+            Page<UserRecommendGameInit> userRecommendGames;
 
-        Page<GameRecommendRes> gameRecommendRes = userRecommendGames
-                .map(userRecommendGame -> GameRecommendRes.builder()
-                        .gameId(userRecommendGame.getGame().getId())
-                        .appName(userRecommendGame.getGame().getAppName())
-                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
-                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
-                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
-                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
-                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
-                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
-                        .rating(userRecommendGame.getRating())
-                        .build());
+            // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져와서 페이징 처리하고
+            // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 후 페이징 처리한다.
+            if (exclusiveGames.isEmpty()) {
+                userRecommendGames = userRecommendGameInitRepository.findByMbtiAndGender(loginUser.getMbti(), loginUser.getGender(), pageable);
+            } else {
+                userRecommendGames = userRecommendGameInitRepository.findByUserIdAndExclusivesNotIn(loginUser.getMbti(), loginUser.getGender(), exclusiveGames, pageable);
+            }
+
+            gameRecommendRes = userRecommendGames
+                    .map(userRecommendGame -> GameRecommendRes.builder()
+                            .gameId(userRecommendGame.getGame().getId())
+                            .appName(userRecommendGame.getGame().getAppName())
+                            .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                            .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                            .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                            .isJoined(userJoinGameRepository.existsByUserIdAndGameId(loginUser.getId(), userRecommendGame.getGame().getId()))
+                            .isOwned(userOwnGameRepository.existsByUserId(loginUser.getId()))
+                            .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                            .rating(userRecommendGame.getRating())
+                            .build());
+        }
 
         return gameRecommendRes;
     }
@@ -294,30 +322,61 @@ public class GameService {
         exclusiveGames.addAll(userJoinGames);
         exclusiveGames.addAll(userBanGames);
 
+        List<GameRecommendRes> gameRecommendRes = new ArrayList<>();
+
         // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져오고
         // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 한다.
-        List<UserRecommendGame> userRecommendGames;
 
-        if (exclusiveGames.isEmpty()) {
-            userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId());
+        if (userRecommendGameRepository.existsByUser(loginUser)) {
+            List<UserRecommendGame> userRecommendGames;
+
+            if (exclusiveGames.isEmpty()) {
+                userRecommendGames = userRecommendGameRepository.findByUserId(loginUser.getId());
+            } else {
+                userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames);
+            }
+
+            gameRecommendRes = userRecommendGames.stream().parallel()
+                    .filter(userRecommendGame -> gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId))
+                    .limit(15)
+                    .map(userRecommendGame -> GameRecommendRes.builder()
+                            .gameId(userRecommendGame.getGame().getId())
+                            .appName(userRecommendGame.getGame().getAppName())
+                            .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                            .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                            .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                            .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
+                            .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
+                            .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                            .rating(userRecommendGame.getRating())
+                            .build()).collect(Collectors.toList());
         } else {
-            userRecommendGames = userRecommendGameRepository.findByUserIdAndExclusivesNotIn(loginUser.getId(), exclusiveGames);
+            List<UserRecommendGameInit> userRecommendGames;
+
+            // 3. 배제할 목록이 없다면 userRecommendGame 리스트를 다 가져와서 페이징 처리하고
+            // 배제할 목록이 있으면 userRecommendGame 리스트 중에 배제할 게임을 제거 후 페이징 처리한다.
+            if (exclusiveGames.isEmpty()) {
+                userRecommendGames = userRecommendGameInitRepository.findByMbtiAndGender(loginUser.getMbti(), loginUser.getGender());
+            } else {
+                userRecommendGames = userRecommendGameInitRepository.findByUserIdAndExclusivesNotIn(loginUser.getMbti(), loginUser.getGender(), exclusiveGames);
+            }
+
+            gameRecommendRes = userRecommendGames.stream().parallel()
+                    .filter(userRecommendGame -> gameGenreRepository.existsByGameAndGenreId(userRecommendGame.getGame(), genreId))
+                    .limit(15)
+                    .map(userRecommendGame -> GameRecommendRes.builder()
+                            .gameId(userRecommendGame.getGame().getId())
+                            .appName(userRecommendGame.getGame().getAppName())
+                            .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
+                            .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
+                            .videoUrl(userRecommendGame.getGame().getVideoUrl())
+                            .isJoined(userJoinGameRepository.existsByUserIdAndGameId(loginUser.getId(), userRecommendGame.getGame().getId()))
+                            .isOwned(userOwnGameRepository.existsByUserId(loginUser.getId()))
+                            .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
+                            .rating(userRecommendGame.getRating())
+                            .build()).collect(Collectors.toList());
         }
-
-        List<GameRecommendRes> gameRecommendRes = userRecommendGames.stream()
-                .filter(userRecommendGame -> gameGenreRepository.findByGameIdAndGenreId(userRecommendGame.getGame().getId(), genreId).isPresent())
-                .map(userRecommendGame -> GameRecommendRes.builder()
-                        .gameId(userRecommendGame.getGame().getId())
-                        .appName(userRecommendGame.getGame().getAppName())
-                        .backgroundImagePath(userRecommendGame.getGame().getBackgroundImagePath())
-                        .logoImagePath(userRecommendGame.getGame().getLogoImagePath())
-                        .videoUrl(userRecommendGame.getGame().getVideoUrl())
-                        .isJoined(userJoinGameRepository.existsByUserIdAndGameId(userRecommendGame.getUser().getId(), userRecommendGame.getGame().getId()))
-                        .isOwned(userOwnGameRepository.existsByUserId(userRecommendGame.getUser().getId()))
-                        .joinUserCount(userRecommendGame.getGame().getUserJoinGames().size())
-                        .rating(userRecommendGame.getRating())
-                        .build()).collect(Collectors.toList());
-
+        
         return gameRecommendRes;
     }
 

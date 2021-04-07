@@ -1,6 +1,7 @@
 package com.ssafy.gambti.repository.user;
 
 import com.ssafy.gambti.domain.game.Game;
+import com.ssafy.gambti.domain.user.User;
 import com.ssafy.gambti.domain.user.UserRecommendGame;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,8 @@ import java.util.Set;
 
 @Repository
 public interface UserRecommendGameRepository extends JpaRepository<UserRecommendGame, Long> {
+
+    boolean existsByUser(User user);
 
     Page<UserRecommendGame> findByUserId(String userId, Pageable pageable);
 
