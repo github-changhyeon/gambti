@@ -1,9 +1,11 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useContext } from "react";
 import styles from "../index.module.css";
 import { usePalette } from "react-palette";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { getGroupRoom } from "src/common/axios/Chat";
+import { UserContext } from "src/Context/UserContext";
+import { ChatContext } from "src/Context/ChatContext";
 
 export default function DetailMain({ propsGameInfo }) {
   const { data, loading, error } = usePalette(
@@ -11,11 +13,20 @@ export default function DetailMain({ propsGameInfo }) {
   );
   const wsThis = "/images/wordcloud/wc_" + propsGameInfo.gameId + ".png";
   const [isWC, setIsWC] = useState(false); // 밑에서 불러오기 !!
+  const user = useContext(UserContext);
+  const chatStore = useContext(ChatContext);
 
   const clickMatchFunc = () => {
     getGroupRoom(
+      { appName: propsGameInfo.appName, gameId: propsGameInfo.gameId },
       (response) => {
         console.log(response.data);
+        chatStore.dispatch({
+          type: "clickMatchBtn",
+          drawer: true,
+          chat: true,
+          roomId: response.data.data,
+        });
       },
       (error) => {
         console.log(error);
@@ -25,7 +36,7 @@ export default function DetailMain({ propsGameInfo }) {
 
   useEffect(() => {
     console.log(propsGameInfo);
-
+    console.log(chatStore);
     isImage();
   }, [propsGameInfo]);
 

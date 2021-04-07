@@ -138,7 +138,7 @@ export default function GamesorderBy({ propsMatch }) {
       >
         &nbsp;
       </Typography>
-      {/* <InfiniteScrollCard
+      <InfiniteScrollCard
         params={{
           type: 0,
           genreId: location.state.genre.id,
@@ -147,8 +147,8 @@ export default function GamesorderBy({ propsMatch }) {
           direction: "DESC",
         }}
         routerMatch={propsMatch}
-      ></InfiniteScrollCard> */}
-      <InfiniteScrollCard
+      ></InfiniteScrollCard>
+      {/* <InfiniteScrollCard
         params={{
           type: 0,
           genreId: 0,
@@ -157,7 +157,7 @@ export default function GamesorderBy({ propsMatch }) {
           direction: "DESC",
         }}
         routerMatch={propsMatch}
-      ></InfiniteScrollCard>
+      ></InfiniteScrollCard> */}
     </div>
   );
 }

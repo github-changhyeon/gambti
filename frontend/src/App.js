@@ -1,16 +1,18 @@
-import React, { useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { StylesProvider } from '@material-ui/core/styles';
-import Header from 'src/components/Header/Header';
-import Nav from 'src/components/Nav/Nav';
-import Footer from 'src/components/Footer/Footer';
-import routerInfo from 'src/constants/routerInfo';
-import fire from 'src/fire';
-import { UserContext, UserProvider } from 'src/Context/UserContext';
-import { FirebaseProvider } from 'src/Context/FirebaseContext';
-import firebase from 'firebase';
-import { useHistory } from 'react-router-dom';
-import ScrollToTop from 'src/components/ScrollToTop';
+import React, { useEffect, useContext } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { StylesProvider } from "@material-ui/core/styles";
+import Header from "src/components/Header/Header";
+import Nav from "src/components/Nav/Nav";
+import Footer from "src/components/Footer/Footer";
+import routerInfo from "src/constants/routerInfo";
+import fire from "src/fire";
+import { UserContext, UserProvider } from "src/Context/UserContext";
+import { FirebaseProvider } from "src/Context/FirebaseContext";
+import { ChatProvider } from "src/Context/ChatContext";
+
+import firebase from "firebase";
+import { useHistory } from "react-router-dom";
+import ScrollToTop from "src/components/ScrollToTop";
 
 import {
   Home,
@@ -32,7 +34,7 @@ import {
   NotFound,
   ActionUrlHandler,
   // KiHyeonTest
-} from './pages';
+} from "./pages";
 
 const AppRouter = () => {
   const user = useContext(UserContext);
@@ -44,9 +46,9 @@ const AppRouter = () => {
   useEffect(() => {
     // 로그인한 유저가 있다면 탭/브라우저 종료시 logout 을 실행한다.
     if (fire.auth) {
-      window.addEventListener('unload', logout);
+      window.addEventListener("unload", logout);
       return () => {
-        window.removeEventListener('unload', logout);
+        window.removeEventListener("unload", logout);
       };
     }
   });
@@ -56,7 +58,7 @@ const AppRouter = () => {
       .signOut()
       .then(() => {
         window.localStorage.clear();
-        history.push('/');
+        history.push("/");
       })
       .catch((error) => {
         // An error happened.
@@ -73,7 +75,7 @@ const AppRouter = () => {
         fire.auth
           .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
           .then(() => {
-            console.log('성공');
+            console.log("성공");
           })
           .catch((error) => {
             // Handle Errors here.
@@ -105,13 +107,23 @@ const NotLoginRouter = () => {
           <Route path={routerInfo.PAGE_URLS.LOGIN} component={Login} />
           <Route path={routerInfo.PAGE_URLS.SIGNUP} component={Signup} />
           <Route path={routerInfo.PAGE_URLS.CHECK_INFO} component={CheckInfo} />
-          <Route path={routerInfo.PAGE_URLS.CHECK_GAMBTI} component={CheckGambti} />
+          <Route
+            path={routerInfo.PAGE_URLS.CHECK_GAMBTI}
+            component={CheckGambti}
+          />
           <Route exact path={routerInfo.PAGE_URLS.FORGOT} component={Forgot} />
-          <Route path={routerInfo.PAGE_URLS.FORGOT_SENT} component={ForgotSent} />
+          <Route
+            path={routerInfo.PAGE_URLS.FORGOT_SENT}
+            component={ForgotSent}
+          />
           <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
           <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
           <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
-          <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
+          <Route
+            exact
+            path={routerInfo.PAGE_URLS.PROFILE}
+            component={Profile}
+          />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
           {/* <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} /> */}
@@ -131,15 +143,26 @@ const MainRouter = () => {
       <ScrollToTop>
         <Header isLogin={true} />
         <Nav />
-        <div style={{ paddingLeft: '64px' }}>
+        <div style={{ paddingLeft: "64px" }}>
           <Switch>
             <Route exact path={routerInfo.PAGE_URLS.HOME} component={Home} />
             <Route path={routerInfo.PAGE_URLS.GAMES} component={GenreGames} />
             <Route path={routerInfo.PAGE_URLS.SEARCH} component={Search} />
             <Route path={routerInfo.PAGE_URLS.DETAIL} component={Detail} />
-            <Route exact path={routerInfo.PAGE_URLS.PROFILE} component={Profile} />
-            <Route path={routerInfo.PAGE_URLS.PROFILE_EDIT} component={EditProfile} />
-            <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+            <Route
+              exact
+              path={routerInfo.PAGE_URLS.PROFILE}
+              component={Profile}
+            />
+            <Route
+              path={routerInfo.PAGE_URLS.PROFILE_EDIT}
+              component={EditProfile}
+            />
+            <Route
+              exact
+              path={routerInfo.PAGE_URLS.EMAIL_CONFIRM}
+              component={EmailConfirm}
+            />
             <Route path="/action-url-handler" component={ActionUrlHandler} />
             {/* <Route exact path={routerInfo.PAGE_URLS.KIHYEON_TEST} component={KiHyeonTest} /> */}
             <Route path="/test" component={Test} />
@@ -157,7 +180,11 @@ const EmailConfirmRouter = () => {
       <ScrollToTop>
         <Header isLogin={true} />
         <Switch>
-          <Route exact path={routerInfo.PAGE_URLS.EMAIL_CONFIRM} component={EmailConfirm} />
+          <Route
+            exact
+            path={routerInfo.PAGE_URLS.EMAIL_CONFIRM}
+            component={EmailConfirm}
+          />
           <Route path="/action-url-handler" component={ActionUrlHandler} />
           <Route path="/test" component={Test} />
           <Route path="*" component={NoAccess} />
@@ -170,16 +197,18 @@ const EmailConfirmRouter = () => {
 
 function App() {
   useEffect(() => {
-    console.log('app.js');
+    console.log("app.js");
   }, []);
 
   return (
     <StylesProvider injectFirst>
       <FirebaseProvider>
         <UserProvider>
-          <div className="App">
-            <AppRouter />
-          </div>
+          <ChatProvider>
+            <div className="App">
+              <AppRouter />
+            </div>
+          </ChatProvider>
         </UserProvider>
       </FirebaseProvider>
     </StylesProvider>
