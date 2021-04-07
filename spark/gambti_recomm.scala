@@ -1,14 +1,22 @@
+/*
+./bin/spark-shell --packages mysql:mysql-connector-java:8.0.23
+*/ 
+
 import java.util.Properties
 import org.apache.spark.sql._
 import spark.implicits._
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
 
+case class Genre(mgenre_id: Int, mgenre: String, sgenre_id: Int)
+case class mGenre(mgenre_id: Int, mbti: String, score: Double)
+case class gGenre(gender: Int, sgenre_id: Int)
+case class aGenre(age: Int, sgenre_id: Int)
+// case class resultData(id: Long, user_id: Long, game_id: Long, rating: Double)
+
 object Gambti {
-	case class Genre(mgenre_id: Int, mgenre: String, sgenre_id: Int)
-	case class mGenre(mgenre_id: Int, mbti: String, score: Double)
-	case class gGenre(gender: Int,sgenre_id: Int)
-	case class aGenre(age: Int,sgenre_id: Int)
 	
 	val url = "jdbc:mysql://gambtidb.c4kbbredlqua.ap-northeast-2.rds.amazonaws.com:3306/gambti?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8"
 	val prop = new Properties()
@@ -140,8 +148,8 @@ object Gambti {
 
 		val model = als.fit(user_game)
 
-		//모든 user에 대해서 10개의 게임 추천
-		val userRecs = model.recommendForAllUsers(20)
+		//모든 user에 대해서 100개의 게임 추천
+		val userRecs = model.recommendForAllUsers(100)
 
 		//user_id, game_id, rating 컬럼을 가지는 dataFrame으로 변환
 		val user_rec_game = userRecs.select($"no", explode($"recommendations")).select($"no", $"col.game_id", $"col.rating")
@@ -150,6 +158,7 @@ object Gambti {
 	}
 
 	def saveMariaDB(res_df: DataFrame, tname: String){
+		
 		res_df.write.mode(SaveMode.Overwrite).jdbc(url, tname, prop)
 		print("[*] Save MariaDB Success")
 	}
@@ -170,9 +179,16 @@ object Gambti {
 		val age_rating_df = calcAgeRating(game_genre_df)
 
 		val user_game = makeUserGameMatrix(user_df, game_df, mgame_rating_df, gender_rating_df, age_rating_df)
-
+		print("[+] ALS 모델 돌아가는 중")
+		
 		val user_rec_game = runAlsModel(user_game).withColumnRenamed("no", "user_id")
+		val w = Window.orderBy("user_id")
+		val add_index = user_rec_game.withColumn("id", row_number().over(w).cast(LongType))
+		val cast_type = add_index.withColumn("user_id", $"user_id".cast(LongType)).withColumn("game_id", $"game_id".cast(LongType)).withColumn("rating", $"rating".cast(DoubleType))
+		//id: Long, user_id: Long, game_id: Long, rating: Double 
 
-		saveMariaDB(user_rec_game, "user_recommend_game")
+		print("[+] 끝")
+		print("[+] DB저장 시작")
+		saveMariaDB(cast_type, "user_recommend_game")
 	}
 }
