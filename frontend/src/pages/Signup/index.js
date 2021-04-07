@@ -244,7 +244,6 @@ export default function Signup() {
               mbti: mbti,
               mbtiSub: mbtiSub,
               rooms: [],
-              friends: [],
               imgPath: basicImg,
             });
 
