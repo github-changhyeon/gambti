@@ -13,12 +13,12 @@ import FaceIcon from '@material-ui/icons/Face';
 import { UserContext } from 'src/Context/UserContext';
 import { event } from 'jquery';
 import Box from '@material-ui/core/Box';
-import NotiList from 'src/components/Notifications/NotiList';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import firebase from 'firebase';
 import Moment from 'react-moment';
 import MoodBadIcon from '@material-ui/icons/MoodBad';
 import Badge from '@material-ui/core/Badge';
+import { Today } from '@material-ui/icons';
 
 export default function Header({ isLogin }) {
   const history = useHistory();
@@ -46,7 +46,7 @@ export default function Header({ isLogin }) {
 
   const goProfile = (event) => {
     history.push({
-      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
+      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
         uid: user.uid,
       }),
     });
@@ -70,8 +70,10 @@ export default function Header({ isLogin }) {
     .collection('users')
     .doc(user.uid)
     .collection('notifications')
-    .where('type', '==', 'friend')
     .where('isRead', '==', false);
+  // .orderBy('timeStamp').startAfter(new Date());
+
+
 
   // 노티 읽어줌
   const ReadNoti = (userId) => {
@@ -112,6 +114,7 @@ export default function Header({ isLogin }) {
   // firestore timeStamp 변환
   function toDate(timestamp) {
     if (!timestamp) return null;
+    // console.log('timestamp', timestamp)
     const seconds = timestamp.seconds;
     const nanoseconds = timestamp.nanoseconds;
     return new firebase.firestore.Timestamp(seconds, nanoseconds).toDate();
@@ -279,7 +282,6 @@ export default function Header({ isLogin }) {
                 <AvatarComp
                   className={styles.dropbtn}
                   size="xsmall"
-                  badge="badge"
                   // textvalue={user.nickname}
                   // textvalue={user.nickname.substring(0, 1)}
                   imgPath={user.imgPath}

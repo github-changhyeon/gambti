@@ -19,6 +19,7 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
   // console.log("simpleUserInfo", simpleUserInfo);
 
   const clickAddBtn = () => {
+
     const token = localStorage.getItem("idToken");
     // console.log(token);
     if (token === null || token === undefined) {
@@ -144,39 +145,39 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
                   onClick={clickAddBtn}
                 ></ButtonComp>
               ) : //  친구 관계
-              simpleUserInfo.friendStatus === 1 ? (
-                <Button className={styles.fix_btn}>FRIEND</Button>
-              ) : // 요청 됨 SENT
-              simpleUserInfo.friendStatus === 2 ? (
-                <Button className={styles.fix_btn}>SENT</Button>
-              ) : // 요청 받은거 ACCEPT
-              simpleUserInfo.friendStatus === 3 ? (
-                <ButtonComp
-                  size="medium"
-                  joined={false}
-                  color="#ccff00"
-                  textvalue="ACCEPT"
-                  onClick={clickAddBtn}
-                ></ButtonComp>
-              ) : (
-                // 본인
-                <ButtonComp
-                  size="medium"
-                  joined={false}
-                  color="#ccff00"
-                  textvalue="PROFILE"
-                  onClick={() => {
-                    history.push({
-                      pathname: generatePath(
-                        routerInfo.PAGE_URLS.PROFILE_EDIT,
-                        {
-                          uid: userInfo.uid,
-                        }
-                      ),
-                    });
-                  }}
-                ></ButtonComp>
-              )
+                simpleUserInfo.friendStatus === 1 ? (
+                  <Button className={styles.fix_btn}>FRIEND</Button>
+                ) : // 요청 됨 SENT
+                  simpleUserInfo.friendStatus === 2 ? (
+                    <Button className={styles.fix_btn}>SENT</Button>
+                  ) : // 요청 받은거 ACCEPT
+                    simpleUserInfo.friendStatus === 3 ? (
+                      <ButtonComp
+                        size="medium"
+                        joined={false}
+                        color="#ccff00"
+                        textvalue="ACCEPT"
+                        onClick={clickAddBtn}
+                      ></ButtonComp>
+                    ) : (
+                      // 본인
+                      <ButtonComp
+                        size="medium"
+                        joined={false}
+                        color="#ccff00"
+                        textvalue="PROFILE"
+                        onClick={() => {
+                          history.push({
+                            pathname: generatePath(
+                              routerInfo.PAGE_URLS.PROFILE,
+                              {
+                                uid: userInfo.uid,
+                              }
+                            ),
+                          });
+                        }}
+                      ></ButtonComp>
+                    )
             }
             {/* <ButtonComp
           size="medium"

@@ -50,7 +50,7 @@ export default function ChatList({ showChat }) {
 
 
   useEffect(() => {
-    return fire.db.collection("rooms").onSnapshot((docs) => {
+    return fire.db.collection("rooms").orderBy("timestamp").onSnapshot((docs) => {
       if (docs.docChanges().length > 0)
         ReadChats(roomId);
     })

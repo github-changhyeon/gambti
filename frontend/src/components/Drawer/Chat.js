@@ -124,6 +124,11 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
         fire.db.collection('users').doc(youId).collection("newChats").doc(roomsId).set({
           new: true
         });
+        // fire.db.collection('rooms').doc(roomsId).update({
+        //   timestamp: timestamp,
+        // });
+
+
         //for debug
         // fire.db.collection('users').doc(user.uid).collection("newChats").doc(roomsId).set({
         //   new: true

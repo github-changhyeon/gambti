@@ -14,6 +14,7 @@ import { addFriend } from "src/common/axios/Friends";
 import RecommendedFriends from "src/components/RecommendedFriends/RecommendedFriends";
 import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
 import Button from "@material-ui/core/Button";
+import routerInfo from 'src/constants/routerInfo';
 import { Container, Grid } from "@material-ui/core";
 import GameCard from "src/components/GameCard/GameCard";
 import { getUserJoinGames } from "src/common/axios/Game";
@@ -178,44 +179,42 @@ export default function Profile({ match }) {
               {/* 버튼 구분 */}
               {
                 // 친구 요청됨
-                friendStatus === 0 ? (
+                friendStatus === 0 ?
                   <div className={styles.add_btn}>
                     <Button className={styles.fix_btn}>SEND</Button>
                   </div>
-                ) : // 친구 수락/ 거절
-                friendStatus === 1 ? (
-                  <div className={styles.add_btn}>
-                    <ButtonComp
-                      size="noti"
-                      color="#ccff00"
-                      textvalue="ACCEPT"
-                      onClick={() => {
-                        handleAddFriend(toUser);
-                      }}
-                    ></ButtonComp>
-                  </div>
-                ) : // 친구 관계
-                friendStatus === 2 ? (
-                  <div className={styles.add_btn}>
-                    <Button className={styles.fix_btn}>FRIEND</Button>
-                  </div>
-                ) : friendStatus === 3 ? (
-                  <div className={styles.add_btn}>
-                    <Button className={styles.fix_btn}>IT'S ME</Button>
-                  </div>
-                ) : (
-                  // 친구 추가
-                  <div className={styles.add_btn}>
-                    <ButtonComp
-                      size="noti"
-                      color="#ccff00"
-                      textvalue="ADD"
-                      onClick={() => {
-                        handleAddFriend(toUser);
-                      }}
-                    ></ButtonComp>
-                  </div>
-                )
+                  : // 친구 수락/ 거절
+                  friendStatus === 1 ?
+                    <div className={styles.add_btn}>
+                      <ButtonComp
+                        size="noti"
+                        color="#ccff00"
+                        textvalue="ACCEPT"
+                        onClick={() => {
+                          handleAddFriend(toUser);
+                        }}></ButtonComp>
+                    </div> :
+                    // 친구 관계
+                    friendStatus === 2 ?
+                      <div className={styles.add_btn}>
+                        <Button className={styles.fix_btn}>FRIEND</Button>
+                      </div> : friendStatus === 3 ?
+                        <div className={styles.add_btn}>
+                          <ButtonComp size='noti' color='#ccff00' textvalue='EDIT' onClick={() => {
+                            history.push({
+                              pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
+                                uid: fromUser.uid,
+                              }),
+                            });
+                          }}></ButtonComp>
+                        </div> :
+
+                        // 친구 추가
+                        <div className={styles.add_btn}>
+                          <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
+                            handleAddFriend(toUser);
+                          }}></ButtonComp>
+                        </div>
               }
             </div>
             <Divider
