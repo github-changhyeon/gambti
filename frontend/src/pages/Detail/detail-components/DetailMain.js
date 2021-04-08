@@ -1,18 +1,20 @@
-import { React, useEffect, useState, useContext } from 'react';
-import styles from '../index.module.css';
-import { usePalette } from 'react-palette';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { getGroupRoom } from 'src/common/axios/Chat';
-import { UserContext } from 'src/Context/UserContext';
-import { ChatContext } from 'src/Context/ChatContext';
+import { React, useEffect, useState, useContext } from "react";
+import styles from "../index.module.css";
+import { usePalette } from "react-palette";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { getGroupRoom } from "src/common/axios/Chat";
+import { UserContext } from "src/Context/UserContext";
+import { ChatContext } from "src/Context/ChatContext";
 
 export default function DetailMain({ propsGameInfo }) {
   const user = useContext(UserContext);
-  const { data, loading, error } = usePalette(propsGameInfo.backgroundImagePath);
+  const { data, loading, error } = usePalette(
+    propsGameInfo.backgroundImagePath
+  );
 
-  const mbtiMatch = '/images/mbti_chemistry/' + user.mbti + '.png';
-  const wcThis = '/images/wordcloud/wc_' + propsGameInfo.gameId + '.png';
+  const mbtiMatch = "/images/mbti_chemistry/" + user.mbti + ".png";
+  const wcThis = "/images/wordcloud/wc_" + propsGameInfo.gameId + ".png";
   const [isWC, setIsWC] = useState(false); // 밑에서 불러오기 !!
   const chatStore = useContext(ChatContext);
 
@@ -20,9 +22,8 @@ export default function DetailMain({ propsGameInfo }) {
     getGroupRoom(
       { appName: propsGameInfo.appName, gameId: propsGameInfo.gameId },
       (response) => {
-        console.log(response.data);
         chatStore.dispatch({
-          type: 'clickMatchBtn',
+          type: "clickMatchBtn",
           drawer: true,
           chat: true,
           roomId: response.data.data,
@@ -35,8 +36,6 @@ export default function DetailMain({ propsGameInfo }) {
   };
 
   useEffect(() => {
-    console.log(propsGameInfo);
-    console.log(chatStore);
     isImage();
   }, [propsGameInfo]);
 
@@ -45,31 +44,37 @@ export default function DetailMain({ propsGameInfo }) {
     img.src = wcThis;
 
     img.onload = function () {
-      console.log('워드클라우드 있지롱');
       setIsWC(true);
     };
 
     img.onerror = function () {
-      console.log('워드클라우드 없어 ㅠㅠㅠ');
       setIsWC(false);
     };
   }
 
   return (
     <div className={styles.detail_main_container}>
-      <div style={{ paddingLeft: '110px' }}>
+      <div style={{ paddingLeft: "110px" }}>
         <Typography className={styles.detail_main_default_title}>
           {propsGameInfo.appName}
         </Typography>
       </div>
       <div className={styles.detail_main_root}>
         {user.isLoggedIn ? (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
-              <Typography className={styles.detail_main_title}>This is for you!</Typography>
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                This is for you!
+              </Typography>
             </div>
             <div className={styles.detail_main_contents}>
-              <img src={mbtiMatch} className={styles.detail_main_contents}></img>
+              <img
+                src={mbtiMatch}
+                className={styles.detail_main_contents}
+              ></img>
             </div>
             <div className={styles.detail_div_center}>
               <Button
@@ -84,21 +89,34 @@ export default function DetailMain({ propsGameInfo }) {
             </div>
           </div>
         ) : (
-          ''
+          ""
         )}
         {propsGameInfo.videoUrl === null ? (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
-              <Typography className={styles.detail_main_title}>Main Image</Typography>
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                Main Image
+              </Typography>
             </div>
             <div className={styles.detail_main_contents}>
-              <img src={propsGameInfo.logoImagePath} className={styles.detail_main_contents}></img>
+              <img
+                src={propsGameInfo.logoImagePath}
+                className={styles.detail_main_contents}
+              ></img>
             </div>
           </div>
         ) : (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
-              <Typography className={styles.detail_main_title}>Intro Video</Typography>
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                Intro Video
+              </Typography>
             </div>
             <div className={styles.detail_main_contents}>
               <video
@@ -115,9 +133,14 @@ export default function DetailMain({ propsGameInfo }) {
           </div>
         )}
         {isWC ? (
-          <div className={styles.detail_main_item} style={{ borderColor: data.lightVibrant }}>
-            <div style={{ padding: '10px 0' }}>
-              <Typography className={styles.detail_main_title}>Word Cloud</Typography>
+          <div
+            className={styles.detail_main_item}
+            style={{ borderColor: data.lightVibrant }}
+          >
+            <div style={{ padding: "10px 0" }}>
+              <Typography className={styles.detail_main_title}>
+                Word Cloud
+              </Typography>
               <Typography className={styles.detail_main_title_plus}>
                 about {propsGameInfo.appName}
               </Typography>
@@ -127,7 +150,7 @@ export default function DetailMain({ propsGameInfo }) {
             </div>
           </div>
         ) : (
-          ''
+          ""
         )}
       </div>
     </div>

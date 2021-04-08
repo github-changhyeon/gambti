@@ -41,7 +41,6 @@ export default function GenreRecommendedGames({ propsMatch }) {
               if (user.isLoggedIn) {
                 gameInfos = response.data.data;
               }
-              console.log("이녀석", gameInfos);
               let tempVideoAndCards = new Array();
               let tempRecommendedCards = new Array();
               for (let i = 0; i < gameInfos.length; ++i) {
@@ -112,7 +111,6 @@ export default function GenreRecommendedGames({ propsMatch }) {
         if (user.isLoggedIn) {
           gameInfos = response.data.data;
         }
-        console.log("이녀석", gameInfos);
         let tempVideoAndCards = new Array();
         let tempRecommendedCards = new Array();
         for (let i = 0; i < gameInfos.length; ++i) {
@@ -195,7 +193,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
             }}
           >
             <Typography
-              variant="h7"
+              variant="body1"
               className={styles.dataLoading}
               data-text="데이터를 받아오는 중입니다."
               style={{
@@ -221,7 +219,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
             }}
           >
             <Typography
-              variant="h7"
+              variant="body1"
               className={styles.dataLoading}
               data-text="추천 데이터가 없습니다."
               style={{
@@ -261,7 +259,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
             }}
           >
             <Typography
-              variant="h7"
+              variant="body1"
               className={styles.dataLoading}
               data-text="데이터를 받아오는 중입니다."
               style={{
@@ -286,7 +284,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
             }}
           >
             <Typography
-              variant="h7"
+              variant="body1"
               className={styles.dataLoading}
               data-text="추천 데이터가 없습니다."
               style={{

@@ -28,20 +28,17 @@ export default function YoutubeCard({ propsYoutubeInfo }) {
 
   useEffect(() => {
     const randomNum = Math.floor(Math.random() * 5);
-    console.log("random?", randomNum);
     axios
       .get(
         `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${propsYoutubeInfo.videoId}&maxResults=10&key=${keyArr[randomNum]}`
       )
       .then((video) => {
-        console.log("비디오", video);
         setViewCount(
           Number(video.data.items[0].statistics.viewCount).toLocaleString("en")
         );
       })
       .catch((error) => {
         console.log(error);
-        console.log("error : 유튜브 api 일일 할당량 초과");
       });
     axios
       .get(
@@ -49,11 +46,9 @@ export default function YoutubeCard({ propsYoutubeInfo }) {
       )
       .then((channel) => {
         setChannelImage(channel.data.items[0].snippet.thumbnails.medium.url);
-        console.log("채널", channel);
       })
       .catch((error) => {
         console.log(error);
-        console.log("error : 유튜브 api 일일 할당량 초과");
       });
   }, []);
 
