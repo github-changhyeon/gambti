@@ -58,14 +58,14 @@ export default function EditProfile() {
         idToken,
         param,
         (response) => {
-          console.log(response, 'response');
-          if (!response.data.status) {
+          // console.log(response, 'response');
+          if (!response.data) {
           } else {
-            console.log(response.data.message);
+            // console.log(response.data.message);
           }
         },
         (error) => {
-          console.log('nick', error);
+          // console.log('nick', error);
         }
       );
 
