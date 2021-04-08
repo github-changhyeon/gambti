@@ -1,24 +1,24 @@
-import React, { useContext, useEffect } from 'react';
-import styles from './Header.module.css';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import AvatarComp from 'src/components/AvatarComp/AvatarComp';
-import { useHistory, generatePath } from 'react-router';
-import routerInfo from 'src/constants/routerInfo';
-import Button from '@material-ui/core/Button';
-import fire from 'src/fire';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import FaceIcon from '@material-ui/icons/Face';
-import { UserContext } from 'src/Context/UserContext';
-import { event } from 'jquery';
-import Box from '@material-ui/core/Box';
-import ButtonComp from 'src/components/ButtonComp/ButtonComp';
-import firebase from 'firebase';
-import Moment from 'react-moment';
-import MoodBadIcon from '@material-ui/icons/MoodBad';
-import Badge from '@material-ui/core/Badge';
-import { Today } from '@material-ui/icons';
+import React, { useContext, useEffect } from "react";
+import styles from "./Header.module.css";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AvatarComp from "src/components/AvatarComp/AvatarComp";
+import { useHistory, generatePath } from "react-router";
+import routerInfo from "src/constants/routerInfo";
+import Button from "@material-ui/core/Button";
+import fire from "src/fire";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import FaceIcon from "@material-ui/icons/Face";
+import { UserContext } from "src/Context/UserContext";
+import { event } from "jquery";
+import Box from "@material-ui/core/Box";
+import ButtonComp from "src/components/ButtonComp/ButtonComp";
+import firebase from "firebase";
+import Moment from "react-moment";
+import MoodBadIcon from "@material-ui/icons/MoodBad";
+import Badge from "@material-ui/core/Badge";
+import { Today } from "@material-ui/icons";
 
 export default function Header({ isLogin }) {
   const history = useHistory();
@@ -26,7 +26,7 @@ export default function Header({ isLogin }) {
   const [isShownNoti, setIsShownNoti] = React.useState(false);
   const [isNoti, setIsNoti] = React.useState(false);
   const [notiCount, setNotiCount] = React.useState(0);
-  const [searchWord, setSearchWord] = React.useState('');
+  const [searchWord, setSearchWord] = React.useState("");
 
   // console.log(user);
 
@@ -35,9 +35,9 @@ export default function Header({ isLogin }) {
     fire.auth
       .signOut()
       .then(() => {
-        history.push('/');
+        history.push("/");
         window.localStorage.clear();
-        alert('로그아웃 되었습니다 !!');
+        alert("로그아웃 되었습니다 !!");
       })
       .catch((error) => {
         // An error happened.
@@ -66,14 +66,8 @@ export default function Header({ isLogin }) {
     return ReadNoti(user.uid);
   }, []);
 
-  const docs = fire.db
-    .collection('users')
-    .doc(user.uid)
-    .collection('notifications')
-    .where('isRead', '==', false);
+  const docs = fire.db.collection("users").doc(user.uid).collection("notifications").where("isRead", "==", false);
   // .orderBy('timeStamp').startAfter(new Date());
-
-
 
   // 노티 읽어줌
   const ReadNoti = (userId) => {
@@ -81,7 +75,7 @@ export default function Header({ isLogin }) {
     docs.onSnapshot((snapshot) => {
       let isRemoved = false;
       const changes = snapshot.docChanges().map((change) => {
-        if (change.type === 'removed') {
+        if (change.type === "removed") {
           isRemoved = true;
           return notiRef.current.filter((item, i) => item.id != change.doc.id);
         }
@@ -105,7 +99,7 @@ export default function Header({ isLogin }) {
       }),
     });
     setIsNoti(false);
-    fire.db.collection('users').doc(user.uid).collection('notifications').doc(noti.id).update({
+    fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).update({
       isRead: true,
     });
     // console.log('noti', noti.data().isRead);
@@ -124,7 +118,7 @@ export default function Header({ isLogin }) {
   const handleClearNoti = () => {
     setIsNoti(false);
     notiList.map((noti) => {
-      fire.db.collection('users').doc(user.uid).collection('notifications').doc(noti.id).delete();
+      fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).delete();
     });
     return setNotiList([]);
   };
@@ -138,16 +132,8 @@ export default function Header({ isLogin }) {
             history.push(routerInfo.PAGE_URLS.HOME);
           }}
         >
-          <img
-            className={styles.header_logo_icon}
-            src="/images/gambti/gambti_icon.png"
-            alt="icon"
-          />
-          <img
-            className={styles.header_logo_text}
-            src="/images/gambti/gambti_logo.png"
-            alt="logo"
-          />
+          <img className={styles.header_logo_icon} src="/images/gambti/gambti_icon.png" alt="icon" />
+          <img className={styles.header_logo_text} src="/images/gambti/gambti_logo.png" alt="logo" />
         </div>
       </div>
       <div className={styles.header_center}>
@@ -157,14 +143,14 @@ export default function Header({ isLogin }) {
         <InputBase
           className={styles.input_root}
           placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
+          inputProps={{ "aria-label": "search" }}
           value={searchWord}
           onChange={(event) => {
             inputChangeFunc(event);
           }}
           onKeyPress={(event) => {
-            if (event.key === 'Enter') {
-              setSearchWord(''); // 검색 후 searchWord 초기화
+            if (event.key === "Enter") {
+              setSearchWord(""); // 검색 후 searchWord 초기화
               history.push({
                 pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
                 search: `?word=${searchWord}`,
@@ -181,7 +167,7 @@ export default function Header({ isLogin }) {
             {/* 로그인 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: '54px', width: '65px' }}
+              style={{ height: "54px", width: "65px" }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.LOGIN);
               }}
@@ -191,7 +177,7 @@ export default function Header({ isLogin }) {
             {/* 회원가입 버튼 */}
             <div
               className={styles.header_right_item}
-              style={{ height: '54px', width: '65px' }}
+              style={{ height: "54px", width: "65px" }}
               onClick={() => {
                 history.push(routerInfo.PAGE_URLS.CHECK_GAMBTI);
               }}
@@ -214,10 +200,7 @@ export default function Header({ isLogin }) {
               }}
             >
               <Badge badgeContent={notiList.length} color="primary">
-                <NotificationsIcon
-                  className={styles.header_right_icon}
-                  style={{ color: '#d1d1d1' }}
-                />
+                <NotificationsIcon className={styles.header_right_icon} style={{ color: "#d1d1d1" }} />
               </Badge>
 
               {isShownNoti && !isNoti && <div className={styles.textarea}>Notifications</div>}
@@ -231,10 +214,12 @@ export default function Header({ isLogin }) {
                     <div className={styles.root}>
                       {notiList.length === 0 ? (
                         <div className={styles.no_noti}>
-                          <div>
-                            <MoodBadIcon className={styles.sad_icon} />
+                          <div className={styles.eyes}>
+                            <div className={styles.eye}></div>
+                            <div className={styles.eye}></div>
                           </div>
-                          <div style={{ marginTop: '1rem' }}>새로운 알람이 없습니다.</div>
+                          <div className={styles.sad}></div>
+                          <div style={{ fontFamily: "DungGeunMo", zIndex: "500" }}>새로운 알람이 없습니다.</div>
                         </div>
                       ) : (
                         <div>
@@ -250,10 +235,7 @@ export default function Header({ isLogin }) {
                               >
                                 {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
                                 <div className={styles.cart_item}>
-                                  <div className={styles.cart_item_header}>
-                                    {' '}
-                                    {noti.data().message}
-                                  </div>
+                                  <div className={styles.cart_item_header}> {noti.data().message}</div>
                                   <Moment className={styles.cart_item_date} format="MM.DD HH:mm">
                                     {time}
                                   </Moment>
@@ -266,12 +248,7 @@ export default function Header({ isLogin }) {
                     </div>
                   </div>
                   <div className={styles.button}>
-                    <ButtonComp
-                      textvalue="Clear"
-                      size="noti"
-                      color="#ccff00"
-                      onClick={handleClearNoti}
-                    />
+                    <ButtonComp textvalue="Clear" size="noti" color="#ccff00" onClick={handleClearNoti} />
                   </div>
                 </Box>
               </div>
