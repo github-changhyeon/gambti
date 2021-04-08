@@ -1,7 +1,6 @@
 package com.ssafy.gambti.utils;
 
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.messaging.*;
@@ -71,7 +70,7 @@ public class NotificationUtils {
         docData.put("senderUid",notificationDto.getSenderUid());
         docData.put("url",notificationDto.getUrl());
         docData.put("type", notificationDto.getType());
-        docData.put("timeStamp", FieldValue.serverTimestamp());
+        docData.put("timeStamp", System.currentTimeMillis());
         docData.put("isRead",false);
 
         notiRef.add(docData);

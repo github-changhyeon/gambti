@@ -257,7 +257,7 @@ public class RoomService {
                     usersData.put("1", myUid);
 
                     docData.put("users", usersData);
-                    docData.put("timestamp", FieldValue.serverTimestamp());
+                    docData.put("timestamp", System.currentTimeMillis());
                     roomsRef.document(uuid).set(docData);
 
                     //유저 데이터에 방 목록을 넣는다.
