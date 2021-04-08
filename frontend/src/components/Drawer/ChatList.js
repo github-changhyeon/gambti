@@ -53,19 +53,15 @@ export default function ChatList({ showChat }) {
   }, []);
 
   useEffect(() => {
-    return fire.db
-      .collection("rooms")
-      .orderBy("timestamp")
-      .onSnapshot((docs) => {
-        if (docs.docChanges().length > 0) ReadChats(roomId);
-      });
+    ReadChats(roomId);
   }, []);
+
+
 
   const ReadChats = async (roomIds) => {
     // map을 햇을경우 promise 약속값이 가지고 잇음
     const roomInfosPromise = roomIds.map((roomId) => {
-      return fire.db
-        .collection("rooms")
+      return fire.db.collection("rooms")
         .doc(roomId)
         .get()
         .then((doc) => {
@@ -91,8 +87,16 @@ export default function ChatList({ showChat }) {
         });
     });
 
-    const extendedRoomInfos = await Promise.all(extendedRoomInfosPromise);
-    setChatList(extendedRoomInfos);
+    let extendedRoomInfos = await Promise.all(extendedRoomInfosPromise);
+    // let tempArray = extendedRoomInfos;
+    let tempArray = new Array();
+    extendedRoomInfos.forEach((item, i) => {
+      tempArray.push(item);
+    })
+    // console.log(tempArray);
+    // console.log('reverse', tempArray.reverse());
+
+    setChatList(tempArray.reverse());
   };
 
   useEffect(() => {
