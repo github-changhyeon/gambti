@@ -171,7 +171,7 @@ export default function EditProfile() {
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="00"
+          indicatorColor="primary"
           style={{ color: "white", margin: "0rem 0rem 0rem 3rem" }}
         >
           <Tab label="MY PROFILE" {...a11yProps(0)} className={styles.tab} />
