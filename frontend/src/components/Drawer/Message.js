@@ -35,7 +35,7 @@ export default function Message({ roomId }) {
       .onSnapshot((snapshot) => {
         // changes에 변화된 값만 넣어서 return
         const changes = snapshot.docChanges().map((change) => {
-          console.log(change.type);
+          // console.log('chat_timeStamp', change.doc.data());
           return change.doc.data();
         });
 

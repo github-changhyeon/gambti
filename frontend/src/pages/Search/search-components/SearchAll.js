@@ -8,6 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useHistory, generatePath, useLocation } from "react-router-dom";
 import routerInfo from "src/constants/routerInfo";
+
+
 import queryString from "query-string";
 
 export default function SearchAll({ propsGames, propsUsers }) {
@@ -106,6 +108,17 @@ export default function SearchAll({ propsGames, propsUsers }) {
                 propsUser={{
                   nickname: user.nickname,
                   email: user.email,
+                  imgPath: user.imgPath,
+                }}
+                onClick={() => {
+                  history.push({
+                    pathname: generatePath(
+                      routerInfo.PAGE_URLS.PROFILE,
+                      {
+                        uid: user.uid,
+                      }
+                    ),
+                  });
                 }}
               />
               {/* <Divider light={true} className={styles.profile_divider} /> */}

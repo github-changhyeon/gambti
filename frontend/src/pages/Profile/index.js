@@ -14,6 +14,7 @@ import { addFriend } from 'src/common/axios/Friends';
 import RecommendedFriends from 'src/components/RecommendedFriends/RecommendedFriends';
 import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
 import Button from "@material-ui/core/Button";
+import routerInfo from 'src/constants/routerInfo';
 
 
 
@@ -162,7 +163,13 @@ export default function Profile({ match }) {
                         <Button className={styles.fix_btn}>FRIEND</Button>
                       </div> : friendStatus === 3 ?
                         <div className={styles.add_btn}>
-                          <Button className={styles.fix_btn}>IT'S ME</Button>
+                          <ButtonComp size='noti' color='#ccff00' textvalue='EDIT' onClick={() => {
+                            history.push({
+                              pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
+                                uid: fromUser.uid,
+                              }),
+                            });
+                          }}></ButtonComp>
                         </div> :
 
                         // 친구 추가
