@@ -6,6 +6,9 @@ import Chat from './Chat';
 import { UserContext } from 'src/Context/UserContext';
 import fire from 'src/fire';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
+import PlacesRoomService from "material-ui/svg-icons/places/room-service";
+import { ChatContext } from "src/Context/ChatContext";
+
 
 
 
@@ -27,6 +30,9 @@ export default function ChatList({ showChat }) {
   chatRef.current = chatList;
 
   const user = useContext(UserContext);
+  const chatStore = useContext(ChatContext);
+
+
   const roomId = user.rooms;
 
   useEffect(() => {
@@ -77,6 +83,26 @@ export default function ChatList({ showChat }) {
     setChatList(extendedRoomInfos);
   }
   // console.log('chatList', chatList);
+
+  useEffect(() => {
+    console.log("isChatOpen");
+    if (chatStore.state.isChatOpen) {
+      setCurrentRoomId(chatStore.state.roomId);
+      fire.db
+        .collection("rooms")
+        .doc(chatStore.state.roomId)
+        .get()
+        .then((doc) => {
+          console.log("새벽6시반", doc.data());
+          setChat(true);
+          setCurrentRoom(doc.data());
+        });
+    } else {
+      setCurrentRoomId(chatStore.state.roomId);
+
+      setChat(false);
+    }
+  }, [chatStore.state.isChatOpen]);
 
 
 
@@ -183,9 +209,9 @@ export default function ChatList({ showChat }) {
                   <Chat currentRoomId={currentRoomId} chat={chat} currentRoom={currentRoom} />
               }
             </div> :
-            <div>
+            <>
 
-            </div>
+            </>
 
         }
       </div>
