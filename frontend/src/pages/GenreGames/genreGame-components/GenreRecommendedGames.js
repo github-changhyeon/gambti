@@ -192,7 +192,7 @@ export default function GenreRecommendedGames({ propsMatch }) {
               alignItems: "center",
             }}
           >
-            <div style={{ width: "85%" }}>
+            <div style={{ width: "90%" }}>
               <Carousel slides={videoAndCards} />
             </div>
           </div>
