@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import styles from './Chat.module.css';
 import CloseButton from 'src/components/CloseButton/CloseButton';
-import InputBase from "@material-ui/core/InputBase";
+import Input from "@material-ui/core/InputBase";
 import MediumProfile from "src/components/MediumProfile/MediumProfile";
 import SmallProfile from "src/components/SmallProfile/SmallProfile";
 import NearMeIcon from '@material-ui/icons/NearMe';
@@ -141,7 +141,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
 
 
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'column'}}>
       {
         close ? (
           <div className={styles.chat}>
@@ -194,13 +194,13 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
               {/* Chat Message */}
               <Box className={styles.box}>
                 <div className={styles.message}>
-                  {chatRoomId ? <Message roomId={chatRoomId} /> : null}
+                  {chatRoomId ? <Message roomId={chatRoomId} /> : <></>}
                 </div>
               </Box>
               {/* Input */}
               <div className={styles.input_position}>
                 <div className={styles.input}>
-                  <InputBase
+                  <Input
                     className={styles.input_root}
                     placeholder="메시지를 입력하세요"
                     inputProps={{ "aria-label": "search" }}
