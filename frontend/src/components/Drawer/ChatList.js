@@ -37,23 +37,22 @@ export default function ChatList({ showChat }) {
 
   useEffect(() => {
     return fire.db.collection("users").doc(user.uid).collection("newChats").onSnapshot((docs) => {
+      // console.log('newChats');
       const newChats = docs.docs.filter(d => d.data().new === true).map((doc) => {
         return doc.id;
       });
       setNewChatsIds(newChats);
-      console.log("display new to following: ", newChats);
+      // console.log("display new to following: ", newChats);
     })
   }, [])
 
 
   useEffect(() => {
-
     return fire.db.collection("rooms").onSnapshot((docs) => {
       if (docs.docChanges().length > 0)
         ReadChats(roomId);
     })
-    // console.log('mount');
-  }, [chatList]);
+  }, []);
 
 
 
