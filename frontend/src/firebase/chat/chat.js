@@ -12,9 +12,8 @@ async function getFriends() {
       });
     })
     .catch((error) => {
-      console.log("리스트 불러오기 실패 : ", error);
+      console.log(error);
     });
-  // console.log(docs);
   return docs;
 }
 //내가 포함된 채팅방 받아오기
@@ -29,7 +28,7 @@ async function getChatRooms() {
       docs = list.data().rooms;
     })
     .catch((error) => {
-      console.log("리스트 불러오기 실패 : ", error);
+      console.log(error);
     });
   return docs;
 }
@@ -38,13 +37,11 @@ async function getChatRooms() {
 async function makeOneOnOneChatRoom(friendUid) {
   if (friendUid == undefined || friendUid == null) return;
   const myUid = fire.auth.currentUser.uid;
-  console.log("방만들자", friendUid);
   getChatRoomId(friendUid);
 }
 
 // Saves a new message to your Cloud Firestore database.
 function sendMessage(roomsId, messageText) {
-  console.log(roomsId, messageText);
   var timestamp = +new Date();
   return fire.db
     .collection("rooms")
@@ -64,7 +61,6 @@ function sendMessage(roomsId, messageText) {
 //선택한 유저에 대한 채팅방 id 받기
 function getChatRoomId(fUid) {
   //axios
-  console.log("채틷id받자", fUid);
   const token = localStorage.getItem("idToken");
   const options = {
     url: `${process.env.REACT_APP_BASE_URL}/v1/rooms/get`,
@@ -80,7 +76,7 @@ function getChatRoomId(fUid) {
     },
   };
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  axios(options).then((response) => console.log(response));
+  axios(options).then((response) => {});
 }
 //목록 가지고 오기 OK
 async function getRooms(myUid) {
@@ -91,7 +87,6 @@ async function getRooms(myUid) {
     .get()
     .then((list) => {
       rooms = list.data().rooms;
-      console.log("방 목록 : " + rooms);
     });
   return rooms;
 }
@@ -108,10 +103,8 @@ function readMessage(chatRoomId) {
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         var message = change.doc.data();
-        console.log("message가자", message);
         docs.push(message);
       });
-      console.log("docs", docs);
     });
   return docs;
 }

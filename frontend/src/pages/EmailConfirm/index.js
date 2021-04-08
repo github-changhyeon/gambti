@@ -1,11 +1,11 @@
-import React, { useEffect, useContext } from 'react';
-import styles from './index.module.css';
-import { useHistory } from 'react-router-dom';
-import fire from 'src/fire';
-import { UserContext } from 'src/Context/UserContext';
-import background from 'src/Images/background.jpg';
-import ButtonComp from 'src/components/ButtonComp/ButtonComp';
-import NeonButton from 'src/components/NeonButton/NeonButton';
+import React, { useEffect, useContext } from "react";
+import styles from "./index.module.css";
+import { useHistory } from "react-router-dom";
+import fire from "src/fire";
+import { UserContext } from "src/Context/UserContext";
+import background from "src/Images/background.jpg";
+import ButtonComp from "src/components/ButtonComp/ButtonComp";
+import NeonButton from "src/components/NeonButton/NeonButton";
 
 export default function EmailConfirm() {
   const history = useHistory();
@@ -20,10 +20,12 @@ export default function EmailConfirm() {
     currentUser
       .sendEmailVerification()
       .then(() => {
-        alert('이메일 인증메일을 재발송 했습니다. 이메일을 확인해주세요.');
+        alert("이메일 인증메일을 재발송 했습니다. 이메일을 확인해주세요.");
       })
       .catch((err) => {
-        alert('인증메일이 발송된지 얼마지나지 않았습니다.이메일에서 인증메일을 확인해주세요.');
+        alert(
+          "인증메일이 발송된지 얼마지나지 않았습니다.이메일에서 인증메일을 확인해주세요."
+        );
       });
   };
 
@@ -33,21 +35,12 @@ export default function EmailConfirm() {
       .signOut()
       .then(() => {
         window.localStorage.clear();
-        history.push('/');
+        history.push("/");
       })
       .catch((error) => {
         // An error happened.
       });
   };
-
-  // useEffect(() => {
-  //   if (user.emailVerified) {
-  //     // console.log('go');
-  //     history.push('/');
-  //   }
-  //   console.log(currentUser);
-  //   console.log(user);
-  // }, []);
 
   return (
     <div
@@ -58,7 +51,11 @@ export default function EmailConfirm() {
     >
       <div className={styles.background}>
         <form className={styles.root}>
-          <img className={styles.logo} src="/images/gambti/welcome_to_gambti.png" alt="logo" />
+          <img
+            className={styles.logo}
+            src="/images/gambti/welcome_to_gambti.png"
+            alt="logo"
+          />
           <div className={styles.button_group}>
             <div className={styles.button}>
               <NeonButton onClick={reSend} textValue="Send Again"></NeonButton>

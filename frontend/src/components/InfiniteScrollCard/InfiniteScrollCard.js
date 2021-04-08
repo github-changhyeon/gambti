@@ -30,21 +30,8 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  // $(".close")
-  //   .off()
-  //   .on("click", function () {
-  //     // alert("haha");
-  //     console.log("안녕", this);
-  //     var $target = $(this).parents(".abc");
-  //     console.log($target);
-  //     $target.hide("slow", function () {
-  //       $target.css("display", "none");
-  //     });
-  //   });
-
   const clickDeleteBtnFunc = (params) => {
     let $pTarget = $(params.element.target).parents(".parentGrid");
-    console.log($pTarget);
     $pTarget.hide("slow", function () {
       $pTarget.css("display", "none");
     });
@@ -85,8 +72,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           colName: colName,
         },
         (response) => {
-          console.log("무한스크롤", response.data.data.content);
-          console.log("여기야", pageNum);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
           setPageNum((pageNum) => pageNum + 1);
@@ -109,7 +94,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           colName: "appName",
         },
         (response) => {
-          console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
           setPageNum((pageNum) => pageNum + 1);
@@ -134,7 +118,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           colName: "nickname",
         },
         (response) => {
-          console.log("무한스크롤", response.data.data.content);
           // setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
           let tempArr = new Array();
@@ -144,8 +127,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
               .doc(response.data.data.content[i].userId)
               .get()
               .then((user) => {
-                console.log("유저");
-                console.log("유저", user.data());
                 if (user.data() !== null && user.data() !== undefined) {
                   tempArr.push(response.data.data.content[i]);
                 }
@@ -170,8 +151,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
       );
     } else if (params.type === 3) {
       // recommends
-      console.log("왜0?", pageNum);
-      console.log("요기지/");
       getRecommendedGames(
         {
           isLogin: user.isLoggedIn,
@@ -180,7 +159,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           size: size,
         },
         (response) => {
-          console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
 
@@ -279,7 +257,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           }}
         >
           <Typography
-            variant="h7"
+            variant="body1"
             className={styles.dataLoading}
             data-text="데이터를 받아오는 중입니다."
             style={{
@@ -305,7 +283,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           }}
         >
           <Typography
-            variant="h7"
+            variant="body1"
             style={{
               color: "white",
               margin: "10px 0px 0px 0px",

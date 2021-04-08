@@ -43,14 +43,12 @@ export default function ChatList({ showChat }) {
       .doc(user.uid)
       .collection("newChats")
       .onSnapshot((docs) => {
-        // console.log('newChats');
         const newChats = docs.docs
           .filter((d) => d.data().new === true)
           .map((doc) => {
             return doc.id;
           });
         setNewChatsIds(newChats);
-        // console.log("display new to following: ", newChats);
       });
   }, []);
 
@@ -80,7 +78,6 @@ export default function ChatList({ showChat }) {
       if (!roomInfo?.users) return undefined;
       const otherUser =
         roomInfo.users[1] !== user.uid ? roomInfo.users[1] : roomInfo.users[2];
-      // console.log('otherUser', roomInfo, otherUser);
       return fire.db
         .collection("users")
         .doc(otherUser)
@@ -101,10 +98,8 @@ export default function ChatList({ showChat }) {
 
     setChatList(tempArray.reverse());
   };
-  // console.log('chatList', chatList);
 
   useEffect(() => {
-    console.log("isChatOpen");
     if (chatStore.state.isChatOpen) {
       setCurrentRoomId(chatStore.state.roomId);
       fire.db
@@ -112,7 +107,6 @@ export default function ChatList({ showChat }) {
         .doc(chatStore.state.roomId)
         .get()
         .then((doc) => {
-          console.log("새벽6시반", doc.data());
           setChat(true);
           setCurrentRoom(doc.data());
         });

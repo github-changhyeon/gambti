@@ -1,13 +1,12 @@
-import React, { useEffect, useContext } from 'react';
-import styles from './ChangePassword.module.css';
-import fire from 'src/fire';
-import qs from 'query-string';
-import { useHistory } from 'react-router';
-import background from 'src/Images/background.jpg';
-import ButtonComp from 'src/components/ButtonComp/ButtonComp';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-
+import React, { useEffect, useContext } from "react";
+import styles from "./ChangePassword.module.css";
+import fire from "src/fire";
+import qs from "query-string";
+import { useHistory } from "react-router";
+import background from "src/Images/background.jpg";
+import ButtonComp from "src/components/ButtonComp/ButtonComp";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
 
 export default function ChangePassword({ query }) {
   const history = useHistory();
@@ -15,36 +14,34 @@ export default function ChangePassword({ query }) {
   const actionCode = query.oobCode;
   const currentUser = fire.auth.currentUser;
 
-
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirm, setPasswordConfirm] = React.useState('');
+  const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordMatchError, setPasswordMatchError] = React.useState(false);
 
   // 계정을 찾는 사용자가 이메일 인증 후 유효한 비밀번호를 제출하면 firebase에 적용하는 함수
   const handleResetPassword = async (auth, actionCode) => {
-    fire.auth.verifyPasswordResetCode(actionCode)
+    fire.auth
+      .verifyPasswordResetCode(actionCode)
       .then((email) => {
         if (passwordError || passwordMatchError) {
-          console.log('문제잇어')
+          console.log("reset password error");
         } else {
-          auth.confirmPasswordReset(actionCode, password)
+          auth
+            .confirmPasswordReset(actionCode, password)
             .then((res) => {
-              alert('비밀번호 변경이 완료되었습니다.');
-              history.push('/');
+              alert("비밀번호 변경이 완료되었습니다.");
+              history.push("/");
             })
             .catch((err) => {
-              console.log('verify', err);
-            })
-
+              console.log(err);
+            });
         }
       })
       .catch((err) => {
-        console.log('reset', err)
-      })
-  }
-
-
+        console.log(err);
+      });
+  };
 
   // 비밀번호 규칙
   const reg = /^(?=.*?[a-z])(?=.*?[0-9]).{8,20}$/;
@@ -52,12 +49,11 @@ export default function ChangePassword({ query }) {
   // 비밀번호 설정
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  }
+  };
   // 비밀번호 확인
   const handlePasswordConfirmChange = (event) => {
     setPasswordConfirm(event.target.value);
   };
-
 
   function PassConfirm() {
     const pass = document.getElementById("password");
@@ -68,9 +64,7 @@ export default function ChangePassword({ query }) {
       }
       if (pass.value === confirm.value) {
         setPasswordMatchError(false);
-        return (
-          <Typography>&nbsp;</Typography>
-        );
+        return <Typography>&nbsp;</Typography>;
       }
       if (pass.value !== confirm.value) {
         setPasswordMatchError(true);
@@ -122,12 +116,18 @@ export default function ChangePassword({ query }) {
       <Container component="main" maxWidth="xs">
         <div className={styles.root}>
           <form noValidate className={styles.form}>
-            <img className={styles.logo} src="/images/gambti/gambti_logo.png" alt="logo" />
+            <img
+              className={styles.logo}
+              src="/images/gambti/gambti_logo.png"
+              alt="logo"
+            />
             <div>
               <Typography className={styles.title}>Reset Password</Typography>
-              <Typography className={styles.sub}>If you’d like to reset your password. enter a new  one below.</Typography>
+              <Typography className={styles.sub}>
+                If you’d like to reset your password. enter a new one below.
+              </Typography>
             </div>
-            <div className={styles.form_holder} >
+            <div className={styles.form_holder}>
               <input
                 id="password"
                 type="password"
@@ -149,9 +149,9 @@ export default function ChangePassword({ query }) {
             </div>
             <div className={styles.buttons}>
               <ButtonComp
-                size='large'
-                textvalue='Reset Password'
-                color='#CCFF00'
+                size="large"
+                textvalue="Reset Password"
+                color="#CCFF00"
                 onClick={() => {
                   handleResetPassword(auth, actionCode);
                 }}
@@ -164,4 +164,3 @@ export default function ChangePassword({ query }) {
     </div>
   );
 }
-

@@ -1,5 +1,5 @@
-import React, { useState, createContext, useEffect, useRef } from 'react';
-import fire from 'src/fire';
+import React, { useState, createContext, useEffect, useRef } from "react";
+import fire from "src/fire";
 
 const UserContext = createContext();
 const CurrentUser = fire.auth.currentUser;
@@ -11,11 +11,10 @@ const UserProvider = (props) => {
 
   const subscribeUser = (uid) => {
     if (!uid) return;
-    // console.log("subscribing user:", uid);
 
     // unsub는 함수
     const unsub = fire.db
-      .collection('users')
+      .collection("users")
       .doc(uid)
       // 리스너 (상태가 변할때 마다 알려주는 역할)
       .onSnapshot({
@@ -23,8 +22,6 @@ const UserProvider = (props) => {
         next: (user) => {
           // ...의미: use.id는 uid로 쓰고 나머지는 user.data에 있는거 뿌셔서 doc에 넣어줌
           updateUser({ uid: user.id, ...user.data() });
-          // console.log(CurrentUser)
-          // console.log(user);
         },
         error: (error) => {
           console.log(`[User Listener Error] ${error.message}`);
@@ -36,17 +33,14 @@ const UserProvider = (props) => {
   // 현재 user를 구독 취소해라.
   const unsubscribeCurrentUser = () => {
     if (!unsubscribe.current) return;
-    // console.log("unsubscribing current user...");
     // 리스너 구독해제하는 함수
     unsubscribe.current();
     // 리스너 구독 해제 했으니까 undefined한거
     unsubscribe.current = undefined;
-    // console.log("unsubscribed.");
   };
 
   // 리스너 구독
   const initUser = async (currentUser) => {
-    // console.log("initializing user:", currentUser.uid);
     subscribeUser(currentUser.uid);
   };
 
@@ -54,9 +48,6 @@ const UserProvider = (props) => {
   const updateUser = async (user) => {
     if (!user.uid) return;
     setUser({ isLoggedIn: true, ...user });
-
-    // console.log(user);
-    // console.log("updated user");
   };
 
   useEffect(() => {
@@ -64,10 +55,8 @@ const UserProvider = (props) => {
       unsubscribeCurrentUser();
       if (currentUser) {
         initUser(currentUser);
-        // console.log(currentUser);
       } else {
         setUser({ isLoggedIn: false });
-        // console.log('우엥');
       }
     });
 
