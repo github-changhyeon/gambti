@@ -45,8 +45,6 @@ security:
     - http://dev.gambti.com
     - https://gambti.com
     - http://gambti.com
-    - https://api.gambti.com
-    - http://api.gambti.com
 
   allowed-methods:
     - GET
