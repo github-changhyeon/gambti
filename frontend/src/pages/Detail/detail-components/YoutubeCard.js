@@ -11,6 +11,14 @@ export default function YoutubeCard({ propsYoutubeInfo }) {
   const [viewCount, setViewCount] = useState("");
   const [channelImage, setChannelImage] = useState("");
 
+  const keyArr = [
+    process.env.REACT_APP_YOUTUBE_API_KEY1,
+    process.env.REACT_APP_YOUTUBE_API_KEY2,
+    process.env.REACT_APP_YOUTUBE_API_KEY3,
+    process.env.REACT_APP_YOUTUBE_API_KEY4,
+    process.env.REACT_APP_YOUTUBE_API_KEY5,
+  ];
+
   const goToChannel = (path) => {
     window.open(path);
   };
@@ -19,9 +27,11 @@ export default function YoutubeCard({ propsYoutubeInfo }) {
   };
 
   useEffect(() => {
+    const randomNum = Math.floor(Math.random() * 5);
+    console.log("random?", randomNum);
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${propsYoutubeInfo.videoId}&maxResults=10&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
+        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${propsYoutubeInfo.videoId}&maxResults=10&key=${keyArr[randomNum]}`
       )
       .then((video) => {
         console.log("비디오", video);
@@ -35,7 +45,7 @@ export default function YoutubeCard({ propsYoutubeInfo }) {
       });
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${propsYoutubeInfo.channelId}&maxResults=1&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
+        `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${propsYoutubeInfo.channelId}&maxResults=1&key=${keyArr[randomNum]}`
       )
       .then((channel) => {
         setChannelImage(channel.data.items[0].snippet.thumbnails.medium.url);

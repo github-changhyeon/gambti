@@ -66,7 +66,11 @@ export default function Header({ isLogin }) {
     return ReadNoti(user.uid);
   }, []);
 
-  const docs = fire.db.collection("users").doc(user.uid).collection("notifications").where("isRead", "==", false);
+  const docs = fire.db
+    .collection("users")
+    .doc(user.uid)
+    .collection("notifications")
+    .where("isRead", "==", false);
   // .orderBy('timeStamp').startAfter(new Date());
 
   // 노티 읽어줌
@@ -99,9 +103,14 @@ export default function Header({ isLogin }) {
       }),
     });
     setIsNoti(false);
-    fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).update({
-      isRead: true,
-    });
+    fire.db
+      .collection("users")
+      .doc(user.uid)
+      .collection("notifications")
+      .doc(noti.id)
+      .update({
+        isRead: true,
+      });
     // console.log('noti', noti.data().isRead);
   };
 
@@ -118,7 +127,12 @@ export default function Header({ isLogin }) {
   const handleClearNoti = () => {
     setIsNoti(false);
     notiList.map((noti) => {
-      fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).delete();
+      fire.db
+        .collection("users")
+        .doc(user.uid)
+        .collection("notifications")
+        .doc(noti.id)
+        .delete();
     });
     return setNotiList([]);
   };
@@ -132,8 +146,16 @@ export default function Header({ isLogin }) {
             history.push(routerInfo.PAGE_URLS.HOME);
           }}
         >
-          <img className={styles.header_logo_icon} src="/images/gambti/gambti_icon.png" alt="icon" />
-          <img className={styles.header_logo_text} src="/images/gambti/gambti_logo.png" alt="logo" />
+          <img
+            className={styles.header_logo_icon}
+            src="/images/gambti/gambti_icon.png"
+            alt="icon"
+          />
+          <img
+            className={styles.header_logo_text}
+            src="/images/gambti/gambti_logo.png"
+            alt="logo"
+          />
         </div>
       </div>
       <div className={styles.header_center}>
@@ -150,10 +172,19 @@ export default function Header({ isLogin }) {
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
+              let temp = searchWord;
+              if (
+                (temp.trim() === undefined ||
+                  temp.trim() === null ||
+                  temp.trim()) === ""
+              ) {
+                alert("검색어를 입력해주세요");
+                return;
+              }
               setSearchWord(""); // 검색 후 searchWord 초기화
               history.push({
                 pathname: generatePath(routerInfo.PAGE_URLS.SEARCH, {}),
-                search: `?word=${searchWord}`,
+                search: `?word=${temp}`,
               });
             }
           }}
@@ -200,10 +231,15 @@ export default function Header({ isLogin }) {
               }}
             >
               <Badge badgeContent={notiList.length} color="primary">
-                <NotificationsIcon className={styles.header_right_icon} style={{ color: "#d1d1d1" }} />
+                <NotificationsIcon
+                  className={styles.header_right_icon}
+                  style={{ color: "#d1d1d1" }}
+                />
               </Badge>
 
-              {isShownNoti && !isNoti && <div className={styles.textarea}>Notifications</div>}
+              {isShownNoti && !isNoti && (
+                <div className={styles.textarea}>Notifications</div>
+              )}
             </div>
             {isNoti && (
               <div className={styles.noti}>
@@ -219,7 +255,11 @@ export default function Header({ isLogin }) {
                             <div className={styles.eye}></div>
                           </div>
                           <div className={styles.sad}></div>
-                          <div style={{ fontFamily: "DungGeunMo", zIndex: "500" }}>새로운 알람이 없습니다.</div>
+                          <div
+                            style={{ fontFamily: "DungGeunMo", zIndex: "500" }}
+                          >
+                            새로운 알람이 없습니다.
+                          </div>
                         </div>
                       ) : (
                         <div>
@@ -235,8 +275,14 @@ export default function Header({ isLogin }) {
                               >
                                 {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
                                 <div className={styles.cart_item}>
-                                  <div className={styles.cart_item_header}> {noti.data().message}</div>
-                                  <Moment className={styles.cart_item_date} format="MM.DD HH:mm">
+                                  <div className={styles.cart_item_header}>
+                                    {" "}
+                                    {noti.data().message}
+                                  </div>
+                                  <Moment
+                                    className={styles.cart_item_date}
+                                    format="MM.DD HH:mm"
+                                  >
                                     {time}
                                   </Moment>
                                 </div>
@@ -248,7 +294,12 @@ export default function Header({ isLogin }) {
                     </div>
                   </div>
                   <div className={styles.button}>
-                    <ButtonComp textvalue="Clear" size="noti" color="#ccff00" onClick={handleClearNoti} />
+                    <ButtonComp
+                      textvalue="Clear"
+                      size="noti"
+                      color="#ccff00"
+                      onClick={handleClearNoti}
+                    />
                   </div>
                 </Box>
               </div>
