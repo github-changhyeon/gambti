@@ -53,7 +53,7 @@ function getChatRoomId(fUid) {
     console.log('채틷id받자', fUid);
     const token = localStorage.getItem("idToken");
     const options = {
-        url: 'https://dev.gambti.com//v1/rooms/get',
+        url: 'https://api.gambti.com//v1/rooms/get',
         method: 'POST',
         Header: {
             'Accept': 'application/json',

@@ -79,7 +79,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
     //axios
     const token = localStorage.getItem("idToken");
     const options = {
-      url: 'https://dev.gambti.com//v1/rooms/get',
+      url: 'https://api.gambti.com//v1/rooms/get',
       method: 'POST',
       Header: {
         'Accept': 'application/json',

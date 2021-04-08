@@ -3,7 +3,7 @@ import fire from 'src/fire';
 
 function restApi() {
   return axios.create({
-    baseURL: "https://dev.gambti.com/v1",
+    baseURL: "https://api.gambti.com/v1",
     headers: {
       "Content-type": "application/json",
     },
