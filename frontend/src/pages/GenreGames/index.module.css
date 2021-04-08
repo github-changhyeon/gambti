@@ -41,3 +41,22 @@
   border: 10px solid;
   border-color: #222222 #222222 transparent transparent;
 }
+
+.dataLoading {
+  position: relative;
+}
+.dataLoading:before {
+  content: attr(data-text);
+  position: absolute;
+  overflow: hidden;
+  max-width: 20em;
+  white-space: nowrap;
+  color: #ccff00;
+  animation: loading 0.6s linear infinite;
+  -webkit-animation: loading 0.6s linear infinite;
+}
+@keyframes loading {
+  0% {
+    max-width: 0;
+  }
+}

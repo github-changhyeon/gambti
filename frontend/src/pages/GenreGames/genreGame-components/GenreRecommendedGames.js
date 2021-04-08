@@ -10,6 +10,7 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { UserContext } from "src/Context/UserContext";
 import { SignalCellularNoSimOutlined } from "@material-ui/icons";
+import styles from "src/pages/GenreGames/index.module.css";
 
 export default function GenreRecommendedGames({ propsMatch }) {
   const user = useContext(UserContext);
@@ -182,9 +183,58 @@ export default function GenreRecommendedGames({ propsMatch }) {
         </Button>
       </Container>
       <MediaQuery minWidth="1024px">
-        {!isFetchEnd ? null : (
-          // <Carousel slides={videoAndCards} />
-
+        {!isFetchEnd ? (
+          <div
+            style={{
+              flexFlow: "nowrap",
+              flexDirection: "row",
+              display: "Flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              zIndex: "100",
+            }}
+          >
+            <Typography
+              variant="h7"
+              className={styles.dataLoading}
+              data-text="데이터를 받아오는 중입니다."
+              style={{
+                color: "white",
+                margin: "10px 0px 0px 0px",
+                fontFamily: "DungGeunMo",
+              }}
+              gutterBottom
+            >
+              데이터를 받아오는 중입니다.
+            </Typography>
+          </div>
+        ) : // <Carousel slides={videoAndCards} />
+        videoAndCards.length === 0 ? (
+          <div
+            style={{
+              flexFlow: "nowrap",
+              flexDirection: "row",
+              display: "Flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              zIndex: "100",
+            }}
+          >
+            <Typography
+              variant="h7"
+              className={styles.dataLoading}
+              data-text="추천 데이터가 없습니다."
+              style={{
+                color: "white",
+                margin: "10px 0px 0px 0px",
+                fontFamily: "DungGeunMo",
+              }}
+              gutterBottom
+            >
+              추천 데이터가 없습니다.
+            </Typography>
+          </div>
+        ) : (
           <div
             style={{
               display: "flex",
@@ -199,7 +249,57 @@ export default function GenreRecommendedGames({ propsMatch }) {
         )}
       </MediaQuery>
       <MediaQuery maxWidth="1024px">
-        {!isFetchEnd ? null : (
+        {!isFetchEnd ? (
+          <div
+            style={{
+              flexFlow: "nowrap",
+              flexDirection: "row",
+              display: "Flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              zIndex: "100",
+            }}
+          >
+            <Typography
+              variant="h7"
+              className={styles.dataLoading}
+              data-text="데이터를 받아오는 중입니다."
+              style={{
+                color: "white",
+                margin: "10px 0px 0px 0px",
+                fontFamily: "DungGeunMo",
+              }}
+              gutterBottom
+            >
+              데이터를 받아오는 중입니다.
+            </Typography>
+          </div>
+        ) : recommendGames.length === 0 ? (
+          <div
+            style={{
+              flexFlow: "nowrap",
+              flexDirection: "row",
+              display: "Flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              zIndex: "100",
+            }}
+          >
+            <Typography
+              variant="h7"
+              className={styles.dataLoading}
+              data-text="추천 데이터가 없습니다."
+              style={{
+                color: "white",
+                margin: "10px 0px 0px 0px",
+                fontFamily: "DungGeunMo",
+              }}
+              gutterBottom
+            >
+              추천 데이터가 없습니다.
+            </Typography>
+          </div>
+        ) : (
           <div
             style={{
               display: "flex",

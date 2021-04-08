@@ -1,5 +1,4 @@
-
-.friend_box{
+.friend_box {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -7,14 +6,15 @@
   height: 300px;
   margin: 2rem 4rem 2rem 2rem;
   border-radius: 15px;
+  box-shadow: 5px 5px 5px;
 }
 
-.rec_title{
+.rec_title {
   margin: 1rem 0rem 0.5rem 1rem;
   color: #cecece;
   font-weight: bold;
 }
-.friend_list{
+.friend_list {
   overflow: auto;
   margin-left: 0.4rem;
 }
@@ -29,10 +29,9 @@
   margin: 0rem 0.7rem;
   width: 100%;
 }
-.rec_profile{
+.rec_profile {
   width: 70%;
 }
-.rec_button{
+.rec_button {
   width: 30%;
 }
-

@@ -13,7 +13,6 @@ import FaceIcon from '@material-ui/icons/Face';
 import { UserContext } from 'src/Context/UserContext';
 import { event } from 'jquery';
 import Box from '@material-ui/core/Box';
-import NotiList from 'src/components/Notifications/NotiList';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 import firebase from 'firebase';
 import Moment from 'react-moment';
