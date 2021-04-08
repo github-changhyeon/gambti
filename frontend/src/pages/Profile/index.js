@@ -80,7 +80,12 @@ export default function Profile({ match }) {
     fire.db.collection("users").doc(toUser).get()
       .then((doc) => {
         setToUserInfo(doc.data());
-        setFriendNumber(doc.data().friends.length);
+        // setFriendNumber(doc.data().friends.length);
+        fire.db.collection("users").doc(toUser).collection("friends").get()
+          .then((friends) => {
+            // console.log(friends.docs)
+            setFriendNumber(friends.docs.length);
+          })
       })
     fire.db.collection("users").doc(fromUser.uid).collection("friends")
       .onSnapshot((onSnapshot) => {
