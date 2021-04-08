@@ -5,6 +5,7 @@ import fire from 'src/fire';
 import firebase from 'firebase';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router';
+import { editProfile } from 'src/common/axios/Account';
 
 
 
@@ -39,6 +40,7 @@ export default function EditProfile() {
   // TODO: Back에 nickname 수정된거 보내주기
   // nickname 수정, 수정 안될시 nickError
   const updateNick = (event) => {
+    const idToken = window.localStorage.getItem('idToken');
     if (1 > nickname.length || 10 < nickname.length) {
       setNickError(true);
     } else {
@@ -49,6 +51,24 @@ export default function EditProfile() {
       fire.db.collection("users").doc(currentUser.uid).update({
         nickname: nickname
       });
+      const param = {
+        nickname: nickname,
+      };
+      editProfile(
+        idToken,
+        param,
+        (response) => {
+          console.log(response, 'response');
+          if (!response.data.status) {
+          } else {
+            console.log(response.data.message);
+          }
+        },
+        (error) => {
+          console.log('nick', error);
+        }
+      );
+
     }
   }
   // enter하면 updateNick 함수 호출(수정)
