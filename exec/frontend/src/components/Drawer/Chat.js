@@ -22,6 +22,7 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
   const [chatRoomId, setChatRoomId] = React.useState('');
   const [chatRoomInfo, setChatRoomInfo] = React.useState('');
 
+
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
   const [inputs, setInputs] = React.useState('');
@@ -120,6 +121,13 @@ export default function Chat({ chat, propsUser, currentRoomId, currentRoom, youI
       isRead: false,
     })
       .then(() => {
+        fire.db.collection('users').doc(youId).collection("newChats").doc(roomsId).set({
+          new: true
+        });
+        //for debug
+        // fire.db.collection('users').doc(user.uid).collection("newChats").doc(roomsId).set({
+        //   new: true
+        // });
       }
       )
       .catch(function (error) {

@@ -18,8 +18,8 @@ export default function EditProfile() {
   const history = useHistory();
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
-  const [joinedGame, setJoinedGame] = React.useState(8);
-  const [friendNumber, setFriendNumber] = React.useState(1);
+  const [joinedGame, setJoinedGame] = React.useState(0);
+  const [friendNumber, setFriendNumber] = React.useState(0);
   const [img, setImg] = useState(user.imgPath);
 
 
@@ -55,6 +55,23 @@ export default function EditProfile() {
         )}
       </div>
     );
+  }
+
+  useEffect(() => {
+    ReadInfo(user.uid)
+  }, [])
+
+  const ReadInfo = (userId) => {
+    fire.db.collection("users").doc(userId).collection("friends").get()
+      .then((friends) => {
+        // console.log(friends.docs)
+        setFriendNumber(friends.docs.length);
+      })
+    fire.db.collection("users").doc(userId).collection("joinGames").get()
+      .then((doc) => {
+        console.log(doc.docs)
+        setJoinedGame(doc.docs.length)
+      })
   }
 
   // 이미지 추가

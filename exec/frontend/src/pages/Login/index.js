@@ -137,7 +137,7 @@ export default function Login() {
         });
     }
   };
-  // TODO: preventDefault 알아보기
+  // preventDefault 알아보기
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
