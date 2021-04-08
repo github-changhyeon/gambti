@@ -6,10 +6,22 @@ import styles from "../index.module.css";
 export default function YoutubeCards({ propsAppName }) {
   const [items, setItems] = useState(new Array());
 
+  const keyArr = [
+    process.env.REACT_APP_YOUTUBE_API_KEY1,
+    process.env.REACT_APP_YOUTUBE_API_KEY2,
+    process.env.REACT_APP_YOUTUBE_API_KEY3,
+    process.env.REACT_APP_YOUTUBE_API_KEY4,
+    process.env.REACT_APP_YOUTUBE_API_KEY5,
+  ];
+
   useEffect(() => {
+    const randomNum = Math.floor(Math.random() * 5);
+    console.log("random?", randomNum);
+    // console.log(process.env.REACT_APP_YOUTUBE_API_KEY5);
+    // console.log(keyArr[randomNum]);
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&type=video&q=${propsAppName}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&type=video&q=${propsAppName}&key=${keyArr[randomNum]}`
       )
       .then((search) => {
         console.log("search data", search.data);
