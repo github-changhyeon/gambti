@@ -85,7 +85,7 @@ export default function RecommendedFriends() {
                     });
                   }}>
                   <MediumProfile
-                    propsUser={{ nickname: recFriend.nickname, email: recFriend.email, imgPath: recFriend.imgPath }}
+                    propsUser={{ nickname: recFriend?.nickname, email: recFriend?.email, imgPath: recFriend?.imgPath }}
                   ></MediumProfile>
                 </div>
 

@@ -1,4 +1,6 @@
 .background_image {
+  font-family: DungGeunMo;
+  font-size: 1.5rem;
   background-color: rgba(24, 9, 9, 0.4);
   height: calc(100vh - 54px);
   background-size: cover;
@@ -25,5 +27,5 @@
   align-items: center;
 }
 .button {
-  margin: 1rem;
+  margin: 0 1rem;
 }

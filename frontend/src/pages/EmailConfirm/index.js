@@ -5,7 +5,7 @@ import fire from 'src/fire';
 import { UserContext } from 'src/Context/UserContext';
 import background from 'src/Images/background.jpg';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
-import Button from '@material-ui/core/Button';
+import NeonButton from 'src/components/NeonButton/NeonButton';
 
 export default function EmailConfirm() {
   const history = useHistory();
@@ -61,10 +61,12 @@ export default function EmailConfirm() {
           <img className={styles.logo} src="/images/gambti/welcome_to_gambti.png" alt="logo" />
           <div className={styles.button_group}>
             <div className={styles.button}>
-              <ButtonComp size="xlarge" textvalue="재전송" color="#CCFF00" onClick={reSend} />
+              <NeonButton onClick={reSend} textValue="Send Again"></NeonButton>
+              {/* <ButtonComp size="xlarge" textvalue="재전송" color="#CCFF00" onClick={reSend} /> */}
             </div>
             <div className={styles.button}>
-              <ButtonComp size="xlarge" textvalue="로그아웃" color="#CCFF00" onClick={logout} />
+              <NeonButton onClick={logout} textValue="Logout"></NeonButton>
+              {/* <ButtonComp size="xlarge" textvalue="로그아웃" color="#CCFF00" onClick={logout} /> */}
             </div>
           </div>
         </form>
