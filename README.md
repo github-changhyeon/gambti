@@ -43,6 +43,7 @@
 ![JAVA ](https://img.shields.io/badge/JAVA_JDK-1.8-007396?Style=flat&logo=Java&logoColor=007396)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-2.4.2-6DB33F?Style=flat&logo=Spring&logoColor=6DB33F)
 ![MariaDB](https://img.shields.io/badge/MariaDB(AWS_RDS)-10.4.13-61DAFB?Style=flat&logo=MariaDB&logoColor=61DAFB)
+![Apache Spark](https://img.shields.io/badge/Apach_Spark-3.1.1-E25A1C?Style=flat&logo=Apache-Spark&logoColor=E25A1C)
 
 #### 📚사용된 라이브러리
 
