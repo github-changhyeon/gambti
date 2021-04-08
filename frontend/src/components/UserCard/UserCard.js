@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import styles from "./UserCard.module.css";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,21 +12,30 @@ import fire from "src/fire";
 import routerInfo from "src/constants/routerInfo";
 import { useHistory, generatePath } from "react-router";
 import Button from "@material-ui/core/Button";
+import { UserContext } from "src/Context/UserContext";
+import { addFriend } from "src/common/axios/Friends";
+
 
 export default function UserCard({ isLogin, simpleUserInfo }) {
   const history = useHistory();
   const [userInfo, setUserInfo] = useState(null);
   // console.log("simpleUserInfo", simpleUserInfo);
 
-  const clickAddBtn = () => {
+  const user = useContext(UserContext);
+
+  const clickAddBtn = (userId) => {
 
     const token = localStorage.getItem("idToken");
     // console.log(token);
-    if (token === null || token === undefined) {
+    if (token === null || token === undefined || !user) {
       alert("로그인 해주세요");
       return;
     }
-    alert("친구추가");
+    addFriend(userId, token, (response) => {
+      console.log(response);
+      alert("친구추가");
+    });
+
   };
 
   useEffect(() => {
@@ -142,7 +151,9 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
                   joined={false}
                   color="#ccff00"
                   textvalue="ADD"
-                  onClick={clickAddBtn}
+                  onClick={() => {
+                    clickAddBtn(userInfo.uid)
+                  }}
                 ></ButtonComp>
               ) : //  친구 관계
                 simpleUserInfo.friendStatus === 1 ? (
@@ -157,7 +168,9 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
                         joined={false}
                         color="#ccff00"
                         textvalue="ACCEPT"
-                        onClick={clickAddBtn}
+                        onClick={() => {
+                          clickAddBtn(userInfo.uid)
+                        }}
                       ></ButtonComp>
                     ) : (
                       // 본인
