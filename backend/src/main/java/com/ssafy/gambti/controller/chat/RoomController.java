@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "rooms")
 public class RoomController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
