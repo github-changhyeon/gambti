@@ -21,8 +21,8 @@
   align-items: center;
   /* justify-content: center; */
   background-color: #2a2c2d;
-  height: 207px;
-  margin: 2rem 0rem 4rem 4rem;
+  height: 300px;
+  margin: 2rem 0rem 2rem 4rem;
   border-radius: 15px;
 }
 
@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: row;
   align-items: start;
-  justify-content: center;
+  justify-content: flex-end;
   /* margin: 3rem; */
   width: 50%;
 }
@@ -57,8 +57,8 @@
   border: none;
   top: 70px;
   bottom: 0;
-  left: 0;
-  right: 700px;
+  left: 14vw;
+  /* right: 700px; */
   margin: 0 auto;
   margin-top: 100px;
 }
@@ -81,17 +81,22 @@
   height: 30px;
   text-align: center;
   line-height: 30px;
-  border: 2px solid white;
+  border: 2px solid #cecece;
   border-radius: 50%;
   background: #222222;
   line-height: 100%;
   cursor: pointer;
 }
 
+.main_nick_wrapper {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
 .main_nick {
   font-weight: bold;
   font-size: 2rem;
-  margin-left: 6rem;
+  /* margin-right: 3vw; */
   color: white;
 }
 .info {
@@ -131,7 +136,7 @@
   align-items: flex-start;
   background-color: #2a2c2d;
   height: 300px;
-  margin: 2rem 4rem;
+  margin: 0rem 4rem;
   border-radius: 15px;
 }
 .rec_title {

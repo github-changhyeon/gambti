@@ -18,7 +18,8 @@ import firebase from "firebase";
 import Moment from "react-moment";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
 import Badge from "@material-ui/core/Badge";
-import { Today } from "@material-ui/icons";
+import Typography from "@material-ui/core/Typography";
+
 
 export default function Header({ isLogin }) {
   const history = useHistory();
@@ -71,7 +72,6 @@ export default function Header({ isLogin }) {
     .doc(user.uid)
     .collection("notifications")
     .where("isRead", "==", false);
-  // .orderBy('timeStamp').startAfter(new Date());
 
   // 노티 읽어줌
   const ReadNoti = (userId) => {
@@ -136,6 +136,8 @@ export default function Header({ isLogin }) {
     });
     return setNotiList([]);
   };
+
+
 
   return (
     <div className={styles.header}>
@@ -244,7 +246,7 @@ export default function Header({ isLogin }) {
             {isNoti && (
               <div className={styles.noti}>
                 <Box className={styles.paper}>
-                  <div className={styles.title}>Notifications</div>
+                  <Typography className={styles.title}>Notifications</Typography>
                   <div className={styles.noti_list}>
                     {/* <NotiList /> */}
                     <div className={styles.root}>
@@ -276,8 +278,9 @@ export default function Header({ isLogin }) {
                                 {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
                                 <div className={styles.cart_item}>
                                   <div className={styles.cart_item_header}>
-                                    {" "}
-                                    {noti.data().message}
+                                    <Typography noWrap={true} className={styles.nick}>
+                                      {noti.data().message}
+                                    </Typography>
                                   </div>
                                   <Moment
                                     className={styles.cart_item_date}

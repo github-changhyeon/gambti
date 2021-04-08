@@ -17,6 +17,11 @@
   align-items: center;
   justify-content: center;
 }
+.footer_info {
+  list-style: none;
+  padding-left: 0px;
+  font-size: 1.2rem;
+}
 
 .footer_detail {
   display: flex;
@@ -35,16 +40,20 @@
   font-size: 0.9rem;
 }
 
-.footer_detail_section a {
+.footer_detail_section p {
   text-decoration: none;
+  color: #7e7e7e;
+  font-size: 0.6em;
+
+
 }
-.footer_detail_section a:link,
+.footer_detail_section p:link,
 a:visited {
   color: #7e7e7e;
 }
 .footer_detail_section a:hover,
 a:active {
-  color: white;
+  color: #7e7e7e;
 }
 
 .footer_copyright {

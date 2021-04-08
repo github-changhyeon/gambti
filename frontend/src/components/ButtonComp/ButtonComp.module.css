@@ -10,6 +10,8 @@
   width: 90%;
   color: #000000;
   background-color: #ccff00;
+  box-sizing: border-box;
+  height: 36px;
 }
 /* login, signup, Forgot, ForgotSent */
 .large {
