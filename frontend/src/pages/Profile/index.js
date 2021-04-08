@@ -143,7 +143,7 @@ export default function Profile({ match }) {
                 // 친구 요청됨
                 friendStatus === 0 ?
                   <div className={styles.add_btn}>
-                    <Button className={styles.fix_btn}>SEㅋ</Button>
+                    <Button className={styles.fix_btn}>SEND</Button>
                   </div>
                   :
                   // 친구 수락/ 거절

@@ -5,7 +5,7 @@ import MediumProfile from 'src/components/MediumProfile/MediumProfile';
 import Chat from './Chat';
 import { UserContext } from 'src/Context/UserContext';
 import fire from 'src/fire';
-import PlacesRoomService from 'material-ui/svg-icons/places/room-service';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
 
 
 
@@ -15,6 +15,9 @@ export default function ChatList({ showChat }) {
   const [chat, setChat] = React.useState(!showChat);
   const [currentRoomId, setCurrentRoomId] = React.useState('');
   const [currentRoom, setCurrentRoom] = React.useState('');
+  const [newChatsIds, setNewChatsIds] = React.useState([]);
+  const chatsIdsRef = React.useRef();
+  chatsIdsRef.current = newChatsIds;
 
   const [youId, setYouId] = React.useState('');
   const [you, setYou] = React.useState('');
@@ -26,11 +29,25 @@ export default function ChatList({ showChat }) {
   const user = useContext(UserContext);
   const roomId = user.rooms;
 
+  useEffect(() => {
+    return fire.db.collection("users").doc(user.uid).collection("newChats").onSnapshot((docs) => {
+      const newChats = docs.docs.filter(d => d.data().new === true).map((doc) => {
+        return doc.id;
+      });
+      setNewChatsIds(newChats);
+      console.log("display new to following: ", newChats);
+    })
+  }, [])
+
 
   useEffect(() => {
-    ReadChats(roomId);
+
+    return fire.db.collection("rooms").onSnapshot((docs) => {
+      if (docs.docChanges().length > 0)
+        ReadChats(roomId);
+    })
     // console.log('mount');
-  }, []);
+  }, [chatList]);
 
 
 
@@ -40,10 +57,10 @@ export default function ChatList({ showChat }) {
       return fire.db.collection("rooms").doc(roomId).get().then(doc => {
         return doc.data();
       });
+
     });
     // map 끝낫을 경우 Promise.all로 약속값 -> 결과값을 바꿔줌
     const roomInfos = (await Promise.all(roomInfosPromise)).filter(roomInfo => roomInfo !== undefined);
-
 
     const extendedRoomInfosPromise = roomInfos.map((roomInfo) => {
       // ?.는 roomInfo가 잇을때만 참조, undefined면 안참조
@@ -65,10 +82,18 @@ export default function ChatList({ showChat }) {
 
   // 채팅방 주소를 넣어줌
   const handleChatChange = (room) => {
+
+
     setCurrentRoomId(room.roomId);
     setChat(!chat);
+
+    fire.db.collection('users').doc(user.uid).collection("newChats").doc(room.roomId).set({
+      new: false
+    });
+
     // 1:1 채팅이면 상대방의 uid 넣어줌
     if (room.type === 'OneOnOne') {
+
       if (room.users[1] === user.uid) {
       } else {
         setYouId(room.users[1]);
@@ -102,21 +127,27 @@ export default function ChatList({ showChat }) {
                 chatList.map((room, i) => {
                   if (room.type === 'OneOnOne') {
                     return (
-                      <div key={i} style={{ width: '195px' }}
-                      >
-                        <MediumProfile
-                          propsUser={{
-                            nickname: room.otherUser.nickname,
-                            email: room.otherUser.email,
-                            imgPath: room.otherUser.imgPath
+                      <>
+                        <div key={i} style={{ width: '195px', display: 'flex', flexDirection: 'row' }}
+                        >
+                          <MediumProfile
+                            propsUser={{
+                              nickname: room.otherUser.nickname,
+                              email: room.otherUser.email,
+                              imgPath: room.otherUser.imgPath
 
-                          }}
-                          onClick={() => {
-                            handleChatChange(room);
-                          }}
-                        />
+                            }}
+                            onClick={() => {
+                              handleChatChange(room);
+                            }}
+                          />
+                          {newChatsIds.includes(room.roomId) ?
+                            <ButtonComp size="xsmall" textvalue="New" color="#CCFF00" />
+                            : <></>}
+                        </div>
                         <hr />
-                      </div>
+
+                      </>
                     )
                   }
                   else {

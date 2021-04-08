@@ -212,7 +212,6 @@ export default function Signup() {
     } else return;
   }, [isSignup]);
 
-  // TODO: 두번 눌러야 해결됨
   // firebase signup
   const onSignup = (event) => {
     fire.auth
@@ -307,7 +306,6 @@ export default function Signup() {
       });
   };
 
-  // TODO: preventDefault 알아보기
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();

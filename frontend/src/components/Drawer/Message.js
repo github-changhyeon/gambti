@@ -5,7 +5,7 @@ import fire from 'src/fire';
 import SmallProfile from "src/components/SmallProfile/SmallProfile";
 import Typo from "src/components/Typo/Typo";
 // import { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage } from 'src/firebase/chat/chat';
-import firebase from 'firebase';
+
 
 export default function Message({ roomId }) {
 
@@ -35,6 +35,7 @@ export default function Message({ roomId }) {
       .onSnapshot((snapshot) => {
         // changes에 변화된 값만 넣어서 return
         const changes = snapshot.docChanges().map((change) => {
+          console.log(change.type);
           return change.doc.data();
         });
 
@@ -48,13 +49,19 @@ export default function Message({ roomId }) {
       })
   }
 
+  // function toDate(timestamp) {
+  //   if (!timestamp) return null;
+  //   const seconds = timestamp.seconds;
+  //   const nanoseconds = timestamp.nanoseconds;
+  //   return new firebase.firestore.Timestamp(seconds, nanoseconds).toDate();
+  // }
 
   return (
     <div className={styles.root}>
       <div>
         {messageList.map((message, i) =>
           <div key={i} >
-            <SmallProfile name={message.name} imgPath={message.profilePicUrl} ></SmallProfile>
+            <SmallProfile name={message.name} imgPath={message.profilePicUrl}></SmallProfile>
             <Typo text={message.text} ></Typo>
           </div>
         )}

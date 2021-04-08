@@ -36,6 +36,7 @@ export default function EditProfile() {
     // handleChangeNick.current.focus();
   }
 
+  // TODO: Back에 nickname 수정된거 보내주기
   // nickname 수정, 수정 안될시 nickError
   const updateNick = (event) => {
     if (1 > nickname.length || 10 < nickname.length) {
