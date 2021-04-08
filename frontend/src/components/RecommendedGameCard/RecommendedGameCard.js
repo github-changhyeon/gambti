@@ -1,19 +1,19 @@
-import styles from "./RecommendedGameCard.module.css";
-import AvatarComp from "src/components/AvatarComp/AvatarComp.js";
-import { React, useState, useContext } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import ButtonComp from "src/components/ButtonComp/ButtonComp.js";
-import { Container } from "@material-ui/core";
-import { joinAndLeave } from "src/common/axios/Game";
-import { usePalette } from "react-palette";
-import { useHistory, generatePath } from "react-router-dom";
-import routerInfo from "src/constants/routerInfo";
-import { UserContext } from "src/Context/UserContext";
-import CloseButton from "src/components/CloseButton/CloseButton";
+import styles from './RecommendedGameCard.module.css';
+import AvatarComp from 'src/components/AvatarComp/AvatarComp.js';
+import { React, useState, useContext } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp.js';
+import { Container } from '@material-ui/core';
+import { joinAndLeave } from 'src/common/axios/Game';
+import { usePalette } from 'react-palette';
+import { useHistory, generatePath } from 'react-router-dom';
+import routerInfo from 'src/constants/routerInfo';
+import { UserContext } from 'src/Context/UserContext';
+import CloseButton from 'src/components/CloseButton/CloseButton';
 
 export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
   const [descriptionNum, setDescriptionNum] = useState(
@@ -29,14 +29,14 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
   const clickJoinBtn = () => {
     // console.log(token);
     if (!user.isLoggedIn) {
-      alert("로그인 해주세요");
+      alert('로그인 해주세요');
       return;
     }
 
     joinAndLeave(
       gameInfo.gameId,
       (response) => {
-        if (response.data.status === "success") {
+        if (response.data.status === 'success') {
           // setDescriptionNum(res.data.data);
 
           if (joined) {
@@ -55,15 +55,13 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <div className={styles["neon-block"]}>
+    <div style={{ width: '100%' }}>
+      <div className={styles['neon-block']}>
         <div className={styles.block}>
           <span className={styles.rainbow}></span>
 
           <Card className={styles.game_card}>
-            {user.isLoggedIn ? (
-              <CloseButton onClick={clickDeleteBtn}></CloseButton>
-            ) : null}
+            {user.isLoggedIn ? <CloseButton onClick={clickDeleteBtn}></CloseButton> : null}
 
             <CardMedia
               className={styles.game_card_background_img}
@@ -73,9 +71,9 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
             <CardContent className={styles.card_logo_img}>
               <Container
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
                 }}
               >
                 <AvatarComp
@@ -123,14 +121,14 @@ export default function RecommendedGameCard({ gameInfo, clickDeleteBtn }) {
                 component="span"
                 style={{ color: data.lightVibrant }}
               >
-                joined
+                &nbsp; joined
               </Typography>
             </CardContent>
             <CardActions className={styles.game_card_button}>
               <ButtonComp
                 size="medium"
                 joined={joined}
-                textvalue={joined ? "JOINED" : "JOIN GAME"}
+                textvalue={joined ? 'JOINED' : 'JOIN GAME'}
                 onClick={clickJoinBtn}
                 color={data.lightVibrant}
               ></ButtonComp>

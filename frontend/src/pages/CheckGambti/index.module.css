@@ -19,13 +19,15 @@ article {
 }
 
 .start_title {
+  font-family: DungGeunMo;
   color: white;
-  font-size: 50px;
+  font-size: 90px;
 }
 
 .start_logo {
   width: 50%;
   height: auto;
+  margin-top: 10px;
 }
 
 .question {
@@ -33,10 +35,11 @@ article {
 }
 
 .question_top_text {
-  font-size: 2.8rem;
-  font-weight: bold;
+  font-family: DungGeunMo;
+  font-size: 3.2rem;
   width: 100%;
   margin-bottom: 30px;
+  letter-spacing: 4px;
 }
 
 .question_top_icon {
@@ -48,7 +51,6 @@ article {
 
 .question_title {
   font-size: 2rem;
-  font-weight: bold;
   color: #f80;
   padding: 40px 0;
 }
@@ -63,6 +65,8 @@ article {
 
 .question_title_text {
   padding: 30px 0;
+  font-family: DungGeunMo;
+  letter-spacing: 1px;
 }
 
 .buttons {
@@ -72,6 +76,7 @@ article {
 }
 
 .button {
+  font-size: 1.2rem;
   border-top: 6px solid rgba(255, 255, 255, 0.8);
   border-bottom: 6px solid rgba(255, 255, 255, 0.8);
   width: 25%;
@@ -92,10 +97,11 @@ article {
 }
 
 .result_title {
-  font-size: 2.8rem;
-  font-weight: bold;
+  font-family: DungGeunMo;
+  font-size: 3.2rem;
   width: 100%;
   margin-bottom: 60px;
+  letter-spacing: 4px;
 }
 
 .result_img {
@@ -111,10 +117,11 @@ article {
 }
 
 .result_concept {
+  font-family: DungGeunMo;
   font-size: 2.5rem;
-  font-weight: bold;
   color: #ccff00;
   padding: 20px 40px;
+  letter-spacing: 3px;
 }
 
 .result_concept_deco {
@@ -135,34 +142,29 @@ article {
   margin-top: 40px;
 }
 
-.result_maxim {
-  width: 50%;
-  margin: 0 auto;
-}
-
 .result_recommend {
   display: inline-flex;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   margin-top: 5px;
 }
 
-.result_game {
-  border-top: 6px solid rgba(255, 255, 255, 0.8);
-  border-bottom: 6px solid rgba(255, 255, 255, 0.8);
-  width: 20%;
+.result_maxim {
+  width: 50%;
   height: auto;
-  padding: 40px 20px;
-  margin: 0 10px;
+  padding: 10px 20px;
+  font-style: italic;
 }
 
-.result_genre {
-  border-top: 6px solid rgba(255, 255, 255, 0.8);
-  border-bottom: 6px solid rgba(255, 255, 255, 0.8);
-  width: 10%;
+.result_explain {
+  letter-spacing: 3px;
+  border-top: 4px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 4px solid rgba(255, 255, 255, 0.8);
+  width: 50%;
   height: auto;
-  padding: 40px 20px;
-  margin: 0 10px;
+  padding: 10px 20px;
+  margin: 6px 0;
 }
 
 .result_buttons {

@@ -83,11 +83,11 @@ export default function CheckInfo({ mbti, mbtiSub }) {
       fontSize: 30,
     },
   });
-  
+
   function QontoStepIcon(props) {
     const classes = useQontoStepIconStyles();
     const { active, completed } = props;
-  
+
     return (
       <div
         className={clsx(classes.root, {
@@ -207,7 +207,7 @@ export default function CheckInfo({ mbti, mbtiSub }) {
 
   function getSteps() {
     // return ['Gender', 'Age Group', 'Price Range', 'Tags'];
-    return ['','','',''];
+    return ['', '', '', ''];
   }
 
   const onClickTag = (event, index_tag) => {
@@ -233,12 +233,16 @@ export default function CheckInfo({ mbti, mbtiSub }) {
 
   return (
     <div className={styles.background}>
-      <div className={styles.stepper_root} color='primary'>
-        <Stepper style={{ background: 'none' }} alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+      <div className={styles.stepper_root} color="primary">
+        <Stepper
+          style={{ background: 'none' }}
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<QontoConnector />}
+        >
           {steps.map((index_step) => (
             <Step key={index_step}>
               <StepLabel StepIconComponent={QontoStepIcon}>{index_step}</StepLabel>
-              
             </Step>
           ))}
         </Stepper>
@@ -250,11 +254,7 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                   <p>모든 정보 등록이 완료되었습니다.</p>
                 </div>
               </div>
-              <Button
-                variant="contained"
-                onClick={handleReset}
-                className={styles.button_reset}
-              >
+              <Button variant="contained" onClick={handleReset} className={styles.button_reset}>
                 다시 선택
               </Button>
               <Button
@@ -296,7 +296,7 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                 <div className={styles.question_title}>
                   <p className="title">문제 제목</p>
                 </div>
-                <div className="option" style={{ color: 'white' }}>
+                <div className="option">
                   {num === 1 && (
                     <FormControl component="fieldset" error={error}>
                       <RadioGroup
@@ -307,27 +307,32 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_gender">
-                            <FormControlLabel
-                               classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
                         </div>
                       </RadioGroup>
-                        <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center'}}>{helperText}</FormHelperText>
+                      <FormHelperText
+                        className={styles.font_DungGeunMo}
+                        style={{ textAlign: 'center' }}
+                      >
+                        {helperText}
+                      </FormHelperText>
                     </FormControl>
                   )}
 
@@ -341,54 +346,59 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_age">
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['C']}
                             control={<NeonRadio />}
                             label={step[num]['label']['C']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['D']}
                             control={<NeonRadio />}
                             label={step[num]['label']['D']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['E']}
                             control={<NeonRadio />}
                             label={step[num]['label']['E']}
                           />
                         </div>
                       </RadioGroup>
-                      <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                      <FormHelperText
+                        className={styles.font_DungGeunMo}
+                        style={{ textAlign: 'center' }}
+                      >
+                        {helperText}
+                      </FormHelperText>
                     </FormControl>
                   )}
                   {num === 3 && (
@@ -401,69 +411,75 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                         style={{ color: 'white' }}
                       >
                         <div className="option_price">
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['A']}
                             control={<NeonRadio />}
                             label={step[num]['label']['A']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['B']}
                             control={<NeonRadio />}
                             label={step[num]['label']['B']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['C']}
                             control={<NeonRadio />}
                             label={step[num]['label']['C']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <br />
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['D']}
                             control={<NeonRadio />}
                             label={step[num]['label']['D']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['E']}
                             control={<NeonRadio />}
                             label={step[num]['label']['E']}
                           />
-                            <FormControlLabel
-                              classes={{
-                                root: classes.root,
-                                label: classes.label
-                              }}
+                          <FormControlLabel
+                            classes={{
+                              root: classes.root,
+                              label: classes.label,
+                            }}
                             value={step[num]['value']['F']}
                             control={<NeonRadio />}
                             label={step[num]['label']['F']}
                           />
                         </div>
                       </RadioGroup>
-                      <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center' }}>{helperText}</FormHelperText>
+                      <FormHelperText
+                        className={styles.font_DungGeunMo}
+                        style={{ textAlign: 'center' }}
+                      >
+                        {helperText}
+                      </FormHelperText>
                     </FormControl>
                   )}
                 </div>
                 {num === 4 && (
                   <FormControl error={error}>
-                    <div>
+                    <div className={styles.buttonContainer}>
                       {step[4].tags.map((index_tag, idx) => {
                         return (
                           <button
@@ -480,7 +496,12 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                           </button>
                         );
                       })}
-                        <FormHelperText className={styles.font_DungGeunMo} style={{ textAlign: 'center'}}>{helperText}</FormHelperText>
+                      <FormHelperText
+                        className={styles.font_DungGeunMo}
+                        style={{ textAlign: 'center' }}
+                      >
+                        {helperText}
+                      </FormHelperText>
                     </div>
                   </FormControl>
                 )}
@@ -495,11 +516,7 @@ export default function CheckInfo({ mbti, mbtiSub }) {
                 >
                   이전
                 </Button> */}
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  className={styles.button}
-                >
+                <Button variant="contained" onClick={handleNext} className={styles.button}>
                   {activeStep === steps.length ? '등록' : '다음'}
                 </Button>
               </div>
@@ -522,10 +539,10 @@ const NeonRadio = withStyles({
 })((props) => <Radio color="default" {...props} />);
 
 const labelStyles = makeStyles({
-  root: {
-  },
+  root: {},
   label: {
-    fontFamily: 'DungGeunMo',
     color: 'white',
+    fontSize: '1.4rem',
+    marginRight: '20px',
   },
 });

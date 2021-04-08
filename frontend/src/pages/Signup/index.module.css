@@ -89,7 +89,7 @@
   color: orange;
   display: flex;
   justify-content: flex-end;
-  font-size: 10px;
+  font-size: 12px;
   height: 6px;
   z-index: 1000;
 }
