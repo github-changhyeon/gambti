@@ -78,7 +78,6 @@ export default function Profile({ match }) {
       .doc(toUser)
       .collection("friends");
     const friendList = friendRef.where("status", "==", 2);
-    // console.log(friendList)
     fire.db
       .collection("users")
       .doc(toUser)
@@ -89,7 +88,6 @@ export default function Profile({ match }) {
         getUserJoinGames(
           doc.data().uid,
           (response) => {
-            console.log("이거", response.data.data);
             if (response.data.status === "success") {
               setJoinGameList(response.data.data);
             }
@@ -109,7 +107,6 @@ export default function Profile({ match }) {
           .collection("joinGames")
           .get()
           .then((doc) => {
-            // console.log(doc.docs);
             setJoinedGame(doc.docs.length);
           });
       });
@@ -119,7 +116,6 @@ export default function Profile({ match }) {
       .collection("friends")
       .onSnapshot((onSnapshot) => {
         onSnapshot.docs.map((doc) => {
-          // console.log("doc.id", doc.id);
           if (doc.id === toUser) {
             fire.db
               .collection("users")
@@ -145,11 +141,8 @@ export default function Profile({ match }) {
   // axios 요청
   const handleAddFriend = (toUserId) => {
     const idToken = window.localStorage.getItem("idToken");
-    console.log("idToken", idToken);
 
-    addFriend(toUserId, idToken, (response) => {
-      console.log(response);
-    });
+    addFriend(toUserId, idToken, (response) => {});
   };
 
   return (

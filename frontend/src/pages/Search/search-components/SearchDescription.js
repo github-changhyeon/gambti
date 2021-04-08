@@ -6,9 +6,6 @@ import queryString from "query-string";
 
 export default function SearchDescription({}) {
   const location = useLocation();
-  useEffect(() => {
-    // console.log(location.search);
-  }, []);
 
   return (
     <div style={{ backgroundColor: "#1a1b1c" }}>

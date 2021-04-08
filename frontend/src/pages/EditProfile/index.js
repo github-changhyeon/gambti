@@ -74,7 +74,6 @@ export default function EditProfile() {
       .collection("joinGames")
       .get()
       .then((doc) => {
-        console.log(doc.docs);
         setJoinedGame(doc.docs.length);
       });
   };
@@ -94,7 +93,6 @@ export default function EditProfile() {
       });
     };
   };
-  console.log(user);
 
   const handleRemove = () => {
     setImg("/images/default-images.png");

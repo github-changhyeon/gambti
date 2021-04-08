@@ -28,8 +28,6 @@ export default function Header({ isLogin }) {
   const [notiCount, setNotiCount] = React.useState(0);
   const [searchWord, setSearchWord] = React.useState("");
 
-  // console.log(user);
-
   // 로그아웃
   const logout = (event) => {
     fire.auth
@@ -111,13 +109,11 @@ export default function Header({ isLogin }) {
       .update({
         isRead: true,
       });
-    // console.log('noti', noti.data().isRead);
   };
 
   // firestore timeStamp 변환
   function toDate(timestamp) {
     if (!timestamp) return null;
-    // console.log('timestamp', timestamp)
     const seconds = timestamp.seconds;
     const nanoseconds = timestamp.nanoseconds;
     return new firebase.firestore.Timestamp(seconds, nanoseconds).toDate();
@@ -263,11 +259,12 @@ export default function Header({ isLogin }) {
                         </div>
                       ) : (
                         <div>
-                          {notiList.map((noti) => {
+                          {notiList.map((noti, i) => {
                             const time = toDate(noti.data().timeStamp);
 
                             return (
                               <div
+                                key={i}
                                 className={styles.shopping_cart_items}
                                 onClick={() => {
                                   gotoFriend(noti);

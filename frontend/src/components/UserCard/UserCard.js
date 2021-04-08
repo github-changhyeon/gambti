@@ -19,33 +19,26 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
   const history = useHistory();
   const [userInfo, setUserInfo] = useState(null);
   const [friendStatus, setFriendStatus] = useState(null);
-  // console.log("simpleUserInfo", simpleUserInfo);
 
   const user = useContext(UserContext);
 
   const clickAddBtn = (userId) => {
     const token = localStorage.getItem("idToken");
-    // console.log(token);
     if (token === null || token === undefined || !user) {
       alert("로그인 해주세요");
       return;
     }
     addFriend(userId, token, (response) => {
-      console.log(response);
-      // alert("친구추가");
       setFriendStatus(1);
     });
   };
 
   useEffect(() => {
-    console.log("@@@@@@@@@@@@@@@@");
     fire.db
       .collection("users")
       .doc(simpleUserInfo.userId)
       .get()
       .then((user) => {
-        console.log("유저");
-        console.log("유저", user.data());
         setUserInfo(user.data());
       })
       .catch((error) => {

@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
-import styles from './Message.module.css';
-import axios from 'axios';
-import fire from 'src/fire';
+import React, { useEffect } from "react";
+import styles from "./Message.module.css";
+import axios from "axios";
+import fire from "src/fire";
 import SmallProfile from "src/components/SmallProfile/SmallProfile";
 import Typo from "src/components/Typo/Typo";
 // import { getFriends, getChatRooms, makeOneOnOneChatRoom, makeGroupChatRoom, sendMessage, readMessage } from 'src/firebase/chat/chat';
 
-
 export default function Message({ roomId }) {
-
   const [messageList, setMessageList] = React.useState([]);
   // messageList Reference 생성
   const messageRef = React.useRef();
@@ -22,20 +20,22 @@ export default function Message({ roomId }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messageList])
+  }, [messageList]);
 
   const scrollToBottom = () => {
-    messageEndRef.current.scrollIntoView({ behavior: 'smooth' })
-  }
-
+    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   const readMessage = (chatRoomId) => {
     // message collection 변화값이 있는지 감시
-    return fire.db.collection('rooms').doc(chatRoomId).collection('messages').orderBy('timestamp')
+    return fire.db
+      .collection("rooms")
+      .doc(chatRoomId)
+      .collection("messages")
+      .orderBy("timestamp")
       .onSnapshot((snapshot) => {
         // changes에 변화된 값만 넣어서 return
         const changes = snapshot.docChanges().map((change) => {
-          // console.log('chat_timeStamp', change.doc.data());
           return change.doc.data();
         });
 
@@ -45,9 +45,8 @@ export default function Message({ roomId }) {
         // 기존의 messageList+ changes를 SetMessage에 넣어줌
         // ref는 항상 최신 값을 참조해서 메시지가 다보임
         setMessageList([...messageRef.current, ...changes]);
-
-      })
-  }
+      });
+  };
 
   // function toDate(timestamp) {
   //   if (!timestamp) return null;
@@ -59,16 +58,17 @@ export default function Message({ roomId }) {
   return (
     <div className={styles.root}>
       <div>
-        {messageList.map((message, i) =>
-          <div key={i} >
-            <SmallProfile name={message.name} imgPath={message.profilePicUrl}></SmallProfile>
-            <Typo text={message.text} ></Typo>
+        {messageList.map((message, i) => (
+          <div key={i}>
+            <SmallProfile
+              name={message.name}
+              imgPath={message.profilePicUrl}
+            ></SmallProfile>
+            <Typo text={message.text}></Typo>
           </div>
-        )}
+        ))}
         <div ref={messageEndRef} />
-
       </div>
-
-    </div >
+    </div>
   );
 }

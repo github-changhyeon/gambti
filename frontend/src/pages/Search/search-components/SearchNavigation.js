@@ -25,7 +25,6 @@ export default function SearchNavigation({ propsMatch, gameCnt, userCnt }) {
   };
 
   useEffect(() => {
-    // console.log(propsMatch.params.all);
     if (propsMatch.params.all === null || propsMatch.params.all === undefined) {
       setBorderSizes(
         borderSizes.map((borderSize, i) => (i === 0 ? "4px" : "0px"))

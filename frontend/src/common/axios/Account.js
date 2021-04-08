@@ -13,7 +13,6 @@ function signup(user, param, success, fail) {
 // 회원정보 수정
 function editProfile(user, param, success, fail) {
   const config = getConfig(user);
-  console.log('config', config);
   restApi().patch(`/account`, param, config).then(success).catch(fail);
 }
 

@@ -16,15 +16,11 @@ export default function YoutubeCards({ propsAppName }) {
 
   useEffect(() => {
     const randomNum = Math.floor(Math.random() * 5);
-    console.log("random?", randomNum);
-    // console.log(process.env.REACT_APP_YOUTUBE_API_KEY5);
-    // console.log(keyArr[randomNum]);
     axios
       .get(
         `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&type=video&q=${propsAppName}&key=${keyArr[randomNum]}`
       )
       .then((search) => {
-        console.log("search data", search.data);
         let searchItems = search.data.items;
         setItems(
           searchItems.map((searchItem, i) => ({
@@ -42,7 +38,6 @@ export default function YoutubeCards({ propsAppName }) {
       })
       .catch((error) => {
         console.log(error);
-        alert("유튜브 api 할당량 초과");
       });
   }, []);
 
