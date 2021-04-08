@@ -138,21 +138,24 @@ export default function Chat({
       })
       .then(() => {
         fire.db
-          .collection("users")
-          .doc(youId)
-          .collection("newChats")
+          .collection("rooms")
           .doc(roomsId)
-          .set({
-            new: true,
+          .get()
+          .then((doc) => {
+            console.log("doc.data().type", doc.data().type);
+            if (doc.data().type === "Group") {
+              // console.log('chat type', doc.data().type)
+              return;
+            }
+            fire.db
+              .collection("users")
+              .doc(youId)
+              .collection("newChats")
+              .doc(roomsId)
+              .set({
+                new: true,
+              });
           });
-        // fire.db.collection('rooms').doc(roomsId).update({
-        //   timestamp: timestamp,
-        // });
-
-        //for debug
-        // fire.db.collection('users').doc(user.uid).collection("newChats").doc(roomsId).set({
-        //   new: true
-        // });
       })
       .catch(function (error) {
         console.error("Error writing new message to database", error);
