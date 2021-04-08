@@ -8,9 +8,13 @@ import routerInfo from 'src/constants/routerInfo';
 import fire from 'src/fire';
 import { UserContext, UserProvider } from 'src/Context/UserContext';
 import { FirebaseProvider } from 'src/Context/FirebaseContext';
+import { ChatProvider } from 'src/Context/ChatContext';
+
 import firebase from 'firebase';
 import { useHistory } from 'react-router-dom';
 import ScrollToTop from 'src/components/ScrollToTop';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 import {
   Home,
@@ -173,15 +177,25 @@ function App() {
     console.log('app.js');
   }, []);
 
+  const fontTheme = createMuiTheme({
+    typography: {
+      fontFamily: 'HangeulNuri-Bold',
+    },
+  });
+
   return (
     <StylesProvider injectFirst>
-      <FirebaseProvider>
-        <UserProvider>
-          <div className="App">
-            <AppRouter />
-          </div>
-        </UserProvider>
-      </FirebaseProvider>
+      <ThemeProvider theme={fontTheme}>
+        <FirebaseProvider>
+          <UserProvider>
+            <ChatProvider>
+              <div className="App">
+                <AppRouter />
+              </div>
+            </ChatProvider>
+          </UserProvider>
+        </FirebaseProvider>
+      </ThemeProvider>
     </StylesProvider>
   );
 }

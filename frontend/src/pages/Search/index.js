@@ -90,14 +90,17 @@ export default function Search({ match }) {
           setUserTotalCnt(response.data.data.totalElements);
           let simpleUsers = response.data.data.content;
           let tempUsers = new Array();
+          // setUsers(simpleUsers);
           for (let i = 0; i < simpleUsers.length; ++i) {
             fire.db
               .collection('users')
               .doc(simpleUsers[i].userId)
               .get()
               .then((user) => {
-                // console.log("유저", user.data());
-                tempUsers.push(user.data());
+                console.log('유저', user.data());
+                if (user.data() !== null && user.data() !== undefined) {
+                  tempUsers.push(user.data());
+                }
                 if (i === simpleUsers.length - 1) {
                   setUsers(tempUsers);
                 }

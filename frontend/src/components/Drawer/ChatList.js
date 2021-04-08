@@ -127,27 +127,25 @@ export default function ChatList({ showChat }) {
                 chatList.map((room, i) => {
                   if (room.type === 'OneOnOne') {
                     return (
-                      <>
-                        <div key={i} style={{ width: '195px', display: 'flex', flexDirection: 'row' }}
-                        >
-                          <MediumProfile
-                            propsUser={{
-                              nickname: room.otherUser.nickname,
-                              email: room.otherUser.email,
-                              imgPath: room.otherUser.imgPath
+                      <div key={i} style={{ width: '195px' }}
+                      >
+                        <MediumProfile
+                          propsUser={{
+                            nickname: room.otherUser.nickname,
+                            email: room.otherUser.email,
+                            imgPath: room.otherUser.imgPath
 
-                            }}
-                            onClick={() => {
-                              handleChatChange(room);
-                            }}
-                          />
-                          {newChatsIds.includes(room.roomId) ?
-                            <ButtonComp size="xsmall" textvalue="New" color="#CCFF00" />
-                            : <></>}
-                        </div>
+                          }}
+                          onClick={() => {
+                            handleChatChange(room);
+                          }}
+                        />
+                        {newChatsIds.includes(room.roomId) ?
+                          <ButtonComp size="xsmall" textvalue="New" color="#CCFF00" />
+
+                          : <></>}
                         <hr />
-
-                      </>
+                      </div>
                     )
                   }
                   else {

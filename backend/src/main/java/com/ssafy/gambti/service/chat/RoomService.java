@@ -4,8 +4,10 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firebase.messaging.Notification;
 import com.ssafy.gambti.domain.game.Game;
 import com.ssafy.gambti.domain.user.User;
+import com.ssafy.gambti.dto.NotificationDto;
 import com.ssafy.gambti.dto.chat.GroupRoomRequest;
 import com.ssafy.gambti.dto.chat.RoomRequest;
 import com.ssafy.gambti.exception.GameListException;
@@ -13,6 +15,7 @@ import com.ssafy.gambti.repository.game.GameRepository;
 import com.ssafy.gambti.repository.user.UserRepository;
 import com.ssafy.gambti.service.caching.CachingService;
 import com.ssafy.gambti.utils.FirebaseTokenUtils;
+import com.ssafy.gambti.utils.NotificationUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +31,11 @@ public class RoomService {
     private static final Logger logger = LoggerFactory.getLogger(RoomService.class);
 
     private final FirebaseTokenUtils firebaseTokenUtils;
+    private final NotificationUtils notificationUtils;
     private final CachingService cachingService;
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
+
 
     public String getRoom(RoomRequest roomRequest, HttpServletRequest httpServletRequest){
         Firestore db = FirestoreClient.getFirestore();
@@ -197,13 +202,46 @@ public class RoomService {
                             DocumentReference usersRef = db.collection("users").document(myUid);
                             usersRef.update("rooms", FieldValue.arrayUnion(selectedRoomId));
 
+
+                            //참가 후, 방에 있는 모든 사용자에게 FCM 메세지 및 Notification을 보낸다.
+                            DocumentSnapshot roomDoc = roomsRef.document(selectedRoomId).get().get();
+                            Map<String, Object> roomUsers = (HashMap<String, Object>) roomDoc.get("users");
+                            List<Object> roomUsersValue = new ArrayList<>(roomUsers.values());
+
+                            for (Object uid : roomUsersValue) {
+                                usersRef = db.collection("users").document(uid.toString());
+                                String fcmToken = usersRef.get().get().get("fcmToken").toString();
+
+                                logger.info("fcmToken : "+ fcmToken);
+                                Notification notification = Notification.builder()
+                                        .setBody(myNickname+"님에게서 새로운 알림이 왔습니다.")
+                                        .setImage("images/gambti/gambti_icon.png")
+                                        .setTitle("GAMBTI의 새로운 알림").build();
+                                notificationUtils.send(fcmToken, notification);
+
+                                NotificationDto notificationDto = NotificationDto.builder()
+                                        .message(myNickname+"께서 "+groupRoomRequest.getGameName()+"그룹방에 참여하셨습니다.")
+                                        .receiverUid(uid.toString())
+                                        .senderUid(myUid)
+                                        .type("group")
+                                        .url(null)
+                                        .build();
+                                notificationUtils.registNotification(notificationDto);
+                            }
+                            //그룹방에 참여 했다고 메세지를 하나 보낸다.
+                            Map<String, Object> messageData = new HashMap<>();
+                            messageData.put("name", "GAMBTI");
+                            messageData.put("profilePicUrl", "/images/admin.jpg");
+                            messageData.put("text", myNickname+"님이 참여하셨습니다!");
+                            messageData.put("timestamp", System.currentTimeMillis());
+                            roomsRef.document(selectedRoomId).collection("messages").add(messageData);
+
                             return selectedRoomId;
                         }
                     }
                     //조건에 부합하는 방이 없다면 해당 게임의 room을 만든다.
                     //방이 없다면 rooms 컬렉션에 해당 방을 등록한다.
                     Game game = gameRepository.findById(groupRoomRequest.getGameId()).orElseThrow(GameListException::new);
-
                     logger.info("50점 미만이라서 새로운 방을 만들었다.");
                     Map<String, Object> docData = new HashMap<>();
                     docData.put("lastMessageText", "");

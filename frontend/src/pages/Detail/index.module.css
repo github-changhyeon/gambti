@@ -1,6 +1,7 @@
 .drawer {
   width: 300px;
   flex-shrink: 0;
+  z-index: 2;
 }
 .loginDrawer {
   top: 54px;
@@ -278,7 +279,7 @@
   display: inline;
 }
 
-.detail_main_video {
+.detail_main_contents {
   margin: 0 auto;
   height: auto;
   width: 600px;
