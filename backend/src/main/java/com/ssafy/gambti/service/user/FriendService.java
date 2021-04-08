@@ -82,7 +82,6 @@ public class FriendService {
                     throw new IllegalStateException("이미 친구요청을 보낸 회원입니다.");
                 }
         );
-
         // FireStore에서 필요한 데이터들을 초기화 한다.
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference usersRef = db.collection("users");
@@ -93,7 +92,6 @@ public class FriendService {
         // 2. 이전에 toUser(상대방)이 나에게 친구요청을 한적이 있는지 확인한다.
         // 만약 있다면, 친구 수락을 해줘야 하는 요청이기때문에 isApproved 변수를 둘다 true로 만들어 줘야 한다.
         Optional<Friend> previousRequest = friendRepository.findByFromAndTo(toUser, fromUser);
-
         // 3. fromUser와 toUser가 존재한다면 친구 요청 또는 수락을 할것임
         if (fromUser != null && toUser != null) {
             // FireStore users-{toUserId}-notification 컬렉션에 다음 필드를 가지는 document 추가
@@ -102,7 +100,6 @@ public class FriendService {
                     .receiverUid(toUser.getId())
                     .senderUid(fromUser.getId())
                     .type("friend").build();
-
             // 3.1 이전에 상대방이 나에게 친구 요청을 한 내역이 있다면 친구 수락을 해야함
             if (previousRequest.isPresent()) {
                 // 3.1.1 이전에 보낸 친구 요청의 승인 상태를 true로 바꾼다.
@@ -132,7 +129,6 @@ public class FriendService {
                         .to(toUser)
                         .isApproved(false)
                         .build();
-
                 friendRepository.save(friend);
 
                 // FireStore에서 fromUser의 users-{fromUserid}-friends에 toUser를 친구 요청 대기자로(code:0) 추가해야함
@@ -166,9 +162,11 @@ public class FriendService {
             try {
                 DocumentSnapshot document = toUserSnapShot.get();
                 // 4.1. toUserFcmToken 가져오기
-                String fcmToken = document.getData().get("fcmToken").toString();
+                if (document.getData().get("fcmToken") != null) {
+                    String fcmToken = document.getData().get("fcmToken").toString();
+                    notificationUtils.send(fcmToken, notification);
+                }
                 // 4.2. 메세지 보내기
-                notificationUtils.send(fcmToken, notification);
             } catch (InterruptedException e) {
                 logger.error(e.getMessage());
             } catch (ExecutionException e) {
