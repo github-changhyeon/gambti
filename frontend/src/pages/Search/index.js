@@ -105,6 +105,9 @@ export default function Search({ match }) {
                 if (i === simpleUsers.length - 1) {
                   setUsers(tempUsers);
                 }
+              })
+              .catch((error) => {
+                console.log(error);
               });
           }
           if (simpleUsers.length === 0) {
@@ -129,7 +132,7 @@ export default function Search({ match }) {
       <SearchNavigation
         propsMatch={match}
         gameCnt={gameTotalCnt}
-        userCnt={userTotalCnt}
+        userCnt={users.length}
         // gameCnt={3}
         // userCnt={3}
       ></SearchNavigation>
