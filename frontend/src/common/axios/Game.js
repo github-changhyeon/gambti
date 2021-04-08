@@ -77,6 +77,12 @@ function deleteGame(gameId, success, fail) {
     .catch(fail);
 }
 
+function getUserJoinGames(success, fail) {
+  const token = localStorage.getItem("idToken");
+  const config = getConfig(token);
+  restApi().get(`/games/joinGames`, config).then(success).catch(fail);
+}
+
 export {
   getRecommendedGames,
   getRecommendedGenreGames,
@@ -84,4 +90,5 @@ export {
   getGamesOrderBy,
   getGameDetail,
   deleteGame,
+  getUserJoinGames,
 };
