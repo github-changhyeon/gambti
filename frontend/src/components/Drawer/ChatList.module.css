@@ -1,5 +1,4 @@
-
-.friend_list{
+.friend_list {
   /* left: 350px; */
   top: 160px;
   width: 250px;
@@ -9,4 +8,16 @@
 }
 .friend_list::-webkit-scrollbar {
   display: none;
+}
+
+.lists {
+  position: relative;
+}
+
+.new_button {
+  position: absolute;
+  top: 0;
+  left: 33px;
+  height: 30px;
+  width: auto;
 }
