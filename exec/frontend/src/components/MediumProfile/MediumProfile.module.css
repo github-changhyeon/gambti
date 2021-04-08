@@ -1,0 +1,26 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: #2a2c2d; */
+  margin: 0.1rem;
+  border-radius: 10px;
+  width: 200px;
+  /* padding: 10px; */
+}
+.nick {
+  font-weight: bold;
+  font-size: 15px;
+  color: #ccff00;
+}
+.email {
+  font-size: 12px;
+}
+.text_margin {
+  margin: 0.6rem;
+  width: 60%;
+  overflow: auto;
+}
+.email {
+  color: #cfcfcf;
+}

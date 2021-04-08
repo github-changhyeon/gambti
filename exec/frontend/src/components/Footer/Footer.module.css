@@ -1,0 +1,61 @@
+.footer {
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 25px 0;
+  bottom: 0;
+  align-items: center; /* 세로에서 가운데에 요소를 배치 */
+  text-align: center;
+  clear: both;
+}
+
+.footer_logo {
+  font-weight: bold;
+  padding-bottom: 15px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.footer_info {
+  list-style: none;
+  padding-left: 0px;
+  font-size: 1.2rem;
+}
+
+.footer_detail {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 15px;
+}
+
+.footer_detail ul {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.footer_detail_section {
+  display: 1;
+  padding: 0 30px;
+  font-size: 0.9rem;
+}
+
+.footer_detail_section p {
+  text-decoration: none;
+  color: #7e7e7e;
+  font-size: 0.6em;
+
+
+}
+.footer_detail_section p:link,
+a:visited {
+  color: #7e7e7e;
+}
+.footer_detail_section a:hover,
+a:active {
+  color: #7e7e7e;
+}
+
+.footer_copyright {
+  font-size: 0.75rem;
+}

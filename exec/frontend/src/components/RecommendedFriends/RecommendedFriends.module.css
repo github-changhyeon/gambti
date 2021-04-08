@@ -1,0 +1,37 @@
+.friend_box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #2a2c2d;
+  height: 300px;
+  margin: 2rem 4rem 2rem 2rem;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px;
+}
+
+.rec_title {
+  margin: 1rem 0rem 0.5rem 1rem;
+  color: #cecece;
+  font-weight: bold;
+}
+.friend_list {
+  overflow: auto;
+  margin-left: 0.4rem;
+}
+
+.friend_list::-webkit-scrollbar {
+  display: none;
+}
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0rem 0.7rem;
+  width: 100%;
+}
+.rec_profile {
+  width: 70%;
+}
+.rec_button {
+  width: 30%;
+}
