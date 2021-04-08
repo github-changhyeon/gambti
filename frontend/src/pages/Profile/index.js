@@ -27,7 +27,7 @@ export default function Profile({ match }) {
   // 상대방
   const toUser = match.params.uid;
   const [joinedGame, setJoinedGame] = React.useState(0);
-  const [friendNumber, setFriendNumber] = React.useState(1);
+  const [friendNumber, setFriendNumber] = React.useState(0);
   const [toUserInfo, setToUserInfo] = React.useState("");
   const [friendStatus, setFriendStatus] = React.useState(null);
   const [joinGameList, setJoinGameList] = useState(new Array());
@@ -41,7 +41,7 @@ export default function Profile({ match }) {
 
   // 게임 갯수 출력
   useEffect(() => {
-    getJoinGameNum(toUser);
+    // getJoinGameNum(toUser);
     getUserJoinGames(
       (response) => {
         console.log("이거", response.data.data);
@@ -90,6 +90,9 @@ export default function Profile({ match }) {
 
   // 유저 정보
   const ReadToUserInfo = (toUser) => {
+    if (toUser === fromUser.uid) {
+      setFriendStatus(3);
+    }
     fire.db
       .collection("users")
       .doc(toUser)
@@ -105,6 +108,15 @@ export default function Profile({ match }) {
           .then((friends) => {
             // console.log(friends.docs)
             setFriendNumber(friends.docs.length);
+          });
+        fire.db
+          .collection("users")
+          .doc(toUser)
+          .collection("joinGames")
+          .get()
+          .then((doc) => {
+            console.log(doc.docs);
+            setJoinedGame(doc.docs.length);
           });
       });
     fire.db
@@ -134,18 +146,6 @@ export default function Profile({ match }) {
     //     }
     //     setFriendStatus(snapshot.data().status);
     //   })
-  };
-
-  // 유저 조인 게임 갯수
-  const getJoinGameNum = (toUser) => {
-    fire.db
-      .collection("users")
-      .doc(toUser)
-      .collection("joinGames")
-      .get()
-      .then((doc) => {
-        setJoinedGame(doc.docs.length);
-      });
   };
 
   // axios 요청
@@ -198,6 +198,10 @@ export default function Profile({ match }) {
                 friendStatus === 2 ? (
                   <div className={styles.add_btn}>
                     <Button className={styles.fix_btn}>FRIEND</Button>
+                  </div>
+                ) : friendStatus === 3 ? (
+                  <div className={styles.add_btn}>
+                    <Button className={styles.fix_btn}>IT'S ME</Button>
                   </div>
                 ) : (
                   // 친구 추가

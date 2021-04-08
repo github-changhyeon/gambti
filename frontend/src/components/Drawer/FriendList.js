@@ -60,6 +60,7 @@ export default function FriendList({ showChat }) {
   return (
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
+        {/* TODO: 친구없을때 UI 고치기 */}
         {
           friendList.length === 0 ?
             <div >
