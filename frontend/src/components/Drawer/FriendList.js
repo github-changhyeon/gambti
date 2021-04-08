@@ -60,24 +60,40 @@ export default function FriendList({ showChat }) {
   return (
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
-        {friendList.map((fuser, i) => {
-          return (
-            <div key={i} style={{ width: '195px' }}
-            >
-              <MediumProfile
-                propsUser={{ nickname: fuser.data().nickname, email: fuser.data().email, imgPath: fuser.data().imgPath }}
-                onClick={() => {
-                  handleChatChange(fuser)
-                }
-                }
-              />
-              <hr />
-            </div>
+        {
+          friendList.length === 0 ?
+            <div >
+              <p>
+                친구가 없습니다.
+              </p>
+              <p>
 
-          );
+                새로운 친구를 만나보세요!
+              </p>
+            </div> :
+            <>
+              {friendList.map((fuser, i) => {
+                return (
+                  <div key={i} style={{ width: '195px' }}
+                  >
+                    <MediumProfile
+                      propsUser={{ nickname: fuser.data().nickname, email: fuser.data().email, imgPath: fuser.data().imgPath }}
+                      onClick={() => {
+                        handleChatChange(fuser)
+                      }
+                      }
+                    />
+                    <hr />
+                  </div>
 
+                );
+
+              }
+              )}
+
+            </>
         }
-        )}
+
         {/* {
           chat && */}
         {
