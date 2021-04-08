@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react";
-import styles from "./Chat.module.css";
-import CloseButton from "src/components/CloseButton/CloseButton";
-import InputBase from "@material-ui/core/InputBase";
+import React, { useEffect, useContext } from 'react';
+import styles from './Chat.module.css';
+import CloseButton from 'src/components/CloseButton/CloseButton';
+import Input from "@material-ui/core/InputBase";
 import MediumProfile from "src/components/MediumProfile/MediumProfile";
 import SmallProfile from "src/components/SmallProfile/SmallProfile";
 import NearMeIcon from "@material-ui/icons/NearMe";
@@ -163,59 +163,78 @@ export default function Chat({
   };
 
   return (
-    <div>
-      {close ? (
-        <div className={styles.chat}>
-          <div className={styles.root}>
-            <div className={styles.header}>
-              {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
-              {chatRoomInfo.type === "Group" ? (
-                <div className={styles.header_profile}>
-                  <MediumProfile
-                    propsUser={{
-                      nickname: chatRoomInfo.gameName,
-                      email: chatRoomInfo.roomName,
-                      imgPath: chatRoomInfo.imgPath,
-                    }}
+    <div style={{display: 'flex', flexDirection: 'column'}}>
+      {
+        close ? (
+          <div className={styles.chat}>
+            <div className={styles.root}>
+              <div className={styles.header}>
+                {/* 1:1 채팅일 경우, 1:n 채팅일 경우 */}
+                {
+                  chatRoomInfo.type === 'Group' ?
+                    <div className={styles.header_profile}>
+                      <MediumProfile propsUser={{ nickname: chatRoomInfo.gameName, email: chatRoomInfo.roomName, imgPath: chatRoomInfo.imgPath }} />
+                    </div> :
+                    propsUser ?
+                      <div className={styles.header_profile}
+                        onClick={() => {
+                          history.push({
+                            pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+                              uid: propsUser.id,
+                            }),
+                          });
+                          onClose();
+                        }}
+                      >
+                        <MediumProfile propsUser={{ nickname: propsUser.data().nickname, email: propsUser.data().email, imgPath: propsUser.data().imgPath }} />
+                      </div>
+                      :
+                      youId ?
+                        <div className={styles.header_profile}
+                          onClick={() => {
+                            history.push({
+                              pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
+                                uid: youInfo.uid,
+                              }),
+                            });
+                            onClose();
+                          }}>
+                          <MediumProfile propsUser={{ nickname: youInfo.nickname, email: youInfo.email, imgPath: youInfo.imgPath }} />
+                        </div> :
+                        <div>
+
+                        </div>
+
+                }
+
+                <div>
+                  <CloseButton color="#cecece"
+                    onClick={onClose}
                   />
                 </div>
-              ) : propsUser ? (
-                <div
-                  className={styles.header_profile}
-                  onClick={() => {
-                    history.push({
-                      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
-                        uid: propsUser.id,
-                      }),
-                    });
-                    onClose();
-                  }}
-                >
-                  <MediumProfile
-                    propsUser={{
-                      nickname: propsUser.data().nickname,
-                      email: propsUser.data().email,
-                      imgPath: propsUser.data().imgPath,
-                    }}
-                  />
+              </div>
+              {/* Chat Message */}
+              <Box className={styles.box}>
+                <div className={styles.message}>
+                  {chatRoomId ? <Message roomId={chatRoomId} /> : <></>}
                 </div>
-              ) : youId ? (
-                <div
-                  className={styles.header_profile}
-                  onClick={() => {
-                    history.push({
-                      pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
-                        uid: youInfo.uid,
-                      }),
-                    });
-                    onClose();
-                  }}
-                >
-                  <MediumProfile
-                    propsUser={{
-                      nickname: youInfo.nickname,
-                      email: youInfo.email,
-                      imgPath: youInfo.imgPath,
+              </Box>
+              {/* Input */}
+              <div className={styles.input_position}>
+                <div className={styles.input}>
+                  <Input
+                    className={styles.input_root}
+                    placeholder="메시지를 입력하세요"
+                    inputProps={{ "aria-label": "search" }}
+                    onChange={handleInputChange}
+                    value={inputs}
+                    onKeyPress={(event) => {
+                      if (event.key === 'Enter') {
+                        console.log('hi', chatRoomId, event.target.value)
+                        if (chatRoomId && event.target.value) {
+                          handleSendMessage(chatRoomId, event.target.value);
+                        }
+                      }
                     }}
                   />
                 </div>
