@@ -250,10 +250,14 @@ export default function Header({ isLogin }) {
                     <div className={styles.root}>
                       {notiList.length === 0 ? (
                         <div className={styles.no_noti}>
-                          <div>
-                            <MoodBadIcon className={styles.sad_icon} />
+                          <div className={styles.eyes}>
+                            <div className={styles.eye}></div>
+                            <div className={styles.eye}></div>
                           </div>
-                          <div style={{ marginTop: "1rem" }}>
+                          <div className={styles.sad}></div>
+                          <div
+                            style={{ fontFamily: "DungGeunMo", zIndex: "500" }}
+                          >
                             새로운 알람이 없습니다.
                           </div>
                         </div>

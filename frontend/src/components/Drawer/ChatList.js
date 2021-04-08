@@ -124,17 +124,16 @@ export default function ChatList({ showChat }) {
     setCurrentRoomId(room.roomId);
     setChat(!chat);
 
-    fire.db
-      .collection("users")
-      .doc(user.uid)
-      .collection("newChats")
-      .doc(room.roomId)
-      .set({
-        new: false,
-      });
-
     // 1:1 채팅이면 상대방의 uid 넣어줌
     if (room.type === "OneOnOne") {
+      fire.db
+        .collection("users")
+        .doc(user.uid)
+        .collection("newChats")
+        .doc(room.roomId)
+        .set({
+          new: false,
+        });
       if (room.users[1] === user.uid) {
       } else {
         setYouId(room.users[1]);
