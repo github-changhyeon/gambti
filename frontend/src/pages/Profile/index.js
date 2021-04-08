@@ -26,7 +26,7 @@ export default function Profile({ match }) {
   // 상대방
   const toUser = match.params.uid;
   const [joinedGame, setJoinedGame] = React.useState(0);
-  const [friendNumber, setFriendNumber] = React.useState(1);
+  const [friendNumber, setFriendNumber] = React.useState(0);
   const [toUserInfo, setToUserInfo] = React.useState('');
   const [friendStatus, setFriendStatus] = React.useState(null);
 

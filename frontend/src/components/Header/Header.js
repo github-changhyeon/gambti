@@ -287,8 +287,8 @@ export default function Header({ isLogin }) {
                   // textvalue={user.nickname.substring(0, 1)}
                   imgPath={user.imgPath}
                 ></AvatarComp>
-                <div className={styles.dropdown_content} onClick={goProfile}>
-                  <div className={styles.dropdown_menu}>
+                <div className={styles.dropdown_content}>
+                  <div onClick={goProfile} className={styles.dropdown_menu}>
                     <p>
                       <FaceIcon />
                     </p>
