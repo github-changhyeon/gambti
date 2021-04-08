@@ -84,6 +84,7 @@ security:
     - /games/recommends/**
     - /search/**
     - /games/detail/**
+    - /games/**/joinGames
 
   exposed-headers:
     - X-Xsrf-Token

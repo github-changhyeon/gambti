@@ -219,20 +219,33 @@ public class GameService {
 
     }
 
-    public List<JoinGamesRes> joinGame(HttpServletRequest httpServletRequest) {
-        FirebaseToken token = firebaseTokenUtils.decodedToken(httpServletRequest);
-        if(token != null){
-            String uid = token.getUid();
+    public List<GameSimpleRes> joinGame(String userId, HttpServletRequest httpServletRequest) {
+        User loginUser = getLoginUser(httpServletRequest);
+        User profileUser = userRepository.findById(userId).get();;
 
-            //찾아온 유저 no로 join한 게임 list를 가지고온다.
-            List<UserJoinGame> joinGames = userJoinGameRepository.findByUserId(uid);
-            List<JoinGamesRes> joinGamesResList = new ArrayList<>();
-            for (UserJoinGame ujg : joinGames) {
-                joinGamesResList.add(new JoinGamesRes(ujg.getGame()));
-            }
+        List<UserJoinGame> profileUserjoinGames = profileUser.getUserJoinGames();
+        List<GameSimpleRes> joinGamesResList;
+
+        if ( loginUser != null) {
+            joinGamesResList = profileUserjoinGames.stream()
+                    .map(userJoinGame -> {
+                        GameSimpleRes gameSimpleRes = new GameSimpleRes(userJoinGame.getGame());
+                        gameSimpleRes.setJoined(userJoinGameRepository.existsByUserIdAndGameId(loginUser.getId(), userJoinGame.getGame().getId()));
+                        gameSimpleRes.setJoinUserCount(userJoinGameRepository.countByGameId(userJoinGame.getGame().getId()));
+                        gameSimpleRes.setOwned(userOwnGameRepository.existsByUserId(loginUser.getId()));
+                        return gameSimpleRes;
+                    }).collect(Collectors.toList());
+
+            return joinGamesResList;
+        } else {
+            joinGamesResList = profileUserjoinGames.stream()
+                    .map(userJoinGame -> {
+                        GameSimpleRes gameSimpleRes = new GameSimpleRes(userJoinGame.getGame());
+                        gameSimpleRes.setJoinUserCount(userJoinGameRepository.countByGameId(userJoinGame.getGame().getId()));
+                        return gameSimpleRes;
+                    }).collect(Collectors.toList());
             return joinGamesResList;
         }
-        return null;
     }
 
     @Transactional(readOnly = true)
