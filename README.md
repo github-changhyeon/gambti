@@ -101,56 +101,56 @@
 
 ### **MBTI**
 - MBTI 검사
-![function01](README.assets/function_01.png)
+![function01](README.assets/function_01.PNG)
 
 ### **회원**
 
 - 실시간 채팅
   - 친구 또는 매칭된 팀원과 실시간을 채팅
-![function05](README.assets/function_05.png)
+![function05](README.assets/function_05.PNG)
 
 - 실시간 알림
   - 실시간 알림을 통해 커뮤니케이션 기능 활성화
-![function07](README.assets/function_07.png)
+![function07](README.assets/function_07.PNG)
 
 - 회원가입
   - Firebase 메일 인증을 기반으로 함
-![function02](README.assets/function_02.png)
+![function02](README.assets/function_02.PNG)
 
 - 로그인
   - Bearer Token 기반
-![function12](README.assets/function_0.png)
+![function12](README.assets/function_12.PNG)
 
 - 비밀번호 변경
   - Firebase를 통해 사용자 재인증 후 비밀번호 변경
-![function03](README.assets/function_03.png)
+![function03](README.assets/function_03.PNG)
 
 - 비밀번호 찾기
   - Firebase 메일 인증을 기반으로 비밀번호 찾기
-![function06](README.assets/function_06.png)
+![function06](README.assets/function_06.PNG)
 
 
 ### 게임 추천
 
 - 게임 정보 확인
   - 스팀 게임에 대한 상세 정보 조회 가능
-![function08](README.assets/function_08.png)
+![function08](README.assets/function_08.PNG)
 
 - 게임 추천
   - MBTI와 사용자 성향을 고려한 개인화 추천 제공
-![function10](README.assets/function_10.png)
+![function10](README.assets/function_10.PNG)
 
 
 ### 팀원 추천
 
 - MBTI와 사용자 로그 데이터 분석에 따른 팀원 자동 매칭
-![function09](README.assets/function_09.png)
+![function09](README.assets/function_09.PNG)
 
 
 ### 친구 추천
 
 - MBTI와 사용자 로그에 따라 친구 추천
-![function11](README.assets/function_11.png)
+![function11](README.assets/function_11.PNG)
 
 
 <br/><br/><br/>
