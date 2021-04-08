@@ -19,7 +19,6 @@
 - [Architecture](#archiecture)
 - [Tech Stack](#tech-stack)
 - [Feature](#feature)
-- [main function](#main-function)
 - [Wireframe](#wireframe)
 
 <br/><br/><br/>
