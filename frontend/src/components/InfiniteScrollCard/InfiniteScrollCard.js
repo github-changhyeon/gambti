@@ -17,6 +17,7 @@ import { UserContext } from "src/Context/UserContext";
 import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
 import $ from "jquery";
 import zIndex from "@material-ui/core/styles/zIndex";
+import fire from "src/fire";
 
 export default function InfiniteScrollCard({ params, routerMatch }) {
   const user = useContext(UserContext);
@@ -133,13 +134,34 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         },
         (response) => {
           console.log("무한스크롤", response.data.data.content);
-          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
-          setPageNum((pageNum) => pageNum + 1);
-          if (response.data.data.last) {
-            setIsEnd(true);
+          let tempArr = new Array();
+          for (let i = 0; i < response.data.data.content.length; ++i) {
+            fire.db
+              .collection("users")
+              .doc(response.data.data.content[i].userId)
+              .get()
+              .then((user) => {
+                console.log("유저");
+                console.log("유저", user.data());
+                if (user.data() !== null && user.data() !== undefined) {
+                  tempArr.push(response.data.data.content[i]);
+                }
+
+                if (i === response.data.data.content.length - 1) {
+                  setItems((items) => [...items, ...tempArr]);
+                }
+                setPageNum((pageNum) => pageNum + 1);
+                if (response.data.data.last) {
+                  setIsEnd(true);
+                }
+                setIsFetching(false);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
-          setIsFetching(false);
         },
         (error) => {
           console.log(error);
@@ -159,6 +181,24 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
+          let tempArr = new Array();
+          for (let i = 0; i < response.data.data.content.length; ++i) {
+            fire.db
+              .collection("users")
+              .doc(response.data.data.content[i].userId)
+              .get()
+              .then((user) => {
+                console.log("유저");
+                console.log("유저", user.data());
+                tempArr.push(user.data());
+                if (i === response.data.data.content.length - 1) {
+                  setItems([...items, ...response.data.data.content]);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
           setPageNum((pageNum) => pageNum + 1);
           if (response.data.data.last) {
             setIsEnd(true);
@@ -266,40 +306,53 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
         ))}
       </Grid>
       {isFetching ? (
-        <div style={{
-          flexFlow: 'nowrap',
-          flexDirection: 'row',
-          display: 'Flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          zIndex: '100'
-        }}>
-        <Typography
+        <div
+          style={{
+            flexFlow: "nowrap",
+            flexDirection: "row",
+            display: "Flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            zIndex: "100",
+          }}
+        >
+          <Typography
             variant="h7"
             className={styles.dataLoading}
-            data-text='데이터를 받아오는 중입니다.'
-          style={{ color: "white", margin: "10px 0px 0px 0px", fontFamily: 'DungGeunMo'}}
-          gutterBottom
-        >
+            data-text="데이터를 받아오는 중입니다."
+            style={{
+              color: "white",
+              margin: "10px 0px 0px 0px",
+              fontFamily: "DungGeunMo",
+            }}
+            gutterBottom
+          >
             데이터를 받아오는 중입니다.
-        </Typography>
+          </Typography>
         </div>
       ) : null}
       {isEnd ? (
-        <div style={{
-          flexFlow: 'nowrap',
-          flexDirection: 'row',
-          display: 'Flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          zIndex: 100}}>
-        <Typography
-          variant="h7"
-          style={{ color: "white", margin: "10px 0px 0px 0px",  fontFamily:'DungGeunMo' }}
-          gutterBottom
+        <div
+          style={{
+            flexFlow: "nowrap",
+            flexDirection: "row",
+            display: "Flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            zIndex: 100,
+          }}
         >
+          <Typography
+            variant="h7"
+            style={{
+              color: "white",
+              margin: "10px 0px 0px 0px",
+              fontFamily: "DungGeunMo",
+            }}
+            gutterBottom
+          >
             불러올 데이터가 없습니다.
-        </Typography>
+          </Typography>
         </div>
       ) : null}
     </Container>
