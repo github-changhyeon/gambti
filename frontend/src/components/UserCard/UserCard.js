@@ -65,7 +65,7 @@ export default function UserCard({ isLogin, simpleUserInfo }) {
               className={styles.card_logo_img}
               onClick={() => {
                 history.push({
-                  pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
+                  pathname: generatePath(routerInfo.PAGE_URLS.PROFILE, {
                     uid: userInfo.uid,
                   }),
                 });
