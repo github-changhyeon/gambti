@@ -6,6 +6,7 @@
   bottom: 0;
   align-items: center; /* 세로에서 가운데에 요소를 배치 */
   text-align: center;
+  clear: both;
 }
 
 .footer_logo {

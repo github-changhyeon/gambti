@@ -4,13 +4,12 @@
 }
 .small {
   width: 80px;
-  
 }
 /* GameCard, UserCard, MainButton */
 .medium {
-  width: 200px;
+  width: 90%;
   color: #000000;
-  background-color: #CCFF00;
+  background-color: #ccff00;
 }
 /* login, signup, Forgot, ForgotSent */
 .large {
@@ -26,4 +25,18 @@
   font-weight: bold;
   border-radius: 15px;
   font-size: 35px;
+}
+.bold {
+  width: 150px;
+  height: 45px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 20px;
+}
+.noti {
+  width: 200px;
+  height: 35px;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 15px;
 }

@@ -1,30 +1,30 @@
-import React, { useEffect, useState, useContext } from "react";
-import { generatePath } from "react-router-dom";
-import routerInfo from "src/constants/routerInfo";
-import styles from "./index.module.css";
-import GameCard from "src/components/GameCard/GameCard";
-import fire from "src/fire";
-import { useHistory } from "react-router";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import GenreList from "src/components/GenreList/GenreList";
-import InfiniteScrollCard from "src/components/InfiniteScrollCard/InfiniteScrollCard";
-import RepresentImage from "src/pages/Home/home-components/RepresentImage";
-import { UserContext } from "src/Context/UserContext";
+import React, { useEffect, useContext, useState } from 'react';
+import routerInfo from 'src/constants/routerInfo';
+import styles from './index.module.css';
+import GameCard from 'src/components/GameCard/GameCard';
+import fire from 'src/fire';
+import { useHistory } from 'react-router';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import GenreList from 'src/components/GenreList/GenreList';
+import InfiniteScrollCard from 'src/components/InfiniteScrollCard/InfiniteScrollCard';
+import RepresentImage from 'src/pages/Home/home-components/RepresentImage';
+import { UserContext } from 'src/Context/UserContext';
+import ScrollArrow from 'src/components/ScrollArrow/ScrollArrow';
 
 export default function Home({ match }) {
   const history = useHistory();
 
   // var user = fire.auth().currentUser;
-  // const [nickName, setNickName] = useState('')
+  // const [nickname, setNickname] = useState('')
   // const [email, setEmail] = useState('')
   // const [photoUrl, setPhotoUrl] = useState('')
   // const [uid, setUid] = useState('')
   // const [emailVerified, setEmailVerified] = useState('')
   // 전역변수 usertoken 가져오기
+  console.log(match);
   const user = useContext(UserContext);
   const currentUser = fire.auth.currentUser;
 
@@ -33,7 +33,7 @@ export default function Home({ match }) {
     fire.auth
       .signOut()
       .then(() => {
-        history.push("/");
+        history.push('/');
         window.localStorage.clear();
       })
       .catch((error) => {
@@ -43,18 +43,20 @@ export default function Home({ match }) {
 
   return (
     <div className={styles.background}>
+      <ScrollArrow />
       <RepresentImage />
       <Typography
         variant="h5"
-        style={{ color: "white", margin: "20px 0px 0px 20px" }}
+        style={{ color: 'white', margin: '20px 0px 0px 20px', letterSpacing: '2px' }}
         gutterBottom
       >
         Type of Games
       </Typography>
-      <GenreList propsOrder="Random"></GenreList>
+      <GenreList propsOrder="hot"></GenreList>
       <Typography
+        id="scrollToThis"
         variant="h5"
-        style={{ color: "white", margin: "20px 0px" }}
+        style={{ color: 'white', margin: '20px 0px', letterSpacing: '2px' }}
         gutterBottom
         align="center"
       >
@@ -62,14 +64,26 @@ export default function Home({ match }) {
       </Typography>
       <Typography
         variant="body1"
-        style={{ color: "white", margin: "20px 0px 40px 0px" }}
+        style={{ color: 'white', margin: '20px 0px 40px 0px', letterSpacing: '1px' }}
         paragraph
         align="center"
       >
         Discover, follow, and play games!
       </Typography>
       {/* TODO: 인피니티 스크롤 router 이동에 따라서 랜더링 다시 안되는 부분 수정 */}
-      <InfiniteScrollCard genreId={0} routerMatch={match} />
+      <div>
+        <div>
+          <InfiniteScrollCard
+            params={{
+              type: 3,
+              genreId: 0,
+              order: 'DESC',
+              word: '',
+            }}
+            routerMatch={match}
+          />
+        </div>
+      </div>
       {/* <h1>Hello Home</h1>
       <a href="/test">Test Page</a>
       { user != null ?

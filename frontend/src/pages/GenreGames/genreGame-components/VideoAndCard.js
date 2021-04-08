@@ -1,23 +1,26 @@
 import React from "react";
-import GameCard from "src/components/GameCard/GameCard";
+import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
 import styles from "src/pages/GenreGames/index.module.css";
 
-export default function VideoAndCard({ gameInfo }) {
+export default function VideoAndCard({ gameInfo, clickDeleteBtn }) {
   return (
     <div
       style={{
         height: "300px",
-        width: "100%",
         display: "flex",
+        // width: "100%",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#202020",
       }}
     >
-      <div style={{ width: "35%", display: "inline-block" }}>
-        <GameCard gameInfo={gameInfo}></GameCard>
+      <div style={{ width: "280px" }}>
+        <RecommendedGameCard
+          clickDeleteBtn={clickDeleteBtn}
+          gameInfo={gameInfo}
+        ></RecommendedGameCard>
       </div>
-      <div style={{ width: "55%", padding: "0px 0px 0px 40px" }}>
+      <div style={{ padding: "0px 0px 0px 40px" }}>
         <div
           className={
             styles.talk_bubble +
@@ -31,11 +34,10 @@ export default function VideoAndCard({ gameInfo }) {
             styles.btm_left_in
           }
         >
-          {" "}
           {gameInfo.videoUrl === null ? (
             <img
-              className={styles.round}
               width="100%"
+              height="auto"
               style={{ maxHeight: "283px" }}
               src={gameInfo.backgroundImagePath}
             ></img>
@@ -47,7 +49,6 @@ export default function VideoAndCard({ gameInfo }) {
               width="100%"
               height="auto"
               controls={false}
-              className={styles.round}
             >
               <source src={gameInfo.videoUrl} type="video/mp4" />
             </video>

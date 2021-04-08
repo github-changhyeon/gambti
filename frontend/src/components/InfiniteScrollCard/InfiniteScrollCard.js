@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GameCard from "src/components/GameCard/GameCard";
 import styles from "./InfiniteScrollCard.module.css";
@@ -6,10 +6,20 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { Button, Card } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { getGamesOrderBy } from "src/common/axios/Game";
+import {
+  getGamesOrderBy,
+  getRecommendedGames,
+  deleteGame,
+} from "src/common/axios/Game";
+import { searchGames, searchUsers } from "src/common/axios/Search";
+import UserCard from "src/components/UserCard/UserCard";
+import { UserContext } from "src/Context/UserContext";
+import RecommendedGameCard from "src/components/RecommendedGameCard/RecommendedGameCard";
+import $ from "jquery";
+import zIndex from "@material-ui/core/styles/zIndex";
 
-export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
-  // 새로운 state 변수를 선언하고, count라 부르겠습니다.
+export default function InfiniteScrollCard({ params, routerMatch }) {
+  const user = useContext(UserContext);
 
   // const [items, setItems] = useState(Array.from({ length: 20 }));
   const [items, setItems] = useState(new Array());
@@ -18,30 +28,171 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
   const [isEnd, setIsEnd] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const fetchData = () => {
-    //TODO: change
-    setIsFetching(true);
+  // $(".close")
+  //   .off()
+  //   .on("click", function () {
+  //     // alert("haha");
+  //     console.log("안녕", this);
+  //     var $target = $(this).parents(".abc");
+  //     console.log($target);
+  //     $target.hide("slow", function () {
+  //       $target.css("display", "none");
+  //     });
+  //   });
 
-    getGamesOrderBy(
-      {
-        genreId: genreId,
-        pageNum: pageNum,
-        size: size,
-      },
+  const clickDeleteBtnFunc = (params) => {
+    let $pTarget = $(params.element.target).parents(".parentGrid");
+    console.log($pTarget);
+    $pTarget.hide("slow", function () {
+      $pTarget.css("display", "none");
+    });
+    deleteGame(
+      params.gameId,
       (response) => {
-        console.log("무한스크롤", response.data.data.content);
-        setItems((items) => [...items, ...response.data.data.content]);
-        // setItems([...items, ...res.data.data.content]);
-        setPageNum(pageNum + 1);
-        if (response.data.data.last) {
-          setIsEnd(true);
+        if (response.data.status !== "success") {
+          console.log("delete error");
         }
-        setIsFetching(false);
       },
       (error) => {
         console.log(error);
       }
     );
+  };
+
+  const fetchData = () => {
+    //TODO: change
+    setIsFetching(true);
+
+    if (params.type === 0) {
+      // find
+      let direction = params.direction;
+      let colName = params.colName;
+      if (colName === "price") {
+        direction = "ASC";
+      } else if (colName === "hot") {
+        colName = "metascore";
+      } else if (colName === "new") {
+        colName = "releaseDate";
+      }
+      getGamesOrderBy(
+        {
+          genreId: params.genreId,
+          pageNum: pageNum,
+          size: size,
+          direction: direction,
+          colName: colName,
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          console.log("여기야", pageNum);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum((pageNum) => pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 1) {
+      // search games
+      searchGames(
+        {
+          word: params.word,
+          pageNum: pageNum,
+          size: size,
+          colName: "appName",
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum((pageNum) => pageNum + 1);
+          // setPageNum(pageNum + 1);
+
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 2) {
+      // search users
+      searchUsers(
+        {
+          word: params.word,
+          pageNum: pageNum,
+          size: size,
+          colName: "nickname",
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum((pageNum) => pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 3) {
+      // recommends
+      console.log("왜0?", pageNum);
+      getRecommendedGames(
+        {
+          isLogin: user.isLoggedIn,
+          genreId: params.genreId,
+          pageNum: pageNum,
+          size: size,
+        },
+        (response) => {
+          console.log("무한스크롤", response.data.data.content);
+          setItems((items) => [...items, ...response.data.data.content]);
+          // setItems([...items, ...response.data.data.content]);
+          setPageNum((pageNum) => pageNum + 1);
+          if (response.data.data.last) {
+            setIsEnd(true);
+          }
+          setIsFetching(false);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (params.type === 4) {
+      // friend
+      // searchUsers(
+      //   {
+      //     word: params.word,
+      //     pageNum: pageNum,
+      //     size: size,
+      //     colName: "nickname",
+      //   },
+      //   (response) => {
+      //     console.log("무한스크롤", response.data.data.content);
+      //     setItems((items) => [...items, ...response.data.data.content]);
+      //     // setItems([...items, ...response.data.data.content]);
+      //     setPageNum((pageNum) => pageNum + 1);
+      //     if (response.data.data.last) {
+      //       setIsEnd(true);
+      //     }
+      //     setIsFetching(false);
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //   }
+      // );
+    }
   };
 
   const handleScroll = () => {
@@ -59,18 +210,15 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
   };
 
   useEffect(() => {
-    // scroll event listener 등록
-    // console.log("매치매치", routerMatch);
     setItems(new Array());
-    // console.log("매치 리스트", items);
-    fetchData();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      // scroll event listener 해제
-
-      window.removeEventListener("scroll", handleScroll);
-    };
+    setPageNum(1);
   }, [routerMatch]);
+
+  useEffect(() => {
+    if (pageNum === 1) {
+      fetchData();
+    }
+  }, [pageNum]);
 
   useEffect(() => {
     // scroll event listener 등록
@@ -83,40 +231,76 @@ export default function InfiniteScrollCard({ genreId, order, routerMatch }) {
   }, [isFetching]);
 
   return (
-    // <div>aa</div>
     <Container maxWidth="lg" spacing={4}>
       <Grid container spacing={4}>
         {items.map((item, i) => (
           <Grid
             item
-            key={i}
             xs={12}
             sm={6}
             md={4}
             lg={3}
-            style={{ display: "flex", justifyContent: "center" }}
+            key={i}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            className="parentGrid"
           >
-            <GameCard isLogin={true} gameInfo={item}></GameCard>
+            {params.type === 2 ? (
+              <UserCard isLogin={true} simpleUserInfo={item}></UserCard>
+            ) : null}
+            {params.type === 3 ? (
+              <RecommendedGameCard
+                gameInfo={item}
+                className="close"
+                clickDeleteBtn={(params) => {
+                  clickDeleteBtnFunc({ element: params, gameId: item.gameId });
+                }}
+              ></RecommendedGameCard>
+            ) : null}
+            {params.type === 0 || params.type === 1 ? (
+              <GameCard gameInfo={item}></GameCard>
+            ) : null}
           </Grid>
         ))}
       </Grid>
       {isFetching ? (
+        <div style={{
+          flexFlow: 'nowrap',
+          flexDirection: 'row',
+          display: 'Flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          zIndex: '100'
+        }}>
         <Typography
-          variant="h5"
-          style={{ color: "white", margin: "10px 0px 0px 0px" }}
+            variant="h7"
+            className={styles.dataLoading}
+            data-text='데이터를 받아오는 중입니다.'
+          style={{ color: "white", margin: "10px 0px 0px 0px", fontFamily: 'DungGeunMo'}}
           gutterBottom
         >
-          데이터를 받아오는 중입니다.
+            데이터를 받아오는 중입니다.
         </Typography>
+        </div>
       ) : null}
       {isEnd ? (
+        <div style={{
+          flexFlow: 'nowrap',
+          flexDirection: 'row',
+          display: 'Flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          zIndex: 100}}>
         <Typography
-          variant="h5"
-          style={{ color: "white", margin: "10px 0px 0px 0px" }}
+          variant="h7"
+          style={{ color: "white", margin: "10px 0px 0px 0px",  fontFamily:'DungGeunMo' }}
           gutterBottom
         >
-          불러올 데이터가 없습니다.
+            불러올 데이터가 없습니다.
         </Typography>
+        </div>
       ) : null}
     </Container>
   );

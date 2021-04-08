@@ -3,8 +3,9 @@ package com.ssafy.gambti.controller.game;
 import com.ssafy.gambti.commons.PageRequest;
 import com.ssafy.gambti.dto.basicResponse.Response;
 import com.ssafy.gambti.dto.game.GameDetailRes;
-import com.ssafy.gambti.dto.game.GameRecommendDto;
+import com.ssafy.gambti.dto.game.GameRecommendRes;
 import com.ssafy.gambti.dto.game.GameSimpleRes;
+import com.ssafy.gambti.dto.game.JoinGamesRes;
 import com.ssafy.gambti.service.game.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,30 +41,45 @@ public class GameController {
     }
 
 
-    @GetMapping(value = "/recommends/{genreId}")
-    @Operation(summary = "추천 게임 조회 ", description = "추천 게임 list를 조회한다.")
-    public ResponseEntity<? extends Response> gameRecommends(@PathVariable Long genreId, HttpServletRequest httpServletRequest){
-        //지금은 우선 random으로 섞어서 주자(페이징 필요 없음)
-        List<GameRecommendDto> gameSimpleResList = gameService.gameRecommends(genreId, httpServletRequest);
-        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", gameSimpleResList), HttpStatus.OK);
+    @GetMapping(value = "/recommends")
+    @Operation(summary = "모든 추천 게임 페이징 처리 조회 ", description = "모든 추천 게임을 페이징 처리하여 조회한다.")
+    public ResponseEntity<? extends Response> gameRecommends(final PageRequest pageable, HttpServletRequest httpServletRequest){
+
+        Page<GameRecommendRes> pagingRecommendGames = gameService.gameRecommends(pageable.of(), httpServletRequest);
+
+        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", pagingRecommendGames), HttpStatus.OK);
     }
 
-// TODO: 2021-03-26 추천 알고리즘 완료 후 진행
 
-//    @PostMapping(value = "/recommends/{gameId}")
-//    @Operation(summary = "추천게임 중 필요없는 게임 제거", description = "gameId를 이용해 게임 추천 제거")
-//    public ResponseEntity<? extends Response> banFromGameRecommends(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
-//        //bangame에 등록해두고 하나 받아서 주자.
-//        GameSimpleRes gameSimpleRes = gameService.banFromGameRecommend(gameId, httpServletRequest);
-//
-//        return new ResponseEntity<>(new Response(SUCCESS, "test", gameSimpleRes), HttpStatus.OK);
-//    }
+    @GetMapping(value = "/recommends/{genreId}")
+    @Operation(summary = "장르 별 추천 게임 리스트 조회", description = "장르 별 추천 게임 리스트 조회")
+    public ResponseEntity<? extends Response> gameRecommends(@PathVariable Long genreId, HttpServletRequest httpServletRequest){
+
+        List<GameRecommendRes> recommendGenreGames = gameService.gameGenreRecommends(genreId, httpServletRequest);
+
+        return new ResponseEntity<>(new Response(SUCCESS, "추천 게임 조회 성공", recommendGenreGames), HttpStatus.OK);
+    }
 
 
-    @GetMapping(value="/{gameId}")
+    @PostMapping(value = "/recommends/{gameId}/ban")
+    @Operation(summary = "추천게임 중 필요없는 게임 제거", description = "gameId를 이용해 게임 추천 제거")
+    public ResponseEntity<? extends Response> banFromGameRecommends(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
+
+        boolean result = gameService.banFromGameRecommend(gameId, httpServletRequest);
+
+        if (result) {
+            return new ResponseEntity<>(new Response(SUCCESS, "추천게임 밴 성공", null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new Response(FAIL, "추천게임 밴 실패", null), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
+    @GetMapping(value="/detail/{gameId}")
     @Operation(summary = "선택된 게임의 detail 정보를 조회", description = "gameId를 통해 하나의 게임의 detail을 조회한다.")
-    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId){
-        GameDetailRes gameDetail = gameService.gameDetail(gameId);
+    public ResponseEntity<? extends Response> gameDetail(@PathVariable Long gameId, HttpServletRequest httpServletRequest){
+        GameDetailRes gameDetail = gameService.gameDetail(gameId, httpServletRequest);
         if (gameDetail != null) {
             return new ResponseEntity<>(new Response(SUCCESS, "게임 디테일 조회 성공", gameDetail), HttpStatus.OK);
         } else {
@@ -81,6 +97,14 @@ public class GameController {
         else{
             return new ResponseEntity<>(new Response(SUCCESS, "변경 실패", null), HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    @GetMapping(value = "/joinGames")
+    @Operation(summary = "유저가 join한 게임 리스트 받기", description = "유저가 이전에 join했던 게임을 받아온다.")
+    public ResponseEntity<? extends Response> joinGames(HttpServletRequest httpServletRequest){
+        List<JoinGamesRes> joinGamesRes = gameService.joinGame(httpServletRequest);
+        return new ResponseEntity<>(new Response(SUCCESS, "유저가 join한 게임 정보", joinGamesRes), HttpStatus.OK);
     }
 
         //TODO : 주석처리 요청은 다른 service로 합친것 들

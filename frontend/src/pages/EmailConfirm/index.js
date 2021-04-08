@@ -3,6 +3,9 @@ import styles from './index.module.css';
 import { useHistory } from 'react-router-dom';
 import fire from 'src/fire';
 import { UserContext } from 'src/Context/UserContext';
+import background from 'src/Images/background.jpg';
+import ButtonComp from 'src/components/ButtonComp/ButtonComp';
+import NeonButton from 'src/components/NeonButton/NeonButton';
 
 export default function EmailConfirm() {
   const history = useHistory();
@@ -14,32 +17,60 @@ export default function EmailConfirm() {
 
   // TODO: 인증 만료 시간 띄워주기
   const reSend = (event) => {
-    currentUser.sendEmailVerification()
+    currentUser
+      .sendEmailVerification()
       .then(() => {
         alert('이메일 인증메일을 재발송 했습니다. 이메일을 확인해주세요.');
       })
       .catch((err) => {
         alert('인증메일이 발송된지 얼마지나지 않았습니다.이메일에서 인증메일을 확인해주세요.');
-      })
+      });
   };
 
   // 로그아웃
   const logout = (event) => {
-    fire.auth.signOut().then(() => {
-      window.localStorage.clear();
-      history.push('/');
-    }).catch((error) => {
-      // An error happened.
-    });
-  }
+    fire.auth
+      .signOut()
+      .then(() => {
+        window.localStorage.clear();
+        history.push('/');
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
-
+  // useEffect(() => {
+  //   if (user.emailVerified) {
+  //     // console.log('go');
+  //     history.push('/');
+  //   }
+  //   console.log(currentUser);
+  //   console.log(user);
+  // }, []);
 
   return (
-    <div>
-      <h1>Hello EmailConfirm</h1>
-      <button onClick={reSend}>재전송</button>
-      <button onClick={logout}>로그아웃</button>
+    <div
+      className={styles.background_image}
+      style={{
+        backgroundImage: `url(${background})`,
+      }}
+    >
+      <div className={styles.background}>
+        <form className={styles.root}>
+          <img className={styles.logo} src="/images/gambti/welcome_to_gambti.png" alt="logo" />
+          <div className={styles.button_group}>
+            <div className={styles.button}>
+              <NeonButton onClick={reSend} textValue="Send Again"></NeonButton>
+              {/* <ButtonComp size="xlarge" textvalue="재전송" color="#CCFF00" onClick={reSend} /> */}
+            </div>
+            <div className={styles.button}>
+              <NeonButton onClick={logout} textValue="Logout"></NeonButton>
+              {/* <ButtonComp size="xlarge" textvalue="로그아웃" color="#CCFF00" onClick={logout} /> */}
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

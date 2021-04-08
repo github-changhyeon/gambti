@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 public class UserBanGame {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +23,10 @@ public class UserBanGame {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
+    public UserBanGame(User user, Game game) {
+        this.user = user;
+        this.game = game;
+    }
 
 }
