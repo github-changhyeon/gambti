@@ -9,7 +9,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import fire from 'src/fire';
 import EditProfiles from 'src/components/EditProfiles/EditProfiles';
-import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import RecommendedFriends from 'src/components/RecommendedFriends/RecommendedFriends';
 
 export default function EditProfile() {
@@ -111,7 +111,7 @@ export default function EditProfile() {
                 <label className={styles.attach_icon}>
                   {/* <i className="fas fa-camera-retro color_black" style={{ fontSize: "1.0m", height: "100%" }}></i> */}
                   {/* <p style={{ fontSize: "3em", height: "100%", color: "white" }}>+</p> */}
-                  <ControlPointIcon style={{ fontSize: "2em", height: "100%", color: "white" }} />
+                  <PhotoCameraIcon style={{ fontSize: "1.5rem", height: "100%", color: "#cecece" }} />
                 </label>
               </div>
 
