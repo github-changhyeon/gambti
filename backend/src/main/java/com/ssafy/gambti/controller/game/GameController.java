@@ -100,10 +100,10 @@ public class GameController {
     }
 
 
-    @GetMapping(value = "/joinGames")
+    @GetMapping(value = "/{userId}/joinGames")
     @Operation(summary = "유저가 join한 게임 리스트 받기", description = "유저가 이전에 join했던 게임을 받아온다.")
-    public ResponseEntity<? extends Response> joinGames(HttpServletRequest httpServletRequest){
-        List<JoinGamesRes> joinGamesRes = gameService.joinGame(httpServletRequest);
+    public ResponseEntity<? extends Response> joinGames(@PathVariable String userId, HttpServletRequest httpServletRequest){
+        List<GameSimpleRes> joinGamesRes = gameService.joinGame(userId, httpServletRequest);
         return new ResponseEntity<>(new Response(SUCCESS, "유저가 join한 게임 정보", joinGamesRes), HttpStatus.OK);
     }
 
