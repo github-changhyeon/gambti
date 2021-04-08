@@ -89,11 +89,13 @@ export default function Profile({ match }) {
     );
   }
 
+
+
   // 유저 정보
   const ReadToUserInfo = (toUser) => {
-    if (toUser === fromUser.uid) {
-      setFriendStatus(3);
-    }
+    const friendRef = fire.db.collection("users").doc(toUser).collection("friends");
+    const friendList = friendRef.where('status', '==', 2);
+    // console.log(friendList)
     fire.db
       .collection("users")
       .doc(toUser)
@@ -101,22 +103,18 @@ export default function Profile({ match }) {
       .then((doc) => {
         setToUserInfo(doc.data());
         // setFriendNumber(doc.data().friends.length);
-        fire.db
-          .collection("users")
-          .doc(toUser)
-          .collection("friends")
-          .get()
-          .then((friends) => {
-            // console.log(friends.docs)
-            setFriendNumber(friends.docs.length);
-          });
+
+        friendList.get().then((doc) => {
+          setFriendNumber(doc.docs.length);
+        })
+
         fire.db
           .collection("users")
           .doc(toUser)
           .collection("joinGames")
           .get()
           .then((doc) => {
-            console.log(doc.docs);
+            // console.log(doc.docs);
             setJoinedGame(doc.docs.length);
           });
       });
@@ -126,7 +124,7 @@ export default function Profile({ match }) {
       .collection("friends")
       .onSnapshot((onSnapshot) => {
         onSnapshot.docs.map((doc) => {
-          console.log("doc.id", doc.id);
+          // console.log("doc.id", doc.id);
           if (doc.id === toUser) {
             fire.db
               .collection("users")
@@ -166,57 +164,73 @@ export default function Profile({ match }) {
         {/* 나의 정보 */}
         <div className={styles.section}>
           <Box className={styles.box}>
-            <div className={styles.profile}>
-              <AvatarComp
-                size="superlarge"
-                imgPath={toUserInfo.imgPath}
-                textvalue={toUserInfo.nickname}
-              ></AvatarComp>
-              {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
-              <Typography className={styles.main_nick}>
-                {toUserInfo.nickname}
-              </Typography>
-              {/* 버튼 구분 */}
-              {
-                // 친구 요청됨
-                friendStatus === 0 ?
+            {
+              toUser === fromUser.uid ?
+                <div className={styles.profile}>
+                  <AvatarComp
+                    size="superlarge"
+                    imgPath={fromUser.imgPath}
+                    textvalue={fromUser.nickname}
+                  ></AvatarComp>
+                  {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
+                  <Typography className={styles.main_nick}>
+                    {fromUser.nickname}
+                  </Typography>
                   <div className={styles.add_btn}>
-                    <Button className={styles.fix_btn}>SEND</Button>
+                    <ButtonComp size='noti' color='#ccff00' textvalue='EDIT' onClick={() => {
+                      history.push({
+                        pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
+                          uid: fromUser.uid,
+                        }),
+                      });
+                    }}></ButtonComp>
                   </div>
-                  : // 친구 수락/ 거절
-                  friendStatus === 1 ?
-                    <div className={styles.add_btn}>
-                      <ButtonComp
-                        size="noti"
-                        color="#ccff00"
-                        textvalue="ACCEPT"
-                        onClick={() => {
-                          handleAddFriend(toUser);
-                        }}></ButtonComp>
-                    </div> :
-                    // 친구 관계
-                    friendStatus === 2 ?
-                      <div className={styles.add_btn}>
-                        <Button className={styles.fix_btn}>FRIEND</Button>
-                      </div> : friendStatus === 3 ?
-                        <div className={styles.add_btn}>
-                          <ButtonComp size='noti' color='#ccff00' textvalue='EDIT' onClick={() => {
-                            history.push({
-                              pathname: generatePath(routerInfo.PAGE_URLS.PROFILE_EDIT, {
-                                uid: fromUser.uid,
-                              }),
-                            });
-                          }}></ButtonComp>
-                        </div> :
+                </div>
 
-                        // 친구 추가
+                :
+                <div className={styles.profile}>
+                  <AvatarComp
+                    size="superlarge"
+                    imgPath={toUserInfo.imgPath}
+                    textvalue={toUserInfo.nickname}
+                  ></AvatarComp>
+                  {/* <AvatarComp size="superlarge" textvalue={userInfo.nickname.substring(0, 1)} ></AvatarComp> */}
+                  <Typography className={styles.main_nick}>
+                    {toUserInfo.nickname}
+                  </Typography>
+                  {
+                    // 친구 요청됨
+                    friendStatus === 0 ?
+                      <div className={styles.add_btn}>
+                        <Button className={styles.fix_btn}>SEND</Button>
+                      </div>
+                      : // 친구 수락/ 거절
+                      friendStatus === 1 ?
                         <div className={styles.add_btn}>
-                          <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
-                            handleAddFriend(toUser);
-                          }}></ButtonComp>
-                        </div>
-              }
-            </div>
+                          <ButtonComp
+                            size="noti"
+                            color="#ccff00"
+                            textvalue="ACCEPT"
+                            onClick={() => {
+                              handleAddFriend(toUser);
+                            }}></ButtonComp>
+                        </div> :
+                        // 친구 관계
+                        friendStatus === 2 ?
+                          <div className={styles.add_btn}>
+                            <Button className={styles.fix_btn}>FRIEND</Button>
+                          </div> :
+                          // 친구 추가
+                          <div className={styles.add_btn}>
+                            <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
+                              handleAddFriend(toUser);
+                            }}></ButtonComp>
+                          </div>
+                  }
+                </div>
+            }
+            {/* 버튼 구분 */}
+
             <Divider
               orientation="vertical"
               flexItem
@@ -300,6 +314,6 @@ export default function Profile({ match }) {
         </Container>
       </TabPanel>
       {/* </Box> */}
-    </div>
+    </div >
   );
 }
