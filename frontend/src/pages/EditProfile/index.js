@@ -62,11 +62,12 @@ export default function EditProfile() {
   }, [])
 
   const ReadInfo = (userId) => {
-    fire.db.collection("users").doc(userId).collection("friends").get()
-      .then((friends) => {
-        // console.log(friends.docs)
-        setFriendNumber(friends.docs.length);
-      })
+    const friendRef = fire.db.collection("users").doc(userId).collection("friends");
+    const friendList = friendRef.where('status', '==', 2);
+
+    friendList.get().then((doc) => {
+      setFriendNumber(doc.docs.length);
+    })
     fire.db.collection("users").doc(userId).collection("joinGames").get()
       .then((doc) => {
         console.log(doc.docs)

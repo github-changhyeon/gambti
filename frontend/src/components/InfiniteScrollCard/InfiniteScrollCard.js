@@ -10,6 +10,7 @@ import {
   getGamesOrderBy,
   getRecommendedGames,
   deleteGame,
+  getUserJoinGames,
 } from "src/common/axios/Game";
 import { searchGames, searchUsers } from "src/common/axios/Search";
 import UserCard from "src/components/UserCard/UserCard";
@@ -170,6 +171,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
     } else if (params.type === 3) {
       // recommends
       console.log("왜0?", pageNum);
+      console.log("요기지/");
       getRecommendedGames(
         {
           isLogin: user.isLoggedIn,
@@ -181,24 +183,7 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log("무한스크롤", response.data.data.content);
           setItems((items) => [...items, ...response.data.data.content]);
           // setItems([...items, ...response.data.data.content]);
-          let tempArr = new Array();
-          for (let i = 0; i < response.data.data.content.length; ++i) {
-            fire.db
-              .collection("users")
-              .doc(response.data.data.content[i].userId)
-              .get()
-              .then((user) => {
-                console.log("유저");
-                console.log("유저", user.data());
-                tempArr.push(user.data());
-                if (i === response.data.data.content.length - 1) {
-                  setItems([...items, ...response.data.data.content]);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
+
           setPageNum((pageNum) => pageNum + 1);
           if (response.data.data.last) {
             setIsEnd(true);
@@ -209,29 +194,6 @@ export default function InfiniteScrollCard({ params, routerMatch }) {
           console.log(error);
         }
       );
-    } else if (params.type === 4) {
-      // friend
-      // searchUsers(
-      //   {
-      //     word: params.word,
-      //     pageNum: pageNum,
-      //     size: size,
-      //     colName: "nickname",
-      //   },
-      //   (response) => {
-      //     console.log("무한스크롤", response.data.data.content);
-      //     setItems((items) => [...items, ...response.data.data.content]);
-      //     // setItems([...items, ...response.data.data.content]);
-      //     setPageNum((pageNum) => pageNum + 1);
-      //     if (response.data.data.last) {
-      //       setIsEnd(true);
-      //     }
-      //     setIsFetching(false);
-      //   },
-      //   (error) => {
-      //     console.log(error);
-      //   }
-      // );
     }
   };
 

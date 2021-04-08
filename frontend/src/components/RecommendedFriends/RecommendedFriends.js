@@ -54,16 +54,19 @@ export default function RecommendedFriends() {
     })
   }
 
+
+  // TODO: 백엔드와 이야기 후 확인
   const addRecFriend = (recFriendId) => {
-    const idToken = window.localStorage.getItem('idToken');
+    const idToken = window.localStorage.getItem("idToken");
     // console.log('idToken', idToken);
+    // console.log('친구왓니..?', idToken)
 
     addFriend(recFriendId, idToken, (response) => {
       console.log(response);
       getRecFriends();
-
-    })
-  }
+      alert('친구 추가가 되었습니다.');
+    });
+  };
 
 
 
