@@ -1,17 +1,17 @@
-import React, { useContext, useEffect } from "react";
-import styles from "./Header.module.css";
-import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AvatarComp from "src/components/AvatarComp/AvatarComp";
-import { useHistory, generatePath } from "react-router";
-import routerInfo from "src/constants/routerInfo";
-import Button from "@material-ui/core/Button";
-import fire from "src/fire";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import FaceIcon from "@material-ui/icons/Face";
-import { UserContext } from "src/Context/UserContext";
-import { event } from "jquery";
+import React, { useContext, useEffect } from 'react';
+import styles from './Header.module.css';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AvatarComp from 'src/components/AvatarComp/AvatarComp';
+import { useHistory, generatePath } from 'react-router';
+import routerInfo from 'src/constants/routerInfo';
+import Button from '@material-ui/core/Button';
+import fire from 'src/fire';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FaceIcon from '@material-ui/icons/Face';
+import { UserContext } from 'src/Context/UserContext';
+import { event } from 'jquery';
 import Box from '@material-ui/core/Box';
 import NotiList from 'src/components/Notifications/NotiList';
 import ButtonComp from 'src/components/ButtonComp/ButtonComp';
@@ -20,22 +20,15 @@ import Moment from 'react-moment';
 import MoodBadIcon from '@material-ui/icons/MoodBad';
 import Badge from '@material-ui/core/Badge';
 
-
-
-
-
 export default function Header({ isLogin }) {
   const history = useHistory();
   const user = useContext(UserContext);
   const [isShownNoti, setIsShownNoti] = React.useState(false);
   const [isNoti, setIsNoti] = React.useState(false);
   const [notiCount, setNotiCount] = React.useState(0);
-  const [searchWord, setSearchWord] = React.useState("");
+  const [searchWord, setSearchWord] = React.useState('');
 
   // console.log(user);
-
-
-
 
   // 로그아웃
   const logout = (event) => {
@@ -63,7 +56,6 @@ export default function Header({ isLogin }) {
     setSearchWord(event.target.value);
   };
 
-
   //Noti
   const [notiList, setNotiList] = React.useState([]);
   const notiRef = React.useRef();
@@ -72,10 +64,14 @@ export default function Header({ isLogin }) {
   useEffect(() => {
     setNotiList([]);
     return ReadNoti(user.uid);
-  }, [])
+  }, []);
 
-  const docs = fire.db.collection('users').doc(user.uid).collection('notifications').where('type', '==', 'friend').where('isRead', '==', false);
-
+  const docs = fire.db
+    .collection('users')
+    .doc(user.uid)
+    .collection('notifications')
+    .where('type', '==', 'friend')
+    .where('isRead', '==', false);
 
   // 노티 읽어줌
   const ReadNoti = (userId) => {
@@ -83,9 +79,9 @@ export default function Header({ isLogin }) {
     docs.onSnapshot((snapshot) => {
       let isRemoved = false;
       const changes = snapshot.docChanges().map((change) => {
-        if (change.type === "removed") {
+        if (change.type === 'removed') {
           isRemoved = true;
-          return notiRef.current.filter((item, i) => item.id != change.doc.id)
+          return notiRef.current.filter((item, i) => item.id != change.doc.id);
         }
         return change.doc;
       });
@@ -96,10 +92,8 @@ export default function Header({ isLogin }) {
       } else {
         setNotiList([...notiRef.current, ...changes]);
       }
-
-    })
-
-  }
+    });
+  };
 
   // 클릭시 프로필 페이지로
   const gotoFriend = (noti) => {
@@ -109,11 +103,11 @@ export default function Header({ isLogin }) {
       }),
     });
     setIsNoti(false);
-    fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).update({
-      isRead: true
-    })
+    fire.db.collection('users').doc(user.uid).collection('notifications').doc(noti.id).update({
+      isRead: true,
+    });
     // console.log('noti', noti.data().isRead);
-  }
+  };
 
   // firestore timeStamp 변환
   function toDate(timestamp) {
@@ -123,18 +117,14 @@ export default function Header({ isLogin }) {
     return new firebase.firestore.Timestamp(seconds, nanoseconds).toDate();
   }
 
-
   // close 하면 삭제
   const handleClearNoti = () => {
     setIsNoti(false);
     notiList.map((noti) => {
-      fire.db.collection("users").doc(user.uid).collection("notifications").doc(noti.id).delete();
-
-    })
+      fire.db.collection('users').doc(user.uid).collection('notifications').doc(noti.id).delete();
+    });
     return setNotiList([]);
-  }
-
-
+  };
 
   return (
     <div className={styles.header}>
@@ -223,55 +213,62 @@ export default function Header({ isLogin }) {
               <Badge badgeContent={notiList.length} color="primary">
                 <NotificationsIcon
                   className={styles.header_right_icon}
-                  style={{ color: "#d1d1d1" }}
+                  style={{ color: '#d1d1d1' }}
                 />
               </Badge>
 
-              {isShownNoti && !isNoti && (
-                <div className={styles.textarea}>Notifications</div>
-              )}
+              {isShownNoti && !isNoti && <div className={styles.textarea}>Notifications</div>}
             </div>
             {isNoti && (
               <div className={styles.noti}>
                 <Box className={styles.paper}>
-                  <div className={styles.title}>
-                    Notifications
-                    </div>
+                  <div className={styles.title}>Notifications</div>
                   <div className={styles.noti_list}>
                     {/* <NotiList /> */}
                     <div className={styles.root}>
-                      {
-                        notiList.length === 0 ?
-                          <div className={styles.no_noti}>
-                            <div >
-                              <MoodBadIcon className={styles.sad_icon} />
-                            </div>
-                            <div style={{ marginTop: '1rem' }}>
-                              새로운 알람이 없습니다.
-            </div>
-                          </div> :
+                      {notiList.length === 0 ? (
+                        <div className={styles.no_noti}>
                           <div>
-                            {
-                              notiList.map((noti) => {
-                                const time = toDate(noti.data().timeStamp);
-
-                                return (
-                                  <div className={styles.shopping_cart_items} onClick={() => { gotoFriend(noti) }}>
-                                    {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
-                                    <div className={styles.cart_item}>
-                                      <div className={styles.cart_item_header}> {noti.data().message}</div>
-                                      <Moment className={styles.cart_item_date} format="MM.DD HH:mm">{time}</Moment>
-                                    </div >
-                                  </div >
-                                );
-                              })
-                            }
+                            <MoodBadIcon className={styles.sad_icon} />
                           </div>
-                      }
-                    </div >
+                          <div style={{ marginTop: '1rem' }}>새로운 알람이 없습니다.</div>
+                        </div>
+                      ) : (
+                        <div>
+                          {notiList.map((noti) => {
+                            const time = toDate(noti.data().timeStamp);
+
+                            return (
+                              <div
+                                className={styles.shopping_cart_items}
+                                onClick={() => {
+                                  gotoFriend(noti);
+                                }}
+                              >
+                                {/* <Moment className={styles.cart_date} format="MM월 DD일, YYYY">{time}</Moment> */}
+                                <div className={styles.cart_item}>
+                                  <div className={styles.cart_item_header}>
+                                    {' '}
+                                    {noti.data().message}
+                                  </div>
+                                  <Moment className={styles.cart_item_date} format="MM.DD HH:mm">
+                                    {time}
+                                  </Moment>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className={styles.button}>
-                    <ButtonComp textvalue="Clear" size="noti" color="#ccff00" onClick={handleClearNoti} />
+                    <ButtonComp
+                      textvalue="Clear"
+                      size="noti"
+                      color="#ccff00"
+                      onClick={handleClearNoti}
+                    />
                   </div>
                 </Box>
               </div>
@@ -288,7 +285,7 @@ export default function Header({ isLogin }) {
                   imgPath={user.imgPath}
                 ></AvatarComp>
                 <div className={styles.dropdown_content}>
-                  <div onClick={goProfile} className={styles.dropdown_menu}>
+                  <div className={styles.dropdown_menu} onClick={goProfile}>
                     <p>
                       <FaceIcon />
                     </p>
@@ -306,6 +303,6 @@ export default function Header({ isLogin }) {
           </>
         )}
       </div>
-    </div >
+    </div>
   );
 }
