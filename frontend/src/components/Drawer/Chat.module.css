@@ -1,0 +1,80 @@
+.root{
+  /* position: absolute;  */
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+.header{
+  background-color: #2a2c2d;
+  height: 70px;
+  border-radius: 10px 10px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: flex-end; */
+}
+.header_profile{
+  margin: 0.25rem 1rem;
+  width: 90%;
+}
+
+.profile{
+  margin: 1.25rem;
+}
+.box{
+ 
+  width: 700px;
+  height: 350px;
+  overflow: auto;
+}
+.message{
+  margin: 0.5rem;
+}
+.box::-webkit-scrollbar{
+  display: none;
+}
+.input_position{
+  margin: 1rem;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.input {
+  /* flex: 0.8; */
+  border-radius: 10px;
+  /* background-color: rgba(255, 255, 255, 0.3); */
+  border: 1px solid #cecece;
+  width: 600px;
+  height: 50px;
+  margin-bottom: 2rem;
+
+}
+.input_root {
+  color: white;
+  width: 600px;
+  padding-left: 20px;
+  height: 50px;
+}
+.search_icon {
+  padding-left: 560px;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  color: #cecece;
+}
+.chat{
+  left: 350px;
+  top: 120px;
+  width: 700px;
+  height: 500px;
+  background-color: #222222;
+  transition: 300ms;
+  position: fixed;
+  z-index: 1000;
+  border-radius: 10px;
+  border: 1px solid #333333;
+  /* overflow: auto; */
+}

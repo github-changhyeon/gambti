@@ -1,0 +1,42 @@
+.user_card {
+  /* width: 283px; */
+  height: 283px;
+  /* max-width: 283px;
+    min-width: 238px; */
+  width: 99%;
+  border-radius: 15px;
+  background-color: #2a2c2d;
+  text-align: center;
+  z-index: 1;
+}
+.user_card_background_img {
+  height: 100px;
+  background-color: #ccff00;
+}
+
+.card_logo_img {
+  position: relative;
+  padding: 0px;
+  margin-top: -52px;
+
+  /* margin-left: 50%; */
+}
+
+.user_card_title {
+  color: white;
+  margin: 0px;
+}
+
+.user_card_button {
+  padding: 0;
+  justify-content: center;
+}
+
+.fix_btn{
+  width: 90%;
+  border-radius: 5px;
+  font-size: 15px;
+  border: 1px solid #ccff00;
+  color: #ccff00;
+  cursor: none;
+}
