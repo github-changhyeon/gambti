@@ -38,27 +38,23 @@ export default function ChatList({ showChat }) {
   const roomId = user.rooms;
 
   useEffect(() => {
-    return fire.db
-      .collection('users')
-      .doc(user.uid)
-      .collection('newChats')
-      .onSnapshot((docs) => {
-        const newChats = docs.docs
-          .filter((d) => d.data().new === true)
-          .map((doc) => {
-            return doc.id;
-          });
-        setNewChatsIds(newChats);
-        console.log('display new to following: ', newChats);
+    return fire.db.collection("users").doc(user.uid).collection("newChats").onSnapshot((docs) => {
+      // console.log('newChats');
+      const newChats = docs.docs.filter(d => d.data().new === true).map((doc) => {
+        return doc.id;
       });
-  }, []);
+      setNewChatsIds(newChats);
+      // console.log("display new to following: ", newChats);
+    })
+  }, [])
+
 
   useEffect(() => {
-    return fire.db.collection('rooms').onSnapshot((docs) => {
-      if (docs.docChanges().length > 0) ReadChats(roomId);
-    });
-    // console.log('mount');
-  }, [chatList]);
+    return fire.db.collection("rooms").onSnapshot((docs) => {
+      if (docs.docChanges().length > 0)
+        ReadChats(roomId);
+    })
+  }, []);
 
   const ReadChats = async (roomIds) => {
     // map을 햇을경우 promise 약속값이 가지고 잇음

@@ -158,7 +158,7 @@ export default function EditProfile() {
               <Divider orientation="vertical" flexItem className={styles.divider} />
               <div className={styles.profile_content}>
                 <Typography className={styles.profile_title}>GAMBTI</Typography>
-                <Typography className={styles.profile_sub}>{user.mbti}</Typography>
+                <Typography className={styles.profile_sub}>{user.mbtiSub}</Typography>
               </div>
             </Box>
             <EditProfiles />
