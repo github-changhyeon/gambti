@@ -22,8 +22,10 @@
 }
 
 .game_card_title {
+  font-family: DungGeunMo;
   color: white;
   margin: 0px;
+  cursor: pointer;
 }
 
 .game_card_button {
@@ -59,7 +61,7 @@
 }
 .neon-block .block:after {
   border-radius: 15px;
-  content: "";
+  content: '';
   position: absolute;
   top: -2px;
   right: -2px;
@@ -79,7 +81,7 @@
   /* z-index: -2; */
 }
 .neon-block .block .rainbow:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;

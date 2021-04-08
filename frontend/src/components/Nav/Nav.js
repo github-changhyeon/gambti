@@ -1,17 +1,17 @@
-import React, { useEffect, useContext } from "react";
-import styles from "./Nav.module.css";
-import AvatarComp from "src/components/AvatarComp/AvatarComp";
-import SearchIcon from "@material-ui/icons/Search";
-import { generatePath, useHistory } from "react-router";
-import ChatDrawer from "../Drawer/ChatDrawer";
-import fire from "src/fire.js";
-import routerInfo from "src/constants/routerInfo";
-import { ChatContext } from "src/Context/ChatContext";
+import React, { useEffect, useContext } from 'react';
+import styles from './Nav.module.css';
+import AvatarComp from 'src/components/AvatarComp/AvatarComp';
+import SearchIcon from '@material-ui/icons/Search';
+import { generatePath, useHistory } from 'react-router';
+import ChatDrawer from '../Drawer/ChatDrawer';
+import fire from 'src/fire.js';
+import routerInfo from 'src/constants/routerInfo';
+import { ChatContext } from 'src/Context/ChatContext';
 
 export default function Nav() {
   const history = useHistory();
 
-  const [atextvalue, setAtextvalue] = React.useState("메세지");
+  const [atextvalue, setAtextvalue] = React.useState('메세지');
   const [isShownChat, setIsShownChat] = React.useState(false);
   const [isShownName, setIsShownName] = React.useState(false);
   const [isShownSearch, setIsShownSearch] = React.useState(false);
@@ -27,7 +27,7 @@ export default function Nav() {
     // console.log(showChat);
     // setShowChat(!showChat);
     chatStore.dispatch({
-      type: "clickMatchBtn",
+      type: 'clickMatchBtn',
       drawer: !showChat,
       chat: false,
       roomId: null,
@@ -49,32 +49,28 @@ export default function Nav() {
   const readJoinGame = () => {
     // message collection 변화값이 있는지 감시
     fire.db
-      .collection("users")
+      .collection('users')
       .doc(fire.auth.currentUser.uid)
-      .collection("joinGames")
-      .orderBy("timestamp")
+      .collection('joinGames')
+      .orderBy('timestamp')
       .onSnapshot((snapshot) => {
         // changes에 변화된 값만 넣어서 return
         let isRemoved = false;
         const changes = snapshot.docChanges().map((change) => {
-          if (change.type === "removed") {
+          if (change.type === 'removed') {
             console.log(change.doc.id);
             // alert(joinGameList.length)
             // joinGameList.forEach((item, i) => { console.log("아이디", item.gameId) });
             isRemoved = true;
-            console.log("줄이기 전에 배열", joinGameList);
-            console.log("줄이기 전에 배열", joinGameRef.current);
+            console.log('줄이기 전에 배열', joinGameList);
+            console.log('줄이기 전에 배열', joinGameRef.current);
             console.log(
-              "다르면 새로 배열 만들어라",
-              joinGameRef.current.filter(
-                (item, i) => item.gameId != change.doc.id
-              )
+              '다르면 새로 배열 만들어라',
+              joinGameRef.current.filter((item, i) => item.gameId != change.doc.id)
             );
-            return joinGameRef.current.filter(
-              (item, i) => item.gameId != change.doc.id
-            );
+            return joinGameRef.current.filter((item, i) => item.gameId != change.doc.id);
           }
-          if (change.type === "added") {
+          if (change.type === 'added') {
             return change.doc.data();
           }
         });
@@ -86,7 +82,7 @@ export default function Nav() {
         // ref는 항상 최신 값을 참조해서 메시지가 다보임
 
         if (isRemoved) {
-          console.log("배열", changes);
+          console.log('배열', changes);
           setJoinGameList(...changes);
         } else {
           setJoinGameList([...joinGameRef.current, ...changes]);
@@ -95,7 +91,7 @@ export default function Nav() {
   };
 
   const handleGameDetail = (gameId) => {
-    console.log("ham", gameId);
+    console.log('ham', gameId);
     history.push({
       pathname: generatePath(routerInfo.PAGE_URLS.DETAIL, {
         gameId: gameId,
@@ -114,13 +110,8 @@ export default function Nav() {
             onMouseLeave={() => setIsShownChat(false)}
             onClick={handleShowChatChange}
           >
-            <AvatarComp
-              size="medium"
-              imgPath="/images/nav/chat.png"
-            ></AvatarComp>
-            {isShownChat && (
-              <div className={styles.textarea}>Chat and Friends List</div>
-            )}
+            <AvatarComp size="medium" imgPath="/images/nav/chat.png"></AvatarComp>
+            {isShownChat && <div className={styles.textarea}>Chat and Friends List</div>}
           </div>
 
           <hr className={styles.divider} />
@@ -138,9 +129,7 @@ export default function Nav() {
                   <AvatarComp size="medium" imgPath={joinGame.imgPath}>
                     {atextvalue}
                   </AvatarComp>
-                  {isShownName && (
-                    <div className={styles.textarea}>Game Name</div>
-                  )}
+                  {isShownName && <div className={styles.textarea}>Game Name</div>}
                 </div>
               );
             })}
@@ -156,9 +145,7 @@ export default function Nav() {
           >
             <div className={styles.search}>
               <SearchIcon className={styles.searchIcon} />
-              {isShownSearch && (
-                <div className={styles.textarea}>Search Game or User</div>
-              )}
+              {isShownSearch && <div className={styles.textarea}>Search Game or User</div>}
             </div>
           </div>
         </div>
