@@ -56,8 +56,7 @@ export default function FriendList({ showChat }) {
     setChat(!chat);
   }
 
-  // TODO: friend status:2 인것만 출력, friend에 user의 데이터 넣어줘야해서
-  // 그냥 위에서 불러서 돌려주는게 나음... 
+
   return (
     <div className={styles.friend_list}>
       <div style={{ width: '500px' }}>
