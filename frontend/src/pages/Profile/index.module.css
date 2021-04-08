@@ -1,6 +1,6 @@
 .root {
-  height: 115vh;
-  background-color: #222222;
+  /* height: 115vh; */
+  background-color: #1a1b1c;
 }
 .upper {
   display: flex;
@@ -10,10 +10,12 @@
 .section {
   width: 70%;
 }
-.section2{
+.section2 {
   width: 30%;
 }
 .box {
+  box-shadow: 5px 5px 5px;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,13 +40,13 @@
   color: white;
   margin: 0.5rem;
 }
-.add_btn{
+.add_btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 220px;
 }
-.fix_btn{
+.fix_btn {
   width: 200px;
   height: 35px;
   font-weight: bold;
@@ -54,7 +56,7 @@
   color: #ccff00;
   cursor: none;
 }
-.info{
+.info {
   /* margin: 4rem; */
   color: white;
   display: flex;
@@ -62,25 +64,24 @@
   align-items: center;
   width: 60%;
 }
-.info_num{
+.info_num {
   display: flex;
   flex-direction: row;
   width: 90%;
 }
-.info_group{
+.info_group {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 50%;
   margin-left: 3rem;
-
 }
-.info_title{
+.info_title {
   /* color: white; */
   font-size: 1rem;
   font-weight: 300;
 }
-.info_number{
+.info_number {
   font-weight: bold;
   font-size: 2.7rem;
 }
@@ -90,21 +91,21 @@
   border-bottom: 14px solid #2a2c2d;
   border-left: none;
   border-right: none;
-  background-color: #cecece;  
+  background-color: #cecece;
 }
-.default{
+.default {
   display: flex;
   flex-direction: row;
   width: 90%;
   /* background-color: red; */
   border: 1px solid #cecece;
-  border-radius: 5px;  
+  border-radius: 5px;
   color: white;
   position: relative;
   margin-bottom: 4rem;
-  top: 10px
+  top: 10px;
 }
-.profile_content{
+.profile_content {
   margin: 1rem;
   display: flex;
   flex-direction: column;
@@ -112,16 +113,16 @@
   width: 50%;
   padding-left: 1.2rem;
 }
-.profile_title{
+.profile_title {
   color: #cecece;
   font-size: 11px;
 }
-.profile_sub{
+.profile_sub {
   color: white;
   font-weight: bold;
   font-size: 15px;
 }
-.friend_box{
+.friend_box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,12 +132,12 @@
   margin: 0rem 4rem;
   border-radius: 15px;
 }
-.rec_title{
+.rec_title {
   margin: 1rem 0rem 0.5rem 1rem;
   color: #cecece;
   font-weight: bold;
 }
-.friend_list{
+.friend_list {
   overflow: auto;
   margin-left: 0.4rem;
 }
@@ -147,16 +148,33 @@
 /* 수정페이지 */
 
 .tab {
-  background-color: #2a2c2d;
+  /* box-shadow: 5px 5px 5px black; */
+  background-color: #222222;
   border-radius: 10px 10px 0px 0px;
   margin-right: 0.09rem;
-
 }
-.tab_panel{
-  background-color: #2a2c2d;
+.tab_panel {
+  /* box-shadow: -5px -5px 5px black; */
+
+  background-color: #222222;
+  padding-top: 10px;
+  min-height: 45vh;
+  max-height: 90vh;
+  overflow-y: scroll;
 }
 
-.edit{
+.tab_panel::-webkit-scrollbar {
+  background-color: #222222;
+}
+
+.tab_panel::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 5px solid transparent;
+}
+
+.edit {
   display: flex;
   flex-direction: row;
   /* justify-content: center; */
@@ -165,20 +183,20 @@
   color: white;
   margin-top: 3rem;
 }
-.edit_content{
+.edit_content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 50%;
 }
-.edit_title{
+.edit_title {
   margin: 1rem 1rem 0rem 1rem;
   /* padding-left: 1.2rem; */
   color: #cecece;
   font-size: 11px;
   font-weight: bold;
 }
-.edit_sub{
+.edit_sub {
   width: 90%;
   margin-left: 1rem;
   margin-bottom: 1rem;
@@ -199,14 +217,14 @@
   margin-top: 0.3rem;
 }
 
-.error{
+.error {
   width: 90%;
   color: orange;
   display: flex;
-  justify-content: flex-end;   
-  font-size: 14px;              
+  justify-content: flex-end;
+  font-size: 14px;
 }
-.edit_pw{
+.edit_pw {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
