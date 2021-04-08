@@ -18,7 +18,7 @@
   overflow: auto;
   margin-left: 0.4rem;
 }
-/* TODO: 스크롤 보이는지 확인 */
+
 .friend_list::-webkit-scrollbar {
   display: none;
 }

@@ -26,7 +26,7 @@ export default function Profile({ match }) {
   // 상대방
   const toUser = match.params.uid;
   const [joinedGame, setJoinedGame] = React.useState(0);
-  const [friendNumber, setFriendNumber] = React.useState(1);
+  const [friendNumber, setFriendNumber] = React.useState(0);
   const [toUserInfo, setToUserInfo] = React.useState('');
   const [friendStatus, setFriendStatus] = React.useState(null);
 
@@ -39,10 +39,6 @@ export default function Profile({ match }) {
     ReadToUserInfo(toUser);
   }, [toUser])
 
-  // 게임 갯수 출력
-  useEffect(() => {
-    getJoinGameNum(toUser);
-  }, [])
 
   // tab 설정
   const handleChange = (event, newValue) => {
@@ -77,10 +73,23 @@ export default function Profile({ match }) {
 
   // 유저 정보 
   const ReadToUserInfo = (toUser) => {
+    if (toUser === fromUser.uid) {
+      setFriendStatus(3);
+    }
     fire.db.collection("users").doc(toUser).get()
       .then((doc) => {
         setToUserInfo(doc.data());
-        setFriendNumber(doc.data().friends.length);
+        // setFriendNumber(doc.data().friends.length);
+        fire.db.collection("users").doc(toUser).collection("friends").get()
+          .then((friends) => {
+            // console.log(friends.docs)
+            setFriendNumber(friends.docs.length);
+          })
+        fire.db.collection("users").doc(toUser).collection("joinGames").get()
+          .then((doc) => {
+            console.log(doc.docs)
+            setJoinedGame(doc.docs.length)
+          })
       })
     fire.db.collection("users").doc(fromUser.uid).collection("friends")
       .onSnapshot((onSnapshot) => {
@@ -105,13 +114,7 @@ export default function Profile({ match }) {
     //   })
   }
 
-  // 유저 조인 게임 갯수
-  const getJoinGameNum = (toUser) => {
-    fire.db.collection("users").doc(toUser).collection("joinGames").get()
-      .then((doc) => {
-        setJoinedGame(doc.docs.length)
-      })
-  }
+
 
   // axios 요청
   const handleAddFriend = (toUserId) => {
@@ -143,7 +146,7 @@ export default function Profile({ match }) {
                 // 친구 요청됨
                 friendStatus === 0 ?
                   <div className={styles.add_btn}>
-                    <Button className={styles.fix_btn}>SEㅋ</Button>
+                    <Button className={styles.fix_btn}>SEND</Button>
                   </div>
                   :
                   // 친구 수락/ 거절
@@ -157,13 +160,18 @@ export default function Profile({ match }) {
                     friendStatus === 2 ?
                       <div className={styles.add_btn}>
                         <Button className={styles.fix_btn}>FRIEND</Button>
-                      </div> :
-                      // 친구 추가
-                      <div className={styles.add_btn}>
-                        <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
-                          handleAddFriend(toUser);
-                        }}></ButtonComp>
-                      </div>
+                      </div> : friendStatus === 3 ?
+                        <div className={styles.add_btn}>
+                          <Button className={styles.fix_btn}>IT'S ME</Button>
+                        </div> :
+
+                        // 친구 추가
+                        <div className={styles.add_btn}>
+                          <ButtonComp size='noti' color='#ccff00' textvalue='ADD' onClick={() => {
+                            handleAddFriend(toUser);
+                          }}></ButtonComp>
+                        </div>
+
               }
             </div>
             <Divider orientation="vertical" flexItem className={styles.divider} />
