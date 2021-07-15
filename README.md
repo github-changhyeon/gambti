@@ -65,20 +65,17 @@
 #### 기술스택
 
 ![React](https://img.shields.io/badge/React-17.0.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
-![PostCSS](https://img.shields.io/badge/PostCSS-gray?Style=flat&logo=PostCSS&logoColor=DD3A0A)
-
 
 #### 📚사용된 라이브러리
 
-![Font Awesome](https://img.shields.io/badge/Font_Awesome-5.15.2-339AF0?Style=flat&logo=Font-Awesome&logoColor=339AF0)
+![Material-UI](https://img.shields.io/badge/Material_UI-4.11.3-0081CB?Style=flat&logo=MaterialUI&logoColor=0081CB)
 ![Axios](https://img.shields.io/badge/Axios-0.21.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
-![ClassNames](https://img.shields.io/badge/ClassNames-2.2.6-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
+![React-Router-Dom](https://img.shields.io/badge/React_Router_Dom-5.2.0-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
 ![Firebase](https://img.shields.io/badge/Firebase-8.2.6-FFCA28?Style=flat&logo=Firebase&logoColor=FFCA28)
-![PropTypes](https://img.shields.io/badge/PropTypes-15.7.2-FECF0C?Style=flat)
-![React-dom](https://img.shields.io/badge/ReactDom-17.0.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
-![React-fade-in](https://img.shields.io/badge/ReactFadeIn-2.0.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
-![react-router-dom](https://img.shields.io/badge/React_Router-5.2.0-CA4245?Style=flat&logo=React-Router&logoColor=CA4245)
-![React-scripts](https://img.shields.io/badge/ReactScripts-4.0.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
+![React-Palette](https://img.shields.io/badge/React_Palette-1.0.2-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
+![React-Moment](https://img.shields.io/badge/React_Moment-1.1.1-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
+![3D-React Carousal](https://img.shields.io/badge/3D_React_Carousal-3.1.0-61DAFB?Style=flat&logo=React&logoColor=61DAFB)
+![Query-String](https://img.shields.io/badge/Query_String-7.0.0-61DAFB?Style=flat)
 
 ### 인프라
 
@@ -106,38 +103,38 @@
 
 - 실시간 채팅
   - 친구 또는 매칭된 팀원과 실시간을 채팅
-![function05](README.assets/function_05.PNG)
+  ![function05](README.assets/function_05.PNG)
 
 - 실시간 알림
   - 실시간 알림을 통해 커뮤니케이션 기능 활성화
-![function07](README.assets/function_07.PNG)
+  ![function07](README.assets/function_07.PNG)
 
 - 회원가입
   - Firebase 메일 인증을 기반으로 함
-![function02](README.assets/function_02.PNG)
+  ![function02](README.assets/function_02.PNG)
 
 - 로그인
   - Bearer Token 기반
-![function12](README.assets/function_12.PNG)
+  ![function12](README.assets/function_12.PNG)
 
 - 비밀번호 변경
   - Firebase를 통해 사용자 재인증 후 비밀번호 변경
-![function03](README.assets/function_03.PNG)
+  ![function03](README.assets/function_03.PNG)
 
 - 비밀번호 찾기
   - Firebase 메일 인증을 기반으로 비밀번호 찾기
-![function06](README.assets/function_06.PNG)
+  ![function06](README.assets/function_06.PNG)
 
 
 ### 게임 추천
 
 - 게임 정보 확인
   - 스팀 게임에 대한 상세 정보 조회 가능
-![function08](README.assets/function_08.PNG)
+  ![function08](README.assets/function_08.PNG)
 
 - 게임 추천
   - MBTI와 사용자 성향을 고려한 개인화 추천 제공
-![function10](README.assets/function_10.PNG)
+  ![function10](README.assets/function_10.PNG)
 
 
 ### 팀원 추천
@@ -157,4 +154,4 @@
 
 ## **🧙Wireframe**
   * 📌[Figma proto](https://www.figma.com/proto/n7biHPfvyDgPvwODgEO5ko/gambti?node-id=14%3A0&scaling=scale-down-width)
-  
+
